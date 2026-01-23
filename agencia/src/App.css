@@ -1,0 +1,1011 @@
+/* ====================================================================== */
+/* ⚠️ ESTE ARCHIVO HA SIDO REFACTORIZADO */
+/* ====================================================================== */
+
+/*
+  NOTA IMPORTANTE:
+  
+  Los estilos de este archivo han sido organizados en archivos separados
+  dentro de la carpeta src/styles/ para mejor organización y mantenimiento.
+  
+  Estructura nueva:
+  - src/styles/variables.css  → Variables CSS globales
+  - src/styles/base.css        → Estilos base y utilidades
+  - src/styles/header.css      → Estilos del header
+  - src/styles/footer.css      → Estilos del footer
+  - src/styles/landing.css     → Estilos de landing page
+  - src/styles/productos.css   → Estilos de productos
+  - src/styles/pagos.css       → Estilos de pagos
+  - src/styles/contacto.css    → Estilos de contacto
+  - src/styles/cart.css        → Estilos del carrito
+  
+  El archivo original se guardó como backup en: App.css.OLD_BACKUP
+  
+  Ver src/styles/README.md para más información.
+*/
+
+/* Este archivo puede ser eliminado de forma segura */
+
+/* ========== LANDING PAGE ========== */
+.landing_page {
+  background: #ffffff;
+  min-height: 100vh;
+}
+
+.texto_landing_page h1 {
+  font-family: 'Playfair Display', serif;
+}
+
+.texto_landing_page p {
+  font-family: 'Lora', serif;
+}
+
+/* ========== HEADER ========== */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: none;
+  transition: box-shadow 0.3s ease;
+}
+
+header .container-fluid {
+  background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+  font-family: 'Poppins', sans-serif;
+  padding: 15px 20px !important;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.search-container {
+  transition: all 0.3s ease;
+}
+
+.search-container:hover {
+  box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+}
+
+/* Logo - Destacado y con efecto hover */
+.kamima_store {
+  color: #e63dc1;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 10px rgba(230, 61, 193, 0.5);
+}
+
+.kamima_store:hover {
+  color: #ff6b9d;
+  text-shadow: 0 0 20px rgba(230, 61, 193, 0.8);
+  transform: scale(1.05);
+}
+
+.kamima_store a {
+  transition: all 0.3s ease;
+}
+
+/* Barra de búsqueda - Moderna y destacada */
+header .input-group {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 25px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+header .input-group:hover {
+  box-shadow: 0 4px 15px rgba(230, 61, 193, 0.4);
+  transform: translateY(-2px);
+}
+
+header .input-group-text {
+  background: linear-gradient(135deg, #e63dc1 0%, #ff6b9d 100%);
+  border: none;
+  padding: 8px 15px;
+  color: white;
+}
+
+header .form-control {
+  border: none;
+  padding: 8px 15px;
+  background-color: #2a2a2a;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+header .form-control:focus {
+  background-color: #333;
+  box-shadow: 0 0 0 0.2rem rgba(230, 61, 193, 0.25);
+  color: white;
+}
+
+header .form-control::placeholder {
+  color: #999;
+}
+
+/* Botones Login/Registro - Modernos y atractivos */
+header .btn-outline-light {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+header .btn-outline-light:hover {
+  background: white;
+  color: #000;
+  border-color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
+header .btn-warning {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+}
+
+header .btn-warning:hover {
+  background: linear-gradient(135deg, #ff8c5a 0%, #ffb347 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.6);
+  color: white;
+}
+
+/* Carrito - Destacado y llamativo */
+header .header-cart .nav-link {
+  background: linear-gradient(135deg, rgba(230, 61, 193, 0.2) 0%, rgba(255, 107, 53, 0.2) 100%);
+  padding: 10px 20px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  border: 2px solid transparent;
+  position: relative;
+}
+
+header .header-cart .nav-link:hover {
+  background: linear-gradient(135deg, rgba(230, 61, 193, 0.4) 0%, rgba(255, 107, 53, 0.4) 100%);
+  border-color: #e63dc1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(230, 61, 193, 0.4);
+}
+
+header .position-relative .nav-link {
+  background: linear-gradient(135deg, rgba(230, 61, 193, 0.2) 0%, rgba(255, 107, 53, 0.2) 100%);
+  padding: 10px 20px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  border: 2px solid transparent;
+}
+
+header .position-relative .nav-link:hover {
+  background: linear-gradient(135deg, rgba(230, 61, 193, 0.4) 0%, rgba(255, 107, 53, 0.4) 100%);
+  border-color: #e63dc1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(230, 61, 193, 0.4);
+}
+
+.bi-cart3 {
+  color: #ff6b35;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+header .position-relative .nav-link:hover .bi-cart3 {
+  color: #ffd700;
+  transform: scale(1.2);
+}
+
+/* Badge del carrito - Animado */
+header .badge {
+  animation: pulse 2s infinite;
+  box-shadow: 0 2px 10px rgba(220, 53, 69, 0.6);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* Menú de navegación - Moderno con efectos hover */
+header .nav {
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+header .nav-item .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  padding: 10px 15px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  position: relative;
+  margin: 0 5px;
+}
+
+header .nav-item .nav-link::before {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #e63dc1, #ff6b35);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+header .nav-item .nav-link:hover {
+  color: white;
+  background: rgba(230, 61, 193, 0.1);
+  transform: translateY(-2px);
+}
+
+header .nav-item .nav-link:hover::before {
+  width: 80%;
+}
+
+header .nav-item .nav-link i {
+  transition: all 0.3s ease;
+}
+
+header .nav-item .nav-link:hover i {
+  transform: scale(1.2);
+}
+
+/* Iconos del menú con colores */
+.bi-instagram {
+  color: #ff07ea;
+}
+
+.bi-whatsapp {
+  color: #25D366;
+}
+
+.bi-geo-alt-fill {
+  color: #ff0000;
+}
+
+.bi-envelope-open-fill {
+  color: #ffffff;
+}
+
+.clase_correo {
+  color: #ffffff;
+}
+
+.bi-house-door-fill {
+  color: #ffffff;
+}
+
+.barra_busqueda_header {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  min-width: 160px;
+}
+
+.nav > li:last-child {
+  margin-right: 0 !important;
+}
+
+.btn_registrarse {
+  background-color: #e47d08;
+  color: white;
+  border: none;
+}
+
+.btn_registrarse:hover {
+  transition: background-color 0.2s ease-in-out;
+  background-color: rgb(39, 245, 20);
+}
+
+.rectangulo {
+  width: 100%;
+  max-width: 100%;
+  padding: 10px;
+  background-color: #000000;
+  text-align: center;
+}
+
+.texto {
+  font-size: 1.2rem;
+  color: rgb(255, 255, 255);
+}
+
+.carrito_header {
+  list-style: none;
+}
+
+/* Responsive - Ajustes para móviles */
+@media (max-width: 768px) {
+  .promociones {
+    font-size: 0.75rem;
+    padding: 8px 0;
+  }
+  
+  header .container-fluid {
+    padding: 10px 15px !important;
+  }
+  
+  header .btn-outline-light,
+  header .btn-warning {
+    padding: 6px 15px;
+    font-size: 0.75rem;
+  }
+  
+  header .nav-item .nav-link {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+  
+  .rectangulo {
+    padding: 15px;
+  }
+  
+  .texto {
+    font-size: 1rem;
+  }
+}
+
+/* ========== FOOTER ========== */
+.footer-container {
+  width: 100%;
+  background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #e63dc1 0%, #ff6b35 50%, #e63dc1 100%);
+  background-size: 200% 100%;
+  animation: gradientMove 4s ease infinite;
+}
+
+@keyframes gradientMove {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  color: #ffffff;
+  padding: 60px 80px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.footer-section {
+  margin-bottom: 30px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer-top {
+  padding: 3rem 0 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-middle {
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-bottom {
+  padding: 1.5rem 0;
+}
+
+.footer-bottom p {
+  margin: 0;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+}
+
+/* Logo y Redes Sociales */
+.logo-social {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #e63dc1, #ff6b35);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(230, 61, 193, 0.5);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 40px;
+  min-width: 200px;
+}
+
+.logo-social .kamima_store {
+  margin-bottom: 25px;
+}
+
+.logo-social .kamima_store a {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e63dc1 0%, #ff6b35 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 20px rgba(230, 61, 193, 0.3);
+}
+
+.logo-social .kamima_store a:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 30px rgba(230, 61, 193, 0.6);
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 10px;
+}
+
+.social-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 1.3rem;
+  transition: all 0.4s ease;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-icon::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+.social-icon:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.social-icon:hover {
+  background: linear-gradient(135deg, #e63dc1, #ff6b35);
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 10px 25px rgba(230, 61, 193, 0.4);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.social-icon i {
+  position: relative;
+  z-index: 1;
+}
+
+.social-icon.bi-whatsapp,
+.social-icon:has(.bi-whatsapp),
+.social-icons a:nth-child(1) {
+  background: linear-gradient(135deg, #25D366 0%, #1eab52 100%);
+}
+
+.social-icon.bi-instagram,
+.social-icon:has(.bi-instagram),
+.social-icons a:nth-child(2) {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+}
+
+.social-icon.bi-envelope-open-fill,
+.social-icon:has(.bi-envelope-open-fill),
+.social-icons a:nth-child(3) {
+  background: linear-gradient(135deg, #EA4335 0%, #c62828 100%);
+}
+
+/* Secciones de Enlaces */
+.help-links, .other-links {
+  margin-right: 40px;
+  min-width: 180px;
+}
+
+.help-links h5,
+.other-links h5,
+.help-links h3,
+.other-links h3 {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.help-links h5::after,
+.other-links h5::after,
+.help-links h3::after,
+.other-links h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, #e63dc1, #ff6b35);
+  border-radius: 2px;
+}
+
+.help-links ul,
+.other-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.help-links li,
+.other-links li {
+  margin-bottom: 0.8rem;
+}
+
+.help-links a,
+.other-links a,
+.help-links ul li a,
+.other-links ul li a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  display: inline-block;
+  position: relative;
+  padding-left: 0;
+}
+
+.help-links ul li a::before,
+.other-links ul li a::before {
+  content: '→';
+  position: absolute;
+  left: -20px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  color: #e63dc1;
+}
+
+.help-links ul li a:hover::before,
+.other-links ul li a:hover::before {
+  opacity: 1;
+  left: -15px;
+}
+
+.help-links a:hover,
+.other-links a:hover,
+.help-links ul li a:hover,
+.other-links ul li a:hover {
+  color: #e63dc1;
+  transform: translateX(5px);
+  padding-left: 20px;
+  text-shadow: 0 0 10px rgba(230, 61, 193, 0.5);
+}
+
+/* Newsletter */
+.newsletter {
+  max-width: 350px;
+  min-width: 300px;
+}
+
+.newsletter h5 {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.newsletter-text {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.newsletter-input,
+.subscribe-form {
+  position: relative;
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+.newsletter-input input,
+.email-input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border-radius: 25px;
+  border: 2px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  backdrop-filter: blur(10px);
+}
+
+.newsletter-input input::placeholder,
+.email-input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.newsletter-input input:focus,
+.email-input:focus {
+  outline: none;
+  border-color: #e63dc1;
+  background: rgba(255,255,255,0.15);
+  box-shadow: 0 0 15px rgba(230, 61, 193, 0.3);
+}
+
+.newsletter-input button,
+.subscribe-button {
+  padding: 0.8rem 1.8rem;
+  border-radius: 25px;
+  border: none;
+  background: linear-gradient(135deg, #e63dc1, #ff6b35);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  align-self: flex-start;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 5px 20px rgba(230, 61, 193, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.subscribe-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.subscribe-button:hover::before {
+  left: 100%;
+}
+
+.newsletter-input button:hover,
+.subscribe-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(230, 61, 193, 0.4);
+  background: linear-gradient(135deg, #ff6b9d 0%, #ff8c5a 100%);
+}
+
+.logo-container {
+  background-color: #ffffff;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo-container_header {
+  background-color: #ffffff;
+  width: 80px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo-placeholder {
+  color: #333333;
+  font-weight: bold;
+}
+
+/* ========== PRODUCTOS ========== */
+.imagen_header_productos {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 15px;
+  box-shadow: var(--shadow-lg);
+}
+
+#breadcrumb-inicio,
+#breadcrumb-productos {
+  text-decoration: none;
+  color: var(--color-primary);
+  transition: color 0.3s ease;
+}
+
+#breadcrumb-inicio:hover,
+#breadcrumb-productos:hover {
+  color: var(--color-primary-dark);
+}
+
+.producto-card {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  overflow: hidden;
+}
+
+.producto-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(230, 61, 193, 0.25);
+}
+
+.producto-card img {
+  transition: transform 0.4s ease;
+}
+
+.producto-card:hover img {
+  transform: scale(1.1);
+}
+
+.marca_producto {
+  color: var(--color-accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ========== DETALLES PRODUCTO ========== */
+.galeria-container {
+  position: relative;
+}
+
+.miniaturas {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.miniaturas img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.miniaturas img:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.miniaturas img.activa {
+  opacity: 1;
+  border-color: var(--color-primary);
+}
+
+.precio-detalles {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.btn_ir_a_productos {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn_ir_a_productos:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(230, 61, 193, 0.4);
+}
+
+/* ========== PAGOS ========== */
+.pagos {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.datos-envio-card,
+.resumen-pedido-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.producto-resumen {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--color-background-light);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.producto-resumen img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.price {
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.divider-line {
+  border: none;
+  border-top: 2px solid var(--color-background-light);
+  margin: 1.5rem 0;
+}
+
+/* ========== TOP VENTAS ========== */
+.top-ventas-container {
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.btn_top_ventas {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  border: none;
+  color: white;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn_top_ventas:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(230, 61, 193, 0.4);
+}
+
+/* ========== PROMOCIONES ========== */
+.promociones {
+  background: linear-gradient(135deg, #e63dc1, #ff6b35);
+  color: white;
+  padding: 3rem 0;
+  margin: 4rem 0;
+  border-radius: 20px;
+  text-align: center;
+}
+
+/* ========== UTILIDADES ========== */
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.re {
+  position: relative;
+}
+
+/* ========== MEDIA QUERIES ========== */
+@media (max-width: 768px) {
+  .logo-social {
+    font-size: 1.5rem;
+    margin-right: 0;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .kamima_store {
+    font-size: 0.9rem;
+  }
+  
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+  
+  .newsletter-input,
+  .subscribe-form {
+    flex-direction: column;
+  }
+  
+  .newsletter-input button,
+  .subscribe-button {
+    width: 100%;
+  }
+  
+  .imagen_header_productos {
+    height: 250px;
+  }
+  
+  .precio-detalles {
+    font-size: 2rem;
+  }
+  
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 30px;
+  }
+
+  .footer-section {
+    margin-right: 0;
+    margin-bottom: 40px;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .footer-top,
+  .footer-middle {
+    padding: 2rem 0;
+  }
+  
+  .help-links,
+  .other-links,
+  .newsletter {
+    margin-bottom: 2rem;
+  }
+  
+  @media (max-width: 600px) {
+    .rectangulo {
+      padding: 15px;
+    }
+    .texto {
+      font-size: 1rem;
+    }
+  }
+}

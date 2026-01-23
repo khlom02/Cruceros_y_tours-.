@@ -1,0 +1,45 @@
+/* ====================================================================== */
+/* ESTILOS BASE Y UTILIDADES */
+/* ====================================================================== */
+
+/* Estilos generales */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+}
+
+/* Utilidades */
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.re {
+  position: relative;
+}
+
+/* Logo containers */
+.logo-container {
+  background-color: #ffffff;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo-container_header {
+  background-color: #ffffff;
+  width: 80px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo-placeholder {
+  color: #333333;
+  font-weight: bold;
+}

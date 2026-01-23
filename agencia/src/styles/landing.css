@@ -1,0 +1,46 @@
+/* ====================================================================== */
+/* ESTILOS DE LANDING PAGE */
+/* ====================================================================== */
+
+.landing_page {
+  background: #ffffff;
+  min-height: 100vh;
+}
+
+.texto_landing_page h1 {
+  font-family: 'Playfair Display', serif;
+}
+
+.texto_landing_page p {
+  font-family: 'Lora', serif;
+}
+
+/* Top Ventas */
+.top-ventas-container {
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.btn_top_ventas {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  border: none;
+  color: white;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn_top_ventas:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(230, 61, 193, 0.4);
+}
+
+/* Promociones */
+.promociones {
+  background: linear-gradient(135deg, #e63dc1, #ff6b35);
+  color: white;
+  padding: 3rem 0;
+  margin: 4rem 0;
+  border-radius: 20px;
+  text-align: center;
+}

@@ -1,0 +1,45 @@
+/* ====================================================================== */
+/* ESTILOS DE PÁGINA DE PAGOS */
+/* ====================================================================== */
+
+.pagos {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.datos-envio-card,
+.resumen-pedido-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.producto-resumen {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--color-background-light);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.producto-resumen img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.price {
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.divider-line {
+  border: none;
+  border-top: 2px solid var(--color-background-light);
+  margin: 1.5rem 0;
+}

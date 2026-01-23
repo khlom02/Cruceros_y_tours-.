@@ -1,0 +1,423 @@
+/* ====================================================================== */
+/* ESTILOS DEL FOOTER */
+/* ====================================================================== */
+
+.footer-container {
+  width: 100%;
+  background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #e63dc1 0%, #ff6b35 50%, #e63dc1 100%);
+  background-size: 200% 100%;
+  animation: gradientMove 4s ease infinite;
+}
+
+@keyframes gradientMove {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  color: #ffffff;
+  padding: 60px 80px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.footer-section {
+  margin-bottom: 30px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer-top {
+  padding: 3rem 0 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-middle {
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-bottom {
+  padding: 1.5rem 0;
+}
+
+.footer-bottom p {
+  margin: 0;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+}
+
+/* Logo y Redes Sociales */
+.logo-social {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #e63dc1, #ff6b35);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(230, 61, 193, 0.5);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 40px;
+  min-width: 200px;
+}
+
+.logo-social .kamima_store {
+  margin-bottom: 25px;
+}
+
+.logo-social .kamima_store a {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e63dc1 0%, #ff6b35 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 20px rgba(230, 61, 193, 0.3);
+}
+
+.logo-social .kamima_store a:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 30px rgba(230, 61, 193, 0.6);
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 10px;
+}
+
+.social-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 1.3rem;
+  transition: all 0.4s ease;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-icon::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+.social-icon:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.social-icon:hover {
+  background: linear-gradient(135deg, #e63dc1, #ff6b35);
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 10px 25px rgba(230, 61, 193, 0.4);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.social-icon i {
+  position: relative;
+  z-index: 1;
+}
+
+.social-icon.bi-whatsapp,
+.social-icon:has(.bi-whatsapp),
+.social-icons a:nth-child(1) {
+  background: linear-gradient(135deg, #25D366 0%, #1eab52 100%);
+}
+
+.social-icon.bi-instagram,
+.social-icon:has(.bi-instagram),
+.social-icons a:nth-child(2) {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+}
+
+.social-icon.bi-envelope-open-fill,
+.social-icon:has(.bi-envelope-open-fill),
+.social-icons a:nth-child(3) {
+  background: linear-gradient(135deg, #EA4335 0%, #c62828 100%);
+}
+
+/* Secciones de Enlaces */
+.help-links, .other-links {
+  margin-right: 40px;
+  min-width: 180px;
+}
+
+.help-links h5,
+.other-links h5,
+.help-links h3,
+.other-links h3 {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.help-links h5::after,
+.other-links h5::after,
+.help-links h3::after,
+.other-links h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, #e63dc1, #ff6b35);
+  border-radius: 2px;
+}
+
+.help-links ul,
+.other-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.help-links li,
+.other-links li {
+  margin-bottom: 0.8rem;
+}
+
+.help-links a,
+.other-links a,
+.help-links ul li a,
+.other-links ul li a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  display: inline-block;
+  position: relative;
+  padding-left: 0;
+}
+
+.help-links ul li a::before,
+.other-links ul li a::before {
+  content: '→';
+  position: absolute;
+  left: -20px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  color: #e63dc1;
+}
+
+.help-links ul li a:hover::before,
+.other-links ul li a:hover::before {
+  opacity: 1;
+  left: -15px;
+}
+
+.help-links a:hover,
+.other-links a:hover,
+.help-links ul li a:hover,
+.other-links ul li a:hover {
+  color: #e63dc1;
+  transform: translateX(5px);
+  padding-left: 20px;
+  text-shadow: 0 0 10px rgba(230, 61, 193, 0.5);
+}
+
+/* Newsletter */
+.newsletter {
+  max-width: 350px;
+  min-width: 300px;
+}
+
+.newsletter h5 {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.newsletter-text {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.newsletter-input,
+.subscribe-form {
+  position: relative;
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+.newsletter-input input,
+.email-input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border-radius: 25px;
+  border: 2px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  backdrop-filter: blur(10px);
+}
+
+.newsletter-input input::placeholder,
+.email-input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.newsletter-input input:focus,
+.email-input:focus {
+  outline: none;
+  border-color: #e63dc1;
+  background: rgba(255,255,255,0.15);
+  box-shadow: 0 0 15px rgba(230, 61, 193, 0.3);
+}
+
+.newsletter-input button,
+.subscribe-button {
+  padding: 0.8rem 1.8rem;
+  border-radius: 25px;
+  border: none;
+  background: linear-gradient(135deg, #e63dc1, #ff6b35);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  align-self: flex-start;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 5px 20px rgba(230, 61, 193, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.subscribe-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.subscribe-button:hover::before {
+  left: 100%;
+}
+
+.newsletter-input button:hover,
+.subscribe-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(230, 61, 193, 0.4);
+  background: linear-gradient(135deg, #ff6b9d 0%, #ff8c5a 100%);
+}
+
+/* Responsive - Ajustes para móviles */
+@media (max-width: 768px) {
+  .logo-social {
+    font-size: 1.5rem;
+    margin-right: 0;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .kamima_store {
+    font-size: 0.9rem;
+  }
+  
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+  
+  .newsletter-input,
+  .subscribe-form {
+    flex-direction: column;
+  }
+  
+  .newsletter-input button,
+  .subscribe-button {
+    width: 100%;
+  }
+  
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 30px;
+  }
+
+  .footer-section {
+    margin-right: 0;
+    margin-bottom: 40px;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .footer-top,
+  .footer-middle {
+    padding: 2rem 0;
+  }
+  
+  .help-links,
+  .other-links,
+  .newsletter {
+    margin-bottom: 2rem;
+  }
+}
