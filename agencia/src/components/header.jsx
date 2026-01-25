@@ -36,8 +36,19 @@ const Header = () => {
       {/* Navbar Superior */}
       <nav className="container-fluid py-3">
         <div className="row align-items-center">
-          {/* Menú de navegación izquierda */}
-          <div className="col-md-8">
+          {/* Logo - izquierda */}
+          <div className="col-auto">
+            <Link to="/" className="header-logo">
+              <img
+                src="/src/marketing/logo/logo_cruceros_y_tours_completo_color.png"
+                alt="Cruceros y Tours Logo"
+                className="header-logo__img"
+              />
+            </Link>
+          </div>
+
+          {/* Menú de navegación */}
+          <div className="col">
             <ul className="nav mb-0 d-flex align-items-center flex-wrap gap-1">
                <li className="nav-item">
                 <Link
@@ -143,7 +154,7 @@ const Header = () => {
           </div>
 
           {/* Sign In y Carrito - derecha */}
-          <div className="col-md-4 d-flex align-items-center justify-content-end gap-3">
+          <div className="col-auto d-flex align-items-center justify-content-end gap-3">
             {authLoading ? (
               <div
                 className="spinner-border spinner-border-sm text-white"

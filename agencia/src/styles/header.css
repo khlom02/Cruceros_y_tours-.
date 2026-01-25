@@ -12,11 +12,38 @@ header {
 
 header .container-fluid {
   background: white;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Chicago Police', sans-serif;
   padding: 15px 20px !important;
   width: 100%;
   max-width: 100%;
   margin: 0;
+  min-height: 90px;
+}
+
+/* Logo del header - sin fondo, adaptable y moderno */
+.header-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.header-logo:hover {
+  transform: translateY(-2px);
+}
+
+.header-logo__img {
+  height: auto;
+  max-height: 300px;
+  width: auto;
+  max-width: 300px;
+  object-fit: contain;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.header-logo:hover .header-logo__img {
+  filter: brightness(1.1);
 }
 
 .search-container {

@@ -34,8 +34,3 @@ import './styles/variables.css';
 import './styles/base.css';
 ```
 
-## 📝 Notas:
-
-- Todos los estilos que estaban en `App.css` han sido organizados por componente
-- Se mantiene un backup del archivo original: `App.css.OLD_BACKUP`
-- Las variables CSS globales se pueden usar en cualquier archivo con `var(--variable-name)`

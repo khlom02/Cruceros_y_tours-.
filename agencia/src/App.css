@@ -33,11 +33,11 @@
 }
 
 .texto_landing_page h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Chicago Police', sans-serif;
 }
 
 .texto_landing_page p {
-  font-family: 'Lora', serif;
+  font-family: 'Photogenic', cursive;
 }
 
 /* ========== HEADER ========== */
@@ -51,7 +51,7 @@ header {
 
 header .container-fluid {
   background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Chicago Police', sans-serif;
   padding: 15px 20px !important;
   max-width: 1400px;
   margin: 0 auto;

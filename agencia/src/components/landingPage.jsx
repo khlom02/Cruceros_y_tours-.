@@ -1,6 +1,7 @@
 import 'animate.css';
 import '../styles/landing.css';
 import Carousel3D from './Carousel3D';
+import { BannerPromocional } from './banner_promocional';
 import { useState } from 'react';
 
 const LandingPage = () => {
@@ -206,7 +207,7 @@ const LandingPage = () => {
             position: 'relative',
             zIndex: isGalleryOpen ? '-1' : '10',
           }}
-        >
+         >
           <button 
             style={buttonStyle}
             onMouseEnter={(e) => {
@@ -261,8 +262,14 @@ const LandingPage = () => {
             </div>
           </div>
         </div>
-
       </div>
+      
+      {/* Banner Promocional */}
+      <BannerPromocional 
+        imagen="/src/imagenes/celebrity.jpg"
+        alt="Cruceros Sin Visa Americana"
+      />
+      
     </main>
   );
 };
