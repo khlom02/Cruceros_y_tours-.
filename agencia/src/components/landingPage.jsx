@@ -2,12 +2,12 @@ import 'animate.css';
 import '../styles/landing.css';
 import Carousel3D from './Carousel3D';
 import { BannerPromocional } from './banner_promocional';
+import ToursCardsGrid from "./tours_cards.jsx";
+import Aerolineas from "./Aerolineas.jsx";
 import { useState } from 'react';
 
 const LandingPage = () => {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-
-  console.log('📊 Estado isGalleryOpen:', isGalleryOpen);
 
   // 🎨 Configuración de destinos - Solo cambia el nombre del archivo de imagen aquí
   const destinations = [
@@ -128,7 +128,7 @@ const LandingPage = () => {
             color: '#023e8a',
             letterSpacing: '-1px',
             lineHeight: '1.15',
-            fontFamily: "'Playfair Display', 'Georgia', serif",
+            fontFamily: "'Photogenic', serif",
             textShadow: '0 2px 4px rgba(0, 0, 0, 0.08)',
             background: 'linear-gradient(135deg, #023e8a 0%, #0077b6 100%)',
             WebkitBackgroundClip: 'text',
@@ -185,7 +185,7 @@ const LandingPage = () => {
           marginBottom: '30px',
           marginTop: '40px',
           letterSpacing: '-0.5px',
-          fontFamily: "'Playfair Display', 'Georgia', serif"
+          fontFamily: "'Photogenic', serif"
         }}>
           Top 5 Cruceros
         </h2>
@@ -263,12 +263,57 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
-      
+
+      <h2 style={{
+        textAlign: 'center',
+        fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+        color: '#023e8a',
+        fontWeight: '700',
+        marginBottom: '30px',
+        marginTop: '40px',
+        letterSpacing: '-0.5px',
+        fontFamily: "'Photogenic', serif"
+      }}>
+        Navieras Nacionales
+      </h2>
+      {/* Sección de Tours Destacados */}
+      <ToursCardsGrid />
+
+       <h2 style={{
+        textAlign: 'center',
+        fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+        color: '#023e8a',
+        fontWeight: '700',
+        marginBottom: '30px',
+        marginTop: '40px',
+        letterSpacing: '-0.5px',
+        fontFamily: "'Photogenic', serif"
+      }}>
+        Navieras Internacionales
+      </h2>
+
+      {/* Sección de Tours Destacados */}
+      <ToursCardsGrid />
+
       {/* Banner Promocional */}
-      <BannerPromocional 
+      {/* <BannerPromocional 
         imagen="/src/imagenes/celebrity.jpg"
         alt="Cruceros Sin Visa Americana"
-      />
+      /> */}
+        <h2 style={{
+        textAlign: 'center',
+        fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+        color: '#023e8a',
+        fontWeight: '700',
+        marginBottom: '30px',
+        marginTop: '40px',
+        letterSpacing: '-0.5px',
+        fontFamily: "'Photogenic', serif"
+      }}>
+       Aerolineas Asociadas
+      </h2>
+      {/* Sección de Aerolíneas */}
+      <Aerolineas />
       
     </main>
   );

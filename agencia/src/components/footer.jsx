@@ -6,14 +6,9 @@ const Footer = () => {
     <div className="footer-container">
       <footer className="footer">
         <div className="footer-section logo-social">
-          <div className="d-flex align-items-center kamima_store">
-            <a href="/" className="fs-4 fw-bold text-decoration-none kamima_store">Cruceros y tours</a>
-          </div>
-          <div className="social-icons ml-2 re">
-            <a href="#" className="social-icon bi-whatsapp"><i className="bi bi-whatsapp"></i></a>
-            <a href="#" className="social-icon bi-instagram"><i className="bi bi-instagram"></i></a>
-            <a href="#" className="social-icon bi-envelope-open-fill"><i className="bi bi-envelope-open-fill"></i></a>
-          </div>
+          <a href="/">
+            <img src="/src/imagenes/texto_logo_solo_color.png"/>
+          </a>
         </div>
 
         <div className="footer-section help-links">

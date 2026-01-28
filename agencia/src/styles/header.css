@@ -61,12 +61,6 @@ header .container-fluid {
   text-shadow: 0 0 10px rgba(230, 61, 193, 0.5);
 }
 
-.kamima_store:hover {
-  color: #ff6b9d;
-  text-shadow: 0 0 20px rgba(230, 61, 193, 0.8);
-  transform: scale(1.05);
-}
-
 .kamima_store a {
   transition: all 0.3s ease;
 }
@@ -77,18 +71,6 @@ header .input-group {
   border-radius: 25px;
   overflow: hidden;
   transition: all 0.3s ease;
-}
-
-header .input-group:hover {
-  box-shadow: 0 4px 15px rgba(230, 61, 193, 0.4);
-  transform: translateY(-2px);
-}
-
-header .input-group-text {
-  background: linear-gradient(135deg, #e63dc1 0%, #ff6b9d 100%);
-  border: none;
-  padding: 8px 15px;
-  color: white;
 }
 
 header .form-control {
@@ -108,49 +90,6 @@ header .form-control:focus {
 
 header .form-control::placeholder {
   color: #999;
-}
-
-/* Botones Login/Registro - Modernos y atractivos */
-header .btn-outline-light {
-  border: 2px solid #e63dc1;
-  background: transparent;
-  color: #e63dc1;
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.5px;
-}
-
-header .btn-outline-light:hover {
-  background: #e63dc1;
-  color: white;
-  border-color: #e63dc1;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(230, 61, 193, 0.4);
-}
-
-header .btn-warning {
-  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-  border: none;
-  color: white;
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
-}
-
-header .btn-warning:hover {
-  background: linear-gradient(135deg, #ff8c5a 0%, #ffb347 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.6);
-  color: white;
 }
 
 /* Carrito - Destacado y llamativo */
@@ -198,21 +137,6 @@ header .position-relative .nav-link:hover .bi-cart3 {
   transform: scale(1.2);
 }
 
-/* Badge del carrito - Animado */
-header .badge {
-  animation: pulse 2s infinite;
-  box-shadow: 0 2px 10px rgba(220, 53, 69, 0.6);
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.1);
-  }
-}
-
 /* Menú de navegación - Moderno con efectos hover */
 header .nav {
   padding-top: 10px;
@@ -257,69 +181,6 @@ header .nav-item .nav-link i {
 
 header .nav-item .nav-link:hover i {
   transform: scale(1.2);
-}
-
-/* Iconos del menú con colores */
-.bi-instagram {
-  color: #ff07ea;
-}
-
-.bi-whatsapp {
-  color: #25D366;
-}
-
-.bi-geo-alt-fill {
-  color: #ff0000;
-}
-
-.bi-envelope-open-fill {
-  color: #ffffff;
-}
-
-.clase_correo {
-  color: #ffffff;
-}
-
-.bi-house-door-fill {
-  color: #ffffff;
-}
-
-.barra_busqueda_header {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  min-width: 160px;
-}
-
-.nav > li:last-child {
-  margin-right: 0 !important;
-}
-
-.btn_registrarse {
-  background-color: #e47d08;
-  color: white;
-  border: none;
-}
-
-.btn_registrarse:hover {
-  transition: background-color 0.2s ease-in-out;
-  background-color: rgb(39, 245, 20);
-}
-
-.rectangulo {
-  width: 100%;
-  max-width: 100%;
-  padding: 10px;
-  background-color: #000000;
-  text-align: center;
-}
-
-.texto {
-  font-size: 1.2rem;
-  color: rgb(255, 255, 255);
-}
-
-.carrito_header {
-  list-style: none;
 }
 
 /* Responsive - Ajustes para móviles */

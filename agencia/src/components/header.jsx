@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "./cartContext/cartContext.jsx";
 import { useAuth } from "../contexts/AuthContext";
-import bannerImage from "../imagenes/banner.png";
 import '../styles/header.css';
 
 const Header = () => {
@@ -22,10 +21,11 @@ const Header = () => {
   };
 
   return (
+    // ACA ESTA LA IMAGEN PRINCIPAL DEL HEADER
     <header
       className="position-relative"
       style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)), url(${bannerImage})`,
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)), url(/src/imagenes/banner_principal.jpeg)`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "600px",
@@ -234,7 +234,7 @@ const Header = () => {
               </Link>
             )}
 
-            {/* Carrito */}
+            {/* Carrito
             <div className="position-relative">
               <Link
                 to="/carrito"
@@ -254,7 +254,7 @@ const Header = () => {
                   </span>
                 )}
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </nav>

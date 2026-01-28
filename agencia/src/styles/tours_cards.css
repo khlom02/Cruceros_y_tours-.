@@ -1,0 +1,144 @@
+.tours-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+  padding: 50px 0;
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+.tour-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 500px;
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.tour-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+}
+
+.tour-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%);
+  z-index: 1;
+}
+
+.tour-card__overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.tour-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tour-card__titulo {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: white;
+  font-family: "Lora", serif;
+  line-height: 1.3;
+}
+
+.tour-card__ubicacion {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: "Lora", serif;
+  font-weight: 400;
+}
+
+.tour-card__fechas {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.tour-card__fechas span {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: "Lora", serif;
+  font-weight: 500;
+}
+
+.tour-card__precio {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.tour-card__precio-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "Lora", serif;
+  font-weight: 400;
+}
+
+.tour-card__precio-valor {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  font-family: "Lora", serif;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .tours-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 30px 0;
+  }
+
+  .tour-card {
+    min-height: 300px;
+  }
+
+  .tour-card__titulo {
+    font-size: 1.1rem;
+  }
+
+  .tour-card__ubicacion {
+    font-size: 0.9rem;
+  }
+
+  .tour-card__precio-valor {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tours-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .tour-card {
+    min-height: 280px;
+  }
+
+  .tour-card__overlay {
+    padding: 20px;
+  }
+}

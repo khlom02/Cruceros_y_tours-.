@@ -15,8 +15,8 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, #e63dc1 0%, #ff6b35 50%, #e63dc1 100%);
+  height: 20px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary) 50%, var(--color-primary) 100%);
   background-size: 200% 100%;
   animation: gradientMove 4s ease infinite;
 }
@@ -34,13 +34,14 @@
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
-  color: #ffffff;
+  color: var(--color-text-light);
   padding: 60px 80px;
   flex-wrap: wrap;
   position: relative;
   z-index: 1;
   max-width: 1400px;
   margin: 0 auto;
+  font-family: 'Lora', serif;
 }
 
 .footer-section {
@@ -79,112 +80,30 @@
   font-size: 0.9rem;
 }
 
-/* Logo y Redes Sociales */
-.logo-social {
-  font-size: 2rem;
-  font-weight: 700;
-  background: linear-gradient(90deg, #e63dc1, #ff6b35);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 0 20px rgba(230, 61, 193, 0.5);
-  transition: all 0.3s ease;
+/* Logo */
+.footer-section.logo-social {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-right: 40px;
-  min-width: 200px;
+  gap: 2rem;
+  min-width: 300px;
 }
 
-.logo-social .kamima_store {
-  margin-bottom: 25px;
+.footer-section.logo-social a {
+  text-decoration: none;
+}
+ /* tamaño de la imagen del logo en el footer */
+.footer-section.logo-social img {
+  height: auto;
+  max-height: 120px;
+  width: auto;
+  max-width: 400px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
-.logo-social .kamima_store a {
-  font-size: 2rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #e63dc1 0%, #ff6b35 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  transition: all 0.3s ease;
-  text-shadow: 0 0 20px rgba(230, 61, 193, 0.3);
-}
-
-.logo-social .kamima_store a:hover {
-  transform: scale(1.05);
-  text-shadow: 0 0 30px rgba(230, 61, 193, 0.6);
-}
-
-.social-icons {
-  display: flex;
-  gap: 1rem;
-  margin-top: 10px;
-}
-
-.social-icon {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255,255,255,0.1);
-  color: white;
-  font-size: 1.3rem;
-  transition: all 0.4s ease;
-  border: 2px solid transparent;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.social-icon::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.3s, height 0.3s;
-}
-
-.social-icon:hover::before {
-  width: 100%;
-  height: 100%;
-}
-
-.social-icon:hover {
-  background: linear-gradient(135deg, #e63dc1, #ff6b35);
-  transform: translateY(-5px) scale(1.1);
-  box-shadow: 0 10px 25px rgba(230, 61, 193, 0.4);
-  border-color: rgba(255,255,255,0.3);
-}
-
-.social-icon i {
-  position: relative;
-  z-index: 1;
-}
-
-.social-icon.bi-whatsapp,
-.social-icon:has(.bi-whatsapp),
-.social-icons a:nth-child(1) {
-  background: linear-gradient(135deg, #25D366 0%, #1eab52 100%);
-}
-
-.social-icon.bi-instagram,
-.social-icon:has(.bi-instagram),
-.social-icons a:nth-child(2) {
-  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
-}
-
-.social-icon.bi-envelope-open-fill,
-.social-icon:has(.bi-envelope-open-fill),
-.social-icons a:nth-child(3) {
-  background: linear-gradient(135deg, #EA4335 0%, #c62828 100%);
+.footer-section.logo-social img:hover {
+  transform: scale(1.08);
 }
 
 /* Secciones de Enlaces */
@@ -197,12 +116,13 @@
 .other-links h5,
 .help-links h3,
 .other-links h3 {
-  color: white;
+  color: var(--color-background);
   font-weight: 600;
   margin-bottom: 1.2rem;
   position: relative;
   padding-bottom: 0.5rem;
   font-size: 1.3rem;
+  font-family: 'Photogenic', serif;
 }
 
 .help-links h5::after,
@@ -215,7 +135,7 @@
   left: 0;
   width: 50px;
   height: 3px;
-  background: linear-gradient(90deg, #e63dc1, #ff6b35);
+  background: linear-gradient(90deg, var(--color-primary-dark), var(--color-primary));
   border-radius: 2px;
 }
 
@@ -238,7 +158,7 @@
   color: rgba(255,255,255,0.7);
   text-decoration: none;
   transition: all 0.3s ease;
-  font-size: 0.95rem;
+  font-size: 1.25rem;
   display: inline-block;
   position: relative;
   padding-left: 0;
@@ -251,7 +171,7 @@
   left: -20px;
   opacity: 0;
   transition: all 0.3s ease;
-  color: #e63dc1;
+  color: var(--color-primary);
 }
 
 .help-links ul li a:hover::before,
@@ -264,10 +184,10 @@
 .other-links a:hover,
 .help-links ul li a:hover,
 .other-links ul li a:hover {
-  color: #e63dc1;
+  color: var(--color-primary);
   transform: translateX(5px);
   padding-left: 20px;
-  text-shadow: 0 0 10px rgba(230, 61, 193, 0.5);
+  text-shadow: 0 0 10px rgba(15, 211, 211, 0.5);
 }
 
 /* Newsletter */
@@ -276,15 +196,9 @@
   min-width: 300px;
 }
 
-.newsletter h5 {
-  color: white;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
 .newsletter-text {
   color: rgba(255,255,255,0.7);
-  font-size: 0.9rem;
+  font-size: 1.25rem;
   margin-bottom: 1rem;
   line-height: 1.6;
 }
@@ -319,9 +233,9 @@
 .newsletter-input input:focus,
 .email-input:focus {
   outline: none;
-  border-color: #e63dc1;
+  border-color: var(--color-primary);
   background: rgba(255,255,255,0.15);
-  box-shadow: 0 0 15px rgba(230, 61, 193, 0.3);
+  box-shadow: 0 0 15px rgba(15, 211, 211, 0.3);
 }
 
 .newsletter-input button,
@@ -329,8 +243,8 @@
   padding: 0.8rem 1.8rem;
   border-radius: 25px;
   border: none;
-  background: linear-gradient(135deg, #e63dc1, #ff6b35);
-  color: white;
+  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+  color: var(--color-background);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -338,9 +252,10 @@
   align-self: flex-start;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 5px 20px rgba(230, 61, 193, 0.4);
+  box-shadow: 0 5px 20px rgba(0, 51, 102, 0.4);
   position: relative;
   overflow: hidden;
+  font-family: 'Lora', serif;
 }
 
 .subscribe-button::before {
@@ -361,49 +276,14 @@
 .newsletter-input button:hover,
 .subscribe-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(230, 61, 193, 0.4);
-  background: linear-gradient(135deg, #ff6b9d 0%, #ff8c5a 100%);
+  box-shadow: 0 8px 20px rgba(0, 51, 102, 0.4);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
 }
 
 /* Responsive - Ajustes para móviles */
 @media (max-width: 768px) {
-  .logo-social {
-    font-size: 1.5rem;
-    margin-right: 0;
+  .footer-section.logo-social {
     align-items: center;
-    text-align: center;
-    width: 100%;
-  }
-  
-  .kamima_store {
-    font-size: 0.9rem;
-  }
-  
-  .social-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 1.1rem;
-  }
-  
-  .newsletter-input,
-  .subscribe-form {
-    flex-direction: column;
-  }
-  
-  .newsletter-input button,
-  .subscribe-button {
-    width: 100%;
-  }
-  
-  .footer {
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 30px;
-  }
-
-  .footer-section {
-    margin-right: 0;
-    margin-bottom: 40px;
     text-align: center;
     width: 100%;
   }

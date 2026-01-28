@@ -1,11 +1,9 @@
-import React, { useEffect } from "react";
-import Header from "./header.jsx";
-import Footer from "./footer.jsx";
+import React from "react";
 
 // Componente Banner Promocional - Optimizado para imágenes de Canva
 // Dimensiones específicas: 1200x300px (ratio 4:1) para banners horizontales
 export const BannerPromocional = ({ 
-  imagen = "/src/imagenes/celebrity.jpg",
+  imagen = "/src/imagenes/silversea.jpg",
   alt = "Banner Promocional",
   onClick = null
 }) => {
@@ -27,7 +25,7 @@ export const BannerPromocional = ({
         alt={alt}
         style={{
           width: '100%',
-          height: 'auto',
+          height: '25rem',
           aspectRatio: '4 / 1',
           display: 'block',
           borderRadius: '15px',
@@ -52,28 +50,4 @@ export const BannerPromocional = ({
   );
 };
 
-const BaseLayout = ({ children, title = "TIENDA ONLINE", showBanner = true }) => {
-  useEffect(() => {
-    document.title = title;
-  }, [title]);
 
-  return (
-    <>
-      <Header />
-      
-      <main style={{ background: 'white', minHeight: '100vh' }}>
-        {/* Contenido principal */}
-        <div className="container py-5">
-          {children}
-        </div>
-
-        {/* Banner promocional - Ancho completo */}
-        {showBanner && <BannerPromocional />}
-      </main>
-
-      <Footer />
-    </>
-  );
-};
-
-export default BaseLayout;
