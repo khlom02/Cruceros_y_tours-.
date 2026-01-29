@@ -1,0 +1,35 @@
+.asistencia-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 20px 200px;
+    box-sizing: border-box;
+}
+
+.imagen-izquierda,
+.imagen-centro,
+.imagen-derecha {
+    flex: 0 0 auto;
+}
+
+.imagen-izquierda {
+    margin-right: auto;
+}
+
+.imagen-centro {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.imagen-derecha {
+    margin-left: auto;
+}
+
+.asistencia-container img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}

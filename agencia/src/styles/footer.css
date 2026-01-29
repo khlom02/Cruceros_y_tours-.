@@ -49,6 +49,45 @@
   animation: fadeInUp 0.6s ease-out;
 }
 
+.socials_media{
+  display: flex;
+  gap: 45px;
+  margin-top: 30px;
+}
+
+.socials_media a {
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.icon-instagram {
+  color: #E1306C;
+  transition: transform 0.3s ease;
+}
+
+.icon-instagram:hover {
+  transform: scale(1.1);
+}
+
+.icon-whatsapp {
+  color: #25D366;
+  transition: transform 0.3s ease;
+}
+
+.icon-whatsapp:hover {
+  transform: scale(1.1);
+}
+
+.icon-gmail {
+  color: #EA4335;
+  transition: transform 0.3s ease;
+}
+
+.icon-gmail:hover {
+  transform: scale(1.1);
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -81,19 +120,19 @@
 }
 
 /* Logo */
-.footer-section.logo-social {
+.footer-section.socials_media {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2rem;
+  gap: 4rem;
   min-width: 300px;
 }
 
-.footer-section.logo-social a {
+.footer-section.socials_media a {
   text-decoration: none;
 }
  /* tamaño de la imagen del logo en el footer */
-.footer-section.logo-social img {
+.footer-section img {
   height: auto;
   max-height: 120px;
   width: auto;
@@ -102,7 +141,7 @@
   transition: transform 0.3s ease;
 }
 
-.footer-section.logo-social img:hover {
+.footer-section img:hover {
   transform: scale(1.08);
 }
 

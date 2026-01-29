@@ -1,6 +1,8 @@
 import React from "react";
 import '../styles/footer.css';
-
+import { FaInstagramSquare } from "react-icons/fa";
+import { FaWhatsappSquare } from "react-icons/fa";
+import { BiLogoGmail } from "react-icons/bi";
 const Footer = () => {
   return (
     <div className="footer-container">
@@ -9,6 +11,17 @@ const Footer = () => {
           <a href="/">
             <img src="/src/imagenes/texto_logo_solo_color.png"/>
           </a>
+          <section className="socials_media">
+            <a href="/" target="_blank" rel="noopener noreferrer">
+              <FaInstagramSquare className="icon-instagram" size={50}/> 
+            </a>
+            <a href="/" target="_blank" rel="noopener noreferrer">
+              <FaWhatsappSquare className="icon-whatsapp" size={50}/>
+            </a>
+            <a href="/">
+              <BiLogoGmail className="icon-gmail" size={50}/>
+            </a>
+          </section>
         </div>
 
         <div className="footer-section help-links">
