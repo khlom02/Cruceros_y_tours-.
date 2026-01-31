@@ -197,7 +197,7 @@ const Carousel3D = ({ destinations, onModalChange }) => {
 
   const cardStyle = {
     width: "380px",
-    height: "300px",
+    height: "600px",
     borderRadius: "20px",
     overflow: "hidden",
     position: "absolute",
@@ -243,6 +243,9 @@ const Carousel3D = ({ destinations, onModalChange }) => {
     userSelect: "none",
   };
 
+  const isVideo = (src) =>
+    typeof src === "string" && /\.(mp4|webm|ogg)$/i.test(src);
+
   return (
     <div
       style={{
@@ -252,8 +255,8 @@ const Carousel3D = ({ destinations, onModalChange }) => {
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
-        marginBottom: "80px",
-        padding: "0 40px",
+        marginBottom: 8,
+        padding: "0 10px 130px",
       }}
     >
       <div
@@ -314,7 +317,7 @@ const Carousel3D = ({ destinations, onModalChange }) => {
                 left: "50%",
                 top: "50%",
                 marginLeft: "-190px",
-                marginTop: "-225px",
+                marginTop: "-300px",
                 cursor: "grab",
               }}
               onMouseEnter={(e) => {
@@ -339,17 +342,34 @@ const Carousel3D = ({ destinations, onModalChange }) => {
                 }
               }}
             >
-              <img
-                src={dest.img}
-                alt={dest.title}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  pointerEvents: "none",
-                  userSelect: "none",
-                }}
-              />
+              {isVideo(dest.img) ? (
+                <video
+                  src={dest.img}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    pointerEvents: "none",
+                    userSelect: "none",
+                  }}
+                />
+              ) : (
+                <img
+                  src={dest.img}
+                  alt={dest.title}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    pointerEvents: "none",
+                    userSelect: "none",
+                  }}
+                />
+              )}
               <div style={overlayStyle}>
                 <div style={{
                   display: 'flex',
@@ -401,11 +421,11 @@ const Carousel3D = ({ destinations, onModalChange }) => {
       <div
         style={{
           position: "absolute",
-          bottom: "150px",
+          bottom: "-8px",
           left: "50%",
           transform: "translateX(-50%)",
           display: isModalOpen ? "none" : "flex",
-          gap: "15px",
+          gap: "10px",
           zIndex: 100,
           alignItems: "center",
         }}
@@ -421,6 +441,8 @@ const Carousel3D = ({ destinations, onModalChange }) => {
             style={{
               width: currentIndex === index ? "45px" : "14px",
               height: "14px",
+              padding: 0,
+              lineHeight: 1,
               borderRadius: "7px",
               border: "none",
               background:
@@ -574,19 +596,37 @@ const Carousel3D = ({ destinations, onModalChange }) => {
                 justifyContent: 'center',
               }}
             >
-              <img
-                src={destinations[modalImageIndex].img}
-                alt={destinations[modalImageIndex].title}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'contain',
-                  display: 'block',
-                  userSelect: 'none',
-                  pointerEvents: 'none',
-                }}
-                draggable="false"
-              />
+              {isVideo(destinations[modalImageIndex].img) ? (
+                <video
+                  src={destinations[modalImageIndex].img}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'contain',
+                    display: 'block',
+                    userSelect: 'none',
+                    pointerEvents: 'none',
+                  }}
+                />
+              ) : (
+                <img
+                  src={destinations[modalImageIndex].img}
+                  alt={destinations[modalImageIndex].title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'contain',
+                    display: 'block',
+                    userSelect: 'none',
+                    pointerEvents: 'none',
+                  }}
+                  draggable="false"
+                />
+              )}
               
               {/* Overlay con información */}
               <div

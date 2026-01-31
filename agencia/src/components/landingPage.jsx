@@ -4,7 +4,11 @@ import Carousel3D from './Carousel3D';
 import { BannerPromocional } from './banner_promocional';
 import ToursCardsGrid from "./tours_cards.jsx";
 import Aerolineas from "./Aerolineas.jsx";
+import Asistencia from "./Asistencia.jsx";
+import trenesvehiculos from "./Trenes_vehiculos.jsx";
 import { useState } from 'react';
+import Trenesyvehiculos from './Trenes_vehiculos.jsx';
+
 
 const LandingPage = () => {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -26,7 +30,7 @@ const LandingPage = () => {
       id: 2 
     },
     { 
-      img: "/src/imagenes/royal_caribean.jpg",
+      img: "/src/imagenes/serenade.mp4",
       logo: "/src/assets/royal_caribbean_logo.jpg",
       title: "Royal Caribbean", 
       // subtitle: "Royal Caribbean", 
@@ -57,7 +61,6 @@ const LandingPage = () => {
     fontSize: '1.2rem',
     fontWeight: '600',
     boxShadow: '0 8px 25px rgba(0, 119, 182, 0.35)',
-    marginTop: '20px',
     cursor: 'pointer',
     transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
     textTransform: 'uppercase',
@@ -70,7 +73,7 @@ const LandingPage = () => {
     <main className="landing_page" style={{ 
       background: 'white',
       minHeight: '100vh', 
-      padding: '60px 0 70px',
+      padding: '40px 0 70px',
       position: 'relative'
     }}>
       {/* Elementos decorativos de fondo */}
@@ -107,35 +110,23 @@ const LandingPage = () => {
             display: 'inline-block',
             marginBottom: '5px'
           }}>
-            <span style={{
-              fontSize: '0.95rem',
-              color: '#0077b6',
-              fontWeight: '600',
-              textTransform: 'uppercase',
-              letterSpacing: '3px',
-              padding: '8px 24px',
-              background: 'rgba(0, 180, 216, 0.1)',
-              borderRadius: '30px',
-              border: '2px solid rgba(0, 180, 216, 0.2)'
-            }}>
-              ✈️ Viajes Memorables
-            </span>
           </div>
           
           <h1 className="fw-bold" style={{ 
-            fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
-            marginBottom: '8px',
+            fontSize: 'clamp(4rem, 7vw, 6rem)',
+            marginBottom: '2px',
             color: '#023e8a',
             letterSpacing: '-1px',
-            lineHeight: '1.15',
             fontFamily: "'Photogenic', serif",
             textShadow: '0 2px 4px rgba(0, 0, 0, 0.08)',
             background: 'linear-gradient(135deg, #023e8a 0%, #0077b6 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
+            backgroundClip: 'text',
+            margin: '-70px',
           }}>
-            Bienvenidos a Cruceros y Tours
+            Bienvenidos a <br/>
+            Cruceros y Tours
           </h1>
           
           <p style={{ 
@@ -145,7 +136,8 @@ const LandingPage = () => {
             margin: '0 auto',
             maxWidth: '700px',
             lineHeight: '1.6',
-            fontFamily: "'Lora', 'Georgia', serif"
+            fontFamily: "'Lora', 'Georgia', serif",
+            paddingTop: '70px'
           }}>
             Aventuras increíbles te esperan
           </p>
@@ -155,7 +147,7 @@ const LandingPage = () => {
             justifyContent: 'center',
             alignItems: 'center',
             gap: '30px',
-            marginTop: '5px',
+            marginTop: '15px',
             flexWrap: 'wrap'
           }}>
             <div style={{ textAlign: 'center' }}>
@@ -182,7 +174,7 @@ const LandingPage = () => {
           fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
           color: '#023e8a',
           fontWeight: '700',
-          marginBottom: '30px',
+          marginBottom: '100px',
           marginTop: '40px',
           letterSpacing: '-0.5px',
           fontFamily: "'Photogenic', serif"
@@ -191,15 +183,15 @@ const LandingPage = () => {
         </h2>
 
         {/* Carrusel 3D */}
-        <div className="animate__animated animate__fadeInUp" style={{ marginBottom: '0px' }}>
+        <div className="animate__animated animate__fadeInUp" style={{ marginBottom: '30px' }}>
           <Carousel3D destinations={destinations} onModalChange={setIsGalleryOpen} />
         </div>
 
         <div 
           className="text-center" 
           style={{ 
-            marginTop: '-200px',
-            transform: isGalleryOpen ? 'translateY(600px) !important' : 'translateY(0)',
+            marginTop: '0px',
+            transform: isGalleryOpen ? 'translateY(600px)' : 'translateY(0)',
             transition: 'all 0.4s ease-in-out',
             opacity: isGalleryOpen ? '0' : '1',
             visibility: isGalleryOpen ? 'hidden' : 'visible',
@@ -223,7 +215,7 @@ const LandingPage = () => {
           </button>
           
           <div style={{
-            marginTop: '20px',
+            marginTop: '12px',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -315,6 +307,21 @@ const LandingPage = () => {
       {/* Sección de Aerolíneas */}
       <Aerolineas />
       
+      <h2 style={{
+        textAlign: 'center',
+        fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+        color: '#023e8a',
+        fontWeight: '700',
+        marginBottom: '30px',
+        marginTop: '40px',
+        letterSpacing: '-0.5px',
+        fontFamily: "'Photogenic', serif"
+      }}>
+       Asistencia de viajes
+      </h2>
+      <Asistencia />
+
+      <Trenesyvehiculos />
     </main>
   );
 };

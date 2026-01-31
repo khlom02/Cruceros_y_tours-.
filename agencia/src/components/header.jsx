@@ -27,8 +27,8 @@ const Header = () => {
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)), url(/src/imagenes/banner_principal.jpeg)`,
         backgroundSize: "cover",
-        backgroundPosition: "center",
-        minHeight: "600px",
+        backgroundPosition: "center -170%",
+        minHeight: "850px",
         display: "flex",
         flexDirection: "column",
       }}
@@ -376,7 +376,7 @@ const Header = () => {
       {/* Curvas decorativas (Wave Shape) */}
       <div
         className="position-absolute bottom-0 w-100"
-        style={{ marginBottom: "-1px", lineHeight: 0 }}
+        style={{ marginBottom: "-1px", lineHeight: 0, paddingBottom: "0px" }}
       >
         <svg
           viewBox="0 0 1440 120"
