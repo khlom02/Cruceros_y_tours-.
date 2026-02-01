@@ -1,14 +1,12 @@
 import 'animate.css';
 import '../styles/landing.css';
 import Carousel3D from './Carousel3D';
-import { BannerPromocional } from './banner_promocional';
 import ToursCardsGrid from "./tours_cards.jsx";
 import Aerolineas from "./Aerolineas.jsx";
 import Asistencia from "./Asistencia.jsx";
-import trenesvehiculos from "./Trenes_vehiculos.jsx";
 import { useState } from 'react';
 import Trenesyvehiculos from './Trenes_vehiculos.jsx';
-
+import BannerPrincipal from './banner_principal.jsx';
 
 const LandingPage = () => {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -70,12 +68,14 @@ const LandingPage = () => {
   };
 
   return (
-    <main className="landing_page" style={{ 
-      background: 'white',
-      minHeight: '100vh', 
-      padding: '40px 0 70px',
-      position: 'relative'
-    }}>
+    <>
+      <BannerPrincipal />
+      <main className="landing_page" style={{ 
+        background: 'white',
+        minHeight: '100vh', 
+        padding: '100px 0 100px',
+        position: 'relative'
+      }}>
       {/* Elementos decorativos de fondo */}
       <div style={{
         position: 'absolute',
@@ -111,7 +111,6 @@ const LandingPage = () => {
             marginBottom: '5px'
           }}>
           </div>
-          
           <h1 className="fw-bold" style={{ 
             fontSize: 'clamp(4rem, 7vw, 6rem)',
             marginBottom: '2px',
@@ -156,7 +155,7 @@ const LandingPage = () => {
                 fontWeight: '700', 
                 color: '#0077b6',
                 marginBottom: '5px'
-              }}>500+</div>
+              }}>+500</div>
               <div style={{ 
                 fontSize: '0.9rem', 
                 color: '#6c757d',
@@ -286,12 +285,6 @@ const LandingPage = () => {
 
       {/* Sección de Tours Destacados */}
       <ToursCardsGrid />
-
-      {/* Banner Promocional */}
-      {/* <BannerPromocional 
-        imagen="/src/imagenes/celebrity.jpg"
-        alt="Cruceros Sin Visa Americana"
-      /> */}
         <h2 style={{
         textAlign: 'center',
         fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
@@ -322,7 +315,10 @@ const LandingPage = () => {
       <Asistencia />
 
       <Trenesyvehiculos />
-    </main>
+
+
+      </main>
+    </>
   );
 };
 

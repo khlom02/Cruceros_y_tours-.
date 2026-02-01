@@ -21,18 +21,8 @@ const Header = () => {
   };
 
   return (
-    // ACA ESTA LA IMAGEN PRINCIPAL DEL HEADER
-    <header
-      className="position-relative"
-      style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)), url(/src/imagenes/banner_principal.jpeg)`,
-        backgroundSize: "cover",
-        backgroundPosition: "center -170%",
-        minHeight: "850px",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    // logo del header 
+    <>
       {/* Navbar Superior */}
       <nav className="container-fluid py-3">
         <div className="row align-items-center">
@@ -154,7 +144,7 @@ const Header = () => {
           </div>
 
           {/* Sign In y Carrito - derecha */}
-          <div className="col-auto d-flex align-items-center justify-content-end gap-3">
+          <div className="col-auto d-flex align-items-center justify-content-end" style={{ marginRight: "200px" }}>
             {authLoading ? (
               <div
                 className="spinner-border spinner-border-sm text-white"
@@ -211,8 +201,8 @@ const Header = () => {
                 className="btn"
                 style={{
                   fontFamily: "'Lora', serif",
-                  borderRadius: "25px",
-                  padding: "8px 25px",
+                  borderRadius: "15px",
+                  padding: "5px 15px",
                   transition: "all 0.3s",
                   fontSize: "1.5rem",
                   border: "2px solid #333",
@@ -258,139 +248,7 @@ const Header = () => {
           </div>
         </div>
       </nav>
-
-      {/* Hero Central */}
-      <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center text-center px-3">
-        <h1
-          className="display-2 text-white fw-bold mb-3"
-          style={{
-            fontFamily: "'Playfair Display', serif",
-            textShadow: "2px 2px 8px rgba(0,0,0,0.5)",
-            letterSpacing: "1px",
-          }}
-        >
-          Encuentra tu destino perfecto
-        </h1>
-        <p
-          className="lead text-white mb-5"
-          style={{
-            fontFamily: "'Lora', serif",
-            fontSize: "1.3rem",
-            opacity: "0.95",
-            textShadow: "1px 1px 4px rgba(0,0,0,0.5)",
-          }}
-        >
-          Explora las mejores ofertas en cruceros y tours en venezuela y alrededor del mundo.
-        </p>
-
-        {/* Barra de Búsqueda Smart Search */}
-        {/* <div
-          className="search-container bg-white p-2 d-flex align-items-center"
-          style={{
-            borderRadius: "50px",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-            maxWidth: "950px",
-            width: "100%",
-            gap: "0",
-          }}
-         >
-          <div
-            className="d-flex align-items-center px-3"
-            style={{ borderRight: "1px solid #e0e0e0" }}
-          >
-            <label
-              className="fw-semibold text-secondary mb-0 text-nowrap"
-              style={{ fontSize: "0.9rem" }}
-            >
-              Busqueda inteligente
-            </label>
-          </div>
-
-          <div
-            className="d-flex align-items-center gap-1 px-3"
-            style={{ borderRight: "1px solid #e0e0e0" }}
-          >
-            <i className="bi bi-geo-alt text-secondary"></i>
-            <select
-              className="form-select border-0"
-              style={{ minWidth: "130px", fontSize: "0.95rem" }}
-            >
-              <option>¿A dónde?</option>
-              <option>Caribe</option>
-              <option>Europa</option>
-              <option>Asia</option>
-              <option>África</option>
-            </select>
-          </div>
-
-          <div
-            className="d-flex align-items-center gap-1 px-3"
-            style={{ borderRight: "1px solid #e0e0e0" }}
-          >
-            <i className="bi bi-calendar text-secondary"></i>
-            <select
-              className="form-select border-0"
-              style={{ minWidth: "110px", fontSize: "0.95rem" }}
-            >
-              <option>Fecha</option>
-              <option>Enero 2026</option>
-              <option>Febrero 2026</option>
-              <option>Marzo 2026</option>
-            </select>
-          </div>
-
-          <div className="d-flex align-items-center gap-1 px-3 flex-grow-1">
-            <i className="bi bi-people text-secondary"></i>
-            <select
-              className="form-select border-0"
-              style={{ minWidth: "110px", fontSize: "0.95rem" }}
-            >
-              <option>Pasajeros</option>
-              <option>1 Pasajero</option>
-              <option>2 Pasajeros</option>
-              <option>3-4 Pasajeros</option>
-              <option>5+ Pasajeros</option>
-            </select>
-          </div>
-
-          <button
-            className="btn btn-lg fw-semibold"
-            style={{
-              backgroundColor: "#ff6b35",
-              color: "white",
-              borderRadius: "50px",
-              padding: "10px 35px",
-              border: "none",
-              transition: "all 0.3s",
-              marginLeft: "auto",
-              marginRight: "5px",
-            }}
-            onMouseEnter={(e) => (e.target.style.backgroundColor = "#e85a2a")}
-            onMouseLeave={(e) => (e.target.style.backgroundColor = "#ff6b35")}
-          >
-            Buscar
-          </button>
-        </div> */}
-      </div>
-
-      {/* Curvas decorativas (Wave Shape) */}
-      <div
-        className="position-absolute bottom-0 w-100"
-        style={{ marginBottom: "-1px", lineHeight: 0, paddingBottom: "0px" }}
-      >
-        <svg
-          viewBox="0 0 1440 120"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{ width: "100%", height: "auto", display: "block" }}
-        >
-          <path
-            d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,64C960,75,1056,85,1152,80C1248,75,1344,53,1392,42.7L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"
-            fill="#ffffff"
-          />
-        </svg>
-      </div>
-    </header>
+    </>
   );
 };
 
