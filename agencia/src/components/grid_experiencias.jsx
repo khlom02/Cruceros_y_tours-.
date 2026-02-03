@@ -1,5 +1,6 @@
-import React from "react";
-import "../styles/tours_cards.css";
+import React, { useState } from "react";
+import "../styles/grid_experiencias.css";
+import Filtro, { aplicarFiltros } from "./filtro";
 
 export const CardExperiencias = ({ 
   imagen, 
@@ -8,8 +9,7 @@ export const CardExperiencias = ({
   fechaInicio, 
   fechaFin, 
   precio,
-  colorFondo = "verde",
-  onClick = null 
+  colorFondo = "verde"
 }) => {
   const colores = {
     verde: "#5a8a66",
@@ -20,28 +20,27 @@ export const CardExperiencias = ({
 
   return (
     <div
-      className="tour-card"
+      className="grid-experiencia__card"
       style={{
         backgroundColor: colores[colorFondo] || colores.verde,
         backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.4) 100%), url(${imagen})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        cursor: onClick ? "pointer" : "default",
+        cursor: "pointer",
       }}
-      onClick={onClick}
     >
-      <div className="tour-card__overlay">
-        <div className="tour-card__content">
-          <h3 className="tour-card__titulo">{titulo}</h3>
-          <p className="tour-card__ubicacion">{ubicacion}</p>
+      <div className="grid-experiencia__overlay">
+        <div className="grid-experiencia__content">
+          <h3 className="grid-experiencia__titulo">{titulo}</h3>
+          <p className="grid-experiencia__ubicacion">{ubicacion}</p>
           
-          <div className="tour-card__fechas">
+          <div className="grid-experiencia__fechas">
             <span>{fechaInicio} - {fechaFin}</span>
           </div>
 
-          <div className="tour-card__precio">
-            <span className="tour-card__precio-label">from</span>
-            <span className="tour-card__precio-valor">€{precio}</span>
+          <div className="grid-experiencia__precio">
+            <span className="grid-experiencia__precio-label">from</span>
+            <span className="grid-experiencia__precio-valor">€{precio}</span>
           </div>
         </div>
       </div>
@@ -50,6 +49,16 @@ export const CardExperiencias = ({
 };
 
 export const GridExperiencias = ({ experiencias = [] }) => {
+  const [filtros, setFiltros] = useState({
+    fechaInicio: "",
+    fechaFin: "",
+    guests: "",
+    location: "",
+    transferType: "",
+    priceMin: "",
+    priceMax: "",
+  });
+
   // Experiencias por defecto si no se proporcionan
   const experienciasDefault = [
     {
@@ -189,17 +198,49 @@ export const GridExperiencias = ({ experiencias = [] }) => {
       fechaFin: "22/08/2026",
       precio: "490",
       colorFondo: "naranja"
+    },
+    {
+      id: 14,
+      imagen: "/src/imagenes/celebrity.jpg",
+      titulo: "Torre de Pareis, Mallorca",
+      ubicacion: "Galicia, Spain",
+      fechaInicio: "19/08",
+      fechaFin: "22/08/2026",
+      precio: "490",
+      colorFondo: "naranja"
     }
   ];
 
   const datosExperiencias = experiencias.length > 0 ? experiencias : experienciasDefault;
 
+  const handleFilterChange = (nuevosFiltros) => {
+    setFiltros(nuevosFiltros);
+  };
+
+  // Aplicar filtros a las experiencias
+  const experienciasFiltradasFinal = aplicarFiltros(datosExperiencias, filtros);
+
   return (
-    <div className="tours-grid">
-      {datosExperiencias.map((experiencia) => (
-        <CardExperiencias key={experiencia.id} {...experiencia} />
-      ))}
-    </div>
+    <>
+      <Filtro onFilterChange={handleFilterChange} />
+      <div className="tours-grid">
+        {experienciasFiltradasFinal.length > 0 ? (
+          experienciasFiltradasFinal.map((experiencia) => (
+            <CardExperiencias key={experiencia.id} {...experiencia} />
+          ))
+        ) : (
+          <div style={{
+            gridColumn: "1 / -1",
+            textAlign: "center",
+            padding: "40px",
+            color: "#666",
+            fontSize: "1.1rem"
+          }}>
+            No experiences found matching your filters.
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

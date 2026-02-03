@@ -8,8 +8,7 @@ export const TourCard = ({
   fechaInicio, 
   fechaFin, 
   precio,
-  colorFondo = "verde",
-  onClick = null 
+  colorFondo = "verde"
 }) => {
   const colores = {
     verde: "#5a8a66",
@@ -26,9 +25,8 @@ export const TourCard = ({
         backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.4) 100%), url(${imagen})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        cursor: onClick ? "pointer" : "default",
+        cursor: "pointer",
       }}
-      onClick={onClick}
     >
       <div className="tour-card__overlay">
         <div className="tour-card__content">
