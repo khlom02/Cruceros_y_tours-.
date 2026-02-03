@@ -24,7 +24,7 @@ const Header = () => {
     // logo del header 
     <>
       {/* Navbar Superior */}
-      <nav className="container-fluid py-3">
+      <nav className="container-fluid">
         <div className="row align-items-center">
           {/* Logo - izquierda */}
           <div className="col-auto">
@@ -39,7 +39,7 @@ const Header = () => {
 
           {/* Menú de navegación */}
           <div className="col">
-            <ul className="nav mb-0 d-flex align-items-center flex-wrap gap-1">
+            <ul className="nav d-flex align-items-center flex-wrap gap-1">
                <li className="nav-item">
                 <Link
                   to="/"

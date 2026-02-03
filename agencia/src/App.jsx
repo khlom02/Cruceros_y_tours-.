@@ -10,10 +10,9 @@ import Pagos from './components/pagos.jsx';
 import Register from './components/registro.jsx';
 import Cart from './components/cartContext/cart.jsx';
 import Contacto from './components/contacto.jsx';
+import { Experiencias } from "./components/experiencias.jsx";
 import { CartProvider } from "./components/cartContext/cartContext.jsx";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
-import Experiencias from './components/experiencias.jsx';
-import Detalles from './components/detalles.jsx';
 
 export default function App() {
   return (
@@ -28,15 +27,11 @@ export default function App() {
             {/* Ruta para la página de login */}
             <Route path="/login" element={<LoginForm />} />
 
+            {/* Ruta para la página de experiencias */}
+            <Route path="/experiencias" element={<Experiencias />} />
+
             {/* Ruta para la página contacto */}
             <Route path="/contacto" element={<Contacto />} />
-
-            {/* Ruta para la página detalles */}
-            <Route path="/detalles" element={<Detalles />} />
-            <Route path="/detalles/:id" element={<Detalles />} />
-
-            {/* Ruta para la página de experiencias */}
-            <Route path="/experiencias" element={<Experiencias />} />  
 
             {/* Ruta para la página pagos */}
             <Route path="/pagos" element={<Pagos />} />
