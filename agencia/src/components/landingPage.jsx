@@ -11,45 +11,6 @@ import BannerPrincipal from './banner_principal.jsx';
 const LandingPage = () => {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
-  // 🎨 Configuración de destinos - Solo cambia el nombre del archivo de imagen aquí
-  const destinations = [
-    { 
-      img: "/src/imagenes/MSC.jpg",
-      logo: "/src/assets/MSC_logo.png",
-      title: "MSC", 
-      // subtitle: "MSC", 
-      id: 1 
-    },
-    { 
-      img: "/src/imagenes/ncl.jpg",
-      logo: "/src/assets/ncl_logo.png",
-      title: "NCL", 
-      // subtitle: "NCL", 
-      id: 2 
-    },
-    { 
-      img: "/src/imagenes/serenade.mp4",
-      logo: "/src/assets/royal_caribbean_logo.jpg",
-      title: "Royal Caribbean", 
-      // subtitle: "Royal Caribbean", 
-      id: 3 
-    },
-    { 
-      img: "/src/imagenes/celebrity.jpg",
-      logo: "/src/assets/Celebrity_logo.jpg",
-        title: "Celebrity", 
-      // subtitle: "Celebrity", 
-      id: 4 
-    },
-    { 
-      img: "/src/imagenes/costa.jpg",
-      logo: "/src/assets/costa_logo.png",
-      title: "Costa", 
-      // subtitle: "Costa", 
-      id: 5 
-    }
-  ];
-
   const buttonStyle = {
     background: 'linear-gradient(135deg, #00b4d8 0%, #0077b6 50%, #023e8a 100%)',
     border: 'none',
@@ -130,7 +91,7 @@ const LandingPage = () => {
           
           <p style={{ 
             fontSize: 'clamp(1.1rem, 2vw, 1.5rem)',
-            color: '#495057',
+            '--color-primary-dark': '#003366',
             fontWeight: '400',
             margin: '0 auto',
             maxWidth: '700px',
@@ -183,7 +144,7 @@ const LandingPage = () => {
 
         {/* Carrusel 3D */}
         <div className="animate__animated animate__fadeInUp" style={{ marginBottom: '30px' }}>
-          <Carousel3D destinations={destinations} onModalChange={setIsGalleryOpen} />
+          <Carousel3D onModalChange={setIsGalleryOpen} />
         </div>
 
         <div 
@@ -265,7 +226,7 @@ const LandingPage = () => {
         letterSpacing: '-0.5px',
         fontFamily: "'Photogenic', serif"
       }}>
-        Navieras Nacionales
+        Destinos Nacionales
       </h2>
       {/* Sección de Tours Destacados */}
       <ToursCardsGrid />
@@ -280,7 +241,7 @@ const LandingPage = () => {
         letterSpacing: '-0.5px',
         fontFamily: "'Photogenic', serif"
       }}>
-        Navieras Internacionales
+        Destinos Internacionales
       </h2>
 
       {/* Sección de Tours Destacados */}
@@ -295,8 +256,21 @@ const LandingPage = () => {
         letterSpacing: '-0.5px',
         fontFamily: "'Photogenic', serif"
       }}>
-       Aerolineas Asociadas
+       VUELA A CUALQUIER DESTINO
       </h2>
+      <p style={{ 
+            fontSize: 'clamp(1.1rem, 2vw, 1.5rem)',
+            '--color-primary-dark': '#003366',
+            fontWeight: '400',
+        textAlign: 'center',
+        margin: '0 auto',
+            maxWidth: '700px',
+            lineHeight: '1.6',
+            fontFamily: "'Photogenic', serif"
+          }}>
+            Conectamos tus sueños con las mejores aerolíneas del mundo
+          </p>
+   
       {/* Sección de Aerolíneas */}
       <Aerolineas />
       

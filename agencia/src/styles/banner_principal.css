@@ -1,0 +1,22 @@
+/* Botón del banner principal */
+.btn_banner_principal__wrapper {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-top: -40px;
+}
+
+.btn_banner_principal {
+  display: inline-block;
+  background: var(--color-primary-dark);
+  color: #ffffff;
+  text-decoration: none;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn_banner_principal:hover {
+  transform: translateY(-2px);
+}

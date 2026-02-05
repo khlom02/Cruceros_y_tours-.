@@ -57,32 +57,12 @@ const Header = () => {
                     (e.target.style.borderBottom = "2px solid transparent")
                   }
                 >
-                  Home
+                  Inicio
                 </Link>
               </li>
               <li className="nav-item">
                 <Link
-                  to="/experiencias"
-                  className="nav-link px-3 text-dark"
-                  style={{
-                    fontFamily: "'Lora', serif",
-                    fontSize: "1.5rem",
-                    transition: "all 0.3s",
-                    borderBottom: "2px solid transparent",
-                  }}
-                  onMouseEnter={(e) =>
-                    (e.target.style.borderBottom = "2px solid #40E0D0")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.target.style.borderBottom = "2px solid transparent")
-                  }
-                >
-                  Experiencias
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/"
+                  to="#"
                   className="nav-link px-3 text-dark"
                   style={{
                     fontFamily: "'Lora', serif",
@@ -101,8 +81,8 @@ const Header = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <a
-                  href="#tours"
+                <Link
+                  to="#"
                   className="nav-link px-3 text-dark"
                   style={{
                     fontFamily: "'Lora', serif",
@@ -117,12 +97,52 @@ const Header = () => {
                     (e.target.style.borderBottom = "2px solid transparent")
                   }
                 >
-                  Tours
+                  Destinos
+                </Link>
+              </li>
+              <li className="nav-item">
+                <a
+                  href="#"
+                  className="nav-link px-3 text-dark"
+                  style={{
+                    fontFamily: "'Lora', serif",
+                    fontSize: "1.5rem",
+                    transition: "all 0.3s",
+                    borderBottom: "2px solid transparent",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.target.style.borderBottom = "2px solid #40E0D0")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.target.style.borderBottom = "2px solid transparent")
+                  }
+                >
+                  Vuelos
                 </a>
               </li>
               <li className="nav-item">
                 <a
-                  href="/contacto"
+                  href="/#"
+                  className="nav-link px-3 text-dark"
+                  style={{
+                    fontFamily: "'Lora', serif",
+                    fontSize: "1.5rem",
+                    transition: "all 0.3s",
+                    borderBottom: "2px solid transparent",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.target.style.borderBottom = "2px solid #40E0D0")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.target.style.borderBottom = "2px solid transparent")
+                  }
+                >
+                  Servicios Especiales
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  href="/#"
                   className="nav-link px-3 text-dark"
                   style={{
                     fontFamily: "'Lora', serif",
@@ -143,8 +163,8 @@ const Header = () => {
             </ul>
           </div>
 
-          {/* Sign In y Carrito - derecha */}
-          <div className="col-auto d-flex align-items-center justify-content-end" style={{ marginRight: "200px" }}>
+          {/* Login y Carrito - derecha */}
+          <div className="col-auto d-flex align-items-center justify-content-end" style={{ marginRight: "90px" }}>
             {authLoading ? (
               <div
                 className="spinner-border spinner-border-sm text-white"
@@ -202,7 +222,6 @@ const Header = () => {
                 style={{
                   fontFamily: "'Lora', serif",
                   borderRadius: "15px",
-                  padding: "5px 15px",
                   transition: "all 0.3s",
                   fontSize: "1.5rem",
                   border: "2px solid #333",

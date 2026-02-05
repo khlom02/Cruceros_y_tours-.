@@ -1,5 +1,7 @@
 import React from "react";
+import '../styles/banner_principal.css';
 import '../styles/landing.css';
+
 
 
 const BannerPrincipal = ({ children }) => {
@@ -8,7 +10,7 @@ const BannerPrincipal = ({ children }) => {
 			className="position-relative"
 			style={{
 				backgroundImage:
-				"url(/src/imagenes/banner_principal.jpeg)",
+				"linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(/src/imagenes/banner_principal.jpeg)",
 				backgroundSize: "cover",
 				backgroundPosition: "center 10%",
 				backgroundRepeat: "no-repeat",
@@ -24,25 +26,27 @@ const BannerPrincipal = ({ children }) => {
 				<h1
 					className="display-2 text-white fw-bold mb-3"
 					style={{
-						fontFamily: "'Playfair Display', serif",
+						fontFamily: "'Chicago Police', sans-serif",
 						textShadow: "4px 4px 16px rgba(0, 0, 0, 0.5)",
 						letterSpacing: "1px",
+						fontSize: "3rem",
 					}}
 				>
-					Encuentra tu destino perfecto
+					 CRUCEROS Y TOURS: TU PRÓXIMA AVENTURA COMIENZA AQUÍ.
 				</h1>
 				<p
 					className="lead text-white mb-5"
 					style={{
 						fontFamily: "'Lora', serif",
-						fontSize: "1.3rem",
+						fontSize: "2rem",
 						opacity: "0.95",
 						textShadow: "4px 4px 16px rgba(0, 0, 0, 0.5)",
 					}}
 				>
-					Explora las mejores ofertas en cruceros y tours en venezuela y
-					alrededor del mundo.
+					Desde el Caribe hasta el Mediterráneo, nosotros te llevamos
 				</p>
+
+				<a href="#" className="btn_banner_principal btn_banner_principal__wrapper">Ver Ofertas del Mes</a>
 			</div>
 
 			{/* Curvas decorativas (Wave Shape) */}
