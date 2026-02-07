@@ -1,4 +1,6 @@
+
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/grid_experiencias.css";
 import Filtro, { aplicarFiltros } from "./filtro";
 
@@ -9,7 +11,8 @@ export const CardExperiencias = ({
   fechaInicio, 
   fechaFin, 
   precio,
-  colorFondo = "verde"
+  colorFondo = "verde",
+  onClick = null
 }) => {
   const colores = {
     verde: "#5a8a66",
@@ -26,8 +29,9 @@ export const CardExperiencias = ({
         backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.4) 100%), url(${imagen})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        cursor: "pointer",
+        cursor: onClick ? "pointer" : "default",
       }}
+      onClick={onClick}
     >
       <div className="grid-experiencia__overlay">
         <div className="grid-experiencia__content">
@@ -40,7 +44,7 @@ export const CardExperiencias = ({
 
           <div className="grid-experiencia__precio">
             <span className="grid-experiencia__precio-label">from</span>
-            <span className="grid-experiencia__precio-valor">€{precio}</span>
+            <span className="grid-experiencia__precio-valor">€ {precio}</span>
           </div>
         </div>
       </div>
@@ -49,6 +53,7 @@ export const CardExperiencias = ({
 };
 
 export const GridExperiencias = ({ experiencias = [] }) => {
+  const navigate = useNavigate();
   const [filtros, setFiltros] = useState({
     fechaInicio: "",
     fechaFin: "",
@@ -102,7 +107,7 @@ export const GridExperiencias = ({ experiencias = [] }) => {
       colorFondo: "naranja"
     },
     {
-      id: 5,
+     id: 5,
       imagen: "/src/imagenes/celebrity.jpg",
       titulo: "Torre de Pareis, Mallorca",
       ubicacion: "Galicia, Spain",
@@ -110,8 +115,7 @@ export const GridExperiencias = ({ experiencias = [] }) => {
       fechaFin: "22/08/2026",
       precio: "490",
       colorFondo: "naranja"
-    },
-    {
+    },{
       id: 6,
       imagen: "/src/imagenes/celebrity.jpg",
       titulo: "Torre de Pareis, Mallorca",
@@ -180,34 +184,6 @@ export const GridExperiencias = ({ experiencias = [] }) => {
       fechaFin: "22/08/2026",
       precio: "490",
       colorFondo: "naranja"
-    }, {
-      id: 13,
-      imagen: "/src/imagenes/celebrity.jpg",
-      titulo: "Torre de Pareis, Mallorca",
-      ubicacion: "Galicia, Spain",
-      fechaInicio: "19/08",
-      fechaFin: "22/08/2026",
-      precio: "490",
-      colorFondo: "naranja"
-    }, {
-      id: 14,
-      imagen: "/src/imagenes/celebrity.jpg",
-      titulo: "Torre de Pareis, Mallorca",
-      ubicacion: "Galicia, Spain",
-      fechaInicio: "19/08",
-      fechaFin: "22/08/2026",
-      precio: "490",
-      colorFondo: "naranja"
-    },
-    {
-      id: 14,
-      imagen: "/src/imagenes/celebrity.jpg",
-      titulo: "Torre de Pareis, Mallorca",
-      ubicacion: "Galicia, Spain",
-      fechaInicio: "19/08",
-      fechaFin: "22/08/2026",
-      precio: "490",
-      colorFondo: "naranja"
     }
   ];
 
@@ -226,7 +202,11 @@ export const GridExperiencias = ({ experiencias = [] }) => {
       <div className="tours-grid">
         {experienciasFiltradasFinal.length > 0 ? (
           experienciasFiltradasFinal.map((experiencia) => (
-            <CardExperiencias key={experiencia.id} {...experiencia} />
+            <CardExperiencias
+              key={experiencia.id}
+              {...experiencia}
+              onClick={() => navigate(`/detalles?id=${experiencia.id}`)}
+            />
           ))
         ) : (
           <div style={{

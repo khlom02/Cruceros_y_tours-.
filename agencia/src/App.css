@@ -18,13 +18,7 @@
   - src/styles/pagos.css       → Estilos de pagos
   - src/styles/contacto.css    → Estilos de contacto
   - src/styles/cart.css        → Estilos del carrito
-  
-  El archivo original se guardó como backup en: App.css.OLD_BACKUP
-  
-  Ver src/styles/README.md para más información.
-*/
 
-/* Este archivo puede ser eliminado de forma segura */
 
 /* ========== LANDING PAGE ========== */
 .landing_page {

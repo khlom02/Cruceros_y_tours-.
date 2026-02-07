@@ -1,10 +1,16 @@
 .tours-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 30px;
-  padding: 50px 0;
+  padding: 50px 64px;
   max-width: 1800px;
   margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .tours-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .trenes-vehiculos-container {
@@ -27,7 +33,7 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: #333;
-  font-family: 'Lora', serif;
+  font-family: "Chicago Police", sans-serif;
   margin: 0;
   text-align: center;
 }
@@ -93,7 +99,7 @@
   font-size: 1.3rem;
   font-weight: 600;
   color: white;
-  font-family: "Lora", serif;
+  font-family: "Chicago Police", sans-serif;
   line-height: 1.3;
 }
 
@@ -101,7 +107,7 @@
   margin: 0;
   font-size: 0.95rem;
   color: rgba(255, 255, 255, 0.9);
-  font-family: "Lora", serif;
+  font-family: "Photogenic", cursive;
   font-weight: 400;
 }
 
@@ -115,7 +121,7 @@
 .grid-experiencia__fechas span {
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.85);
-  font-family: "Lora", serif;
+  font-family: "Photogenic", cursive;
   font-weight: 500;
 }
 
@@ -129,7 +135,7 @@
 .grid-experiencia__precio-label {
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.8);
-  font-family: "Lora", serif;
+  font-family: "Photogenic", cursive;
   font-weight: 400;
 }
 
@@ -137,7 +143,7 @@
   font-size: 1.8rem;
   font-weight: 700;
   color: white;
-  font-family: "Lora", serif;
+  font-family: "Chicago Police", sans-serif;
 }
 
 /* Estilos para tour-card (tours y otros) */
@@ -158,6 +164,7 @@
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
 }
 
+/* Sombra para mejorar la legibilidad del texto sobre la imagen de fondo */
 .tour-card::after {
   content: "";
   position: absolute;
@@ -190,7 +197,7 @@
   font-size: 1.3rem;
   font-weight: 600;
   color: white;
-  font-family: "Lora", serif;
+  font-family: "Chicago Police", sans-serif;
   line-height: 1.3;
 }
 
@@ -198,7 +205,7 @@
   margin: 0;
   font-size: 0.95rem;
   color: rgba(255, 255, 255, 0.9);
-  font-family: "Lora", serif;
+  font-family: "Photogenic", cursive;
   font-weight: 400;
 }
 
@@ -212,7 +219,7 @@
 .tour-card__fechas span {
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.85);
-  font-family: "Lora", serif;
+  font-family: "Photogenic", cursive;
   font-weight: 500;
 }
 
@@ -226,7 +233,7 @@
 .tour-card__precio-label {
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.8);
-  font-family: "Lora", serif;
+  font-family: "Photogenic", cursive;
   font-weight: 400;
 }
 
@@ -234,15 +241,15 @@
   font-size: 1.8rem;
   font-weight: 700;
   color: white;
-  font-family: "Lora", serif;
+  font-family: "Chicago Police", sans-serif;
 }
 
 /* Responsivo */
 @media (max-width: 768px) {
   .tours-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
-    padding: 30px 0;
+    padding: 30px 32px;
   }
 
   .grid-experiencia__card,
@@ -270,6 +277,7 @@
   .tours-grid {
     grid-template-columns: 1fr;
     gap: 16px;
+    padding: 24px 20px;
   }
 
   .grid-experiencia__card,

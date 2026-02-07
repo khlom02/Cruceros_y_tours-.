@@ -1,7 +1,46 @@
 import React, { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
+import "../styles/carrusel3D.css";
 
-const Carousel3D = ({ destinations, onModalChange }) => {
+const defaultDestinations = [
+  {
+    img: "/src/imagenes/MSC.jpg",
+    logo: "/src/assets/MSC_logo.png",
+    title: "Alaska",
+    // subtitle: "MSC",
+    id: 1,
+  },
+  {
+    img: "/src/imagenes/ncl.jpg",
+    logo: "/src/assets/ncl_logo.png",
+    title: "Europa",
+    // subtitle: "NCL",
+    id: 2,
+  },
+  {
+    img: "/src/imagenes/serenade.mp4",
+    logo: "/src/assets/royal_caribbean_logo.jpg",
+    title: "¡CRUCERO SIN VISA! (Hasta abril 2027)",
+    // subtitle: "Royal Caribbean",
+    id: 3,
+  },
+  {
+    img: "/src/imagenes/celebrity.jpg",
+    logo: "/src/assets/Celebrity_logo.jpg",
+    title: "Caribe Familiar",
+    // subtitle: "Celebrity",
+    id: 4,
+  },
+  {
+    img: "/src/imagenes/costa.jpg",
+    logo: "/src/assets/costa_logo.png",
+    title: "Transatlánticos.",
+    // subtitle: "Costa",
+    id: 5,
+  },
+];
+
+const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
   const [currentIndex, setCurrentIndex] = useState(2);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -195,14 +234,14 @@ const Carousel3D = ({ destinations, onModalChange }) => {
     modalDragRef.current.isDragging = false;
   };
 
+  // tamaño de las cards y estilos generales
   const cardStyle = {
-    width: "380px",
-    height: "600px",
+    width: "400px",
+    height: "420px",
     borderRadius: "20px",
     overflow: "hidden",
     position: "absolute",
     border: "none",
-    // boxShadow: "0 20px 60px rgb(104, 104, 104)",
     cursor: "pointer",
     willChange: "transform",
     userSelect: "none",
@@ -211,8 +250,9 @@ const Carousel3D = ({ destinations, onModalChange }) => {
     msUserSelect: "none",
   };
 
+  // posicion del texto sobre la imagen y estilos
   const overlayStyle = {
-    padding: "30px",
+    padding: "10px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-end",
@@ -419,45 +459,57 @@ const Carousel3D = ({ destinations, onModalChange }) => {
 
       {/* Indicadores */}
       <div
-        style={{
-          position: "absolute",
-          bottom: "-8px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          display: isModalOpen ? "none" : "flex",
-          gap: "10px",
-          zIndex: 100,
-          alignItems: "center",
-        }}
+        className={`carousel3d-indicators ${isModalOpen ? "is-hidden" : ""}`}
       >
-        {destinations.map((_, index) => (
+        <div className="carousel3d-indicator-row">
+          {destinations.map((_, index) => (
+            <button
+              key={index}
+              className={`carousel3d-indicator ${
+                currentIndex === index ? "is-active" : ""
+              }`}
+              onClick={() => {
+                if (index !== currentIndex && !isAnimating) {
+                  setCurrentIndex(index);
+                }
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="carousel3d-cta text-center">
           <button
-            key={index}
-            onClick={() => {
-              if (index !== currentIndex && !isAnimating) {
-                setCurrentIndex(index);
-              }
+            className="carousel3d-cta-button"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform =
+                "translateY(-5px) scale(1.05)";
+              e.currentTarget.style.boxShadow =
+                "0 15px 40px rgba(0, 119, 182, 0.5)";
             }}
-            style={{
-              width: currentIndex === index ? "45px" : "14px",
-              height: "14px",
-              padding: 0,
-              lineHeight: 1,
-              borderRadius: "7px",
-              border: "none",
-              background:
-                currentIndex === index
-                  ? "linear-gradient(135deg, #f39c12, #d35400)"
-                  : "rgba(0,0,0,0.15)",
-              cursor: "pointer",
-              transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
-              boxShadow:
-                currentIndex === index
-                  ? "0 4px 12px rgba(211, 84, 0, 0.4)"
-                  : "none",
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0) scale(1)";
+              e.currentTarget.style.boxShadow =
+                "0 8px 25px rgba(0, 119, 182, 0.35)";
             }}
-          />
-        ))}
+          >
+            🌴 Reserva tu Aventura
+          </button>
+
+          <div className="carousel3d-perks">
+            <div className="carousel3d-perk">
+              <span className="carousel3d-perk-icon">✓</span>
+              <span>Cancelación gratuita</span>
+            </div>
+            <div className="carousel3d-perk">
+              <span className="carousel3d-perk-icon">✓</span>
+              <span>Pago seguro</span>
+            </div>
+            <div className="carousel3d-perk">
+              <span className="carousel3d-perk-icon">✓</span>
+              <span>Mejor precio garantizado</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Modal de galería */}
@@ -540,7 +592,7 @@ const Carousel3D = ({ destinations, onModalChange }) => {
               cursor: 'grab',
             }}
           >
-            {/* Botón anterior - Estilizado según la página */}
+            {/* Botón anterior */}
             <button
               onClick={(e) => {
                 e.stopPropagation();

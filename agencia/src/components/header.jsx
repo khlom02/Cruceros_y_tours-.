@@ -82,7 +82,7 @@ const Header = () => {
               </li>
               <li className="nav-item">
                 <Link
-                  to="#"
+                  to="/destinos"
                   className="nav-link px-3 text-dark"
                   style={{
                     fontFamily: "'Lora', serif",

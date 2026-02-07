@@ -110,21 +110,6 @@ const LandingPage = () => {
             marginTop: '15px',
             flexWrap: 'wrap'
           }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ 
-                fontSize: '2.5rem', 
-                fontWeight: '700', 
-                color: '#0077b6',
-                marginBottom: '5px'
-              }}>+500</div>
-              <div style={{ 
-                fontSize: '0.9rem', 
-                color: '#6c757d',
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
-              }}>Destinos</div>
-            </div>
-          
           </div>
         </div>
 
@@ -147,73 +132,6 @@ const LandingPage = () => {
           <Carousel3D onModalChange={setIsGalleryOpen} />
         </div>
 
-        <div 
-          className="text-center" 
-          style={{ 
-            marginTop: '0px',
-            transform: isGalleryOpen ? 'translateY(600px)' : 'translateY(0)',
-            transition: 'all 0.4s ease-in-out',
-            opacity: isGalleryOpen ? '0' : '1',
-            visibility: isGalleryOpen ? 'hidden' : 'visible',
-            pointerEvents: isGalleryOpen ? 'none' : 'auto',
-            position: 'relative',
-            zIndex: isGalleryOpen ? '-1' : '10',
-          }}
-         >
-          <button 
-            style={buttonStyle}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-5px) scale(1.05)';
-              e.currentTarget.style.boxShadow = '0 15px 40px rgba(0, 119, 182, 0.5)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0) scale(1)';
-              e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 119, 182, 0.35)';
-            }}
-          >
-            🌴 Reserva tu Aventura
-          </button>
-          
-          <div style={{
-            marginTop: '12px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '20px',
-            flexWrap: 'wrap'
-          }}>
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '10px',
-              color: '#0077b6',
-              fontSize: '0.95rem'
-            }}>
-              <span style={{ fontSize: '1.3rem' }}>✓</span>
-              <span>Cancelación gratuita</span>
-            </div>
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '10px',
-              color: '#0077b6',
-              fontSize: '0.95rem'
-            }}>
-              <span style={{ fontSize: '1.3rem' }}>✓</span>
-              <span>Pago seguro</span>
-            </div>
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '10px',
-              color: '#0077b6',
-              fontSize: '0.95rem'
-            }}>
-              <span style={{ fontSize: '1.3rem' }}>✓</span>
-              <span>Mejor precio garantizado</span>
-            </div>
-          </div>
-        </div>
       </div>
 
       <h2 style={{

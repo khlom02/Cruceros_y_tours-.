@@ -89,16 +89,6 @@ export const ToursCardsGrid = ({ tours = [] }) => {
       fechaFin: "22/08/2026",
       precio: "490",
       colorFondo: "naranja"
-    },
-    {
-      id: 5,
-      imagen: "/src/imagenes/celebrity.jpg",
-      titulo: "Torre de Pareis, Mallorca",
-      ubicacion: "Galicia, Spain",
-      fechaInicio: "19/08",
-      fechaFin: "22/08/2026",
-      precio: "490",
-      colorFondo: "naranja"
     }
   ];
 

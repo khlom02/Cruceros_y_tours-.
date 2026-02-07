@@ -1,9 +1,8 @@
-import React from "react";
-import '../styles/experiencias.css';
+import '../styles/destinos.css';
 import { BannerExperiencias } from "./banner_experiencias";
 import { CardExperiencias, GridExperiencias } from "./grid_experiencias";
 
-export const Experiencias = () => {
+export const Destinos = () => {
 
   return (
     <div className="experiencias-container">
