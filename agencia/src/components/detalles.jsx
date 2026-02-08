@@ -1,7 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "../styles/detalles.css";
 import { fetchProductById } from "../backend/supabase_client.js";
+import Rooms from "./rooms.jsx";
+import DetallesNavieras from "./detalles_navieras.jsx";
 
 const normalizeDetalle = (data) => {
     if (!data) return null;
@@ -23,6 +25,13 @@ const normalizeDetalle = (data) => {
         highlights: Array.isArray(data.highlights) ? data.highlights : [],
         facilities: Array.isArray(data.facilities) ? data.facilities : [],
         rooms: Array.isArray(data.rooms) ? data.rooms : [],
+        anosServicio: data.anos_servicio ?? data.anosServicio ?? null,
+        pasajerosMax: data.pasajeros_max ?? data.pasajerosMax ?? null,
+        tripulantes: data.tripulantes ?? null,
+        ratioEspacio: data.ratio_espacio ?? data.ratioEspacio ?? null,
+        ratioServicio: data.ratio_servicio ?? data.ratioServicio ?? null,
+        cabinaSingle: data.cabina_single ?? data.cabinaSingle ?? false,
+        viajandoConNinos: data.viajando_con_ninos ?? data.viajandoConNinos ?? false,
         gallery,
     };
 };
@@ -47,16 +56,16 @@ const mockDetalles = {
             "Mundo SPA",
         ],
         facilities: [
-            "Wi-Fi",
-            "Piscina cubierta",
-            "Mundo SPA",
-            "Amenities cosmeticos de lujo",
-            "Gimnasio",
-            "Terraza",
-            "Balcon",
-            "Restaurante",
-            "Sauna",
-            "Vista a la playa",
+            " 🛜 Wi-Fi",
+            " 👙 Piscina",
+            " 💆 SPA",
+            " 💅 cosmeticos",
+            " 🏋️ Gimnasio",
+            " 🔭 Terraza",
+            " 🏠 Balcon",
+            " 🍽️ Restaurante",
+            " 🧖 Sauna",
+            " 🌅 Vista a la playa",
         ],
         rooms: [
             {
@@ -83,10 +92,13 @@ const mockDetalles = {
 const Detalles = () => {
     const [searchParams] = useSearchParams();
     const detalleId = searchParams.get("id");
+    const detalleTipo = searchParams.get("tipo");
     const [detalle, setDetalle] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [isInteracting, setIsInteracting] = useState(false);
+    const intervalRef = useRef(null);
 
     useEffect(() => {
         let isMounted = true;
@@ -137,6 +149,24 @@ const Detalles = () => {
         setActiveIndex(0);
     }, [gallery.length]);
 
+    useEffect(() => {
+        if (gallery.length <= 1 || isInteracting) return;
+
+        intervalRef.current = setInterval(() => {
+            setActiveIndex((prev) => (prev + 1) % gallery.length);
+        }, 3000);
+
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
+        };
+    }, [gallery.length, isInteracting]);
+
+    const handleInteractStart = () => setIsInteracting(true);
+    const handleInteractEnd = () => setIsInteracting(false);
+
     const activeImage = gallery[activeIndex];
 
     if (loading) {
@@ -172,6 +202,10 @@ const Detalles = () => {
                             className="detalles-main-image"
                             src={activeImage}
                             alt={detalle.title}
+                            onMouseEnter={handleInteractStart}
+                            onMouseLeave={handleInteractEnd}
+                            onTouchStart={handleInteractStart}
+                            onTouchEnd={handleInteractEnd}
                         />
                     ) : (
                         <div className="detalles-image-placeholder">
@@ -180,7 +214,13 @@ const Detalles = () => {
                     )}
 
                     {gallery.length > 1 && (
-                        <div className="detalles-thumbs">
+                        <div
+                            className="detalles-thumbs"
+                            onMouseEnter={handleInteractStart}
+                            onMouseLeave={handleInteractEnd}
+                            onTouchStart={handleInteractStart}
+                            onTouchEnd={handleInteractEnd}
+                        >
                             {gallery.map((imgUrl, index) => (
                                 <button
                                     key={`${detalle.id}-thumb-${index}`}
@@ -211,6 +251,18 @@ const Detalles = () => {
                     </div>
 
                     <h1 className="detalles-title">{detalle.title}</h1>
+
+                    {detalleTipo === "crucero" && (
+                        <DetallesNavieras
+                            anosServicio={detalle.anosServicio}
+                            pasajerosMax={detalle.pasajerosMax}
+                            tripulantes={detalle.tripulantes}
+                            ratioEspacio={detalle.ratioEspacio}
+                            ratioServicio={detalle.ratioServicio}
+                            cabinaSingle={detalle.cabinaSingle}
+                            viajandoConNinos={detalle.viajandoConNinos}
+                        />
+                    )}
 
                     {detalle.highlights.length > 0 && (
                         <ul className="detalles-highlights">
@@ -253,28 +305,10 @@ const Detalles = () => {
                 </section>
             )}
 
-            {detalle.rooms.length > 0 && (
-                <section className="detalles-section">
-                    <h2>Habitaciones disponibles</h2>
-                    <div className="detalles-rooms">
-                        {detalle.rooms.map((room, index) => (
-                            <div
-                                key={`${detalle.id}-room-${index}`}
-                                className="detalles-room"
-                            >
-                                <div className="detalles-room-title">{room.title}</div>
-                                {room.description && (
-                                    <div className="detalles-room-desc">{room.description}</div>
-                                )}
-                                {room.price && (
-                                    <div className="detalles-room-price">{room.price}</div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </section>
-            )}
+            
+            <Rooms />
         </div>
+
     );
 };
 

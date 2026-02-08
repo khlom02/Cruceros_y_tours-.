@@ -1,0 +1,292 @@
+.tours-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  padding: 50px 64px;
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .tours-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.trenes-vehiculos-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 120px;
+  padding: 50px 40px;
+  max-width: 1800px;
+  margin: 80px auto 0;
+}
+
+.trenes-vehiculos-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  font-family: "Chicago Police", sans-serif;
+  margin: 0;
+  text-align: center;
+}
+
+.cards-horizontal {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cards-horizontal .tour-card {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Estilos para grid-experiencias */
+.grid-experiencia__card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 400px;
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.grid-experiencia__card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+}
+
+.grid-experiencia__card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%);
+  z-index: 1;
+}
+
+.grid-experiencia__overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.grid-experiencia__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.grid-experiencia__titulo {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: white;
+  font-family: "Chicago Police", sans-serif;
+  line-height: 1.3;
+}
+
+.grid-experiencia__ubicacion {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: "Photogenic", cursive;
+  font-weight: 400;
+}
+
+.grid-experiencia__fechas {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.grid-experiencia__fechas span {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: "Photogenic", cursive;
+  font-weight: 500;
+}
+
+.grid-experiencia__precio {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.grid-experiencia__precio-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "Photogenic", cursive;
+  font-weight: 400;
+}
+
+.grid-experiencia__precio-valor {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  font-family: "Chicago Police", sans-serif;
+}
+
+/* Estilos para tour-card (tours y otros) */
+.tour-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 400px;
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.tour-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* Sombra para mejorar la legibilidad del texto sobre la imagen de fondo */
+.tour-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%);
+  z-index: 1;
+}
+
+.tour-card__overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.tour-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tour-card__titulo {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: white;
+  font-family: "Chicago Police", sans-serif;
+  line-height: 1.3;
+}
+
+.tour-card__ubicacion {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: "Photogenic", cursive;
+  font-weight: 400;
+}
+
+.tour-card__fechas {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.tour-card__fechas span {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: "Photogenic", cursive;
+  font-weight: 500;
+}
+
+.tour-card__precio {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.tour-card__precio-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "Photogenic", cursive;
+  font-weight: 400;
+}
+
+.tour-card__precio-valor {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  font-family: "Chicago Police", sans-serif;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .tours-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 30px 32px;
+  }
+
+  .grid-experiencia__card,
+  .tour-card {
+    min-height: 300px;
+  }
+
+  .grid-experiencia__titulo,
+  .tour-card__titulo {
+    font-size: 1.1rem;
+  }
+
+  .grid-experiencia__ubicacion,
+  .tour-card__ubicacion {
+    font-size: 0.9rem;
+  }
+
+  .grid-experiencia__precio-valor,
+  .tour-card__precio-valor {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tours-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px 20px;
+  }
+
+  .grid-experiencia__card,
+  .tour-card {
+    min-height: 280px;
+  }
+
+  .grid-experiencia__overlay,
+  .tour-card__overlay {
+    padding: 20px;
+  }
+}

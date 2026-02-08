@@ -1,14 +1,14 @@
-export const BannerExperiencias = ({
+export const BannerCruceros = ({
   titulo = "Encuentra tu destino ideal",
   subtitulo = "Explora experiencias únicas y personalizadas alrededor del mundo.",
   imagen = "/src/imagenes/banner_principal.jpeg",
   colorFondo = "#E8863B"
 }) => {
   return (
-    <div className="banner-experiencias">
+    <div className="banner-cruceros">
       <style>
         {`
-          .banner-experiencias {
+          .banner-cruceros {
             display: flex;
             width: 100%;
             height: 350px;
@@ -56,7 +56,7 @@ export const BannerExperiencias = ({
           }
 
           @media (max-width: 768px) {
-            .banner-experiencias {
+            .banner-cruceros {
               flex-direction: column;
               height: auto;
               max-width: calc(100vw - 40px);

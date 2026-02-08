@@ -32,7 +32,7 @@ const Contacto = () => {
     <div className="contacto-page">
       {/* Hero Section */}
       <div className="contacto-hero">
-        <h1 className="contacto-title">Contact & Support</h1>
+        <h1 className="contacto-title">Contacto y soporte</h1>
       </div>
 
       {/* Main Content */}
@@ -41,7 +41,7 @@ const Contacto = () => {
           {/* Contact Form */}
           <div className="col-lg-6">
             <div className="contact-card">
-              <h2 className="card-title-contact mb-4">Contact Us</h2>
+              <h2 className="card-title-contact mb-4">Contacta con nosotros</h2>
               
               {enviado && (
                 <div className="alert alert-success mb-3">
@@ -57,7 +57,7 @@ const Contacto = () => {
                       type="text"
                       name="nombre"
                       className="form-control-contact"
-                      placeholder="Your Name"
+                      placeholder="Tu nombre"
                       value={formData.nombre}
                       onChange={handleChange}
                       required
@@ -72,7 +72,7 @@ const Contacto = () => {
                       type="email"
                       name="email"
                       className="form-control-contact"
-                      placeholder="Your Email"
+                      placeholder="Tu correo"
                       value={formData.email}
                       onChange={handleChange}
                       required
@@ -87,7 +87,7 @@ const Contacto = () => {
                       type="tel"
                       name="telefono"
                       className="form-control-contact"
-                      placeholder="Your Phone"
+                      placeholder="Tu telefono"
                       value={formData.telefono}
                       onChange={handleChange}
                       required
@@ -101,7 +101,7 @@ const Contacto = () => {
                     <textarea
                       name="mensaje"
                       className="form-control-contact"
-                      placeholder="Message"
+                      placeholder="Mensaje"
                       rows="4"
                       value={formData.mensaje}
                       onChange={handleChange}
@@ -111,7 +111,7 @@ const Contacto = () => {
                 </div>
 
                 <button type="submit" className="btn-send-message">
-                  Send Message
+                  Enviar mensaje
                 </button>
               </form>
             </div>
@@ -120,22 +120,22 @@ const Contacto = () => {
           {/* Travel Expert Section */}
           <div className="col-lg-6">
             <div className="contact-card text-center">
-              <h2 className="card-title-contact mb-4">Talk to a Travel Expert</h2>
+              <h2 className="card-title-contact mb-4">Habla con un asesor de viajes</h2>
               
               <div className="expert-image-container mb-4">
                 <img 
                   src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop" 
-                  alt="Travel Expert" 
+                  alt="Asesor de viajes" 
                   className="expert-image"
                 />
               </div>
 
               <p className="expert-text mb-4">
-                Have questions? Our travel experts are here to help!
+                ¿Tienes dudas? Nuestros asesores de viajes estan aqui para ayudarte.
               </p>
 
               <button className="btn-live-chat">
-                Live Chat
+                Chat en vivo
               </button>
             </div>
           </div>
@@ -143,14 +143,14 @@ const Contacto = () => {
 
         {/* Global Locations Section */}
         <div className="locations-section">
-          <h2 className="locations-title text-center mb-5">Our Global Locations</h2>
+          <h2 className="locations-title text-center mb-5">Nuestras ubicaciones globales</h2>
           
           <div className="row align-items-center">
             <div className="col-lg-8">
               <div className="map-container">
                 <img 
                   src="https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg" 
-                  alt="World Map" 
+                  alt="Mapa del mundo" 
                   className="world-map"
                 />
                 {/* Location Markers */}
@@ -163,7 +163,7 @@ const Contacto = () => {
               <div className="location-info">
                 <div className="location-item mb-3">
                   <i className="bi bi-geo-alt-fill text-warning me-2"></i>
-                  <span>1234 Wanderlust Ave, Suite 100,<br/>Adventure City, CA 98765</span>
+                  <span>Calle Viajes 1234, Oficina 100,<br/>Ciudad Aventura, CA 98765</span>
                 </div>
                 <div className="location-item mb-3">
                   <i className="bi bi-telephone-fill text-warning me-2"></i>

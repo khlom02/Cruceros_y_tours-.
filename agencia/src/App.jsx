@@ -12,6 +12,8 @@ import Cart from './components/cartContext/cart.jsx';
 import Contacto from './components/contacto.jsx';
 import Detalles from './components/detalles.jsx';
 import { Destinos } from "./components/destinos.jsx";
+import Cruceros from "./components/Cruceros.jsx";
+import Vuelos from "./components/vuelos.jsx";
 import { CartProvider } from "./components/cartContext/cartContext.jsx";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 
@@ -30,6 +32,12 @@ export default function App() {
 
             {/* Ruta para la página de experiencias */}
             <Route path="/destinos" element={<Destinos />} />
+
+            {/* Ruta para la página de cruceros */}
+            <Route path="/cruceros" element={<Cruceros />} />
+
+            {/* Ruta para la página de vuelos */}
+            <Route path="/vuelos" element={<Vuelos />} />
 
               {/* Ruta para la página de detalles del viaje */}
             <Route path="/detalles" element={<Detalles />} />

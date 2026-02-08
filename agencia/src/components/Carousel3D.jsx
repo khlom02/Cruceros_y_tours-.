@@ -11,10 +11,10 @@ const defaultDestinations = [
     id: 1,
   },
   {
-    img: "/src/imagenes/ncl.jpg",
-    logo: "/src/assets/ncl_logo.png",
+    img: "/src/imagenes/promo_royal.jpeg",
+    logo: "/src/assets/royal_caribbean_logo.jpg",
     title: "Europa",
-    // subtitle: "NCL",
+    // subtitle: "Royal Caribbean",
     id: 2,
   },
   {

@@ -153,3 +153,24 @@ export const fetchRandomProducts = async (limit = 4) => {
     return [];
   }
 };
+
+// ============================================
+// OBTENER HABITACIONES
+// ============================================
+export const fetchRooms = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("rooms")
+      .select("id, title, image_url, features");
+
+    if (error) {
+      console.error("Error al obtener habitaciones:", error);
+      return [];
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado al obtener habitaciones:", err);
+    return [];
+  }
+};

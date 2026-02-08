@@ -1,4 +1,3 @@
-import '../styles/destinos.css';
 import { BannerExperiencias } from "./banner_experiencias";
 import { CardExperiencias, GridExperiencias } from "./grid_experiencias";
 

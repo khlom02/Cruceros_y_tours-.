@@ -1,0 +1,138 @@
+.container-rooms {
+	padding: 24px 0 48px;
+}
+
+.cheque_rooms {
+	display: grid;
+	justify-content: center;
+	gap: 24px;
+}
+
+.room-card {
+	background: #e6dcc2;
+	border-radius: 18px;
+	padding: 24px 28px;
+	display: grid;
+	grid-template-columns: 240px 1px minmax(0, 1fr) auto;
+	gap: 24px;
+	align-items: center;
+	box-shadow: 0 10px 24px rgba(28, 22, 10, 0.12);
+	width: 100%;
+	max-width: 980px;
+}
+
+.rooms-state {
+	background: #f3ecd7;
+	border-radius: 14px;
+	padding: 20px 24px;
+	color: #2a2a2a;
+	text-align: center;
+	max-width: 420px;
+	margin: 0 auto;
+}
+
+.room-media {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.room-title {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 700;
+	color: #1b1b1b;
+}
+
+.room-image {
+	width: 200px;
+	height: 140px;
+	border-radius: 16px;
+	object-fit: cover;
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.room-divider {
+	width: 1px;
+	height: 150px;
+	background: #c9bb9d;
+}
+
+.room-features {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(160px, 1fr));
+	gap: 12px 28px;
+	color: #2a2a2a;
+	font-size: 14px;
+}
+
+.room-features li {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.room-icon {
+	width: 22px;
+	height: 22px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: #1a1a1a;
+}
+
+.room-icon svg {
+	width: 20px;
+	height: 20px;
+	stroke: currentColor;
+	fill: none;
+	stroke-width: 1.6;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.room-cta {
+	border: none;
+	background: #0f2215;
+	color: #f4f4f4;
+	padding: 12px 28px;
+	border-radius: 999px;
+	font-weight: 600;
+	cursor: pointer;
+	box-shadow: 0 8px 18px rgba(9, 26, 15, 0.35);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.room-cta:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 10px 22px rgba(9, 26, 15, 0.45);
+}
+
+@media (max-width: 900px) {
+	.room-card {
+		grid-template-columns: 1fr;
+		justify-items: start;
+	}
+
+	.room-image {
+		width: 100%;
+		height: 180px;
+	}
+
+	.room-divider {
+		width: 100%;
+		height: 1px;
+	}
+
+	.room-features {
+		grid-template-columns: 1fr;
+	}
+
+	.room-cta {
+		width: 100%;
+		text-align: center;
+	}
+}

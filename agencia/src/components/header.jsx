@@ -62,7 +62,7 @@ const Header = () => {
               </li>
               <li className="nav-item">
                 <Link
-                  to="#"
+                  to="/cruceros"
                   className="nav-link px-3 text-dark"
                   style={{
                     fontFamily: "'Lora', serif",
@@ -101,8 +101,8 @@ const Header = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <a
-                  href="#"
+                <Link
+                  to="/vuelos"
                   className="nav-link px-3 text-dark"
                   style={{
                     fontFamily: "'Lora', serif",
@@ -118,7 +118,7 @@ const Header = () => {
                   }
                 >
                   Vuelos
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
                 <a
@@ -142,7 +142,7 @@ const Header = () => {
               </li>
               <li className="nav-item">
                 <a
-                  href="/#"
+                  href="/contacto"
                   className="nav-link px-3 text-dark"
                   style={{
                     fontFamily: "'Lora', serif",

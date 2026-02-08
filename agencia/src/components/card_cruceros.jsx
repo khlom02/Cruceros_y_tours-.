@@ -1,10 +1,10 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/grid_experiencias.css";
+import "../styles/card_cruceros.css";
 import Filtro, { aplicarFiltros } from "./filtro";
 
-export const CardExperiencias = ({ 
+export const Card_cruceros = ({ 
   imagen, 
   titulo, 
   ubicacion, 
@@ -23,7 +23,7 @@ export const CardExperiencias = ({
 
   return (
     <div
-      className="grid-experiencia__card"
+      className="card_cruceros"
       style={{
         backgroundColor: colores[colorFondo] || colores.verde,
         backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.4) 100%), url(${imagen})`,
@@ -33,18 +33,18 @@ export const CardExperiencias = ({
       }}
       onClick={onClick}
     >
-      <div className="grid-experiencia__overlay">
-        <div className="grid-experiencia__content">
-          <h3 className="grid-experiencia__titulo">{titulo}</h3>
-          <p className="grid-experiencia__ubicacion">{ubicacion}</p>
+      <div className="card_cruceros__overlay">
+        <div className="card_cruceros__content">
+          <h3 className="card_cruceros__titulo">{titulo}</h3>
+          <p className="card_cruceros__ubicacion">{ubicacion}</p>
           
-          <div className="grid-experiencia__fechas">
+          <div className="card_cruceros__fechas">
             <span>{fechaInicio} - {fechaFin}</span>
           </div>
 
-          <div className="grid-experiencia__precio">
-            <span className="grid-experiencia__precio-label">from</span>
-            <span className="grid-experiencia__precio-valor">€ {precio}</span>
+          <div className="card_cruceros__precio">
+            <span className="card_cruceros__precio-label">from</span>
+            <span className="card_cruceros__precio-valor">€ {precio}</span>
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@ export const CardExperiencias = ({
   );
 };
 
-export const GridExperiencias = ({ experiencias = [], detalleTipo = "" }) => {
+export const GridCruceros = ({ cruceros = [] }) => {
   const navigate = useNavigate();
   const [filtros, setFiltros] = useState({
     fechaInicio: "",
@@ -65,7 +65,7 @@ export const GridExperiencias = ({ experiencias = [], detalleTipo = "" }) => {
   });
 
   // Experiencias por defecto si no se proporcionan
-  const experienciasDefault = [
+  const crucerosDefault = [
     {
       id: 1,
       imagen: "/src/imagenes/MSC.jpg",
@@ -187,27 +187,25 @@ export const GridExperiencias = ({ experiencias = [], detalleTipo = "" }) => {
     }
   ];
 
-  const datosExperiencias = experiencias.length > 0 ? experiencias : experienciasDefault;
+  const datosCruceros = cruceros.length > 0 ? cruceros : crucerosDefault;
 
   const handleFilterChange = (nuevosFiltros) => {
     setFiltros(nuevosFiltros);
   };
 
   // Aplicar filtros a las experiencias
-  const experienciasFiltradasFinal = aplicarFiltros(datosExperiencias, filtros);
-
-  const detalleQuery = detalleTipo ? `&tipo=${detalleTipo}` : "";
+  const crucerosFiltradosFinal = aplicarFiltros(datosCruceros, filtros);
 
   return (
     <>
       <Filtro onFilterChange={handleFilterChange} />
       <div className="tours-grid">
-        {experienciasFiltradasFinal.length > 0 ? (
-          experienciasFiltradasFinal.map((experiencia) => (
-            <CardExperiencias
-              key={experiencia.id}
-              {...experiencia}
-              onClick={() => navigate(`/detalles?id=${experiencia.id}${detalleQuery}`)}
+        {crucerosFiltradosFinal.length > 0 ? (
+          crucerosFiltradosFinal.map((crucero) => (
+            <Card_cruceros
+              key={crucero.id}
+              {...crucero}
+              onClick={() => navigate(`/detalles?id=${crucero.id}&tipo=crucero`)}
             />
           ))
         ) : (
@@ -218,7 +216,7 @@ export const GridExperiencias = ({ experiencias = [], detalleTipo = "" }) => {
             color: "#666",
             fontSize: "1.1rem"
           }}>
-            No experiences found matching your filters.
+            No se encontraron cruceros con esos filtros.
           </div>
         )}
       </div>
@@ -226,4 +224,4 @@ export const GridExperiencias = ({ experiencias = [], detalleTipo = "" }) => {
   );
 };
 
-export default GridExperiencias;
+export default GridCruceros;

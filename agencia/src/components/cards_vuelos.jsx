@@ -1,10 +1,10 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/grid_experiencias.css";
+import "../styles/card_vuelos.css";
 import Filtro, { aplicarFiltros } from "./filtro";
 
-export const CardExperiencias = ({ 
+export const Card_vuelos = ({ 
   imagen, 
   titulo, 
   ubicacion, 
@@ -33,18 +33,18 @@ export const CardExperiencias = ({
       }}
       onClick={onClick}
     >
-      <div className="grid-experiencia__overlay">
-        <div className="grid-experiencia__content">
-          <h3 className="grid-experiencia__titulo">{titulo}</h3>
-          <p className="grid-experiencia__ubicacion">{ubicacion}</p>
+      <div className="grid-vuelos__overlay">
+        <div className="grid-vuelos__content">
+          <h3 className="grid-vuelos__titulo">{titulo}</h3>
+          <p className="grid-vuelos__ubicacion">{ubicacion}</p>
           
-          <div className="grid-experiencia__fechas">
+          <div className="grid-vuelos__fechas">
             <span>{fechaInicio} - {fechaFin}</span>
           </div>
 
-          <div className="grid-experiencia__precio">
-            <span className="grid-experiencia__precio-label">from</span>
-            <span className="grid-experiencia__precio-valor">€ {precio}</span>
+          <div className="grid-vuelos__precio">
+            <span className="grid-vuelos__precio-label">from</span>
+            <span className="grid-vuelos__precio-valor">€ {precio}</span>
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@ export const CardExperiencias = ({
   );
 };
 
-export const GridExperiencias = ({ experiencias = [], detalleTipo = "" }) => {
+export const GridVuelos = ({ vuelos = [] }) => {
   const navigate = useNavigate();
   const [filtros, setFiltros] = useState({
     fechaInicio: "",
@@ -64,8 +64,8 @@ export const GridExperiencias = ({ experiencias = [], detalleTipo = "" }) => {
     priceMax: "",
   });
 
-  // Experiencias por defecto si no se proporcionan
-  const experienciasDefault = [
+  // Vuelos por defecto si no se proporcionan
+  const vuelosDefault = [
     {
       id: 1,
       imagen: "/src/imagenes/MSC.jpg",
@@ -196,8 +196,6 @@ export const GridExperiencias = ({ experiencias = [], detalleTipo = "" }) => {
   // Aplicar filtros a las experiencias
   const experienciasFiltradasFinal = aplicarFiltros(datosExperiencias, filtros);
 
-  const detalleQuery = detalleTipo ? `&tipo=${detalleTipo}` : "";
-
   return (
     <>
       <Filtro onFilterChange={handleFilterChange} />
@@ -207,7 +205,7 @@ export const GridExperiencias = ({ experiencias = [], detalleTipo = "" }) => {
             <CardExperiencias
               key={experiencia.id}
               {...experiencia}
-              onClick={() => navigate(`/detalles?id=${experiencia.id}${detalleQuery}`)}
+              onClick={() => navigate(`/detalles?id=${experiencia.id}`)}
             />
           ))
         ) : (
@@ -226,4 +224,4 @@ export const GridExperiencias = ({ experiencias = [], detalleTipo = "" }) => {
   );
 };
 
-export default GridExperiencias;
+export default GridVuelos;
