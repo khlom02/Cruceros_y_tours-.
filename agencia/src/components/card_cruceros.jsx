@@ -134,56 +134,6 @@ export const GridCruceros = ({ cruceros = [] }) => {
       fechaFin: "22/08/2026",
       precio: "490",
       colorFondo: "naranja"
-    },
-    {
-      id: 8,
-      imagen: "/src/imagenes/celebrity.jpg",
-      titulo: "Torre de Pareis, Mallorca",
-      ubicacion: "Galicia, Spain",
-      fechaInicio: "19/08",
-      fechaFin: "22/08/2026",
-      precio: "490",
-      colorFondo: "naranja"
-    },
-    {
-      id: 9,
-      imagen: "/src/imagenes/celebrity.jpg",
-      titulo: "Torre de Pareis, Mallorca",
-      ubicacion: "Galicia, Spain",
-      fechaInicio: "19/08",
-      fechaFin: "22/08/2026",
-      precio: "490",
-      colorFondo: "naranja"
-    },
-    {
-      id: 10,
-      imagen: "/src/imagenes/celebrity.jpg",
-      titulo: "Torre de Pareis, Mallorca",
-      ubicacion: "Galicia, Spain",
-      fechaInicio: "19/08",
-      fechaFin: "22/08/2026",
-      precio: "490",
-      colorFondo: "naranja"
-    },
-    {
-      id: 11,
-      imagen: "/src/imagenes/celebrity.jpg",
-      titulo: "Torre de Pareis, Mallorca",
-      ubicacion: "Galicia, Spain",
-      fechaInicio: "19/08",
-      fechaFin: "22/08/2026",
-      precio: "490",
-      colorFondo: "naranja"
-    },
-    {
-      id: 12,
-      imagen: "/src/imagenes/celebrity.jpg",
-      titulo: "Torre de Pareis, Mallorca",
-      ubicacion: "Galicia, Spain",
-      fechaInicio: "19/08",
-      fechaFin: "22/08/2026",
-      precio: "490",
-      colorFondo: "naranja"
     }
   ];
 

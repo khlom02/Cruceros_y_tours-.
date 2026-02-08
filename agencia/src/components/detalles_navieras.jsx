@@ -20,8 +20,10 @@ const DetallesNavieras = ({
                             <path d="M12 7v5l3 2" />
                         </svg>
                     </span>
-                    <span className="detalles-navieras__value">{anosServicio}</span>
-                    <span className="detalles-navieras__label">anos en servicio</span>
+                    <span className="detalles-navieras__text">
+                        <span className="detalles-navieras__value">{anosServicio}</span>
+                        <span className="detalles-navieras__label">años en servicio</span>
+                    </span>
                 </div>
                 <div className="detalles-navieras__item">
                     <span className="detalles-navieras__icon" aria-hidden="true">
@@ -32,8 +34,10 @@ const DetallesNavieras = ({
                             <path d="M21 20c-1-3-4-4-5-4" />
                         </svg>
                     </span>
-                    <span className="detalles-navieras__value">{pasajerosMax}</span>
-                    <span className="detalles-navieras__label">pasajeros max.</span>
+                    <span className="detalles-navieras__text">
+                        <span className="detalles-navieras__value">{pasajerosMax}</span>
+                        <span className="detalles-navieras__label">pasajeros máx.</span>
+                    </span>
                 </div>
                 <div className="detalles-navieras__item">
                     <span className="detalles-navieras__icon" aria-hidden="true">
@@ -42,8 +46,10 @@ const DetallesNavieras = ({
                             <path d="M5 20c1.5-3.5 4.5-5 7-5s5.5 1.5 7 5" />
                         </svg>
                     </span>
-                    <span className="detalles-navieras__value">{tripulantes}</span>
-                    <span className="detalles-navieras__label">tripulantes</span>
+                    <span className="detalles-navieras__text">
+                        <span className="detalles-navieras__value">{tripulantes}</span>
+                        <span className="detalles-navieras__label">tripulantes</span>
+                    </span>
                 </div>
             </div>
 
@@ -56,8 +62,10 @@ const DetallesNavieras = ({
                             <path d="M4 18h16" />
                         </svg>
                     </span>
-                    <span className="detalles-navieras__label">Ratio espacio:</span>
-                    <span className="detalles-navieras__value">{ratioEspacio}</span>
+                    <span className="detalles-navieras__text">
+                        <span className="detalles-navieras__label">Ratio espacio:</span>
+                        <span className="detalles-navieras__value">{ratioEspacio}</span>
+                    </span>
                 </div>
                 <div className="detalles-navieras__item">
                     <span className="detalles-navieras__icon" aria-hidden="true">
@@ -65,8 +73,10 @@ const DetallesNavieras = ({
                             <path d="M12 4l2.5 5 5.5.8-4 3.9.9 5.5L12 16l-4.9 2.2.9-5.5-4-3.9 5.5-.8z" />
                         </svg>
                     </span>
-                    <span className="detalles-navieras__label">Ratio servicio:</span>
-                    <span className="detalles-navieras__value">{ratioServicio}</span>
+                    <span className="detalles-navieras__text">
+                        <span className="detalles-navieras__label">Ratio servicio:</span>
+                        <span className="detalles-navieras__value">{ratioServicio}</span>
+                    </span>
                 </div>
             </div>
 
@@ -79,7 +89,9 @@ const DetallesNavieras = ({
                                 <path d="M8 12l2.5 2.5L16 9" />
                             </svg>
                         </span>
-                        <span className="detalles-navieras__label">Cabina Single</span>
+                        <span className="detalles-navieras__text">
+                            <span className="detalles-navieras__label">Cabina Single</span>
+                        </span>
                     </div>
                 )}
                 {viajandoConNinos && (
@@ -90,7 +102,9 @@ const DetallesNavieras = ({
                                 <path d="M8 12l2.5 2.5L16 9" />
                             </svg>
                         </span>
-                        <span className="detalles-navieras__label">Viajando con ninos</span>
+                        <span className="detalles-navieras__text">
+                            <span className="detalles-navieras__label">Viajando con niños</span>
+                        </span>
                     </div>
                 )}
             </div>

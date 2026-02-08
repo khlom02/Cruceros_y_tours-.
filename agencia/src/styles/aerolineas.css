@@ -6,36 +6,36 @@
 }
 
 .aerolineas-container {
-  padding: 100px 20px;
+  padding: 72px 16px;
   background: white;
   max-width: 100%;
 }
 
 .aerolineas-content {
   display: flex;
-  gap: 60px;
+  gap: 48px;
   max-width: 100%;
   margin: 0 auto;
   align-items: flex-start;
-  padding: 0 40px;
+  padding: 0 28px;
 }
 
 /* Sección de botones */
 .aerolineas-buttons {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+  gap: 14px;
   flex: 1;
   pointer-events: all;
   z-index: 10;
 }
 
 .airline-btn {
-  padding: 14px 18px;
+  padding: 10px 12px;
   border: 2px solid #000000;
   background: white;
   border-radius: var(--btn-border-radius);
-  font-size: 1.25rem;
+  font-size: 1.05rem;
   font-family: "'Lora', serif";
   color: #555;
   cursor: pointer;
@@ -49,6 +49,21 @@
   pointer-events: all;
   user-select: none;
   -webkit-user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 74px;
+}
+
+.airline-btn-logo {
+  width: 100%;
+  height: 46px;
+  object-fit: contain;
+  transform-origin: center;
+}
+
+.airline-btn-text {
+  text-align: left;
 }
 
 .airline-btn:hover {
@@ -66,17 +81,24 @@
   box-shadow: 0 8px 25px rgba(0, 119, 182, 0.28);
 }
 
+.airline-btn.active[data-airline="tap air portugal"] {
+  background: white;
+  color: #555;
+  border-color: #000000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
 /* Tarjeta de información */
 .airline-card {
-  flex: 0 0 520px;
+  flex: 0 0 460px;
   background: white;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06), 
               0 10px 20px rgba(0, 119, 182, 0.1),
               0 15px 35px rgba(0, 119, 182, 0.06);
-  padding: 60px;
+  padding: 44px;
   position: sticky;
   top: 30px;
-  min-height: 480px;
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -87,7 +109,15 @@
 .airline-card-content {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 18px;
+}
+
+.airline-card-logo {
+  width: 150px;
+  height: 66px;
+  object-fit: contain;
+  align-self: flex-start;
+  transform-origin: center;
 }
 
 .airline-name {
@@ -105,7 +135,7 @@
 
 .airline-tarifa {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   color: #666;
   font-family: "'Lora', serif";
   line-height: 1.9;
@@ -114,14 +144,14 @@
 /* Responsivo */
 @media (max-width: 1200px) {
   .aerolineas-content {
-    gap: 50px;
-    padding: 0 30px;
+    gap: 40px;
+    padding: 0 24px;
   }
 
   .airline-card {
-    flex: 0 0 480px;
-    padding: 50px;
-    min-height: 450px;
+    flex: 0 0 420px;
+    padding: 40px;
+    min-height: 380px;
   }
 
   .airline-name {
@@ -131,7 +161,7 @@
 
 @media (max-width: 1024px) {
   .aerolineas-container {
-    padding: 80px 20px;
+    padding: 64px 16px;
   }
 
   .aerolineas-content {
@@ -152,7 +182,7 @@
 
 @media (max-width: 768px) {
   .aerolineas-container {
-    padding: 60px 16px;
+    padding: 52px 14px;
   }
 
   .aerolineas-content {
@@ -165,8 +195,8 @@
   }
 
   .airline-btn {
-    font-size: 0.85rem;
-    padding: 12px 14px;
+    font-size: 0.82rem;
+    padding: 10px 12px;
   }
 
   .airline-name {
@@ -174,19 +204,19 @@
   }
 
   .airline-card {
-    padding: 45px;
+    padding: 36px;
     min-height: auto;
     border: 3px solid #000;
   }
 
   .airline-tarifa {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 }
 
 @media (max-width: 480px) {
   .aerolineas-container {
-    padding: 50px 12px;
+    padding: 44px 12px;
   }
 
   .aerolineas-content {
@@ -200,12 +230,12 @@
   }
 
   .airline-btn {
-    font-size: 0.8rem;
-    padding: 11px 13px;
+    font-size: 0.78rem;
+    padding: 9px 11px;
   }
 
   .airline-card {
-    padding: 35px;
+    padding: 30px;
     min-height: auto;
     flex: 1;
     position: static;
@@ -213,7 +243,7 @@
   }
 
   .airline-name {
-    font-size: 1.4rem;
+    font-size: 1.25rem;
   }
 
   .airline-tarifa {
