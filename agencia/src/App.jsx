@@ -13,6 +13,7 @@ import Contacto from './components/contacto.jsx';
 import Detalles from './components/detalles.jsx';
 import { Destinos } from "./components/destinos.jsx";
 import Cruceros from "./components/Cruceros.jsx";
+import ServiciosEspeciales from "./components/servicios_especiales.jsx";
 import Vuelos from "./components/vuelos.jsx";
 import { CartProvider } from "./components/cartContext/cartContext.jsx";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
@@ -38,6 +39,9 @@ export default function App() {
 
             {/* Ruta para la página de vuelos */}
             <Route path="/vuelos" element={<Vuelos />} />
+
+            {/* Ruta para la página de servicios especiales */}
+            <Route path="/servicios_especiales" element={<ServiciosEspeciales />} />
 
               {/* Ruta para la página de detalles del viaje */}
             <Route path="/detalles" element={<Detalles />} />

@@ -1,0 +1,146 @@
+/* Servicios layout */
+.services {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	padding: 50px 64px;
+	max-width: 1600px;
+	margin: 0 auto;
+}
+
+/* Card base */
+.card_servicio {
+	position: relative;
+	border-radius: var(--border-radius);
+	overflow: hidden;
+	min-height: 320px;
+	display: flex;
+	align-items: stretch;
+	transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	box-shadow: var(--shadow-md);
+}
+
+.card_servicio:hover {
+	transform: translateY(-10px) scale(1.01);
+	box-shadow: var(--shadow-lg);
+}
+
+.card_servicio::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: linear-gradient(
+		to right,
+		color-mix(in srgb, var(--color-primary) 35%, transparent) 0%,
+		color-mix(in srgb, var(--color-primary-dark) 65%, transparent) 100%
+	);
+	z-index: 1;
+}
+
+/* Overlay content */
+.card_servicio__overlay {
+	position: relative;
+	z-index: 2;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	padding: 28px 32px;
+}
+
+.card_servicio__content {
+	max-width: 520px;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	color: var(--color-background-light);
+}
+
+.card_servicio__titulo {
+	margin: 0;
+	font-size: 1.6rem;
+	font-weight: 700;
+	font-family: "Chicago Police", sans-serif;
+	line-height: 1.2;
+}
+
+.card_servicio__descripcion {
+	margin: 0;
+	font-size: 1rem;
+	color: var(--color-background-light);
+	font-family: "Photogenic", cursive;
+}
+
+.card_servicio__btn {
+	align-self: flex-start;
+	padding: 10px 18px;
+	border-radius: 999px;
+	border: 1px solid transparent;
+	background: var(--color-primary);
+	color: var(--color-background-light);
+	font-size: 0.95rem;
+	font-family: "Chicago Police", sans-serif;
+	cursor: pointer;
+	transition: all 0.25s ease;
+}
+
+.card_servicio__btn:hover {
+	background: var(--color-primary-dark);
+	color: var(--color-background-light);
+}
+
+/* Left/Right alignment */
+.card_servicio--left .card_servicio__overlay {
+	justify-content: flex-start;
+}
+
+.card_servicio--right .card_servicio__overlay {
+	justify-content: flex-end;
+}
+
+.card_servicio--right .card_servicio__content {
+	text-align: right;
+	align-items: flex-end;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+	.services {
+		padding: 40px 36px;
+	}
+
+	.card_servicio {
+		min-height: 300px;
+	}
+}
+
+@media (max-width: 768px) {
+	.services {
+		padding: 30px 24px;
+	}
+
+	.card_servicio__titulo {
+		font-size: 1.3rem;
+	}
+
+	.card_servicio__descripcion {
+		font-size: 0.95rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.services {
+		padding: 24px 20px;
+		gap: 20px;
+	}
+
+	.card_servicio {
+		min-height: 260px;
+	}
+
+	.card_servicio__overlay {
+		padding: 20px;
+	}
+}
