@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import "../styles/auth.css";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -58,22 +59,22 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="container mt-5 mb-5">
+    <div className="container mt-5 mb-5 auth-page">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <div className="card shadow-lg border-0">
-            <div className="card-body p-4">
-              <h3 className="card-title text-center mb-4 text-success">
+          <div className="card shadow-lg auth-card">
+            <div className="card-body p-4 auth-card__body">
+              <h3 className="card-title text-center mb-4 auth-title">
                 Iniciar Sesión
               </h3>
               <form onSubmit={handleLogin}>
                 <div className="mb-3">
-                  <label htmlFor="email" className="form-label fw-semibold">
+                  <label htmlFor="email" className="form-label fw-semibold auth-label">
                     Correo Electrónico
                   </label>
                   <input
                     type="email"
-                    className="form-control rounded-pill"
+                    className="form-control rounded-pill auth-input"
                     id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -82,12 +83,12 @@ export default function LoginForm() {
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="password" className="form-label fw-semibold">
+                  <label htmlFor="password" className="form-label fw-semibold auth-label">
                     Contraseña
                   </label>
                   <input
                     type="password"
-                    className="form-control rounded-pill"
+                    className="form-control rounded-pill auth-input"
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -99,7 +100,7 @@ export default function LoginForm() {
                 <div className="d-grid">
                   <button
                     type="submit"
-                    className="btn btn-success rounded-pill"
+                    className="btn rounded-pill auth-btn-primary"
                     disabled={loading}
                   >
                     {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
@@ -109,7 +110,7 @@ export default function LoginForm() {
               
               {/* Divider */}
               <div className="text-center my-4">
-                <span className="text-muted">O inicia sesión con:</span>
+                <span className="auth-muted">O inicia sesión con:</span>
               </div>
 
               {/* OAuth Buttons */}
@@ -117,7 +118,7 @@ export default function LoginForm() {
                 <button
                   type="button"
                   onClick={handleGoogleLogin}
-                  className="btn btn-outline-danger rounded-pill"
+                  className="btn rounded-pill auth-btn-outline auth-btn-google"
                   disabled={loading}
                 >
                   <i className="bi bi-google me-2"></i>
@@ -126,7 +127,7 @@ export default function LoginForm() {
                 <button
                   type="button"
                   onClick={handleFacebookLogin}
-                  className="btn btn-outline-primary rounded-pill"
+                  className="btn rounded-pill auth-btn-outline auth-btn-facebook"
                   disabled={loading}
                 >
                   <i className="bi bi-facebook me-2"></i>
@@ -137,13 +138,13 @@ export default function LoginForm() {
               <div className="text-center mt-3">
                 <a
                   href="#"
-                  className="text-decoration-none text-muted"
+                  className="text-decoration-none auth-muted"
                 >
                   ¿Olvidaste tu contraseña?
                 </a>
               </div>
               <p className="mt-4 text-center">
-                ¿No tienes cuenta? <Link to="/registro" className="text-success text-decoration-none">Regístrate</Link>
+                ¿No tienes cuenta? <Link to="/registro" className="auth-link">Regístrate</Link>
               </p>
             </div>
           </div>

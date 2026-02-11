@@ -157,11 +157,17 @@ export const fetchRandomProducts = async (limit = 4) => {
 // ============================================
 // OBTENER HABITACIONES
 // ============================================
-export const fetchRooms = async () => {
+export const fetchRooms = async ({ serviceType } = {}) => {
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from("rooms")
-      .select("id, title, image_url, features");
+      .select("id, title, image_url, features, service_type");
+
+    if (serviceType) {
+      query = query.eq("service_type", serviceType);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error("Error al obtener habitaciones:", error);
@@ -172,5 +178,38 @@ export const fetchRooms = async () => {
   } catch (err) {
     console.error("Error inesperado al obtener habitaciones:", err);
     return [];
+  }
+};
+
+// ============================================
+// OBTENER SERVICIO ESPECIAL POR ID O TIPO
+// ============================================
+export const fetchSpecialServiceByKey = async ({ id, tipo } = {}) => {
+  try {
+    let query = supabase
+      .from("servicios_especiales")
+      .select(
+        "id, tipo, nombre, descripcion, ubicacion, rating, reviews, imagen_url, gallery, highlights, amenities, facilities, service_info, service_cta"
+      );
+
+    if (id) {
+      query = query.eq("id", id).single();
+    } else if (tipo) {
+      query = query.eq("tipo", tipo).single();
+    } else {
+      return null;
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error("Error al obtener servicio especial:", error);
+      return null;
+    }
+
+    return data || null;
+  } catch (err) {
+    console.error("Error inesperado al obtener servicio especial:", err);
+    return null;
   }
 };

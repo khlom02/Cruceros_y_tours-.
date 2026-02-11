@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import "../styles/auth.css";
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -65,40 +66,40 @@ const Register = () => {
   };
 
   return (
-    <div className="container mt-5 mb-5">
+    <div className="container mt-5 mb-5 auth-page">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <div className="card shadow-lg border-0">
-            <div className="card-body p-4">
-              <h3 className="card-title text-center mb-4 text-success">Crear Cuenta</h3>
+          <div className="card shadow-lg auth-card">
+            <div className="card-body p-4 auth-card__body">
+              <h3 className="card-title text-center mb-4 auth-title">Crear Cuenta</h3>
               <form onSubmit={handleRegister}>
                 <div className="mb-3">
-                  <label htmlFor="email" className="form-label fw-semibold">Correo Electrónico</label>
+                  <label htmlFor="email" className="form-label fw-semibold auth-label">Correo Electrónico</label>
                   <input
                     type="email"
                     id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="form-control rounded-pill"
+                    className="form-control rounded-pill auth-input"
                     placeholder="Ingresa tu correo"
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="password" className="form-label fw-semibold">Contraseña</label>
+                  <label htmlFor="password" className="form-label fw-semibold auth-label">Contraseña</label>
                   <input
                     type="password"
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="form-control rounded-pill"
+                    className="form-control rounded-pill auth-input"
                     placeholder="Crea una contraseña"
                   />
                 </div>
                 {error && <p className="text-danger mb-3">{error}</p>}
                 {success && (
-                  <div className="alert alert-success mb-3">
+                  <div className="alert auth-alert mb-3">
                     <strong>¡Registro exitoso!</strong> Revisa tu correo para confirmar tu cuenta. 
                     Serás redirigido en unos segundos...
                   </div>
@@ -106,7 +107,7 @@ const Register = () => {
                 <div className="d-grid">
                   <button 
                     type="submit" 
-                    className="btn btn-success rounded-pill"
+                    className="btn rounded-pill auth-btn-primary"
                     disabled={loading}
                   >
                     {loading ? "Registrando..." : "Registrarse"}
@@ -116,14 +117,14 @@ const Register = () => {
               
               {/* Divider */}
               <div className="text-center my-4">
-                <span className="text-muted">O regístrate con:</span>
+                <span className="auth-muted">O regístrate con:</span>
               </div>
 
               {/* OAuth Buttons */}
               <div className="d-grid gap-2">
                 <button
                   onClick={handleGoogleSignUp}
-                  className="btn btn-outline-danger rounded-pill"
+                  className="btn rounded-pill auth-btn-outline auth-btn-google"
                   disabled={loading}
                 >
                   <i className="bi bi-google me-2"></i>
@@ -131,7 +132,7 @@ const Register = () => {
                 </button>
                 <button
                   onClick={handleFacebookSignUp}
-                  className="btn btn-outline-primary rounded-pill"
+                  className="btn rounded-pill auth-btn-outline auth-btn-facebook"
                   disabled={loading}
                 >
                   <i className="bi bi-facebook me-2"></i>
@@ -139,7 +140,7 @@ const Register = () => {
                 </button>
               </div>
               <p className="mt-4 text-center">
-                ¿Ya tienes una cuenta? <Link to="/login" className="text-success text-decoration-none" >Inicia sesión</Link>
+                ¿Ya tienes una cuenta? <Link to="/login" className="auth-link">Inicia sesión</Link>
               </p>
             </div>
           </div>

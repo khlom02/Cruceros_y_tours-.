@@ -1,0 +1,101 @@
+/* Auth pages (login/registro) */
+.auth-page {
+	font-family: "Chicago Police", sans-serif;
+	color: var(--color-text-primary);
+}
+
+.auth-card {
+	background: var(--color-background-light);
+	border-radius: var(--border-radius);
+	box-shadow: var(--shadow-lg);
+	border: 2px solid var(--color-primary);
+}
+
+.auth-title {
+	color: var(--color-primary);
+	letter-spacing: 0.5px;
+}
+
+.auth-label {
+	color: var(--color-text-primary);
+}
+
+.auth-input {
+	border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+	color: var(--color-text-primary);
+	background: #ffffff;
+}
+
+.auth-input:focus {
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+
+.auth-btn-primary {
+	background: var(--color-primary);
+	border: 1px solid var(--color-primary);
+	color: #ffffff;
+	font-weight: 600;
+	transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.auth-btn-primary:hover {
+	background: var(--color-primary-dark);
+	border-color: var(--color-primary-dark);
+	box-shadow: var(--shadow-md);
+	transform: translateY(-1px);
+}
+
+.auth-btn-outline {
+	background: transparent;
+	border: 1px solid var(--color-primary);
+	color: var(--color-text-primary);
+	font-weight: 600;
+	transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.auth-btn-outline:hover {
+	background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+	box-shadow: var(--shadow-sm);
+	transform: translateY(-1px);
+}
+
+.auth-btn-google {
+	border-color: #db4437;
+	color: #db4437;
+}
+
+.auth-btn-google:hover {
+	background: color-mix(in srgb, #db4437 12%, transparent);
+	border-color: #db4437;
+}
+
+.auth-btn-facebook {
+	border-color: #1877f2;
+	color: #1877f2;
+}
+
+.auth-btn-facebook:hover {
+	background: color-mix(in srgb, #1877f2 12%, transparent);
+	border-color: #1877f2;
+}
+
+.auth-muted {
+	color: var(--color-text-secondary);
+}
+
+.auth-link {
+	color: var(--color-primary);
+	text-decoration: none;
+}
+
+.auth-link:hover {
+	color: var(--color-primary-dark);
+}
+
+.auth-alert {
+	border-radius: var(--border-radius);
+	border: 1px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+	background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+	color: var(--color-text-primary);
+}

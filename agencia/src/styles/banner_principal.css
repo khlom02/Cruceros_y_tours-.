@@ -4,10 +4,13 @@
   border: none;
   padding: 0;
   margin-top: -40px;
+  display: inline-flex;
 }
 
 .btn_banner_principal {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: var(--color-primary-dark);
   color: #ffffff;
   text-decoration: none;
@@ -15,6 +18,9 @@
   border-radius: 30px;
   font-weight: 600;
   transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
 }
 
 .btn_banner_principal:hover {

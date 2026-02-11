@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "../styles/detalles.css";
-import { fetchProductById } from "../backend/supabase_client.js";
+import { fetchProductById, fetchSpecialServiceByKey } from "../backend/supabase_client.js";
 import Rooms from "./rooms.jsx";
 import DetallesNavieras from "./detalles_navieras.jsx";
 
@@ -89,10 +89,153 @@ const mockDetalles = {
     },
 };
 
+const serviceTypes = ["tren", "auto", "asistencia"];
+
+const mockServicios = {
+    tren: {
+        id: 1,
+        tipo: "tren",
+        title: "Trenes de alta velocidad",
+        location: "Rutas nacionales e internacionales",
+        rating: 4.7,
+        reviews: 182,
+        description:
+            "Conecta ciudades principales con horarios flexibles, asientos confort y opciones de tarifa segun tu plan.",
+        highlights: [
+            "Salidas diarias con multiples horarios",
+            "Tarifas flexibles y cambios rapidos",
+            "Check-in digital en minutos",
+        ],
+        amenities: [
+            "Asientos reclinables",
+            "Wifi a bordo",
+            "Equipaje incluido",
+        ],
+        facilities: [
+            "🎫 Boletos digitales",
+            "🚉 Acceso prioritario",
+            "🧳 Equipaje extra",
+            "🪟 Ventanas panoramicas",
+        ],
+        serviceInfo: [
+            "Tarifas por tramo con descuentos por ida y vuelta.",
+            "Soporte 24/7 para cambios de horario.",
+            "Opciones premium con lounge incluido.",
+        ],
+        gallery: [
+            "/src/imagenes/banner_principal.jpeg",
+            "/src/imagenes/MSC.jpg",
+            "/src/imagenes/ncl.jpg",
+        ],
+    },
+    auto: {
+        id: 2,
+        tipo: "auto",
+        title: "Alquiler de autos flexible",
+        location: "Retiro en aeropuerto o ciudad",
+        rating: 4.6,
+        reviews: 146,
+        description:
+            "Vehiculos nuevos con seguro incluido y planes por dia o semana. Reserva en minutos.",
+        highlights: [
+            "Retiro rapido con documentacion digital",
+            "Seguro incluido en todas las tarifas",
+            "Asistencia mecanica 24/7",
+        ],
+        amenities: [
+            "Kilometraje flexible",
+            "GPS disponible",
+            "Entrega a domicilio",
+        ],
+        facilities: [
+            "🚗 Flota premium",
+            "🛡️ Seguro completo",
+            "📍 Retiro flexible",
+            "🔧 Soporte mecanico",
+        ],
+        serviceInfo: [
+            "Planes semanales con tarifas preferenciales.",
+            "Opciones SUV, sedan y compacto.",
+            "Asesor personalizado para viajes largos.",
+        ],
+        gallery: [
+            "/src/imagenes/celebrity.jpg",
+            "/src/imagenes/costa.jpg",
+            "/src/imagenes/banner_principal.jpeg",
+        ],
+    },
+    asistencia: {
+        id: 3,
+        tipo: "asistencia",
+        title: "Asistencia en viaje",
+        location: "Cobertura internacional",
+        rating: 4.9,
+        reviews: 214,
+        description:
+            "Cobertura medica, soporte en destino y asistencia inmediata ante imprevistos.",
+        highlights: [
+            "Cobertura medica en destino",
+            "Soporte 24/7 multicanal",
+            "Reembolso por cancelaciones",
+        ],
+        amenities: [
+            "Atencion medica",
+            "Asistencia legal",
+            "Cobertura de equipaje",
+        ],
+        facilities: [
+            "🩺 Medico en linea",
+            "🧾 Gestion de reclamos",
+            "🌍 Cobertura global",
+            "☎️ Soporte inmediato",
+        ],
+        serviceInfo: [
+            "Planes por dias con cobertura total.",
+            "Extensiones para deportes y aventura.",
+            "Atencion personalizada en tu idioma.",
+        ],
+        gallery: [
+            "/src/imagenes/MSC.jpg",
+            "/src/imagenes/banner_principal.jpeg",
+            "/src/imagenes/ncl.jpg",
+        ],
+    },
+};
+
+const normalizeServiceDetalle = (data) => {
+    if (!data) return null;
+
+    const gallery = Array.isArray(data.gallery)
+        ? data.gallery
+        : data.imagen_url
+            ? [data.imagen_url]
+            : [];
+
+    return {
+        id: data.id,
+        tipo: data.tipo || "",
+        title: data.nombre || data.title || "",
+        location: data.ubicacion || data.location || "",
+        rating: data.rating ?? null,
+        reviews: data.reviews ?? null,
+        description: data.descripcion || data.description || "",
+        amenities: Array.isArray(data.amenities) ? data.amenities : [],
+        highlights: Array.isArray(data.highlights) ? data.highlights : [],
+        facilities: Array.isArray(data.facilities) ? data.facilities : [],
+        serviceInfo: Array.isArray(data.serviceInfo)
+            ? data.serviceInfo
+            : Array.isArray(data.service_info)
+                ? data.service_info
+                : [],
+        gallery,
+    };
+};
+
 const Detalles = () => {
     const [searchParams] = useSearchParams();
     const detalleId = searchParams.get("id");
     const detalleTipo = searchParams.get("tipo");
+    const isSpecialService = serviceTypes.includes(detalleTipo);
     const [detalle, setDetalle] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -104,7 +247,7 @@ const Detalles = () => {
         let isMounted = true;
 
         const loadDetalle = async () => {
-            if (!detalleId) {
+            if (!detalleId && !isSpecialService) {
                 if (!isMounted) return;
                 setDetalle(null);
                 setError("Selecciona una experiencia para ver sus detalles.");
@@ -115,13 +258,20 @@ const Detalles = () => {
             setLoading(true);
             setError("");
 
-            const data = await fetchProductById(detalleId);
+            const data = isSpecialService
+                ? await fetchSpecialServiceByKey({ id: detalleId, tipo: detalleTipo })
+                : await fetchProductById(detalleId);
             if (!isMounted) return;
 
             if (!data) {
-                const fallback = mockDetalles[detalleId];
+                const fallback = isSpecialService
+                    ? mockServicios[detalleTipo]
+                    : mockDetalles[detalleId];
                 if (fallback) {
-                    setDetalle(normalizeDetalle(fallback));
+                    const normalizedFallback = isSpecialService
+                        ? normalizeServiceDetalle(fallback)
+                        : normalizeDetalle(fallback);
+                    setDetalle(normalizedFallback);
                     setLoading(false);
                     return;
                 }
@@ -132,7 +282,10 @@ const Detalles = () => {
                 return;
             }
 
-            setDetalle(normalizeDetalle(data));
+            const normalizedDetalle = isSpecialService
+                ? normalizeServiceDetalle(data)
+                : normalizeDetalle(data);
+            setDetalle(normalizedDetalle);
             setLoading(false);
         };
 
@@ -141,7 +294,7 @@ const Detalles = () => {
         return () => {
             isMounted = false;
         };
-    }, [detalleId]);
+    }, [detalleId, detalleTipo, isSpecialService]);
 
     const gallery = useMemo(() => detalle?.gallery || [], [detalle]);
 
@@ -264,6 +417,14 @@ const Detalles = () => {
                         />
                     )}
 
+                    {isSpecialService && detalle.serviceInfo.length > 0 && (
+                        <ul className="detalles-amenities">
+                            {detalle.serviceInfo.map((item, index) => (
+                                <li key={`${detalle.id}-service-info-${index}`}>{item}</li>
+                            ))}
+                        </ul>
+                    )}
+
                     {detalle.highlights.length > 0 && (
                         <ul className="detalles-highlights">
                             {detalle.highlights.map((item, index) => (
@@ -306,7 +467,15 @@ const Detalles = () => {
             )}
 
             
-            <Rooms />
+            <Rooms
+                serviceType={isSpecialService ? detalleTipo : ""}
+                title={isSpecialService ? "Opciones segun tu servicio" : "Opciones recomendadas"}
+                subtitle={
+                    isSpecialService
+                        ? "Selecciona la alternativa que mejor se ajuste a tu plan."
+                        : ""
+                }
+            />
         </div>
 
     );

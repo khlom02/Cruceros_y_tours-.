@@ -1,5 +1,5 @@
 import "../styles/rooms.css";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fetchRooms } from "../backend/supabase_client.js";
 
 const featureIcons = {
@@ -62,6 +62,7 @@ const mockRooms = [
         id: "room-1",
         title: "Doble Estándar",
         image_url: "/src/imagenes/banner_principal.jpeg",
+        serviceType: "asistencia",
         features: [
             "1 doble cama",
             "10 metros cuadrados",
@@ -77,6 +78,7 @@ const mockRooms = [
         id: "room-2",
         title: "Premium Oceánico",
         image_url: "/src/imagenes/MSC.jpg",
+        serviceType: "tren",
         features: [
             "2 doble cama",
             "20 metros cuadrados",
@@ -92,6 +94,7 @@ const mockRooms = [
         id: "room-3",
         title: "Suite Ejecutiva",
         image_url: "/src/imagenes/celebrity.jpg",
+        serviceType: "auto",
         features: [
             "1 doble cama",
             "50 metros cuadrados",
@@ -125,10 +128,11 @@ const normalizeRooms = (data) =>
         id: room.id,
         title: room.title || room.nombre || "",
         imageUrl: room.image_url || room.imagen_url || "",
+        serviceType: room.service_type || room.serviceType || "",
         features: normalizeFeatures(room.features),
     }));
 
-const Rooms = () => {
+const Rooms = ({ serviceType = "", title = "Opciones recomendadas", subtitle = "" }) => {
     const [rooms, setRooms] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -140,14 +144,21 @@ const Rooms = () => {
             setLoading(true);
             setError("");
 
-            const data = await fetchRooms();
+            const data = await fetchRooms({ serviceType });
             if (!isMounted) return;
 
             const normalized = normalizeRooms(data);
-            if (normalized.length > 0) {
-                setRooms(normalized);
+            const fallback = normalizeRooms(mockRooms);
+            const baseRooms = normalized.length > 0 ? normalized : fallback;
+            const filteredRooms = serviceType
+                ? baseRooms.filter((room) => room.serviceType === serviceType)
+                : baseRooms;
+
+            if (filteredRooms.length > 0) {
+                setRooms(filteredRooms);
             } else {
-                setRooms(normalizeRooms(mockRooms));
+                setRooms([]);
+                setError("No hay opciones disponibles para este servicio.");
             }
 
             setLoading(false);
@@ -158,7 +169,7 @@ const Rooms = () => {
         return () => {
             isMounted = false;
         };
-    }, []);
+    }, [serviceType]);
 
     const roomCards = useMemo(() => {
         return rooms.map((room) => ({
@@ -179,6 +190,13 @@ const Rooms = () => {
 
     return (
         <div className="container container-rooms">
+            {(title || subtitle) && (
+                <div className="rooms-header">
+                    {title && <h2 className="rooms-title">{title}</h2>}
+                    {subtitle && <p className="rooms-subtitle">{subtitle}</p>}
+                </div>
+            )}
+
             <section className="cheque_rooms">
                 {loading && <div className="rooms-state">Cargando habitaciones...</div>}
                 {!loading && error && <div className="rooms-state">{error}</div>}
