@@ -127,6 +127,8 @@ const Contacto = () => {
                   src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop" 
                   alt="Asesor de viajes" 
                   className="expert-image"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
 
@@ -152,6 +154,8 @@ const Contacto = () => {
                   src="https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg" 
                   alt="Mapa del mundo" 
                   className="world-map"
+                  loading="lazy"
+                  decoding="async"
                 />
                 {/* Location Markers */}
                 <div className="map-marker" style={{top: '38%', left: '30%'}} title="Caracas, Venezuela">📍</div>

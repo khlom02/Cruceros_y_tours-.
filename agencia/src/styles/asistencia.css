@@ -6,6 +6,8 @@
     padding: 20px 200px;
     box-sizing: border-box;
     gap: 24px;
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 240px;
 }
 
 .imagen-izquierda,

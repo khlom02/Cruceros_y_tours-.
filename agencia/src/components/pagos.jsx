@@ -49,6 +49,8 @@ const Pagos = () => {
                   alt="Producto"
                   className="cart-img me-3"
                   style={{ width: "80px", height: "80px", objectFit: "cover", borderRadius: "10px" }}
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div>
                   <h5 className="mb-1">{producto.nombre}</h5>

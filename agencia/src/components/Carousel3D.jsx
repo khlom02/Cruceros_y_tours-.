@@ -79,7 +79,7 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen, modalImageIndex]);
+  }, [isModalOpen, destinations.length]);
 
   const updateCarousel = () => {
     cardsRef.current.forEach((card, index) => {
@@ -389,6 +389,7 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
                   muted
                   loop
                   playsInline
+                  preload="metadata"
                   style={{
                     width: "100%",
                     height: "100%",
@@ -401,6 +402,7 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
                 <img
                   src={dest.img}
                   alt={dest.title}
+                  decoding="async"
                   style={{
                     width: "100%",
                     height: "100%",
@@ -438,6 +440,8 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
                       <img
                         src={dest.logo}
                         alt="Logo"
+                        loading="lazy"
+                        decoding="async"
                         style={{
                           maxWidth: '100%',
                           maxHeight: '100%',
@@ -655,6 +659,7 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
                   muted
                   loop
                   playsInline
+                  preload="metadata"
                   style={{
                     width: '100%',
                     height: '100%',
@@ -668,6 +673,7 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
                 <img
                   src={destinations[modalImageIndex].img}
                   alt={destinations[modalImageIndex].title}
+                  decoding="async"
                   style={{
                     width: '100%',
                     height: '100%',
@@ -739,6 +745,8 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
                       <img
                         src={destinations[modalImageIndex].logo}
                         alt="Logo"
+                        loading="lazy"
+                        decoding="async"
                         style={{
                           maxWidth: '100%',
                           maxHeight: '100%',
@@ -868,6 +876,8 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
                 <img
                   src={dest.img}
                   alt={dest.title}
+                  loading="lazy"
+                  decoding="async"
                   style={{
                     width: '100%',
                     height: '100%',

@@ -152,6 +152,8 @@
     margin-top: 32px;
     padding-top: 24px;
     border-top: 1px solid var(--color-primary-transparent);
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 360px;
 }
 
 .detalles-section h2 {

@@ -23,6 +23,8 @@ export const BannerPromocional = ({
         className='banner_promocional'
         src={imagen}
         alt={alt}
+        loading="lazy"
+        decoding="async"
         style={{
           width: '100%',
           height: '25rem',

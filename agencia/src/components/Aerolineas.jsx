@@ -182,6 +182,8 @@ const Aerolineas = () => {
                 src={resolveLogo(airline.logo)}
                 style={getLogoStyle(airline)}
                 alt=""
+                loading="lazy"
+                decoding="async"
               />
             </button>
           ))}
@@ -195,6 +197,8 @@ const Aerolineas = () => {
               src={resolveLogo(airline.logo)}
               style={getLogoStyle(airline)}
               alt=""
+              loading="lazy"
+              decoding="async"
             />
             <p className="airline-tarifa">{airline.tarifa}</p>
           </div>

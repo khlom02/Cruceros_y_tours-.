@@ -89,7 +89,7 @@ export const BannerExperiencias = ({
       </div>
 
       <div className="banner-imagen">
-        <img src={imagen} alt={titulo} />
+        <img src={imagen} alt={titulo} loading="eager" decoding="async" />
       </div>
     </div>
   );

@@ -5,13 +5,28 @@ const Asistencia = () => {
     return (
         <div className="asistencia-container">
             <div className="imagen-izquierda">
-                <img src="/src/imagenes/logo_interwelt.png" alt="INTERWELT" />
+                <img
+                    src="/src/imagenes/logo_interwelt.png"
+                    alt="INTERWELT"
+                    loading="lazy"
+                    decoding="async"
+                />
             </div>
             <div className="imagen-centro">
-                <img src="/src/imagenes/logo_simply.png" alt="SIMPLY ASSISTANCE" />
+                <img
+                    src="/src/imagenes/logo_simply.png"
+                    alt="SIMPLY ASSISTANCE"
+                    loading="lazy"
+                    decoding="async"
+                />
             </div>
             <div className="imagen-derecha">
-                <img src="/src/imagenes/logo_runaway.png" alt="RUNAWAY TRAVEL ASSISTANCE" />
+                <img
+                    src="/src/imagenes/logo_runaway.png"
+                    alt="RUNAWAY TRAVEL ASSISTANCE"
+                    loading="lazy"
+                    decoding="async"
+                />
             </div>
         </div>
     );

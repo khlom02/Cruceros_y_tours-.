@@ -33,6 +33,8 @@ const Header = () => {
                 src="/src/marketing/logo/logo_cruceros_y_tours_completo_color.png"
                 alt="Cruceros y Tours Logo"
                 className="header-logo__img"
+                loading="eager"
+                decoding="async"
               />
             </Link>
           </div>

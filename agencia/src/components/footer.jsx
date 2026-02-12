@@ -9,7 +9,12 @@ const Footer = () => {
       <footer className="footer">
         <div className="footer-section logo-social">
           <a href="/">
-            <img src="/src/imagenes/texto_logo_solo_color.png"/>
+            <img
+              src="/src/imagenes/texto_logo_solo_color.png"
+              alt="Cruceros y Tours"
+              loading="lazy"
+              decoding="async"
+            />
           </a>
           <section className="socials_media">
             <a href="/" target="_blank" rel="noopener noreferrer">

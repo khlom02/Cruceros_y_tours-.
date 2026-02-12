@@ -9,6 +9,8 @@
   padding: 72px 16px;
   background: white;
   max-width: 100%;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 700px;
 }
 
 .aerolineas-content {

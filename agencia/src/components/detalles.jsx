@@ -355,6 +355,8 @@ const Detalles = () => {
                             className="detalles-main-image"
                             src={activeImage}
                             alt={detalle.title}
+                            loading="eager"
+                            decoding="async"
                             onMouseEnter={handleInteractStart}
                             onMouseLeave={handleInteractEnd}
                             onTouchStart={handleInteractStart}
@@ -383,7 +385,12 @@ const Detalles = () => {
                                     }`}
                                     onClick={() => setActiveIndex(index)}
                                 >
-                                    <img src={imgUrl} alt={`${detalle.title} ${index + 1}`} />
+                                    <img
+                                        src={imgUrl}
+                                        alt={`${detalle.title} ${index + 1}`}
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
                                 </button>
                             ))}
                         </div>

@@ -1,6 +1,10 @@
 import "../styles/rooms.css";
 import { useEffect, useMemo, useState } from "react";
 import { fetchRooms } from "../backend/supabase_client.js";
+import railEuropa from "../imagenes/rail_europa.png";
+import renfeLogo from "../imagenes/Renfe.png";
+import budgetLogo from "../imagenes/Budget.png";
+import agentCarsLogo from "../imagenes/agentcars.png";
 
 const featureIcons = {
     "1 double bed": (
@@ -75,38 +79,83 @@ const mockRooms = [
         ],
     },
     {
-        id: "room-2",
-        title: "Premium Oceánico",
-        image_url: "/src/imagenes/MSC.jpg",
-        serviceType: "tren",
-        features: [
-            "2 doble cama",
-            "20 metros cuadrados",
-            "aire acondicionado",
-            "mini bar",
-            "TV",
-            "incluido desayuno",
-            "vista al mar",
-            "bath",
-        ],
-    },
-    {
-        id: "room-3",
-        title: "Suite Ejecutiva",
-        image_url: "/src/imagenes/celebrity.jpg",
-        serviceType: "auto",
-        features: [
-            "1 doble cama",
-            "50 metros cuadrados",
-            "aire acondicionado",
-            "mini bar",
-            "TV 45 pulgadas",
-            "todo incluido",
-            "vista al mar",
-            "jacuzzi",
-        ],
     },
 ];
+
+const serviceRoomsByType = {
+    tren: [
+        {
+            id: "tren-rail-europa",
+            title: "Rail Europa",
+            imageUrl: railEuropa,
+            serviceType: "tren",
+            isBrand: true,
+            features: [
+                "Ruta internacional",
+                "Trenes alta velocidad",
+                "Salida diaria",
+                "Asientos reclinables",
+                "WiFi a bordo",
+                "Equipaje incluido",
+                "Reserva flexible",
+                "Atencion 24/7",
+            ],
+        },
+        {
+            id: "tren-renfe",
+            title: "Renfe",
+            imageUrl: renfeLogo,
+            serviceType: "tren",
+            isBrand: true,
+            features: [
+                "Ruta nacional",
+                "Trenes AVE",
+                "Frecuencias diarias",
+                "Asientos confort",
+                "WiFi a bordo",
+                "Snack incluido",
+                "Cambios rapidos",
+                "Check-in digital",
+            ],
+        },
+    ],
+    auto: [
+        {
+            id: "auto-budget",
+            title: "Budget",
+            imageUrl: budgetLogo,
+            serviceType: "auto",
+            isBrand: true,
+            features: [
+                "Retiro en aeropuerto",
+                "Tarifa diaria",
+                "Seguro incluido",
+                "Kilometraje flexible",
+                "Asistencia 24/7",
+                "Cambio sin costo",
+                "Entrega en ciudad",
+                "Reserva digital",
+            ],
+        },
+        {
+            id: "auto-agentcars",
+            title: "Agent Cars",
+            imageUrl: agentCarsLogo,
+            serviceType: "auto",
+            isBrand: true,
+            features: [
+                "Entrega a domicilio",
+                "Flota premium",
+                "Planes semanales",
+                "GPS disponible",
+                "Seguro completo",
+                "Soporte mecanico",
+                "Retiro flexible",
+                "Pago facil",
+            ],
+        },
+    ],
+};
 
 const normalizeFeatures = (features) => {
     if (Array.isArray(features)) {
@@ -149,10 +198,14 @@ const Rooms = ({ serviceType = "", title = "Opciones recomendadas", subtitle = "
 
             const normalized = normalizeRooms(data);
             const fallback = normalizeRooms(mockRooms);
+            const serviceFallback = serviceRoomsByType[serviceType] || [];
             const baseRooms = normalized.length > 0 ? normalized : fallback;
-            const filteredRooms = serviceType
-                ? baseRooms.filter((room) => room.serviceType === serviceType)
+            const combinedRooms = serviceFallback.length > 0
+                ? [...serviceFallback, ...baseRooms]
                 : baseRooms;
+            const filteredRooms = serviceType
+                ? combinedRooms.filter((room) => room.serviceType === serviceType)
+                : combinedRooms;
 
             if (filteredRooms.length > 0) {
                 setRooms(filteredRooms);
@@ -202,13 +255,18 @@ const Rooms = ({ serviceType = "", title = "Opciones recomendadas", subtitle = "
                 {!loading && error && <div className="rooms-state">{error}</div>}
 
                 {!loading && !error && roomCards.map((room) => (
-                    <article className="room-card" key={room.id}>
+                    <article
+                        className={`room-card ${room.isBrand ? "room-card--brand" : ""}`}
+                        key={room.id}
+                    >
                         <div className="room-media">
                             <h3 className="room-title">{room.title}</h3>
                             <img
-                                className="room-image"
+                                className={`room-image ${room.isBrand ? "room-image--contain" : ""}`}
                                 src={room.imageUrl}
                                 alt={room.title}
+                                loading="lazy"
+                                decoding="async"
                             />
                         </div>
 

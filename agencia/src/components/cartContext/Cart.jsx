@@ -40,6 +40,8 @@ const Cart = () => {
                         className="img-fluid rounded-start"
                         alt={item.nombre}
                         style={{ maxHeight: "100px", objectFit: "contain" }}
+                        loading="lazy"
+                        decoding="async"
                       />
                     </div>
                     <div className="col-md-6">
