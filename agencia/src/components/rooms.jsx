@@ -5,6 +5,9 @@ import railEuropa from "../imagenes/rail_europa.png";
 import renfeLogo from "../imagenes/Renfe.png";
 import budgetLogo from "../imagenes/Budget.png";
 import agentCarsLogo from "../imagenes/agentcars.png";
+import interWeltLogo from "../imagenes/logo_interwelt.png";
+import simplyLogo from "../imagenes/logo_simply.png";
+import runAwayLogo from "../imagenes/logo_runaway.png";
 
 const featureIcons = {
     "1 double bed": (
@@ -62,22 +65,6 @@ const featureIcons = {
 };
 
 const mockRooms = [
-    {
-        id: "room-1",
-        title: "Doble Estándar",
-        image_url: "/src/imagenes/banner_principal.jpeg",
-        serviceType: "asistencia",
-        features: [
-            "1 doble cama",
-            "10 metros cuadrados",
-            "aire acondicionado",
-            "mini bar",
-            "TV",
-            "todo incluido",
-            "vista al mar",
-            "bath",
-        ],
-    },
     {
     },
 ];
@@ -152,6 +139,59 @@ const serviceRoomsByType = {
                 "Soporte mecanico",
                 "Retiro flexible",
                 "Pago facil",
+            ],
+        },
+    ],
+    asistencia: [
+        {
+            id: "asistencia-interwelt",
+            title: "InterWelt",
+            imageUrl: interWeltLogo,
+            serviceType: "asistencia",
+            isBrand: true,
+            features: [
+                "Cobertura medica internacional",
+                "Asistencia 24/7 multicanal",
+                "Evacuacion medica",
+                "Reembolso gastos medicos",
+                "Asistencia legal",
+                "Cobertura de equipaje",
+                "Cancelacion de viajes",
+                "Soporte en tu idioma",
+            ],
+        },
+        {
+            id: "asistencia-simply",
+            title: "Simply",
+            imageUrl: simplyLogo,
+            serviceType: "asistencia",
+            isBrand: true,
+            features: [
+                "Proteccion medica completa",
+                "Emergencias sin limites",
+                "Asistencia dental",
+                "Retorno anticipado",
+                "Atencion psicologica",
+                "Rescate en montaña",
+                "Seguro de accidentes",
+                "Red de clinicas",
+            ],
+        },
+        {
+            id: "asistencia-runaway",
+            title: "RunAway",
+            imageUrl: runAwayLogo,
+            serviceType: "asistencia",
+            isBrand: true,
+            features: [
+                "Cobertura flexible",
+                "Planes personalizados",
+                "Asistencia en destino",
+                "Gestion de reclamos",
+                "Repatriacion",
+                "Cobertura ante robo",
+                "Asistencia transporte",
+                "Chat disponible 24/7",
             ],
         },
     ],

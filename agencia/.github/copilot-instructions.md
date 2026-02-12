@@ -22,7 +22,7 @@
 - TODO CODIGO DEBE ESTAR OPTIMIZADO PARA RENDIMIENTO Y SEO.
 - Usar siempre hooks y componentes funcionales.
 - Seguir la arquitectura y convenciones del proyecto.
--todo componente debe tener su archivo CSS propio si es necesario.
+- Todo componente debe tener su archivo CSS propio si es necesario.
 
 ## Convenciones de estilos
 - Centralizar colores/estilos en src/styles/variables.css.

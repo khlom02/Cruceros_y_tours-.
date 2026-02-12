@@ -158,6 +158,8 @@ export const fetchRandomProducts = async (limit = 4) => {
 // OBTENER HABITACIONES
 // ============================================
 export const fetchRooms = async ({ serviceType } = {}) => {
+  const timeoutMs = 2000;
+
   try {
     let query = supabase
       .from("rooms")
@@ -167,14 +169,17 @@ export const fetchRooms = async ({ serviceType } = {}) => {
       query = query.eq("service_type", serviceType);
     }
 
-    const { data, error } = await query;
+    const timeoutRace = new Promise((resolve) =>
+      setTimeout(() => resolve(null), timeoutMs)
+    );
 
-    if (error) {
-      console.error("Error al obtener habitaciones:", error);
+    const result = await Promise.race([query, timeoutRace]);
+
+    if (!result || result.error) {
       return [];
     }
 
-    return data || [];
+    return result.data || [];
   } catch (err) {
     console.error("Error inesperado al obtener habitaciones:", err);
     return [];
