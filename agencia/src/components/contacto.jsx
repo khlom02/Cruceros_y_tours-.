@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import '../styles/contacto.css';
+import { createContact } from '../backend/supabase_client';
 
 const Contacto = () => {
   const [formData, setFormData] = useState({
     nombre: "",
     email: "",
     telefono: "",
+    asunto: "",
     mensaje: ""
   });
   const [enviado, setEnviado] = useState(false);
+  const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -17,15 +21,36 @@ const Contacto = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    setEnviado(true);
-    
-    setTimeout(() => {
-      setEnviado(false);
-      setFormData({ nombre: "", email: "", telefono: "", mensaje: "" });
-    }, 3000);
+    setCargando(true);
+    setError("");
+
+    try {
+      const resultado = await createContact(
+        formData.nombre,
+        formData.email,
+        formData.telefono,
+        formData.asunto,
+        formData.mensaje
+      );
+
+      if (resultado) {
+        setEnviado(true);
+        setFormData({ nombre: "", email: "", telefono: "", asunto: "", mensaje: "" });
+        
+        setTimeout(() => {
+          setEnviado(false);
+        }, 3000);
+      } else {
+        setError("Hubo un problema al enviar el mensaje. Intenta de nuevo.");
+      }
+    } catch (err) {
+      console.error("Error al enviar contacto:", err);
+      setError("Error al enviar el mensaje. Por favor intenta de nuevo.");
+    } finally {
+      setCargando(false);
+    }
   };
 
   return (
@@ -46,6 +71,12 @@ const Contacto = () => {
               {enviado && (
                 <div className="alert alert-success mb-3">
                   ¡Mensaje enviado exitosamente!
+                </div>
+              )}
+
+              {error && (
+                <div className="alert alert-danger mb-3">
+                  {error}
                 </div>
               )}
 
@@ -87,8 +118,22 @@ const Contacto = () => {
                       type="tel"
                       name="telefono"
                       className="form-control-contact"
-                      placeholder="Tu telefono"
+                      placeholder="Tu teléfono"
                       value={formData.telefono}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <div className="input-group-contact">
+                    <i className="bi bi-subject-fill input-icon"></i>
+                    <input
+                      type="text"
+                      name="asunto"
+                      className="form-control-contact"
+                      placeholder="Asunto"
+                      value={formData.asunto}
                       onChange={handleChange}
                       required
                     />
@@ -110,8 +155,8 @@ const Contacto = () => {
                   </div>
                 </div>
 
-                <button type="submit" className="btn-send-message">
-                  Enviar mensaje
+                <button type="submit" className="btn-send-message" disabled={cargando}>
+                  {cargando ? "Enviando..." : "Enviar mensaje"}
                 </button>
               </form>
             </div>

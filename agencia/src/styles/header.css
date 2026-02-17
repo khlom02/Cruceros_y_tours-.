@@ -13,11 +13,11 @@ header {
 header .container-fluid {
   background: white;
   font-family: 'Chicago Police', sans-serif;
-  padding: 15px 20px !important;
+  padding: 10px 20px !important;
   width: 100%;
   max-width: 100%;
   margin: 0;
-  min-height: 90px;
+  min-height: auto;
 }
 
 /* Logo del header - sin fondo, adaptable y moderno */
@@ -139,8 +139,9 @@ header .position-relative .nav-link:hover .bi-cart3 {
 
 /* Menú de navegación - Moderno con efectos hover */
 header .nav {
-  padding-top: 10px;
-  margin-top: 10px;
+  padding-top: 0;
+  margin-top: 0;
+  gap: 8px;
 }
 
 header .nav-item .nav-link {
@@ -212,6 +213,89 @@ header .nav-item .nav-link:hover i {
   .texto {
     font-size: 1rem;
   }
+}
+
+/* Botones de autenticación del header */
+.header-user-btn {
+  font-family: 'Chicago Police', sans-serif;
+  border-radius: 20px;
+  padding: 8px 16px;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary-dark);
+  background-color: transparent;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.header-user-btn:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  border-color: var(--color-primary);
+}
+
+.header-user-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(15, 211, 211, 0.2);
+  border-color: var(--color-primary);
+}
+
+/* Dropdown del usuario */
+.header-user-dropdown {
+  position: relative;
+}
+
+.header-user-menu {
+  min-width: 200px;
+  z-index: 1050;
+  margin-top: 8px;
+  border: 1px solid rgba(15, 211, 211, 0.2);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+}
+
+.header-user-menu .dropdown-item {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  transition: all 0.2s ease;
+}
+
+.header-user-menu .dropdown-item:hover {
+  background-color: rgba(15, 211, 211, 0.1);
+  color: var(--color-primary);
+}
+
+.header-user-menu .dropdown-item.text-danger:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.header-login-btn {
+  font-family: 'Chicago Police', sans-serif;
+  border-radius: 20px;
+  padding: 8px 16px;
+  border: 2px solid var(--color-primary-dark);
+  color: var(--color-primary-dark);
+  background-color: transparent;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.header-login-btn:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-light);
+}
+
+.header-login-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(15, 211, 211, 0.2);
 }
 
 @media (max-width: 600px) {

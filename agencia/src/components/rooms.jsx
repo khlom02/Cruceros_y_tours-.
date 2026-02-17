@@ -1,6 +1,6 @@
 import "../styles/rooms.css";
 import { useEffect, useMemo, useState } from "react";
-import { fetchRooms } from "../backend/supabase_client.js";
+import { fetchRooms } from "../backend/supabase_client";
 import railEuropa from "../imagenes/rail_europa.png";
 import renfeLogo from "../imagenes/Renfe.png";
 import budgetLogo from "../imagenes/Budget.png";
@@ -64,10 +64,7 @@ const featureIcons = {
     ),
 };
 
-const mockRooms = [
-    {
-    },
-];
+const mockRooms = [];
 
 const serviceRoomsByType = {
     tren: [
@@ -294,20 +291,22 @@ const Rooms = ({ serviceType = "", title = "Opciones recomendadas", subtitle = "
                 {loading && <div className="rooms-state">Cargando habitaciones...</div>}
                 {!loading && error && <div className="rooms-state">{error}</div>}
 
-                {!loading && !error && roomCards.map((room) => (
+                {!loading && !error && roomCards.map((room, index) => (
                     <article
                         className={`room-card ${room.isBrand ? "room-card--brand" : ""}`}
-                        key={room.id}
+                        key={room.id || `${room.title}-${index}`}
                     >
                         <div className="room-media">
                             <h3 className="room-title">{room.title}</h3>
-                            <img
-                                className={`room-image ${room.isBrand ? "room-image--contain" : ""}`}
-                                src={room.imageUrl}
-                                alt={room.title}
-                                loading="lazy"
-                                decoding="async"
-                            />
+                            {room.imageUrl && (
+                                <img
+                                    className={`room-image ${room.isBrand ? "room-image--contain" : ""}`}
+                                    src={room.imageUrl}
+                                    alt={room.title}
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            )}
                         </div>
 
                         <div className="room-divider" aria-hidden="true" />

@@ -6,34 +6,13 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // ============================================
-// OBTENER PRODUCTOS
-// ============================================
-export const fetchProducts = async () => {
-  try {
-    const { data, error } = await supabase
-      .from("productos")
-      .select("id, nombre, descripcion, precio, imagen_url, stock, categoria_id, marca_id, fecha_creacion");
-
-    if (error) {
-      console.error("Error al obtener productos:", error);
-      return [];
-    }
-
-    return data || [];
-  } catch (err) {
-    console.error("Error inesperado al obtener productos:", err);
-    return [];
-  }
-};
-
-// ============================================
 // OBTENER CATEGORÍAS
 // ============================================
 export const fetchCategories = async () => {
   try {
     const { data, error } = await supabase
       .from("categorias")
-      .select("id, nombre");
+      .select("id, nombre, descripcion");
 
     if (error) {
       console.error("Error al obtener categorías:", error);
@@ -48,140 +27,203 @@ export const fetchCategories = async () => {
 };
 
 // ============================================
-// OBTENER MARCAS
+// OBTENER PRODUCTOS POR CATEGORÍA
 // ============================================
-export const fetchBrands = async () => {
+export const fetchProductsByCategory = async (categoryId) => {
   try {
     const { data, error } = await supabase
-      .from("marcas")
-      .select("id, nombre");
-
-    if (error) {
-      console.error("Error al obtener marcas:", error);
-      return [];
-    }
-
-    return data || [];
-  } catch (err) {
-    console.error("Error inesperado al obtener marcas:", err);
-    return [];
-  }
-};
-
-// ============================================
-// APLICAR FILTROS (CATEGORÍA + MARCA + BUSCAR)
-// ============================================
-export const applyFilters = async (filters) => {
-  const { categoria, marca, buscar } = filters;
-
-  try {
-    let query = supabase
       .from("productos")
-      .select("id, nombre, descripcion, precio, imagen_url, stock, categoria_id, marca_id, fecha_creacion");
-
-    // Filtrar por categoría
-    if (categoria && categoria !== "todos") {
-      query = query.eq("categoria_id", categoria);
-    }
-
-    // Filtrar por marca
-    if (marca && marca !== "todos") {
-      query = query.eq("marca_id", marca);
-    }
-
-    // Filtro por texto (nombre del producto)
-    if (buscar && buscar.trim() !== "") {
-      query = query.ilike("nombre", `%${buscar}%`);
-    }
-
-    const { data, error } = await query;
+      .select("id, titulo, descripcion, precio, imagen, ubicacion, rating, fecha_inicio, fecha_fin, color_fondo")
+      .eq("categoria_id", categoryId)
+      .eq("activo", true)
+      .order("fecha_creacion", { ascending: false });
 
     if (error) {
-      console.error("Error al aplicar filtros:", error);
+      console.error("Error al obtener productos por categoría:", error);
       return [];
     }
 
     return data || [];
   } catch (err) {
-    console.error("Error inesperado al aplicar filtros:", err);
+    console.error("Error inesperado al obtener productos por categoría:", err);
     return [];
   }
 };
 
 // ============================================
-// OBTENER PRODUCTO POR ID
+// OBTENER TODOS LOS PRODUCTOS
+// ============================================
+export const fetchProducts = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("productos")
+      .select("id, titulo, descripcion, precio, imagen, imagen_url, ubicacion, rating, cantidad_reviews, categoria_id, fecha_inicio, fecha_fin, color_fondo")
+      .eq("activo", true)
+      .order("fecha_creacion", { ascending: false });
+
+    if (error) {
+      console.error("Error al obtener productos:", error);
+      return [];
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado al obtener productos:", err);
+    return [];
+  }
+};
+
+// ============================================
+// OBTENER PRODUCTO POR ID CON DETALLES COMPLETOS
 // ============================================
 export const fetchProductById = async (id) => {
   try {
-    const { data, error } = await supabase
+    // Obtener producto base
+    const { data: producto, error: errorProducto } = await supabase
       .from("productos")
-      .select("id, nombre, descripcion, precio, imagen_url, stock, categoria_id, marca_id, fecha_creacion")
+      .select("id, titulo, descripcion, precio, imagen, imagen_url, ubicacion, rating, cantidad_reviews, categoria_id, fecha_inicio, fecha_fin")
       .eq("id", id)
       .single();
 
-    if (error) {
-      console.error("Error al obtener el producto por ID:", error);
+    if (errorProducto) {
+      console.error("Error al obtener producto:", errorProducto);
       return null;
     }
 
-    return data;
+    // Obtener detalles específicos de cruceros (si aplica)
+    const { data: detallesCrucero } = await supabase
+      .from("detalles_cruceros")
+      .select("*")
+      .eq("producto_id", id)
+      .maybeSingle();
+
+    // Obtener galerías
+    const { data: galleries } = await supabase
+      .from("galleries")
+      .select("id, imagen_url, posicion_orden")
+      .eq("producto_id", id)
+      .order("posicion_orden", { ascending: true });
+
+    // Obtener habitaciones
+    const { data: rooms } = await supabase
+      .from("rooms")
+      .select("id, titulo, descripcion, precio, imagen_url")
+      .eq("producto_id", id);
+
+    // Obtener amenidades
+    const { data: amenities } = await supabase
+      .from("amenities")
+      .select("id, nombre, icono_emoji")
+      .eq("producto_id", id);
+
+    // Obtener highlights
+    const { data: highlights } = await supabase
+      .from("highlights")
+      .select("id, descripcion")
+      .eq("producto_id", id)
+      .order("posicion_orden", { ascending: true });
+
+    return {
+      ...producto,
+      detalles_crucero: detallesCrucero || {},
+      gallery: galleries?.map(g => g.imagen_url) || [],
+      rooms: rooms || [],
+      amenities: amenities || [],
+      highlights: highlights?.map(h => h.descripcion) || [],
+    };
   } catch (err) {
-    console.error("Error inesperado al obtener el producto por ID:", err);
+    console.error("Error inesperado al obtener producto con detalles:", err);
     return null;
   }
 };
 
 // ============================================
-// OBTENER PRODUCTOS ALEATORIOS
+// OBTENER GALERÍAS DE UN PRODUCTO
 // ============================================
-export const fetchRandomProducts = async (limit = 4) => {
+export const fetchGalleries = async (productId) => {
   try {
     const { data, error } = await supabase
-      .from("productos")
-      .select("id, nombre, descripcion, precio, imagen_url, categoria_id")
-      .order("id", { ascending: false })
-      .limit(limit);
+      .from("galleries")
+      .select("id, imagen_url, posicion_orden")
+      .eq("producto_id", productId)
+      .order("posicion_orden", { ascending: true });
 
     if (error) {
-      console.error("Error al obtener productos aleatorios:", error);
+      console.error("Error al obtener galerías:", error);
       return [];
     }
 
     return data || [];
   } catch (err) {
-    console.error("Error inesperado al obtener productos aleatorios:", err);
+    console.error("Error inesperado al obtener galerías:", err);
     return [];
   }
 };
 
 // ============================================
-// OBTENER HABITACIONES
+// OBTENER HABITACIONES DE UN PRODUCTO
 // ============================================
-export const fetchRooms = async ({ serviceType } = {}) => {
-  const timeoutMs = 2000;
-
+export const fetchRoomsForProduct = async (productId) => {
   try {
-    let query = supabase
+    const { data, error } = await supabase
       .from("rooms")
-      .select("id, title, image_url, features, service_type");
+      .select("id, titulo, descripcion, precio, imagen_url")
+      .eq("producto_id", productId)
+      .order("id", { ascending: true });
 
-    if (serviceType) {
-      query = query.eq("service_type", serviceType);
-    }
-
-    const timeoutRace = new Promise((resolve) =>
-      setTimeout(() => resolve(null), timeoutMs)
-    );
-
-    const result = await Promise.race([query, timeoutRace]);
-
-    if (!result || result.error) {
+    if (error) {
+      console.error("Error al obtener habitaciones:", error);
       return [];
     }
 
-    return result.data || [];
+    return data || [];
   } catch (err) {
     console.error("Error inesperado al obtener habitaciones:", err);
+    return [];
+  }
+};
+
+// ============================================
+// OBTENER AMENIDADES DE UN PRODUCTO
+// ============================================
+export const fetchAmenitiesForProduct = async (productId) => {
+  try {
+    const { data, error } = await supabase
+      .from("amenities")
+      .select("id, nombre, icono_emoji")
+      .eq("producto_id", productId);
+
+    if (error) {
+      console.error("Error al obtener amenidades:", error);
+      return [];
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado al obtener amenidades:", err);
+    return [];
+  }
+};
+
+// ============================================
+// OBTENER HIGHLIGHTS DE UN PRODUCTO
+// ============================================
+export const fetchHighlightsForProduct = async (productId) => {
+  try {
+    const { data, error } = await supabase
+      .from("highlights")
+      .select("id, descripcion")
+      .eq("producto_id", productId)
+      .order("posicion_orden", { ascending: true });
+
+    if (error) {
+      console.error("Error al obtener highlights:", error);
+      return [];
+    }
+
+    return data?.map(h => h.descripcion) || [];
+  } catch (err) {
+    console.error("Error inesperado al obtener highlights:", err);
     return [];
   }
 };
@@ -192,15 +234,22 @@ export const fetchRooms = async ({ serviceType } = {}) => {
 export const fetchSpecialServiceByKey = async ({ id, tipo } = {}) => {
   try {
     let query = supabase
-      .from("servicios_especiales")
-      .select(
-        "id, tipo, nombre, descripcion, ubicacion, rating, reviews, imagen_url, gallery, highlights, amenities, facilities, service_info, service_cta"
-      );
+      .from("productos")
+      .select("id, titulo, descripcion, precio, imagen, ubicacion, rating, cantidad_reviews");
 
     if (id) {
       query = query.eq("id", id).single();
     } else if (tipo) {
-      query = query.eq("tipo", tipo).single();
+      // Buscar por nombre de categoría
+      const { data: categoria } = await supabase
+        .from("categorias")
+        .select("id")
+        .ilike("nombre", `%${tipo}%`)
+        .single();
+
+      if (!categoria) return null;
+
+      query = query.eq("categoria_id", categoria.id).single();
     } else {
       return null;
     }
@@ -215,6 +264,245 @@ export const fetchSpecialServiceByKey = async ({ id, tipo } = {}) => {
     return data || null;
   } catch (err) {
     console.error("Error inesperado al obtener servicio especial:", err);
+    return null;
+  }
+};
+
+// ============================================
+// FUNCIONES PARA CARRITO DE COMPRAS
+// ============================================
+export const addToCart = async (usuarioId, productoId, cantidad = 1) => {
+  try {
+    const { data, error } = await supabase
+      .from("cart_items")
+      .upsert({
+        usuario_id: usuarioId,
+        producto_id: productoId,
+        cantidad: cantidad,
+      });
+
+    if (error) {
+      console.error("Error al agregar al carrito:", error);
+      return null;
+    }
+
+    return data;
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return null;
+  }
+};
+
+// Obtener carrito del usuario
+export const fetchCart = async (usuarioId) => {
+  try {
+    const { data, error } = await supabase
+      .from("cart_items")
+      .select("id, producto_id, cantidad, productos(titulo, precio, imagen)")
+      .eq("usuario_id", usuarioId);
+
+    if (error) {
+      console.error("Error al obtener carrito:", error);
+      return [];
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return [];
+  }
+};
+
+// Eliminar del carrito
+export const removeFromCart = async (cartItemId) => {
+  try {
+    const { error } = await supabase
+      .from("cart_items")
+      .delete()
+      .eq("id", cartItemId);
+
+    if (error) {
+      console.error("Error al eliminar del carrito:", error);
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return false;
+  }
+};
+
+// ============================================
+// FUNCIONES PARA ÓRDENES
+// ============================================
+export const createOrder = async (usuarioId, items, montoTotal, metodoPago) => {
+  try {
+    const numeroOrden = `ORD-${Date.now()}`;
+    
+    const { data: order, error: errorOrder } = await supabase
+      .from("orders")
+      .insert({
+        usuario_id: usuarioId,
+        numero_orden: numeroOrden,
+        monto_total: montoTotal,
+        metodo_pago: metodoPago,
+        estado: "pendiente",
+      })
+      .select()
+      .single();
+
+    if (errorOrder) {
+      console.error("Error al crear orden:", errorOrder);
+      return null;
+    }
+
+    // Agregar items a la orden
+    const orderItems = items.map(item => ({
+      orden_id: order.id,
+      producto_id: item.producto_id,
+      cantidad: item.cantidad,
+      precio_unitario: item.precio,
+      subtotal: item.precio * item.cantidad,
+    }));
+
+    const { error: errorItems } = await supabase
+      .from("order_items")
+      .insert(orderItems);
+
+    if (errorItems) {
+      console.error("Error al agregar items a la orden:", errorItems);
+      return null;
+    }
+
+    return order;
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return null;
+  }
+};
+
+// Obtener órdenes del usuario
+export const fetchUserOrders = async (usuarioId) => {
+  try {
+    const { data, error } = await supabase
+      .from("orders")
+      .select("id, numero_orden, estado, monto_total, fecha_orden, order_items(id, producto_id, cantidad, precio_unitario)")
+      .eq("usuario_id", usuarioId)
+      .order("fecha_orden", { ascending: false });
+
+    if (error) {
+      console.error("Error al obtener órdenes:", error);
+      return [];
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return [];
+  }
+};
+
+// ============================================
+// FUNCIONES PARA PERFIL DE USUARIO
+// ============================================
+export const getUserProfile = async (usuarioId) => {
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", usuarioId)
+      .single();
+
+    if (error) {
+      console.error("Error al obtener perfil:", error);
+      return null;
+    }
+
+    return data || null;
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return null;
+  }
+};
+
+// Actualizar perfil del usuario
+export const updateUserProfile = async (usuarioId, perfil) => {
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .update(perfil)
+      .eq("id", usuarioId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error al actualizar perfil:", error);
+      return null;
+    }
+
+    return data || null;
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return null;
+  }
+};
+
+// ============================================
+// OBTENER HABITACIONES (Para compatibilidad con rooms.jsx)
+// ============================================
+export const fetchRooms = async ({ serviceType } = {}) => {
+  try {
+    let query = supabase
+      .from("rooms")
+      .select("id, titulo, descripcion, precio, imagen_url, producto_id");
+
+    // Si se proporciona serviceType, filtrar por tipo de servicio
+    if (serviceType) {
+      // Por ahora devolvemos todas las habitaciones
+      // En futuro se puede expandir para filtrar por categoría
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error("Error al obtener habitaciones:", error);
+      return [];
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado al obtener habitaciones:", err);
+    return [];
+  }
+};
+
+// ============================================
+// FUNCIONES PARA CONTACTOS
+// ============================================
+export const createContact = async (nombre, email, telefono, asunto, mensaje) => {
+  try {
+    const { data, error } = await supabase
+      .from("contactos")
+      .insert({
+        nombre,
+        email,
+        telefono,
+        asunto,
+        mensaje,
+        estado: "nuevo",
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error al crear contacto:", error);
+      return null;
+    }
+
+    return data;
+  } catch (err) {
+    console.error("Error inesperado:", err);
     return null;
   }
 };

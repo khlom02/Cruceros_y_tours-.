@@ -1,14 +1,14 @@
-export const BannerCruceros = ({
+export const Banner = ({
   titulo = "Encuentra tu destino ideal",
   subtitulo = "Explora experiencias únicas y personalizadas alrededor del mundo.",
   imagen = "/src/imagenes/banner_principal.jpeg",
   colorFondo = "#E8863B"
 }) => {
   return (
-    <div className="banner-cruceros">
+    <div className="banner-generico">
       <style>
         {`
-          .banner-cruceros {
+          .banner-generico {
             display: flex;
             width: 100%;
             height: 350px;
@@ -16,7 +16,7 @@ export const BannerCruceros = ({
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
           }
 
-          .banner-texto {
+          .banner-generico .banner-texto {
             flex: 0 0 35%;
             display: flex;
             flex-direction: column;
@@ -25,7 +25,7 @@ export const BannerCruceros = ({
             background-color: ${colorFondo};
           }
 
-          .banner-titulo {
+          .banner-generico .banner-titulo {
             font-family: 'Playfair Display', Georgia, serif;
             font-size: 3rem;
             font-weight: 700;
@@ -34,7 +34,7 @@ export const BannerCruceros = ({
             line-height: 1.1;
           }
 
-          .banner-subtitulo {
+          .banner-generico .banner-subtitulo {
             font-family: 'Lora', Georgia, serif;
             font-size: 1.1rem;
             font-weight: 400;
@@ -44,39 +44,39 @@ export const BannerCruceros = ({
             opacity: 0.95;
           }
 
-          .banner-imagen {
+          .banner-generico .banner-imagen {
             flex: 1;
             position: relative;
           }
 
-          .banner-imagen img {
+          .banner-generico .banner-imagen img {
             width: 100%;
             height: 100%;
             object-fit: cover;
           }
 
           @media (max-width: 768px) {
-            .banner-cruceros {
+            .banner-generico {
               flex-direction: column;
               height: auto;
               max-width: calc(100vw - 40px);
               margin: 60px auto 30px;
             }
 
-            .banner-texto {
+            .banner-generico .banner-texto {
               flex: none;
               padding: 30px;
             }
 
-            .banner-titulo {
+            .banner-generico .banner-titulo {
               font-size: 2rem;
             }
 
-            .banner-subtitulo {
+            .banner-generico .banner-subtitulo {
               font-size: 1rem;
             }
 
-            .banner-imagen {
+            .banner-generico .banner-imagen {
               height: 200px;
             }
           }

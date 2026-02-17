@@ -1,5 +1,6 @@
 import 'animate.css';
 import '../styles/landing.css';
+import '../styles/tours_cards.css';
 import Carousel3D from './Carousel3D';
 import ToursCardsGrid from "./tours_cards.jsx";
 import Aerolineas from "./Aerolineas.jsx";
@@ -147,7 +148,12 @@ const LandingPage = () => {
         Destinos Nacionales
       </h2>
       {/* Sección de Tours Destacados */}
-      <ToursCardsGrid />
+      <ToursCardsGrid 
+        categoryName="Tours" 
+        cardRootClassName="tour-card"
+        cardBaseClassName="tour-card"
+        withFilters={false} 
+      />
 
        <h2 style={{
         textAlign: 'center',
@@ -163,7 +169,12 @@ const LandingPage = () => {
       </h2>
 
       {/* Sección de Tours Destacados */}
-      <ToursCardsGrid />
+      <ToursCardsGrid 
+        categoryName="Tours" 
+        cardRootClassName="tour-card"
+        cardBaseClassName="tour-card"
+        withFilters={false} 
+      />
         <h2 style={{
         textAlign: 'center',
         fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',

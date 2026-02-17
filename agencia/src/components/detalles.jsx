@@ -1,37 +1,38 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "../styles/detalles.css";
-import { fetchProductById, fetchSpecialServiceByKey } from "../backend/supabase_client.js";
+import { fetchProductById, fetchSpecialServiceByKey } from "../backend/supabase_client";
 import Rooms from "./rooms.jsx";
 import DetallesNavieras from "./detalles_navieras.jsx";
 
 const normalizeDetalle = (data) => {
     if (!data) return null;
 
+    // Usar galería de la DB o fallback a imagen principal
     const gallery = Array.isArray(data.gallery)
         ? data.gallery
-        : data.imagen_url
-            ? [data.imagen_url]
+        : data.imagen || data.imagen_url
+            ? [data.imagen || data.imagen_url]
             : [];
 
     return {
         id: data.id,
-        title: data.nombre || data.title || "",
+        title: data.titulo || data.title || "",
         location: data.ubicacion || data.location || "",
         rating: data.rating ?? null,
-        reviews: data.reviews ?? null,
+        reviews: data.cantidad_reviews ?? data.reviews ?? null,
         description: data.descripcion || data.description || "",
-        amenities: Array.isArray(data.amenities) ? data.amenities : [],
+        amenities: Array.isArray(data.amenities) ? data.amenities.map(a => a.nombre || a) : [],
         highlights: Array.isArray(data.highlights) ? data.highlights : [],
-        facilities: Array.isArray(data.facilities) ? data.facilities : [],
+        facilities: Array.isArray(data.amenities) ? data.amenities.map(a => `${a.icono_emoji || '•'} ${a.nombre || a}`) : [],
         rooms: Array.isArray(data.rooms) ? data.rooms : [],
-        anosServicio: data.anos_servicio ?? data.anosServicio ?? null,
-        pasajerosMax: data.pasajeros_max ?? data.pasajerosMax ?? null,
-        tripulantes: data.tripulantes ?? null,
-        ratioEspacio: data.ratio_espacio ?? data.ratioEspacio ?? null,
-        ratioServicio: data.ratio_servicio ?? data.ratioServicio ?? null,
-        cabinaSingle: data.cabina_single ?? data.cabinaSingle ?? false,
-        viajandoConNinos: data.viajando_con_ninos ?? data.viajandoConNinos ?? false,
+        anosServicio: data.detalles_crucero?.anos_servicio ?? data.anos_servicio ?? null,
+        pasajerosMax: data.detalles_crucero?.pasajeros_max ?? data.pasajeros_max ?? null,
+        tripulantes: data.detalles_crucero?.tripulantes ?? null,
+        ratioEspacio: data.detalles_crucero?.ratio_espacio ?? data.ratio_espacio ?? null,
+        ratioServicio: data.detalles_crucero?.ratio_servicio ?? data.ratio_servicio ?? null,
+        cabinaSingle: data.detalles_crucero?.cabina_single ?? data.cabina_single ?? false,
+        viajandoConNinos: data.detalles_crucero?.viajando_con_ninos ?? data.viajando_con_ninos ?? false,
         gallery,
     };
 };
@@ -264,20 +265,8 @@ const Detalles = () => {
             if (!isMounted) return;
 
             if (!data) {
-                const fallback = isSpecialService
-                    ? mockServicios[detalleTipo]
-                    : mockDetalles[detalleId];
-                if (fallback) {
-                    const normalizedFallback = isSpecialService
-                        ? normalizeServiceDetalle(fallback)
-                        : normalizeDetalle(fallback);
-                    setDetalle(normalizedFallback);
-                    setLoading(false);
-                    return;
-                }
-
                 setDetalle(null);
-                setError("No se encontro el detalle solicitado.");
+                setError("No se encontró el detalle solicitado en la base de datos.");
                 setLoading(false);
                 return;
             }

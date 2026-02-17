@@ -166,7 +166,7 @@ const Header = () => {
           </div>
 
           {/* Login y Carrito - derecha */}
-          <div className="col-auto d-flex align-items-center justify-content-end" style={{ marginRight: "90px" }}>
+          <div className="col-auto d-flex align-items-center justify-content-end">
             {authLoading ? (
               <div
                 className="spinner-border spinner-border-sm text-white"
@@ -176,37 +176,33 @@ const Header = () => {
               </div>
             ) : user ? (
               <div className="d-flex align-items-center gap-2">
-                <div className="dropdown">
+                <div className="dropdown header-user-dropdown">
                   <button
-                    className="btn btn-outline-light dropdown-toggle"
+                    className="btn header-user-btn dropdown-toggle"
                     type="button"
                     id="userDropdown"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
-                    style={{
-                      fontFamily: "'Lora', serif",
-                      borderRadius: "25px",
-                      padding: "8px 20px",
-                    }}
                   >
                     <i className="bi bi-person-circle me-1"></i>
                     {user.email?.split("@")[0] || "Usuario"}
                   </button>
                   <ul
-                    className="dropdown-menu dropdown-menu-end"
+                    className="dropdown-menu dropdown-menu-end header-user-menu"
                     aria-labelledby="userDropdown"
                   >
                     <li>
-                      <span className="dropdown-item-text">
-                        <small className="text-muted">{user.email}</small>
-                      </span>
+                      <Link to="/admin" className="dropdown-item">
+                        <i className="bi bi-sliders me-2"></i>
+                        Panel de Administración
+                      </Link>
                     </li>
                     <li>
                       <hr className="dropdown-divider" />
                     </li>
                     <li>
                       <button
-                        className="dropdown-item"
+                        className="dropdown-item text-danger"
                         onClick={handleLogout}
                         disabled={loggingOut}
                       >
@@ -220,26 +216,7 @@ const Header = () => {
             ) : (
               <Link
                 to="/registro"
-                className="btn"
-                style={{
-                  fontFamily: "'Lora', serif",
-                  borderRadius: "15px",
-                  transition: "all 0.3s",
-                  fontSize: "1.5rem",
-                  border: "2px solid #333",
-                  color: "#333",
-                  backgroundColor: "transparent"
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = "#40E0D0";
-                  e.target.style.borderColor = "#40E0D0";
-                  e.target.style.color = "white";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = "transparent";
-                  e.target.style.borderColor = "#333";
-                  e.target.style.color = "#333";
-                }}
+                className="btn header-login-btn"
               >
                 Log in
               </Link>

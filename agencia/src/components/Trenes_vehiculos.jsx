@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/tours_cards.css";
+import { fetchCategories, fetchProductsByCategory } from "../backend/supabase_client";
 
 export const TourCard = ({ 
   imagen, 
@@ -50,69 +52,123 @@ export const TourCard = ({
 };
 
 export const Trenesyvehiculos = () => {
-  const trenesData = [
-    {
-      id: 1,
-      imagen: "/src/imagenes/MSC.jpg",
-      titulo: "Tren Expreso",
-      ubicacion: "Europa Central",
-      fechaInicio: "09/08",
-      fechaFin: "14/08/2026",
-      precio: "720",
-      colorFondo: "verde"
-    },
-    {
-      id: 2,
-      imagen: "/src/imagenes/ncl.jpg",
-      titulo: "Tren de Lujo",
-      ubicacion: "Francia",
-      fechaInicio: "11/08",
-      fechaFin: "15/08/2026",
-      precio: "510",
-      colorFondo: "verdeOscuro"
-    }
-  ];
+  const navigate = useNavigate();
+  const [trenesData, setTrenesData] = useState([]);
+  const [vehiculosData, setVehiculosData] = useState([]);
+  const [cargando, setCargando] = useState(true);
 
-  const vehiculosData = [
-    {
-      id: 3,
-      imagen: "/src/imagenes/royal_caribean.jpg",
-      titulo: "Vehículo Premium",
-      ubicacion: "Costa Mediterránea",
-      fechaInicio: "12/08",
-      fechaFin: "17/08/2026",
-      precio: "680",
-      colorFondo: "grisClaro"
-    },
-    {
-      id: 4,
-      imagen: "/src/imagenes/celebrity.jpg",
-      titulo: "Vehículo Ejecutivo",
-      ubicacion: "España",
-      fechaInicio: "19/08",
-      fechaFin: "22/08/2026",
-      precio: "490",
-      colorFondo: "naranja"
-    }
-  ];
+  // Cargar datos desde DB al montar el componente (solo UNA VEZ)
+  useEffect(() => {
+    let isMounted = true;
+
+    const cargarDatos = async () => {
+      try {
+        setCargando(true);
+        
+        // Obtener categorías
+        const categorias = await fetchCategories();
+        
+        if (!isMounted) return;
+        
+        // Cargar Trenes
+        const categoriaTrenes = categorias.find(cat => cat.nombre.toLowerCase() === "trenes");
+        if (categoriaTrenes) {
+          const productosTrenes = await fetchProductsByCategory(categoriaTrenes.id);
+          if (isMounted) {
+            const trenesMapeados = productosTrenes.map(producto => ({
+              id: producto.id,
+              imagen: producto.imagen || "/src/imagenes/tren-default.jpg",
+              titulo: producto.titulo,
+              ubicacion: producto.ubicacion,
+              fechaInicio: producto.fecha_inicio?.slice(5, 10) || "N/A",
+              fechaFin: producto.fecha_fin?.slice(5, 10) || "N/A",
+              precio: producto.precio.toString(),
+              colorFondo: producto.color_fondo || "verde"
+            }));
+            setTrenesData(trenesMapeados);
+          }
+        }
+        
+        if (!isMounted) return;
+
+        // Cargar Vehículos
+        const categoriaVehiculos = categorias.find(cat => cat.nombre.toLowerCase() === "vehículos");
+        if (categoriaVehiculos) {
+          const productosVehiculos = await fetchProductsByCategory(categoriaVehiculos.id);
+          if (isMounted) {
+            const vehiculosMapeados = productosVehiculos.map(producto => ({
+              id: producto.id,
+              imagen: producto.imagen || "/src/imagenes/vehiculo-default.jpg",
+              titulo: producto.titulo,
+              ubicacion: producto.ubicacion,
+              fechaInicio: producto.fecha_inicio?.slice(5, 10) || "N/A",
+              fechaFin: producto.fecha_fin?.slice(5, 10) || "N/A",
+              precio: producto.precio.toString(),
+              colorFondo: producto.color_fondo || "verde"
+            }));
+            setVehiculosData(vehiculosMapeados);
+          }
+        }
+      } catch (error) {
+        console.error("Error al cargar trenes y vehículos:", error);
+      } finally {
+        if (isMounted) setCargando(false);
+      }
+    };
+
+    cargarDatos();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []); // Dependencias vacías - carga solo una vez
+
+  if (cargando) {
+    return (
+      <div style={{
+        textAlign: "center",
+        padding: "40px",
+        color: "#666",
+        fontSize: "1.1rem"
+      }}>
+        Cargando trenes y vehículos...
+      </div>
+    );
+  }
 
   return (
     <div className="trenes-vehiculos-container">
       <div className="trenes-vehiculos-section">
         <h2 className="section-title">Trenes</h2>
         <div className="cards-horizontal">
-          {trenesData.map((tour) => (
-            <TourCard key={tour.id} {...tour} />
-          ))}
+          {trenesData.length > 0 ? (
+            trenesData.map((tour) => (
+              <TourCard 
+                key={tour.id} 
+                {...tour}
+                onClick={() => navigate(`/detalles?id=${tour.id}&tipo=tren`)}
+              />
+            ))
+          ) : (
+            <p style={{ padding: "20px", color: "#666" }}>No hay trenes disponibles</p>
+          )}
         </div>
       </div>
       
       <div className="trenes-vehiculos-section">
         <h2 className="section-title">Vehículos</h2>
         <div className="cards-horizontal">
-          {vehiculosData.map((tour) => (
-            <TourCard key={tour.id} {...tour} />
-          ))}
+          {vehiculosData.length > 0 ? (
+            vehiculosData.map((tour) => (
+              <TourCard 
+                key={tour.id} 
+                {...tour}
+                onClick={() => navigate(`/detalles?id=${tour.id}&tipo=vehiculo`)}
+              />
+            ))
+          ) : (
+            <p style={{ padding: "20px", color: "#666" }}>No hay vehículos disponibles</p>
+          )}
         </div>
       </div>
     </div>

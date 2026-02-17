@@ -17,6 +17,8 @@ import ServiciosEspeciales from "./components/servicios_especiales.jsx";
 import Vuelos from "./components/vuelos.jsx";
 import { CartProvider } from "./components/cartContext/cartContext.jsx";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
+import AdminPanel from "./components/AdminPanel.jsx";
+import AdminRoute from "./components/AdminRoute.jsx";
 
 export default function App() {
   return (
@@ -57,6 +59,16 @@ export default function App() {
 
             {/* Ruta para el carrito de compras */}
             <Route path="/carrito" element={<Cart />} />
+
+            {/* Ruta para el panel de administracion */}
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminPanel />
+                </AdminRoute>
+              }
+            />
           </Routes>
           <Footer />
         </Router>
