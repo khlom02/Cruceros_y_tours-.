@@ -14,6 +14,7 @@ import Detalles from './components/detalles.jsx';
 import { Destinos } from "./components/destinos.jsx";
 import Cruceros from "./components/Cruceros.jsx";
 import ServiciosEspeciales from "./components/servicios_especiales.jsx";
+import ServicioCategoria from "./components/ServicioCategoria.jsx";
 import Vuelos from "./components/vuelos.jsx";
 import { CartProvider } from "./components/cartContext/cartContext.jsx";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
@@ -44,6 +45,9 @@ export default function App() {
 
             {/* Ruta para la página de servicios especiales */}
             <Route path="/servicios_especiales" element={<ServiciosEspeciales />} />
+
+            {/* Subrutas dinamicas: /servicios_especiales/trenes | vehiculos | asistencia */}
+            <Route path="/servicios_especiales/:categoria" element={<ServicioCategoria />} />
 
               {/* Ruta para la página de detalles del viaje */}
             <Route path="/detalles" element={<Detalles />} />

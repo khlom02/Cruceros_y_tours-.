@@ -2,10 +2,15 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/services.css';
 import bannerPrincipal from '../imagenes/banner_principal.jpeg';
 
-const servicesData = [
+// Agrega aqui nuevos servicios si se crean categorias adicionales en Supabase.
+// seccionId define la subruta: /servicios_especiales/:seccionId
+// categoryName debe coincidir exactamente con el nombre de la categoria en Supabase
+export const servicesData = [
     {
         id: 1,
         tipo: 'tren',
+        seccionId: 'trenes',
+        categoryName: 'Trenes',
         titulo: 'Trenes',
         descripcion: 'Reserva rapida en rutas nacionales e internacionales.',
         imagen: bannerPrincipal,
@@ -14,6 +19,8 @@ const servicesData = [
     {
         id: 2,
         tipo: 'auto',
+        seccionId: 'vehiculos',
+        categoryName: 'Vehículos',
         titulo: 'Alquiler de autos',
         descripcion: 'Autos por dia o semana con seguro incluido.',
         imagen: bannerPrincipal,
@@ -22,59 +29,52 @@ const servicesData = [
     {
         id: 3,
         tipo: 'asistencia',
+        seccionId: 'asistencia',
+        categoryName: 'Asistencia de viajes',
         titulo: 'Asistencia de viajes',
         descripcion: 'Cobertura medica y soporte 24/7 en destino.',
         imagen: bannerPrincipal,
-        cta: 'Ver asistencia',
+        cta: 'Ver servicios',
     },
 ];
 
-const Services = () => {
+// Tarjeta individual — navega a /servicios_especiales/:seccionId al hacer clic
+export const ServiceCard = ({ item }) => {
     const navigate = useNavigate();
+    const isRight = item.tipo === 'auto';
+    const imagen = item.imagen || bannerPrincipal;
+
+    const ir = () => navigate(`/servicios_especiales/${item.seccionId}`);
 
     return (
-        <section className="services">
-            {servicesData.map((item) => {
-                const isRight = item.tipo === 'auto';
-
-                const imagen = item.imagen || bannerPrincipal;
-
-                return (
-                    <div
-                        key={item.id}
-                        className={`card_servicio ${isRight ? 'card_servicio--right' : 'card_servicio--left'}`}
-                    >
-                        <div
-                            className="card_servicio__media"
-                            style={{
-                                backgroundImage: `url(${imagen})`,
-                            }}
-                            role="img"
-                            aria-label={item.titulo}
-                        />
-
-                        <div className="card_servicio__panel">
-                            <div className="card_servicio__overlay">
-                                <div className="card_servicio__content">
-                                    <h3 className="card_servicio__titulo">{item.titulo}</h3>
-                                    <p className="card_servicio__descripcion">{item.descripcion}</p>
-                                    <button
-                                        className="card_servicio__btn"
-                                        type="button"
-                                        onClick={() =>
-                                            navigate(`/detalles?id=${item.id}&tipo=${item.tipo}`)
-                                        }
-                                    >
-                                        {item.cta}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+        <div
+            className={`card_servicio ${isRight ? 'card_servicio--right' : 'card_servicio--left'}`}
+            style={{ cursor: 'pointer' }}
+            onClick={ir}
+        >
+            <div
+                className="card_servicio__media"
+                style={{ backgroundImage: `url(${imagen})` }}
+                role="img"
+                aria-label={item.titulo}
+            />
+            <div className="card_servicio__panel">
+                <div className="card_servicio__overlay">
+                    <div className="card_servicio__content">
+                        <h3 className="card_servicio__titulo">{item.titulo}</h3>
+                        <p className="card_servicio__descripcion">{item.descripcion}</p>
+                        <button
+                            className="card_servicio__btn"
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); ir(); }}
+                        >
+                            {item.cta}
+                        </button>
                     </div>
-                );
-            })}
-        </section>
+                </div>
+            </div>
+        </div>
     );
 };
 
-export default Services;
+export default ServiceCard;

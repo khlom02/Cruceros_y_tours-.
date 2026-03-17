@@ -2,18 +2,23 @@ import { useEffect, useMemo, useState } from "react";
 import "../styles/admin.css";
 import { supabase, fetchCategories } from "../backend/supabase_client";
 
+// ─── Nombre del bucket de Supabase Storage donde se guardan las imagenes ───
 const BUCKET_NAME = "content media";
 
+// ─── Plantillas vacias para cada item de lista dinamica ─────────────────────
 const emptyRoom = { titulo: "", descripcion: "", precio: "", imagenFile: null };
 const emptyAmenity = { nombre: "", icono_emoji: "" };
 const emptyHighlight = { descripcion: "" };
 
 const AdminPanel = () => {
+
+  // ─── Estado general del formulario ────────────────────────────────────────
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [success, setSuccess] = useState(null); // { titulo, categoria, ruta }
 
+  // ─── Campos del producto principal ────────────────────────────────────────
   const [producto, setProducto] = useState({
     titulo: "",
     descripcion: "",
@@ -29,6 +34,7 @@ const AdminPanel = () => {
     imagenFile: null,
   });
 
+  // ─── Campos extra solo para cruceros (tabla detalles_cruceros) ───────────
   const [detalleCrucero, setDetalleCrucero] = useState({
     anos_servicio: "",
     pasajeros_max: "",
@@ -39,11 +45,13 @@ const AdminPanel = () => {
     viajando_con_ninos: false,
   });
 
+  // ─── Listas dinamicas: galeria, rooms, amenities, highlights ─────────────
   const [galleryFiles, setGalleryFiles] = useState([]);
   const [rooms, setRooms] = useState([ { ...emptyRoom } ]);
   const [amenities, setAmenities] = useState([ { ...emptyAmenity } ]);
   const [highlights, setHighlights] = useState([ { ...emptyHighlight } ]);
 
+  // ─── Carga las categorias desde Supabase al montar el componente ─────────
   useEffect(() => {
     const loadCategories = async () => {
       const data = await fetchCategories();
@@ -53,12 +61,28 @@ const AdminPanel = () => {
     loadCategories();
   }, []);
 
+  // ─── Nombre legible de la categoria seleccionada ─────────────────────────
   const categoriaNombre = useMemo(() => {
     return categorias.find((cat) => String(cat.id) === String(producto.categoria_id))?.nombre || "";
   }, [categorias, producto.categoria_id]);
 
+  // Muestra la seccion de detalles solo si la categoria es "cruceros"
   const isCrucero = categoriaNombre.toLowerCase() === "cruceros";
 
+  // ─── Mapeo de categoria → ruta de la app ─────────────────────────────────
+  // Agregar nuevas categorias aqui si se crean rutas nuevas
+  const rutaPorCategoria = (nombre) => {
+    const n = nombre.toLowerCase();
+    if (n.includes("crucero")) return "/cruceros";
+    if (n.includes("nacional")) return "/ (landing · Destinos Nacionales)";
+    if (n.includes("internacional")) return "/ (landing · Destinos Internacionales)";
+    if (n.includes("tour") || n.includes("destino")) return "/destinos";
+    if (n.includes("vuelo") || n.includes("aerol")) return "/vuelos";
+    if (n.includes("servicio")) return "/servicios_especiales";
+    return "/destinos";
+  };
+
+  // ─── Handlers de cambio de campo ──────────────────────────────────────────
   const handleProductoChange = (field, value) => {
     setProducto((prev) => ({ ...prev, [field]: value }));
   };
@@ -67,6 +91,7 @@ const AdminPanel = () => {
     setDetalleCrucero((prev) => ({ ...prev, [field]: value }));
   };
 
+  // ─── Helpers para listas dinamicas (rooms, amenities, highlights) ─────────
   const updateListItem = (setter, index, field, value) => {
     setter((prev) => prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)));
   };
@@ -79,6 +104,8 @@ const AdminPanel = () => {
     setter((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // ─── Sube un archivo a Supabase Storage y retorna la URL publica ──────────
+  // folder: carpeta destino dentro del bucket (ej: "productos", "productos/123/gallery")
   const uploadFile = async (file, folder) => {
     const fileName = `${Date.now()}-${file.name}`;
     const filePath = `${folder}/${fileName}`;
@@ -97,6 +124,7 @@ const AdminPanel = () => {
     return publicUrl.publicUrl;
   };
 
+  // ─── Limpia todos los campos del formulario tras una creacion exitosa ──────
   const resetForm = () => {
     setProducto({
       titulo: "",
@@ -127,11 +155,16 @@ const AdminPanel = () => {
     setHighlights([ { ...emptyHighlight } ]);
   };
 
+  // ─── Envio del formulario: inserta en Supabase en este orden ──────────────
+  // 1. Producto principal  2. Detalles crucero (si aplica)
+  // 3. Galeria             4. Rooms
+  // 5. Amenities           6. Highlights
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
-    setSuccess("");
+    setSuccess(null);
 
+    // Validacion minima antes de llamar a Supabase
     if (!producto.titulo || !producto.categoria_id || !producto.precio) {
       setError("Titulo, categoria y precio son obligatorios.");
       return;
@@ -145,6 +178,7 @@ const AdminPanel = () => {
     try {
       setLoading(true);
 
+      // 1. Subir imagen principal y crear el producto
       const imagenUrl = await uploadFile(producto.imagenFile, "productos");
 
       const { data: productoInsertado, error: productoError } = await supabase
@@ -172,6 +206,7 @@ const AdminPanel = () => {
 
       const productoId = productoInsertado.id;
 
+      // 2. Insertar detalles especificos del crucero (solo si la categoria es cruceros)
       if (isCrucero) {
         const { error: detalleError } = await supabase
           .from("detalles_cruceros")
@@ -191,6 +226,7 @@ const AdminPanel = () => {
         }
       }
 
+      // 3. Subir imagenes de galeria (tabla: galleries)
       if (galleryFiles.length > 0) {
         const uploadedGallery = [];
         for (const file of galleryFiles) {
@@ -213,6 +249,7 @@ const AdminPanel = () => {
         }
       }
 
+      // 4. Insertar rooms (se ignoran filas incompletas sin titulo/descripcion/precio)
       const roomRows = rooms
         .filter((room) => room.titulo && room.descripcion && room.precio)
         .map(async (room) => {
@@ -241,6 +278,7 @@ const AdminPanel = () => {
         }
       }
 
+      // 5. Insertar amenities (se ignoran las que no tengan nombre)
       const amenityRows = amenities
         .filter((amenity) => amenity.nombre)
         .map((amenity) => ({
@@ -259,6 +297,7 @@ const AdminPanel = () => {
         }
       }
 
+      // 6. Insertar highlights (se ignoran los que no tengan descripcion)
       const highlightRows = highlights
         .filter((highlight) => highlight.descripcion)
         .map((highlight, index) => ({
@@ -277,7 +316,12 @@ const AdminPanel = () => {
         }
       }
 
-      setSuccess("Producto creado correctamente.");
+      // Muestra confirmacion con nombre, categoria y ruta del producto creado
+      setSuccess({
+        titulo: producto.titulo,
+        categoria: categoriaNombre,
+        ruta: rutaPorCategoria(categoriaNombre),
+      });
       resetForm();
     } catch (err) {
       console.error(err);
@@ -295,6 +339,8 @@ const AdminPanel = () => {
       </div>
 
       <form className="admin-form" onSubmit={handleSubmit}>
+
+        {/* ── Datos principales del producto ── */}
         <section className="admin-section">
           <h2>Producto</h2>
 
@@ -323,8 +369,10 @@ const AdminPanel = () => {
               <input
                 type="number"
                 step="0.01"
+                min="0"
                 value={producto.precio}
                 onChange={(e) => handleProductoChange("precio", e.target.value)}
+                onKeyDown={(e) => ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()}
                 required
               />
             </label>
@@ -352,6 +400,7 @@ const AdminPanel = () => {
               />
             </label>
 
+            {/* color_fondo controla el estilo visual de la card en el catalogo */}
             <label>
               Color fondo
               <select
@@ -423,6 +472,7 @@ const AdminPanel = () => {
           </label>
         </section>
 
+        {/* ── Seccion exclusiva para cruceros: aparece solo si la categoria es "cruceros" ── */}
         {isCrucero && (
           <section className="admin-section">
             <h2>Detalles crucero</h2>
@@ -497,6 +547,7 @@ const AdminPanel = () => {
           </section>
         )}
 
+        {/* ── Imagenes adicionales del producto (tabla: galleries) ── */}
         <section className="admin-section">
           <h2>Galeria</h2>
           <input
@@ -510,6 +561,7 @@ const AdminPanel = () => {
           )}
         </section>
 
+        {/* ── Habitaciones/cabinas disponibles (tabla: rooms) ── */}
         <section className="admin-section">
           <h2>Rooms</h2>
           {rooms.map((room, index) => (
@@ -549,6 +601,7 @@ const AdminPanel = () => {
           </button>
         </section>
 
+        {/* ── Servicios incluidos del producto (tabla: amenities) ── */}
         <section className="admin-section">
           <h2>Amenities</h2>
           {amenities.map((amenity, index) => (
@@ -577,6 +630,7 @@ const AdminPanel = () => {
           </button>
         </section>
 
+        {/* ── Puntos destacados del producto (tabla: highlights) ── */}
         <section className="admin-section">
           <h2>Highlights</h2>
           {highlights.map((highlight, index) => (
@@ -599,8 +653,18 @@ const AdminPanel = () => {
           </button>
         </section>
 
+        {/* ── Mensajes de error y confirmacion ── */}
         {error && <div className="admin-error">{error}</div>}
-        {success && <div className="admin-success">{success}</div>}
+        {success && (
+          <div className="admin-success">
+            <strong>Producto creado correctamente</strong>
+            <ul className="admin-success-detail">
+              <li><span>Nombre:</span> {success.titulo}</li>
+              <li><span>Categoria:</span> {success.categoria}</li>
+              <li><span>Ruta:</span> <code>{success.ruta}</code></li>
+            </ul>
+          </div>
+        )}
 
         <button className="admin-submit" type="submit" disabled={loading}>
           {loading ? "Guardando..." : "Crear producto"}

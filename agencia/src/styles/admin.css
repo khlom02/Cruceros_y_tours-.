@@ -172,6 +172,35 @@
   border-left: 4px solid var(--color-primary);
 }
 
+.admin-success strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.admin-success-detail {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+}
+
+.admin-success-detail li span {
+  font-weight: bold;
+  margin-right: 6px;
+}
+
+.admin-success-detail code {
+  background: rgba(0, 51, 102, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: var(--color-primary-dark);
+}
+
 .admin-help {
   color: var(--color-text-secondary);
   font-size: 0.9rem;

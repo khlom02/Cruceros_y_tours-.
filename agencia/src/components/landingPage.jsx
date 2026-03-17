@@ -2,32 +2,15 @@ import 'animate.css';
 import '../styles/landing.css';
 import '../styles/tours_cards.css';
 import Carousel3D from './Carousel3D';
-import ToursCardsGrid from "./tours_cards.jsx";
 import Aerolineas from "./Aerolineas.jsx";
 import Asistencia from "./Asistencia.jsx";
 import { useState } from 'react';
 import Trenesyvehiculos from './Trenes_vehiculos.jsx';
 import BannerPrincipal from './banner_principal.jsx';
+import DestinosSection from './DestinosSection.jsx';
 
 const LandingPage = () => {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-
-  const buttonStyle = {
-    background: 'linear-gradient(135deg, #00b4d8 0%, #0077b6 50%, #023e8a 100%)',
-    border: 'none',
-    borderRadius: '50px',
-    padding: '16px 45px',
-    color: 'white',
-    fontSize: '1.2rem',
-    fontWeight: '600',
-    boxShadow: '0 8px 25px rgba(0, 119, 182, 0.35)',
-    cursor: 'pointer',
-    transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-    textTransform: 'uppercase',
-    letterSpacing: '1.5px',
-    position: 'relative',
-    overflow: 'hidden'
-  };
 
   return (
     <>
@@ -135,46 +118,7 @@ const LandingPage = () => {
 
       </div>
 
-      <h2 style={{
-        textAlign: 'center',
-        fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
-        color: '#023e8a',
-        fontWeight: '700',
-        marginBottom: '30px',
-        marginTop: '40px',
-        letterSpacing: '-0.5px',
-        fontFamily: "'Photogenic', serif"
-      }}>
-        Destinos Nacionales
-      </h2>
-      {/* Sección de Tours Destacados */}
-      <ToursCardsGrid 
-        categoryName="Tours" 
-        cardRootClassName="tour-card"
-        cardBaseClassName="tour-card"
-        withFilters={false} 
-      />
-
-       <h2 style={{
-        textAlign: 'center',
-        fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
-        color: '#023e8a',
-        fontWeight: '700',
-        marginBottom: '30px',
-        marginTop: '40px',
-        letterSpacing: '-0.5px',
-        fontFamily: "'Photogenic', serif"
-      }}>
-        Destinos Internacionales
-      </h2>
-
-      {/* Sección de Tours Destacados */}
-      <ToursCardsGrid 
-        categoryName="Tours" 
-        cardRootClassName="tour-card"
-        cardBaseClassName="tour-card"
-        withFilters={false} 
-      />
+      <DestinosSection />
         <h2 style={{
         textAlign: 'center',
         fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',

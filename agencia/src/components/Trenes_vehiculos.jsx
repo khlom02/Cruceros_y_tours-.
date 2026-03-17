@@ -136,41 +136,64 @@ export const Trenesyvehiculos = () => {
     );
   }
 
+  // Secciones a mostrar: max 2 cards cada una + boton para ver el resto en servicios_especiales
+  const secciones = [
+    {
+      titulo: "Trenes",
+      data: trenesData.slice(0, 2),
+      tipo: "tren",
+      seccionId: "trenes",
+      vacio: "No hay trenes disponibles",
+    },
+    {
+      titulo: "Vehículos",
+      data: vehiculosData.slice(0, 2),
+      tipo: "vehiculo",
+      seccionId: "vehiculos",
+      vacio: "No hay vehículos disponibles",
+    },
+  ];
+
   return (
     <div className="trenes-vehiculos-container">
-      <div className="trenes-vehiculos-section">
-        <h2 className="section-title">Trenes</h2>
-        <div className="cards-horizontal">
-          {trenesData.length > 0 ? (
-            trenesData.map((tour) => (
-              <TourCard 
-                key={tour.id} 
-                {...tour}
-                onClick={() => navigate(`/detalles?id=${tour.id}&tipo=tren`)}
-              />
-            ))
-          ) : (
-            <p style={{ padding: "20px", color: "#666" }}>No hay trenes disponibles</p>
-          )}
+      {secciones.map((seccion) => (
+        <div className="trenes-vehiculos-section" key={seccion.seccionId}>
+          <h2 className="section-title">{seccion.titulo}</h2>
+          <div className="cards-horizontal">
+            {seccion.data.length > 0 ? (
+              seccion.data.map((tour) => (
+                <TourCard
+                  key={tour.id}
+                  {...tour}
+                  onClick={() => navigate(`/detalles?id=${tour.id}&tipo=${seccion.tipo}`)}
+                />
+              ))
+            ) : (
+              <p style={{ padding: "20px", color: "#666" }}>{seccion.vacio}</p>
+            )}
+          </div>
+          {/* Boton para ver todos los productos de esta categoria */}
+          <div style={{ textAlign: "center", marginTop: "16px" }}>
+            <button
+              style={{
+                background: "linear-gradient(135deg, #00b4d8 0%, #023e8a 100%)",
+                border: "none",
+                borderRadius: "50px",
+                padding: "10px 32px",
+                color: "white",
+                fontSize: "0.95rem",
+                fontWeight: "600",
+                cursor: "pointer",
+                fontFamily: "'Chicago Police', sans-serif",
+                letterSpacing: "0.5px",
+              }}
+              onClick={() => navigate(`/servicios_especiales/${seccion.seccionId}`)}
+            >
+              Ver todos los {seccion.titulo.toLowerCase()}
+            </button>
+          </div>
         </div>
-      </div>
-      
-      <div className="trenes-vehiculos-section">
-        <h2 className="section-title">Vehículos</h2>
-        <div className="cards-horizontal">
-          {vehiculosData.length > 0 ? (
-            vehiculosData.map((tour) => (
-              <TourCard 
-                key={tour.id} 
-                {...tour}
-                onClick={() => navigate(`/detalles?id=${tour.id}&tipo=vehiculo`)}
-              />
-            ))
-          ) : (
-            <p style={{ padding: "20px", color: "#666" }}>No hay vehículos disponibles</p>
-          )}
-        </div>
-      </div>
+      ))}
     </div>
   );
 };
