@@ -184,32 +184,202 @@ header .nav-item .nav-link:hover i {
   transform: scale(1.2);
 }
 
+/* ====================================================================== */
+/* BOTÓN HAMBURGUESA */
+/* ====================================================================== */
+
+.header-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  z-index: 1200;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.header-hamburger:hover {
+  background: rgba(64, 224, 208, 0.1);
+}
+
+.header-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--color-primary-dark);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+}
+
+/* Animación X al abrir */
+.header-hamburger.is-open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.header-hamburger.is-open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.header-hamburger.is-open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ====================================================================== */
+/* MENÚ MÓVIL OVERLAY */
+/* ====================================================================== */
+
+.header-nav-mobile {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1100;
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeInOverlay 0.2s ease;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.header-nav-mobile__panel {
+  background: white;
+  width: min(300px, 85vw);
+  height: 100%;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+  animation: slideInPanel 0.25s ease;
+}
+
+@keyframes slideInPanel {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+.header-nav-mobile__close {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  padding: 0 4px;
+  margin-bottom: 12px;
+  transition: color 0.2s ease;
+}
+
+.header-nav-mobile__close:hover {
+  color: var(--color-primary-dark);
+}
+
+.header-nav-mobile__links {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.header-nav-mobile__link {
+  display: block;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  font-family: 'Lora', serif;
+  font-size: 1.15rem;
+  border-radius: 10px;
+  transition: background 0.2s ease, color 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.header-nav-mobile__link:hover {
+  background: rgba(64, 224, 208, 0.1);
+  color: var(--color-primary-dark);
+  border-left-color: #40E0D0;
+}
+
+.header-nav-mobile__auth {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(64, 224, 208, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.header-nav-mobile__logout {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  color: #dc3545;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.header-nav-mobile__logout:hover {
+  background: rgba(220, 53, 69, 0.1);
+}
+
+.header-nav-mobile__cta {
+  display: block;
+  text-align: center;
+  padding: 12px 24px;
+  border-radius: 20px;
+  border: 2px solid var(--color-primary-dark);
+  color: var(--color-primary-dark);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.header-nav-mobile__cta:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+/* ====================================================================== */
 /* Responsive - Ajustes para móviles */
+/* ====================================================================== */
 @media (max-width: 768px) {
+  .header-desktop-nav-col {
+    display: none !important;
+  }
+
+  .header-hamburger {
+    display: flex;
+  }
+
   .promociones {
     font-size: 0.75rem;
     padding: 8px 0;
   }
-  
+
   header .container-fluid {
     padding: 10px 15px !important;
   }
-  
-  header .btn-outline-light,
-  header .btn-warning {
-    padding: 6px 15px;
-    font-size: 0.75rem;
+
+  .header-logo__img {
+    max-height: 60px;
+    max-width: 180px;
   }
-  
-  header .nav-item .nav-link {
-    padding: 8px 10px;
-    font-size: 0.9rem;
-  }
-  
+
   .rectangulo {
     padding: 15px;
   }
-  
+
   .texto {
     font-size: 1rem;
   }

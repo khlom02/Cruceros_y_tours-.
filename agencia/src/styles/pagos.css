@@ -43,3 +43,26 @@
   border-top: 2px solid var(--color-background-light);
   margin: 1.5rem 0;
 }
+
+@media (max-width: 768px) {
+  .datos-envio-card,
+  .resumen-pedido-card {
+    padding: 1.25rem;
+  }
+
+  .producto-resumen {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .datos-envio-card,
+  .resumen-pedido-card {
+    padding: 1rem;
+    border-radius: 10px;
+  }
+
+  .price {
+    font-size: 1rem;
+  }
+}

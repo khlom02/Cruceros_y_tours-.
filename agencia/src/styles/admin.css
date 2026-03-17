@@ -206,3 +206,41 @@
   font-size: 0.9rem;
   margin-top: 6px;
 }
+
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 0 16px;
+    margin: 24px auto 60px;
+  }
+
+  .admin-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .admin-section {
+    padding: 16px;
+  }
+
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-list {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-submit {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-container {
+    padding: 0 12px;
+  }
+
+  .admin-checkboxes {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

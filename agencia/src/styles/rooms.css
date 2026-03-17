@@ -150,6 +150,7 @@
 	.room-card {
 		grid-template-columns: 1fr;
 		justify-items: start;
+		padding: 20px;
 	}
 
 	.room-image {
@@ -163,11 +164,40 @@
 	}
 
 	.room-features {
-		grid-template-columns: 1fr;
+		grid-template-columns: repeat(2, 1fr);
 	}
 
 	.room-cta {
 		width: 100%;
 		text-align: center;
+	}
+}
+
+@media (max-width: 600px) {
+	.container-rooms {
+		padding: 16px 0 32px;
+	}
+
+	.room-card {
+		padding: 16px;
+		border-radius: 12px;
+	}
+
+	.room-features {
+		grid-template-columns: 1fr;
+	}
+
+	.rooms-title {
+		font-size: 20px;
+	}
+}
+
+@media (max-width: 480px) {
+	.room-image {
+		height: 160px;
+	}
+
+	.room-title {
+		font-size: 17px;
 	}
 }

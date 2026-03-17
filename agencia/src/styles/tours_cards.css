@@ -144,11 +144,38 @@
 }
 
 /* Responsivo */
+@media (max-width: 1200px) {
+  .tours-grid {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 40px 40px;
+  }
+
+  .trenes-vehiculos-container {
+    gap: 60px;
+    padding: 40px 40px;
+  }
+}
+
+@media (max-width: 900px) {
+  .tours-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 30px 24px;
+  }
+
+  .trenes-vehiculos-container {
+    flex-direction: column;
+    gap: 40px;
+    padding: 30px 24px;
+    margin-top: 40px;
+  }
+}
+
 @media (max-width: 768px) {
   .tours-grid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
-    padding: 30px 32px;
+    padding: 24px 16px;
   }
 
   .tour-card {
@@ -172,14 +199,22 @@
   .tours-grid {
     grid-template-columns: 1fr;
     gap: 16px;
-    padding: 24px 20px;
+    padding: 16px 12px;
+  }
+
+  .trenes-vehiculos-container {
+    padding: 20px 12px;
   }
 
   .tour-card {
-    min-height: 280px;
+    min-height: 260px;
   }
 
   .tour-card__overlay {
-    padding: 20px;
+    padding: 16px;
+  }
+
+  .tour-card__precio-valor {
+    font-size: 1.3rem;
   }
 }

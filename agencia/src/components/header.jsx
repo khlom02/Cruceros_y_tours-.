@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "./cartContext/cartContext.jsx";
 import { useAuth } from "../contexts/AuthContext";
 import '../styles/header.css';
@@ -8,8 +8,23 @@ const Header = () => {
   const { carrito } = useCart();
   const { user, signOut, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loggingOut, setLoggingOut] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+
+  // Cerrar menú al cambiar de ruta
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
+  // Bloquear scroll del body cuando el menú móvil está abierto
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
 
   const handleLogout = async () => {
     setLoggingOut(true);
@@ -21,7 +36,7 @@ const Header = () => {
   };
 
   return (
-    // logo del header 
+    // logo del header
     <>
       {/* Navbar Superior */}
       <nav className="container-fluid">
@@ -39,8 +54,8 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Menú de navegación */}
-          <div className="col">
+          {/* Menú de navegación - solo visible en desktop */}
+          <div className="col header-desktop-nav-col">
             <ul className="nav d-flex align-items-center flex-wrap gap-1">
                <li className="nav-item">
                 <Link
@@ -165,8 +180,8 @@ const Header = () => {
             </ul>
           </div>
 
-          {/* Login y Carrito - derecha */}
-          <div className="col-auto d-flex align-items-center justify-content-end">
+          {/* Login y Carrito + Hamburger - derecha */}
+          <div className="col-auto d-flex align-items-center justify-content-end gap-2">
             {authLoading ? (
               <div
                 className="spinner-border spinner-border-sm text-white"
@@ -243,9 +258,65 @@ const Header = () => {
                 )}
               </Link>
             </div> */}
+
+            {/* Botón hamburguesa - solo visible en móvil */}
+            <button
+              className={`header-hamburger ${menuOpen ? "is-open" : ""}`}
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Abrir menú"
+              aria-expanded={menuOpen}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
           </div>
         </div>
       </nav>
+
+      {/* Menú móvil overlay */}
+      {menuOpen && (
+        <div className="header-nav-mobile" onClick={closeMenu}>
+          <div className="header-nav-mobile__panel" onClick={(e) => e.stopPropagation()}>
+            {/* Botón cerrar */}
+            <button className="header-nav-mobile__close" onClick={closeMenu} aria-label="Cerrar menú">
+              ×
+            </button>
+
+            <nav className="header-nav-mobile__links">
+              <Link to="/" className="header-nav-mobile__link" onClick={closeMenu}>Inicio</Link>
+              <Link to="/cruceros" className="header-nav-mobile__link" onClick={closeMenu}>Cruceros</Link>
+              <Link to="/destinos" className="header-nav-mobile__link" onClick={closeMenu}>Destinos</Link>
+              <Link to="/vuelos" className="header-nav-mobile__link" onClick={closeMenu}>Vuelos</Link>
+              <Link to="/servicios_especiales" className="header-nav-mobile__link" onClick={closeMenu}>Servicios Especiales</Link>
+              <Link to="/contacto" className="header-nav-mobile__link" onClick={closeMenu}>Contacto</Link>
+            </nav>
+
+            {/* Autenticación en menú móvil */}
+            <div className="header-nav-mobile__auth">
+              {authLoading ? null : user ? (
+                <>
+                  <Link to="/admin" className="header-nav-mobile__link" onClick={closeMenu}>
+                    <i className="bi bi-sliders me-2"></i>Panel de Administración
+                  </Link>
+                  <button
+                    className="header-nav-mobile__logout"
+                    onClick={() => { closeMenu(); handleLogout(); }}
+                    disabled={loggingOut}
+                  >
+                    <i className="bi bi-box-arrow-right me-2"></i>
+                    {loggingOut ? "Cerrando sesión..." : "Cerrar sesión"}
+                  </button>
+                </>
+              ) : (
+                <Link to="/registro" className="header-nav-mobile__cta" onClick={closeMenu}>
+                  Log in
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

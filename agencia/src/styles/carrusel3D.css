@@ -101,4 +101,39 @@
 	.carousel3d-perks {
 		gap: 12px;
 	}
+
+	.carousel3d-cta-button {
+		padding: 10px 20px;
+		font-size: 0.9rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.carousel3d-indicators {
+		bottom: 36px;
+		gap: 8px;
+	}
+
+	.carousel3d-indicator {
+		width: 10px;
+		height: 10px;
+	}
+
+	.carousel3d-indicator.is-active {
+		width: 32px;
+	}
+
+	.carousel3d-perk {
+		font-size: 0.8rem;
+		gap: 6px;
+	}
+
+	.carousel3d-perk-icon {
+		font-size: 1rem;
+	}
+
+	.carousel3d-cta-button {
+		padding: 8px 16px;
+		font-size: 0.85rem;
+	}
 }

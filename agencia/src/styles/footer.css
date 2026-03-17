@@ -319,24 +319,74 @@
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
 }
 
-/* Responsive - Ajustes para móviles */
+/* Responsive */
+@media (max-width: 1024px) {
+  .footer {
+    padding: 40px 40px;
+    gap: 24px;
+  }
+}
+
 @media (max-width: 768px) {
+  .footer {
+    padding: 40px 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
   .footer-section.logo-social {
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
     width: 100%;
+    min-width: unset;
+  }
+
+  .socials_media {
+    gap: 24px;
+  }
+
+  .help-links,
+  .other-links {
+    margin-right: 0;
+    min-width: unset;
+    width: 100%;
+  }
+
+  .help-links a,
+  .other-links a,
+  .help-links ul li a,
+  .other-links ul li a {
+    font-size: 1rem;
+  }
+
+  .newsletter {
+    min-width: unset;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .newsletter-text {
+    font-size: 1rem;
   }
 }
 
 @media (max-width: 576px) {
+  .footer {
+    padding: 32px 16px;
+  }
+
   .footer-top,
   .footer-middle {
-    padding: 2rem 0;
+    padding: 1.5rem 0;
   }
-  
+
   .help-links,
   .other-links,
   .newsletter {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-section.socials_media {
+    min-width: unset;
   }
 }

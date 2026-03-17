@@ -40,11 +40,32 @@ const defaultDestinations = [
   },
 ];
 
+// Devuelve dimensiones del carrusel según el ancho de pantalla.
+// xSpacing se calcula dinámicamente para garantizar que las cards adyacentes (±1)
+// siempre quepan dentro del viewport sin desbordarse, en cualquier tamaño de pantalla.
+const getCarouselConfig = (w) => {
+  let cardW, cardH, containerH, paddingBottom;
+
+  if      (w <= 480)  { cardW = 240; cardH = 290; containerH = 420; paddingBottom = 110; }
+  else if (w <= 768)  { cardW = 280; cardH = 330; containerH = 470; paddingBottom = 115; }
+  else if (w <= 1100) { cardW = 330; cardH = 375; containerH = 520; paddingBottom = 120; }
+  else                { cardW = 400; cardH = 420; containerH = 580; paddingBottom = 130; }
+
+  // La card adyacente debe caber: xSpacing + cardW/2 ≤ w/2 - margen
+  // Nunca superar 370 (valor original desktop)
+  const xSpacing = Math.min(370, Math.floor(w / 2 - cardW / 2 - 15));
+
+  return { cardW, cardH, xSpacing, containerH, paddingBottom };
+};
+
 const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
   const [currentIndex, setCurrentIndex] = useState(2);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1200
+  );
   const cardsRef = useRef([]);
   const dragStateRef = useRef({
     isDragging: false,
@@ -58,10 +79,17 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
     currentX: 0,
   });
 
-  // Actualizar posiciones de las cards
+  // Actualizar posiciones de las cards al cambiar slide o tamaño de pantalla
   useEffect(() => {
     updateCarousel();
-  }, [currentIndex]);
+  }, [currentIndex, windowWidth]);
+
+  // Escuchar cambios de tamaño de ventana
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Cerrar modal con tecla Escape
   useEffect(() => {
@@ -82,19 +110,27 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
   }, [isModalOpen, destinations.length]);
 
   const updateCarousel = () => {
+    const w = window.innerWidth;
+    const { xSpacing } = getCarouselConfig(w);
+    // En móvil pequeño (≤480) solo la card central; en el resto, central + adyacentes (±1)
+    // Las cards ±2 siempre se ocultan para evitar desbordamiento más allá del contenedor
+    const maxVisible = w <= 480 ? 0 : 1;
+
     cardsRef.current.forEach((card, index) => {
       if (!card) return;
 
       const offset = index - currentIndex;
       const absOffset = Math.abs(offset);
 
-      // Configuración para cada posición
-      let x = offset * 370; // Separación horizontal
+      // Configuración para cada posición (xSpacing responsive)
+      let x = offset * xSpacing; // Separación horizontal
       let z = -absOffset * 100; // Profundidad
       let rotateY = offset * 25; // Rotación
-      let opacity = absOffset === 0 ? 1 : 0.6;
+      // Ocultar completamente las cards que quedan demasiado lejos en móvil
+      let opacity = absOffset > maxVisible ? 0 : absOffset === 0 ? 1 : 0.6;
       let scale = absOffset === 0 ? 1 : 0.8;
       let zIndex = 10 - absOffset;
+      let pointerEvents = absOffset > maxVisible ? "none" : "auto";
 
       gsap.to(card, {
         x: x,
@@ -103,6 +139,7 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
         opacity: opacity,
         scale: scale,
         zIndex: zIndex,
+        pointerEvents: pointerEvents,
         duration: 0.4,
         ease: "power3.out",
       });
@@ -234,10 +271,13 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
     modalDragRef.current.isDragging = false;
   };
 
-  // tamaño de las cards y estilos generales
+  // Dimensiones responsive del carrusel
+  const { cardW, cardH, containerH, paddingBottom } = getCarouselConfig(windowWidth);
+
+  // tamaño de las cards y estilos generales (responsive)
   const cardStyle = {
-    width: "400px",
-    height: "420px",
+    width: `${cardW}px`,
+    height: `${cardH}px`,
     borderRadius: "20px",
     overflow: "hidden",
     position: "absolute",
@@ -287,16 +327,18 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
     typeof src === "string" && /\.(mp4|webm|ogg)$/i.test(src);
 
   return (
+    // overflow-x:hidden previene scroll horizontal sin cortar las cards verticalmente
+    <div style={{ overflowX: "hidden", width: "100%" }}>
     <div
       style={{
         perspective: "2000px",
-        height: "580px",
+        height: `${containerH}px`,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
         marginBottom: 8,
-        padding: "0 10px 130px",
+        padding: `0 10px ${paddingBottom}px`,
       }}
     >
       <div
@@ -356,8 +398,8 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
                 ...cardStyle,
                 left: "50%",
                 top: "50%",
-                marginLeft: "-190px",
-                marginTop: "-300px",
+                marginLeft: `${-cardW / 2}px`,
+                marginTop: `${-cardH / 2}px`,
                 cursor: "grab",
               }}
               onMouseEnter={(e) => {
@@ -932,6 +974,7 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
           </style>
         </div>
       )}
+    </div>
     </div>
   );
 };
