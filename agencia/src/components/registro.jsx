@@ -3,29 +3,49 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import "../styles/auth.css";
 
+function nivelFortaleza(password) {
+  if (password.length < 6) return { nivel: 0, texto: "" };
+  let puntos = 0;
+  if (password.length >= 8) puntos++;
+  if (/[A-Z]/.test(password)) puntos++;
+  if (/[0-9]/.test(password)) puntos++;
+  if (/[^A-Za-z0-9]/.test(password)) puntos++;
+  if (puntos <= 1) return { nivel: 1, texto: "Débil", color: "#dc3545" };
+  if (puntos === 2) return { nivel: 2, texto: "Media", color: "#fd7e14" };
+  return { nivel: 3, texto: "Fuerte", color: "#198754" };
+}
+
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const { signUp, signInWithOAuth, user } = useAuth();
   const navigate = useNavigate();
+  const fortaleza = nivelFortaleza(password);
 
   useEffect(() => {
-    // Si el usuario ya está autenticado, redirigir
-    if (user) {
-      navigate("/");
-    }
+    if (user) navigate("/");
   }, [user, navigate]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(false);
-    setLoading(true);
 
-    const { data, error } = await signUp(email, password);
+    if (password.length < 8) {
+      setError("La contraseña debe tener al menos 8 caracteres.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Las contraseñas no coinciden.");
+      return;
+    }
+
+    setLoading(true);
+    const { error } = await signUp(email, password);
 
     if (error) {
       setError(error.message);
@@ -33,32 +53,14 @@ const Register = () => {
     } else {
       setSuccess(true);
       setLoading(false);
-      // Opcional: redirigir después de 3 segundos
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
+      setTimeout(() => navigate("/"), 3000);
     }
   };
 
-  const handleGoogleSignUp = async () => {
+  const handleOAuth = async (provider) => {
     setError(null);
     setLoading(true);
-    
-    const { error } = await signInWithOAuth("google");
-    
-    if (error) {
-      setError(error.message);
-      setLoading(false);
-    }
-    // Si es exitoso, el usuario será redirigido automáticamente por OAuth
-  };
-
-  const handleFacebookSignUp = async () => {
-    setError(null);
-    setLoading(true);
-    
-    const { error } = await signInWithOAuth("facebook");
-    
+    const { error } = await signInWithOAuth(provider);
     if (error) {
       setError(error.message);
       setLoading(false);
@@ -74,7 +76,9 @@ const Register = () => {
               <h3 className="card-title text-center mb-4 auth-title">Crear Cuenta</h3>
               <form onSubmit={handleRegister}>
                 <div className="mb-3">
-                  <label htmlFor="email" className="form-label fw-semibold auth-label">Correo Electrónico</label>
+                  <label htmlFor="email" className="form-label fw-semibold auth-label">
+                    Correo Electrónico
+                  </label>
                   <input
                     type="email"
                     id="email"
@@ -86,27 +90,65 @@ const Register = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="password" className="form-label fw-semibold auth-label">Contraseña</label>
+                  <label htmlFor="password" className="form-label fw-semibold auth-label">
+                    Contraseña
+                  </label>
                   <input
                     type="password"
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    minLength={8}
                     className="form-control rounded-pill auth-input"
-                    placeholder="Crea una contraseña"
+                    placeholder="Mínimo 8 caracteres"
                   />
+                  {password.length > 0 && (
+                    <div className="mt-2">
+                      <div style={{
+                        height: "4px",
+                        borderRadius: "2px",
+                        background: "#e9ecef",
+                        overflow: "hidden",
+                      }}>
+                        <div style={{
+                          height: "100%",
+                          width: `${(fortaleza.nivel / 3) * 100}%`,
+                          background: fortaleza.color,
+                          transition: "width 0.3s ease",
+                        }} />
+                      </div>
+                      <small style={{ color: fortaleza.color }}>{fortaleza.texto}</small>
+                    </div>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="confirmPassword" className="form-label fw-semibold auth-label">
+                    Confirmar contraseña
+                  </label>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    className="form-control rounded-pill auth-input"
+                    placeholder="Repite tu contraseña"
+                  />
+                  {confirmPassword.length > 0 && password !== confirmPassword && (
+                    <small className="text-danger">Las contraseñas no coinciden.</small>
+                  )}
                 </div>
                 {error && <p className="text-danger mb-3">{error}</p>}
                 {success && (
                   <div className="alert auth-alert mb-3">
-                    <strong>¡Registro exitoso!</strong> Revisa tu correo para confirmar tu cuenta. 
+                    <strong>¡Registro exitoso!</strong> Revisa tu correo para confirmar tu cuenta.
                     Serás redirigido en unos segundos...
                   </div>
                 )}
                 <div className="d-grid">
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     className="btn rounded-pill auth-btn-primary"
                     disabled={loading}
                   >
@@ -114,16 +156,14 @@ const Register = () => {
                   </button>
                 </div>
               </form>
-              
-              {/* Divider */}
+
               <div className="text-center my-4">
                 <span className="auth-muted">O regístrate con:</span>
               </div>
 
-              {/* OAuth Buttons */}
               <div className="d-grid gap-2">
                 <button
-                  onClick={handleGoogleSignUp}
+                  onClick={() => handleOAuth("google")}
                   className="btn rounded-pill auth-btn-outline auth-btn-google"
                   disabled={loading}
                 >
@@ -131,7 +171,7 @@ const Register = () => {
                   {loading ? "Conectando..." : "Continuar con Google"}
                 </button>
                 <button
-                  onClick={handleFacebookSignUp}
+                  onClick={() => handleOAuth("facebook")}
                   className="btn rounded-pill auth-btn-outline auth-btn-facebook"
                   disabled={loading}
                 >

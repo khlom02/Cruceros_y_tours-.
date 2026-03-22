@@ -65,6 +65,20 @@ export const AuthProvider = ({ children }) => {
     return { data, error };
   };
 
+  // Función para enviar email de recuperación de contraseña
+  const resetPasswordForEmail = async (email) => {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    return { data, error };
+  };
+
+  // Función para actualizar la contraseña (usada desde /reset-password)
+  const updatePassword = async (newPassword) => {
+    const { data, error } = await supabase.auth.updateUser({ password: newPassword });
+    return { data, error };
+  };
+
   // Función para cerrar sesión
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -102,6 +116,8 @@ export const AuthProvider = ({ children }) => {
     signInWithOAuth,
     signOut,
     getUserProfile,
+    resetPasswordForEmail,
+    updatePassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

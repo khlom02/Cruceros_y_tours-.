@@ -5,6 +5,19 @@ import { supabase, fetchCategories } from "../backend/supabase_client";
 // ─── Nombre del bucket de Supabase Storage donde se guardan las imagenes ───
 const BUCKET_NAME = "content media";
 
+// ─── Validación de archivos ────────────────────────────────────────────────
+const TIPOS_PERMITIDOS = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const TAMANO_MAX_MB = 5;
+
+function validarArchivo(file) {
+  if (!TIPOS_PERMITIDOS.includes(file.type)) {
+    throw new Error("Solo se permiten imágenes en formato JPG, PNG, WEBP o GIF.");
+  }
+  if (file.size > TAMANO_MAX_MB * 1024 * 1024) {
+    throw new Error(`El archivo no debe superar ${TAMANO_MAX_MB}MB.`);
+  }
+}
+
 // ─── Plantillas vacias para cada item de lista dinamica ─────────────────────
 const emptyRoom = { titulo: "", descripcion: "", precio: "", imagenFile: null };
 const emptyAmenity = { nombre: "", icono_emoji: "" };
@@ -107,6 +120,7 @@ const AdminPanel = () => {
   // ─── Sube un archivo a Supabase Storage y retorna la URL publica ──────────
   // folder: carpeta destino dentro del bucket (ej: "productos", "productos/123/gallery")
   const uploadFile = async (file, folder) => {
+    validarArchivo(file);
     const fileName = `${Date.now()}-${file.name}`;
     const filePath = `${folder}/${fileName}`;
     const { data, error } = await supabase.storage
