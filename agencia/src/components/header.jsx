@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useCart } from "./cartContext/cartContext.jsx";
 import { useAuth } from "../contexts/AuthContext";
 import '../styles/header.css';
 
 const Header = () => {
-  const { carrito } = useCart();
   const { user, signOut, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [loggingOut, setLoggingOut] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
 
   // Cerrar menú al cambiar de ruta
   useEffect(() => {
@@ -45,7 +42,7 @@ const Header = () => {
           <div className="col-auto">
             <Link to="/" className="header-logo">
               <img
-                src="/src/marketing/logo/logo_cruceros_y_tours_completo_color.png"
+                src="/logo_cruceros_y_tours_completo_color.png"
                 alt="Cruceros y Tours Logo"
                 className="header-logo__img"
                 loading="eager"
@@ -236,28 +233,6 @@ const Header = () => {
                 Log in
               </Link>
             )}
-
-            {/* Carrito
-            <div className="position-relative">
-              <Link
-                to="/carrito"
-                className="text-dark d-flex align-items-center text-decoration-none"
-              >
-                <i className="bi bi-cart3" style={{ fontSize: "1.5rem" }}></i>
-                {totalItems > 0 && (
-                  <span
-                    className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                    style={{
-                      fontSize: "0.7rem",
-                      minWidth: "18px",
-                      height: "18px",
-                    }}
-                  >
-                    {totalItems}
-                  </span>
-                )}
-              </Link>
-            </div> */}
 
             {/* Botón hamburguesa - solo visible en móvil */}
             <button

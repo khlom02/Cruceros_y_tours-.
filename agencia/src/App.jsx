@@ -1,14 +1,14 @@
+import './App.css';
 import './styles/variables.css';
 import './styles/base.css';
 import 'animate.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import ResetPassword from './components/ResetPassword.jsx';
 import Header from './components/header.jsx';
 import Footer from './components/footer.jsx';
 import LandingPage from './components/landingPage.jsx';
 import LoginForm from './components/login.jsx';
-import Pagos from './components/pagos.jsx';
 import Register from './components/registro.jsx';
-import Cart from './components/cartContext/cart.jsx';
 import Contacto from './components/contacto.jsx';
 import Detalles from './components/detalles.jsx';
 import { Destinos } from "./components/destinos.jsx";
@@ -16,7 +16,6 @@ import Cruceros from "./components/Cruceros.jsx";
 import ServiciosEspeciales from "./components/servicios_especiales.jsx";
 import ServicioCategoria from "./components/ServicioCategoria.jsx";
 import Vuelos from "./components/vuelos.jsx";
-import { CartProvider } from "./components/cartContext/cartContext.jsx";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import AdminPanel from "./components/AdminPanel.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
@@ -24,7 +23,6 @@ import AdminRoute from "./components/AdminRoute.jsx";
 export default function App() {
   return (
     <AuthProvider>
-      <CartProvider>
         <Router>
           <Header />
           <Routes>
@@ -55,14 +53,14 @@ export default function App() {
             {/* Ruta para la página contacto */}
             <Route path="/contacto" element={<Contacto />} />
 
-            {/* Ruta para la página pagos */}
-            <Route path="/pagos" element={<Pagos />} />
-
             {/* Ruta para la página de registro */}
             <Route path="/registro" element={<Register />} />
 
-            {/* Ruta para el carrito de compras */}
-            <Route path="/carrito" element={<Cart />} />
+            {/* Ruta para restablecer contraseña (destino del email de Supabase) */}
+            <Route path="/reset-password" element={<ResetPassword />} />
+
+            {/* Ruta 404 — cualquier URL desconocida redirige al inicio */}
+            <Route path="*" element={<Navigate to="/" replace />} />
 
             {/* Ruta para el panel de administracion */}
             <Route
@@ -76,7 +74,6 @@ export default function App() {
           </Routes>
           <Footer />
         </Router>
-      </CartProvider>
     </AuthProvider>
   );
 }

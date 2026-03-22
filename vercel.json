@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd agencia && npm install && npm run build",
+  "outputDirectory": "agencia/dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
