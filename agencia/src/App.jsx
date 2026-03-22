@@ -2,6 +2,7 @@ import './App.css';
 import './styles/variables.css';
 import './styles/base.css';
 import 'animate.css';
+import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import ResetPassword from './components/ResetPassword.jsx';
 import Header from './components/header.jsx';
@@ -22,6 +23,7 @@ import AdminRoute from "./components/AdminRoute.jsx";
 
 export default function App() {
   return (
+    <HelmetProvider>
     <AuthProvider>
         <Router>
           <Header />
@@ -75,5 +77,6 @@ export default function App() {
           <Footer />
         </Router>
     </AuthProvider>
+    </HelmetProvider>
   );
 }

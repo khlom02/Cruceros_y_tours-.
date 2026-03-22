@@ -1,0 +1,39 @@
+User-agent: *
+Allow: /
+
+# Bloquear rutas privadas
+Disallow: /admin
+Disallow: /login
+Disallow: /registro
+Disallow: /reset-password
+
+# Sitemap
+Sitemap: https://crucerosytours.vercel.app/sitemap.xml
+
+# Crawlers de IA — permitidos explícitamente
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /

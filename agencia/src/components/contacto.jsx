@@ -1,6 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import '../styles/contacto.css';
 import { createContact } from '../backend/supabase_client';
+import SEO from './SEO.jsx';
+
+const RATE_LIMIT_KEY = "contacto_ultimo_envio";
+const RATE_LIMIT_MS = 60_000; // 60 segundos entre envíos
+const MAX_NOMBRE = 100;
+const MAX_ASUNTO = 200;
+const MAX_MENSAJE = 1000;
 
 const Contacto = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +17,7 @@ const Contacto = () => {
     asunto: "",
     mensaje: ""
   });
+  const [honeypot, setHoneypot] = useState(""); // campo trampa para bots
   const [enviado, setEnviado] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState("");
@@ -23,25 +31,53 @@ const Contacto = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setCargando(true);
     setError("");
+
+    // Anti-bot: si el honeypot tiene valor, simular éxito silenciosamente
+    if (honeypot) {
+      setEnviado(true);
+      setTimeout(() => setEnviado(false), 3000);
+      return;
+    }
+
+    // Rate limiting: un envío por minuto
+    const ultimoEnvio = parseInt(localStorage.getItem(RATE_LIMIT_KEY) || "0", 10);
+    if (Date.now() - ultimoEnvio < RATE_LIMIT_MS) {
+      const segundos = Math.ceil((RATE_LIMIT_MS - (Date.now() - ultimoEnvio)) / 1000);
+      setError(`Por favor espera ${segundos} segundos antes de enviar otro mensaje.`);
+      return;
+    }
+
+    // Validación de longitud
+    if (formData.nombre.trim().length > MAX_NOMBRE) {
+      setError(`El nombre no puede superar ${MAX_NOMBRE} caracteres.`);
+      return;
+    }
+    if (formData.asunto.trim().length > MAX_ASUNTO) {
+      setError(`El asunto no puede superar ${MAX_ASUNTO} caracteres.`);
+      return;
+    }
+    if (formData.mensaje.trim().length > MAX_MENSAJE) {
+      setError(`El mensaje no puede superar ${MAX_MENSAJE} caracteres.`);
+      return;
+    }
+
+    setCargando(true);
 
     try {
       const resultado = await createContact(
-        formData.nombre,
-        formData.email,
-        formData.telefono,
-        formData.asunto,
-        formData.mensaje
+        formData.nombre.trim(),
+        formData.email.trim(),
+        formData.telefono.trim(),
+        formData.asunto.trim(),
+        formData.mensaje.trim()
       );
 
       if (resultado) {
+        localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
         setEnviado(true);
         setFormData({ nombre: "", email: "", telefono: "", asunto: "", mensaje: "" });
-        
-        setTimeout(() => {
-          setEnviado(false);
-        }, 3000);
+        setTimeout(() => setEnviado(false), 3000);
       } else {
         setError("Hubo un problema al enviar el mensaje. Intenta de nuevo.");
       }
@@ -55,6 +91,11 @@ const Contacto = () => {
 
   return (
     <div className="contacto-page">
+      <SEO
+        title="Contacto y Soporte"
+        description="¿Tienes preguntas sobre tu viaje? Contáctanos y un asesor de Cruceros y Tours te atenderá a la brevedad. Estamos para ayudarte."
+        canonical="/contacto"
+      />
       {/* Hero Section */}
       <div className="contacto-hero">
         <h1 className="contacto-title">Contacto y soporte</h1>
@@ -81,6 +122,18 @@ const Contacto = () => {
               )}
 
               <form onSubmit={handleSubmit}>
+                {/* Campo trampa anti-bot: invisible para humanos, los bots lo llenan */}
+                <div style={{ display: "none" }} aria-hidden="true">
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
+
                 <div className="mb-3">
                   <div className="input-group-contact">
                     <i className="bi bi-person-fill input-icon"></i>
@@ -151,8 +204,12 @@ const Contacto = () => {
                       value={formData.mensaje}
                       onChange={handleChange}
                       required
+                      maxLength={MAX_MENSAJE}
                     ></textarea>
                   </div>
+                  <small style={{ color: formData.mensaje.length > MAX_MENSAJE * 0.9 ? "#dc3545" : "#6c757d" }}>
+                    {formData.mensaje.length}/{MAX_MENSAJE}
+                  </small>
                 </div>
 
                 <button type="submit" className="btn-send-message" disabled={cargando}>

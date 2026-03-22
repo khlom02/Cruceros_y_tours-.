@@ -1,5 +1,6 @@
 import 'animate.css';
 import '../styles/landing.css';
+import SEO from './SEO.jsx';
 import '../styles/tours_cards.css';
 import Carousel3D from './Carousel3D';
 import Aerolineas from "./Aerolineas.jsx";
@@ -12,8 +13,36 @@ import DestinosSection from './DestinosSection.jsx';
 const LandingPage = () => {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "TravelAgency",
+    "name": "Cruceros y Tours",
+    "description": "Agencia de viajes especializada en cruceros de lujo, tours, vuelos y servicios especiales. Destinos en el Caribe, Mediterráneo y todo el mundo.",
+    "url": "https://crucerosytours.vercel.app",
+    "logo": "https://crucerosytours.vercel.app/logo_cruceros_y_tours_completo_color.png",
+    "image": "https://crucerosytours.vercel.app/logo_cruceros_y_tours_completo_color.png",
+    "priceRange": "$$",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Servicios de viaje",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cruceros de lujo" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Tours y destinos" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Vuelos internacionales" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Servicios especiales de viaje" } }
+      ]
+    }
+  };
+
   return (
     <>
+      <SEO
+        title="Tu Próxima Aventura Comienza Aquí"
+        description="Agencia de viajes especializada en cruceros de lujo, tours, vuelos y servicios especiales. Desde el Caribe hasta el Mediterráneo, nosotros te llevamos."
+        canonical="/"
+        type="website"
+        jsonLd={jsonLd}
+      />
       <BannerPrincipal />
       <main className="landing_page" style={{ 
         background: 'white',

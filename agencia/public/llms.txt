@@ -1,0 +1,27 @@
+# Cruceros y Tours — Agencia de Viajes
+
+## Qué somos
+Cruceros y Tours es una agencia de viajes especializada en la venta y asesoría de cruceros de lujo, tours nacionales e internacionales, vuelos con las mejores aerolíneas y servicios especiales de transporte y asistencia.
+
+## Servicios principales
+- **Cruceros de lujo**: Rutas por el Caribe, Mediterráneo, Fiordos escandinavos y más. Navieras como MSC, Norwegian Cruise Line, Celebrity Cruises y Costa Cruceros.
+- **Destinos y tours**: Experiencias únicas y personalizadas alrededor del mundo.
+- **Vuelos internacionales**: Mejores tarifas con aerolíneas internacionales.
+- **Servicios especiales**: Trenes de alta velocidad, alquiler de autos con seguro incluido y asistencia médica 24/7 en destino.
+
+## Audiencia objetivo
+Viajeros que buscan experiencias de calidad, familias, parejas y grupos que planean vacaciones internacionales.
+
+## Contacto
+Los usuarios pueden contactar a la agencia a través del formulario en /contacto.
+
+## Tecnología
+Sitio web SPA construido con React + Vite. Backend en Supabase (PostgreSQL). Desplegado en Vercel.
+
+## Páginas principales
+- / — Inicio y presentación de servicios
+- /cruceros — Catálogo de cruceros disponibles
+- /destinos — Destinos turísticos
+- /vuelos — Vuelos disponibles
+- /servicios_especiales — Servicios complementarios de viaje
+- /contacto — Formulario de contacto y soporte
