@@ -1,9 +1,42 @@
+/* ── Variable local para color de peligro/eliminar ──────────────────────── */
+:root {
+  --color-danger: #c0392b;
+  --color-danger-hover: #a93226;
+}
+
 .admin-container {
   max-width: 1100px;
   margin: 40px auto 80px;
   padding: 0 24px;
   color: var(--color-text-primary);
   font-family: "Chicago Police", sans-serif;
+}
+
+@media (max-width: 1200px) {
+  .admin-container {
+    max-width: 960px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .admin-container {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 900px) {
+  .admin-container {
+    margin: 32px auto 60px;
+    padding: 0 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-container {
+    margin: 20px auto 48px;
+    padding: 0 14px;
+  }
 }
 
 .admin-header {
@@ -16,7 +49,7 @@
 
 .admin-header h1 {
   margin: 0 0 8px;
-  font-size: 2rem;
+  font-size: clamp(1.4rem, 4vw, 2rem);
   color: var(--color-primary-dark);
 }
 
@@ -41,7 +74,7 @@
 
 .admin-section h2 {
   margin: 0 0 16px;
-  font-size: 1.3rem;
+  font-size: clamp(1.1rem, 3vw, 1.3rem);
   color: var(--color-primary-dark);
 }
 
@@ -49,7 +82,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
   margin-bottom: 12px;
   color: var(--color-text-primary);
 }
@@ -72,6 +105,65 @@
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+/* ── Errores de validación ────────────────────────────────────── */
+input.admin-field-error,
+select.admin-field-error,
+textarea.admin-field-error {
+  border: 3px solid #ff0000 !important;
+  background-color: #ffe6e6 !important;
+  box-shadow: 0 0 0 4px rgba(255, 0, 0, 0.15) !important;
+  padding: 10px 12px !important;
+}
+
+input.admin-field-error:focus,
+select.admin-field-error:focus,
+textarea.admin-field-error:focus {
+  outline: none !important;
+  border: 3px solid #cc0000 !important;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.8) !important;
+}
+
+.admin-section input.admin-field-error,
+.admin-section select.admin-field-error,
+.admin-section textarea.admin-field-error {
+  border: 3px solid #ff0000 !important;
+  background-color: #ffe6e6 !important;
+  box-shadow: 0 0 0 4px rgba(255, 0, 0, 0.15) !important;
+  padding: 10px 12px !important;
+}
+
+.admin-section input.admin-field-error:focus,
+.admin-section select.admin-field-error:focus,
+.admin-section textarea.admin-field-error:focus {
+  outline: none !important;
+  border: 3px solid #cc0000 !important;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.8) !important;
+}
+
+.admin-field-error-label {
+  position: relative;
+}
+
+.admin-field-error-msg {
+  font-size: 0.75rem;
+  color: #cc0000;
+  font-weight: 700;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background-color: #ffe6e6;
+  border-radius: 4px;
+  border-left: 4px solid #ff0000;
+}
+
+.admin-field-error-msg::before {
+  content: "⚠";
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 
 .admin-grid {
@@ -157,11 +249,15 @@
 }
 
 .admin-error {
-  background: rgba(15, 211, 211, 0.1);
-  color: var(--color-primary-dark);
-  padding: 12px;
+  background: #ffe6e6;
+  color: #cc0000;
+  padding: 16px;
   border-radius: var(--border-radius);
-  border-left: 4px solid var(--color-primary-dark);
+  border: 2px solid #ff0000;
+  border-left: 5px solid #ff0000;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
 }
 
 .admin-success {
@@ -194,7 +290,7 @@
 }
 
 .admin-success-detail code {
-  background: rgba(0, 51, 102, 0.08);
+  background: var(--color-primary-light);
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 0.85rem;
@@ -207,14 +303,464 @@
   margin-top: 6px;
 }
 
+/* ── Tabs ─────────────────────────────────────────────────────────────── */
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.admin-tab {
+  padding: 10px 20px;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  background: transparent;
+  color: var(--color-primary-dark);
+  font-family: "Chicago Police", sans-serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-tab:hover {
+  background: var(--color-primary-light);
+}
+
+.admin-tab--active {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+}
+
+/* ── Banner de edicion ────────────────────────────────────────────────── */
+.admin-edit-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(15, 211, 211, 0.12);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  color: var(--color-primary-dark);
+  flex-wrap: wrap;
+}
+
+.admin-edit-cancel {
+  border: 1px solid var(--color-primary-dark);
+  background: transparent;
+  color: var(--color-primary-dark);
+  padding: 6px 14px;
+  border-radius: var(--border-radius);
+  font-family: "Chicago Police", sans-serif;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.admin-edit-cancel:hover {
+  background: var(--color-primary-dark);
+  color: var(--color-text-light);
+}
+
+/* ── Imagen actual en edicion ─────────────────────────────────────────── */
+.admin-current-image {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.admin-current-image img {
+  width: 80px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(15, 211, 211, 0.3);
+}
+
+.admin-current-image span {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.admin-current-image--small img {
+  width: 56px;
+  height: 40px;
+}
+
+/* ── Gestionar productos ──────────────────────────────────────────────── */
+.admin-gestionar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-gestionar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-gestionar-header p {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.admin-product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-product-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--color-background);
+  border: 1px solid var(--color-primary-light);
+  border-radius: var(--border-radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+
+.admin-product-thumb {
+  flex-shrink: 0;
+}
+
+.admin-product-thumb img {
+  width: 72px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(15, 211, 211, 0.2);
+}
+
+.admin-product-info {
+  flex: 1;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-product-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-text-primary);
+}
+
+.admin-product-meta {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.admin-product-status {
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 20px;
+  align-self: flex-start;
+}
+
+.admin-product-status--active {
+  background: rgba(15, 211, 211, 0.15);
+  color: var(--color-primary-dark);
+}
+
+.admin-product-status--inactive {
+  background: rgba(0, 0, 0, 0.07);
+  color: var(--color-text-secondary);
+}
+
+.admin-product-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.admin-btn-edit {
+  padding: 8px 16px;
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: var(--border-radius);
+  font-family: "Chicago Police", sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.admin-btn-edit:hover {
+  background: var(--color-primary-dark);
+}
+
+.admin-btn-delete {
+  padding: 8px 16px;
+  background: transparent;
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--border-radius);
+  font-family: "Chicago Police", sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-btn-delete:hover {
+  background: var(--color-danger);
+  color: var(--color-text-light);
+}
+
+.admin-delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-delete-confirm span {
+  font-size: 0.9rem;
+  color: var(--color-danger);
+  font-weight: bold;
+}
+
+.admin-btn-delete-confirm {
+  padding: 7px 14px;
+  background: var(--color-danger);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: var(--border-radius);
+  font-family: "Chicago Police", sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.admin-btn-delete-cancel {
+  padding: 7px 14px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-text-secondary);
+  border-radius: var(--border-radius);
+  font-family: "Chicago Police", sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* ── Amenities — chips + selector ────────────────────────────────────── */
+.admin-amenity-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 40px;
+  margin-bottom: 16px;
+}
+
+.admin-amenity-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 211, 211, 0.12);
+  border: 1px solid var(--color-primary);
+  border-radius: 20px;
+  padding: 6px 10px 6px 12px;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  color: var(--color-primary-dark);
+  font-family: "Chicago Police", sans-serif;
+}
+
+.admin-amenity-chip-emoji {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.admin-amenity-chip-remove {
+  background: transparent;
+  border: none;
+  color: var(--color-primary-dark);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0 2px;
+  line-height: 1;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.admin-amenity-chip-remove:hover {
+  opacity: 1;
+}
+
+/* Selector dropdown predefinidos */
+.admin-amenity-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.admin-amenity-dropdown {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 6px;
+  padding: 12px;
+  background: var(--color-background-light);
+  border: 1px solid rgba(15, 211, 211, 0.25);
+  border-radius: var(--border-radius);
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.admin-amenity-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--color-background);
+  border: 1px solid rgba(15, 211, 211, 0.2);
+  border-radius: var(--border-radius);
+  font-family: "Chicago Police", sans-serif;
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.admin-amenity-option:hover {
+  background: rgba(15, 211, 211, 0.12);
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
+}
+
+/* Fila de amenity personalizado */
+.admin-amenity-custom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px;
+  background: var(--color-background-light);
+  border: 1px dashed rgba(15, 211, 211, 0.4);
+  border-radius: var(--border-radius);
+}
+
+.admin-amenity-emoji-preview {
+  font-size: 1.6rem;
+  min-width: 38px;
+  text-align: center;
+  background: var(--color-background);
+  border: 1px solid rgba(15, 211, 211, 0.3);
+  border-radius: 6px;
+  padding: 4px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  flex-shrink: 0;
+}
+
+.admin-emoji-toggle {
+  padding: 8px 12px;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  font-family: "Chicago Police", sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.admin-emoji-toggle:hover {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+}
+
+.admin-amenity-nombre {
+  flex: 1;
+  min-width: 140px;
+  padding: 10px 12px;
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(15, 211, 211, 0.3);
+  font-family: "Chicago Police", sans-serif;
+  color: var(--color-text-primary);
+  background: var(--color-background);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.admin-amenity-nombre:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+/* Emoji picker grid (custom) */
+.admin-emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+  gap: 6px;
+  padding: 12px;
+  margin-top: 8px;
+  background: var(--color-background);
+  border: 1px solid rgba(15, 211, 211, 0.2);
+  border-radius: var(--border-radius);
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.admin-emoji-btn {
+  padding: 6px;
+  background: transparent;
+  border: 1px solid rgba(15, 211, 211, 0.3);
+  border-radius: 6px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  height: 36px;
+}
+
+.admin-emoji-btn:hover {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  transform: scale(1.1);
+}
+
+.admin-emoji-btn--active {
+  background: var(--color-primary);
+  border-color: var(--color-primary-dark);
+  box-shadow: 0 0 0 2px var(--color-primary-light);
+}
+
+@media (max-width: 600px) {
+  .admin-amenity-custom {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-amenity-custom .admin-add {
+    width: 100%;
+  }
+
+  .admin-amenity-dropdown {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   .admin-container {
     padding: 0 16px;
     margin: 24px auto 60px;
-  }
-
-  .admin-header h1 {
-    font-size: 1.5rem;
   }
 
   .admin-section {
@@ -222,7 +768,7 @@
   }
 
   .admin-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .admin-list {
@@ -232,6 +778,25 @@
   .admin-submit {
     width: 100%;
   }
+
+  .admin-product-card {
+    gap: 12px;
+  }
+
+  .admin-product-thumb img {
+    width: 56px;
+    height: 40px;
+  }
+
+  .admin-product-actions {
+    width: 100%;
+  }
+
+  .admin-btn-edit,
+  .admin-btn-delete {
+    flex: 1;
+    text-align: center;
+  }
 }
 
 @media (max-width: 480px) {
@@ -239,8 +804,42 @@
     padding: 0 12px;
   }
 
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
   .admin-checkboxes {
     flex-direction: column;
     gap: 12px;
+  }
+
+  .admin-tabs {
+    flex-direction: column;
+  }
+
+  .admin-tab {
+    width: 100%;
+  }
+
+  .admin-edit-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-gestionar-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-section {
+    padding: 12px;
+  }
+
+  .admin-header {
+    padding: 16px;
+  }
+
+  .admin-tabs {
+    margin-bottom: 16px;
   }
 }

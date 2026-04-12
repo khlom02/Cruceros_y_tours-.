@@ -267,3 +267,75 @@
         grid-template-columns: 1fr 1fr;
     }
 }
+
+/* CTA Consultar paquete */
+.detalles-cta {
+  background: var(--color-primary-light);
+  border-top: 2px solid var(--color-primary-transparent);
+  padding: clamp(40px, 6vw, 80px) 20px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.detalles-cta__content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.detalles-cta__title {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  color: var(--color-primary-dark);
+  margin-bottom: 12px;
+}
+
+.detalles-cta__text {
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  color: var(--color-text-secondary);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.detalles-cta__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.detalles-cta__btn {
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: clamp(0.875rem, 1.8vw, 1rem);
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+  display: inline-block;
+}
+
+.detalles-cta__btn:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+.detalles-cta__btn--whatsapp {
+  background: #25d366;
+  color: #ffffff;
+}
+
+.detalles-cta__btn--contact {
+  background: var(--color-primary);
+  color: var(--color-primary-dark);
+}
+
+@media (max-width: 480px) {
+  .detalles-cta__actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .detalles-cta__btn {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+  }
+}

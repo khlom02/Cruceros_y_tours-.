@@ -12,7 +12,7 @@
 .trenes-vehiculos-container {
   display: flex;
   justify-content: space-between;
-  gap: 120px;
+  gap: clamp(40px, 8vw, 120px);
   padding: 50px 40px;
   max-width: 1800px;
   margin: 80px auto 0;
@@ -28,7 +28,7 @@
 }
 
 .section-title {
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
   font-weight: 600;
   color: #333;
   font-family: 'Lora', serif;
@@ -192,6 +192,40 @@
 
   .tour-card__precio-valor {
     font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .tours-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    padding: 20px 14px;
+  }
+
+  .trenes-vehiculos-container {
+    padding: 24px 16px;
+    gap: 32px;
+  }
+
+  .cards-horizontal {
+    flex-direction: column;
+  }
+
+  .cards-horizontal .tour-card {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .tour-card {
+    min-height: 280px;
+  }
+
+  .tour-card__titulo {
+    font-size: 1rem;
+  }
+
+  .tour-card__precio-valor {
+    font-size: 1.4rem;
   }
 }
 

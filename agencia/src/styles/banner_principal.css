@@ -1,3 +1,47 @@
+/* Grupo de CTAs del banner */
+.banner_cta_group {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: -20px;
+}
+
+/* Botón principal: Contactar Agente */
+.btn_contactar {
+  background: #0FD3D3 !important;
+  color: #003366 !important;
+  font-size: 1.1rem;
+  padding: 14px 32px !important;
+  box-shadow: 0 4px 20px rgba(15, 211, 211, 0.45);
+  border: 2px solid #0FD3D3;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.btn_contactar:hover {
+  background: #003366 !important;
+  color: #0FD3D3 !important;
+  border-color: #003366;
+  box-shadow: 0 6px 28px rgba(0, 51, 102, 0.35);
+  transform: translateY(-3px) !important;
+}
+
+/* Botón secundario: Ver Ofertas */
+.btn_ofertas {
+  background: transparent !important;
+  border: 2px solid rgba(255, 255, 255, 0.75) !important;
+  color: #ffffff !important;
+  font-size: 1rem;
+  backdrop-filter: blur(4px);
+}
+
+.btn_ofertas:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  transform: translateY(-2px) !important;
+}
+
 /* Botón del banner principal */
 .btn_banner_principal__wrapper {
   background: transparent;
@@ -28,6 +72,16 @@
 }
 
 @media (max-width: 768px) {
+  .banner_cta_group {
+    margin-top: -10px;
+    gap: 12px;
+  }
+
+  .btn_contactar {
+    font-size: 1rem !important;
+    padding: 12px 24px !important;
+  }
+
   .btn_banner_principal__wrapper {
     margin-top: -20px;
   }
@@ -39,6 +93,26 @@
 }
 
 @media (max-width: 480px) {
+  .banner_cta_group {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 0;
+  }
+
+  .btn_contactar {
+    font-size: 0.95rem !important;
+    padding: 11px 22px !important;
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+
+  .btn_ofertas {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+
   .btn_banner_principal__wrapper {
     margin-top: -10px;
   }

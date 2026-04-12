@@ -35,7 +35,7 @@
   justify-content: space-around;
   align-items: flex-start;
   color: var(--color-text-light);
-  padding: 60px 80px;
+  padding: clamp(32px, 5vw, 60px) clamp(16px, 5vw, 80px);
   flex-wrap: wrap;
   position: relative;
   z-index: 1;
@@ -125,7 +125,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 4rem;
-  min-width: 300px;
+  flex: 1 1 250px;
 }
 
 .footer-section.socials_media a {
@@ -160,7 +160,7 @@
   margin-bottom: 1.2rem;
   position: relative;
   padding-bottom: 0.5rem;
-  font-size: 1.3rem;
+  font-size: clamp(1rem, 2vw, 1.3rem);
   font-family: 'Photogenic', serif;
 }
 
@@ -197,7 +197,7 @@
   color: rgba(255,255,255,0.7);
   text-decoration: none;
   transition: all 0.3s ease;
-  font-size: 1.25rem;
+  font-size: clamp(0.9rem, 1.8vw, 1.25rem);
   display: inline-block;
   position: relative;
   padding-left: 0;
@@ -232,12 +232,12 @@
 /* Newsletter */
 .newsletter {
   max-width: 350px;
-  min-width: 300px;
+  flex: 1 1 250px;
 }
 
 .newsletter-text {
   color: rgba(255,255,255,0.7);
-  font-size: 1.25rem;
+  font-size: clamp(0.9rem, 1.8vw, 1.25rem);
   margin-bottom: 1rem;
   line-height: 1.6;
 }
@@ -327,6 +327,17 @@
   }
 }
 
+@media (max-width: 900px) {
+  .footer {
+    gap: 28px;
+    justify-content: flex-start;
+  }
+
+  .newsletter {
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .footer {
     padding: 40px 24px;
@@ -363,6 +374,7 @@
     min-width: unset;
     width: 100%;
     max-width: 100%;
+    flex: unset;
   }
 
   .newsletter-text {
@@ -370,9 +382,16 @@
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 600px) {
   .footer {
     padding: 32px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .footer-section {
+    width: 100%;
   }
 
   .footer-top,
@@ -384,9 +403,46 @@
   .other-links,
   .newsletter {
     margin-bottom: 1.5rem;
+    margin-right: 0;
   }
 
   .footer-section.socials_media {
     min-width: unset;
+    flex: unset;
+    gap: 2rem;
+  }
+
+  .socials_media {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 28px 12px;
+    gap: 20px;
+  }
+
+  .footer-section img {
+    max-width: 100%;
+    max-height: 90px;
+  }
+
+  .socials_media {
+    gap: 16px;
+  }
+
+  .subscribe-form {
+    width: 100%;
+  }
+
+  .email-input {
+    font-size: 0.875rem;
+  }
+
+  .subscribe-button {
+    width: 100%;
+    text-align: center;
+    align-self: stretch;
   }
 }

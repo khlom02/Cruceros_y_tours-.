@@ -2,63 +2,25 @@ import React, { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
 import "../styles/carrusel3D.css";
 
-const defaultDestinations = [
-  {
-    img: "/src/imagenes/MSC.jpg",
-    logo: "/src/assets/MSC_logo.png",
-    title: "Alaska",
-    // subtitle: "MSC",
-    id: 1,
-  },
-  {
-    img: "/src/imagenes/promo_royal.jpeg",
-    logo: "/src/assets/royal_caribbean_logo.jpg",
-    title: "Europa",
-    // subtitle: "Royal Caribbean",
-    id: 2,
-  },
-  {
-    img: "/src/imagenes/serenade.mp4",
-    logo: "/src/assets/royal_caribbean_logo.jpg",
-    title: "¡CRUCERO SIN VISA! (Hasta abril 2027)",
-    // subtitle: "Royal Caribbean",
-    id: 3,
-  },
-  {
-    img: "/src/imagenes/celebrity.jpg",
-    logo: "/src/assets/Celebrity_logo.jpg",
-    title: "Caribe Familiar",
-    // subtitle: "Celebrity",
-    id: 4,
-  },
-  {
-    img: "/src/imagenes/costa.jpg",
-    logo: "/src/assets/costa_logo.png",
-    title: "Transatlánticos.",
-    // subtitle: "Costa",
-    id: 5,
-  },
-];
-
 // Devuelve dimensiones del carrusel según el ancho de pantalla.
 // xSpacing se calcula dinámicamente para garantizar que las cards adyacentes (±1)
 // siempre quepan dentro del viewport sin desbordarse, en cualquier tamaño de pantalla.
 const getCarouselConfig = (w) => {
-  let cardW, cardH, containerH, paddingBottom;
+  let cardW, cardH, containerH;
 
-  if      (w <= 480)  { cardW = 240; cardH = 290; containerH = 420; paddingBottom = 110; }
-  else if (w <= 768)  { cardW = 280; cardH = 330; containerH = 470; paddingBottom = 115; }
-  else if (w <= 1100) { cardW = 330; cardH = 375; containerH = 520; paddingBottom = 120; }
-  else                { cardW = 400; cardH = 420; containerH = 580; paddingBottom = 130; }
+  if      (w <= 480)  { cardW = 240; cardH = 290; containerH = 340; }
+  else if (w <= 768)  { cardW = 280; cardH = 330; containerH = 390; }
+  else if (w <= 1100) { cardW = 330; cardH = 375; containerH = 440; }
+  else                { cardW = 400; cardH = 420; containerH = 500; }
 
   // La card adyacente debe caber: xSpacing + cardW/2 ≤ w/2 - margen
   // Nunca superar 370 (valor original desktop)
   const xSpacing = Math.min(370, Math.floor(w / 2 - cardW / 2 - 15));
 
-  return { cardW, cardH, xSpacing, containerH, paddingBottom };
+  return { cardW, cardH, xSpacing, containerH };
 };
 
-const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
+const Carousel3D = ({ destinations = [], onModalChange }) => {
   const [currentIndex, setCurrentIndex] = useState(2);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -272,7 +234,15 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
   };
 
   // Dimensiones responsive del carrusel
-  const { cardW, cardH, containerH, paddingBottom } = getCarouselConfig(windowWidth);
+  const { cardW, cardH, containerH } = getCarouselConfig(windowWidth);
+
+  // Posición de los botones de navegación del modal:
+  // En pantallas > 1024px los botones van fuera del contenedor (left/right negativos).
+  // En pantallas ≤ 1024px van dentro, para que no queden fuera del viewport.
+  const modalNavButtonLeft = windowWidth > 1024 ? '-70px' : '8px';
+  const modalNavButtonRight = windowWidth > 1024 ? '-70px' : '8px';
+  const modalNavButtonSize = windowWidth <= 768 ? '44px' : '60px';
+  const modalNavButtonFontSize = windowWidth <= 768 ? '26px' : '32px';
 
   // tamaño de las cards y estilos generales (responsive)
   const cardStyle = {
@@ -305,9 +275,12 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
     WebkitUserSelect: "none",
   };
 
+  // fontSize responsive calculado dinámicamente según el ancho de pantalla
+  const titleFontSize = windowWidth <= 480 ? '1rem' : windowWidth <= 768 ? '1.3rem' : '1.8rem';
+
   const titleStyle = {
     color: "white",
-    fontSize: "2rem",
+    fontSize: titleFontSize,
     fontWeight: "600",
     fontFamily: "'Serif', 'Georgia', serif",
     marginBottom: "8px",
@@ -338,7 +311,7 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
         justifyContent: "center",
         position: "relative",
         marginBottom: 8,
-        padding: `0 10px ${paddingBottom}px`,
+        padding: "0 10px",
       }}
     >
       <div
@@ -467,8 +440,8 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
                   </div>
                   {dest.logo && (
                     <div style={{
-                      width: '110px',
-                      height: '95px',
+                      width: windowWidth <= 480 ? '70px' : windowWidth <= 768 ? '88px' : '110px',
+                      height: windowWidth <= 480 ? '60px' : windowWidth <= 768 ? '76px' : '95px',
                       flexShrink: 0,
                       borderRadius: '12px',
                       overflow: 'hidden',
@@ -501,61 +474,6 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
             </div>
           );
         })}
-      </div>
-
-      {/* Indicadores */}
-      <div
-        className={`carousel3d-indicators ${isModalOpen ? "is-hidden" : ""}`}
-      >
-        <div className="carousel3d-indicator-row">
-          {destinations.map((_, index) => (
-            <button
-              key={index}
-              className={`carousel3d-indicator ${
-                currentIndex === index ? "is-active" : ""
-              }`}
-              onClick={() => {
-                if (index !== currentIndex && !isAnimating) {
-                  setCurrentIndex(index);
-                }
-              }}
-            />
-          ))}
-        </div>
-
-        <div className="carousel3d-cta text-center">
-          <button
-            className="carousel3d-cta-button"
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform =
-                "translateY(-5px) scale(1.05)";
-              e.currentTarget.style.boxShadow =
-                "0 15px 40px rgba(0, 119, 182, 0.5)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0) scale(1)";
-              e.currentTarget.style.boxShadow =
-                "0 8px 25px rgba(0, 119, 182, 0.35)";
-            }}
-          >
-            🌴 Reserva tu Aventura
-          </button>
-
-          <div className="carousel3d-perks">
-            <div className="carousel3d-perk">
-              <span className="carousel3d-perk-icon">✓</span>
-              <span>Cancelación gratuita</span>
-            </div>
-            <div className="carousel3d-perk">
-              <span className="carousel3d-perk-icon">✓</span>
-              <span>Pago seguro</span>
-            </div>
-            <div className="carousel3d-perk">
-              <span className="carousel3d-perk-icon">✓</span>
-              <span>Mejor precio garantizado</span>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Modal de galería */}
@@ -646,14 +564,16 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
               }}
               style={{
                 position: 'absolute',
-                left: '-70px',
-                width: '60px',
-                height: '60px',
+                left: modalNavButtonLeft,
+                top: windowWidth <= 1024 ? '50%' : undefined,
+                transform: windowWidth <= 1024 ? 'translateY(-50%)' : undefined,
+                width: modalNavButtonSize,
+                height: modalNavButtonSize,
                 borderRadius: '50%',
                 border: '2px solid rgba(64, 224, 208, 0.6)',
                 background: 'linear-gradient(135deg, rgba(0, 180, 216, 0.95) 0%, rgba(0, 119, 182, 0.95) 100%)',
                 color: 'white',
-                fontSize: '32px',
+                fontSize: modalNavButtonFontSize,
                 fontWeight: '300',
                 cursor: 'pointer',
                 display: 'flex',
@@ -831,14 +751,16 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
               }}
               style={{
                 position: 'absolute',
-                right: '-70px',
-                width: '60px',
-                height: '60px',
+                right: modalNavButtonRight,
+                top: windowWidth <= 1024 ? '50%' : undefined,
+                transform: windowWidth <= 1024 ? 'translateY(-50%)' : undefined,
+                width: modalNavButtonSize,
+                height: modalNavButtonSize,
                 borderRadius: '50%',
                 border: '2px solid rgba(64, 224, 208, 0.6)',
                 background: 'linear-gradient(135deg, rgba(0, 180, 216, 0.95) 0%, rgba(0, 119, 182, 0.95) 100%)',
                 color: 'white',
-                fontSize: '32px',
+                fontSize: modalNavButtonFontSize,
                 fontWeight: '300',
                 cursor: 'pointer',
                 display: 'flex',
@@ -942,7 +864,7 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
                   opacity: 1;
                 }
               }
-              
+
               @keyframes zoomIn {
                 from {
                   transform: scale(0.8);
@@ -953,28 +875,64 @@ const Carousel3D = ({ destinations = defaultDestinations, onModalChange }) => {
                   opacity: 1;
                 }
               }
-
-              @media (max-width: 1024px) {
-                button[style*="left: -70px"] {
-                  left: 10px !important;
-                }
-                button[style*="right: -70px"] {
-                  right: 10px !important;
-                }
-              }
-
-              @media (max-width: 768px) {
-                button[style*="width: 60px"] {
-                  width: 50px !important;
-                  height: 50px !important;
-                  font-size: 26px !important;
-                }
-              }
             `}
           </style>
         </div>
       )}
     </div>
+
+    {/* Indicadores — fuera del contexto 3D para evitar solapamiento */}
+    <div
+      className={`carousel3d-indicators ${isModalOpen ? "is-hidden" : ""}`}
+    >
+      <div className="carousel3d-indicator-row">
+        {destinations.map((_, index) => (
+          <button
+            key={index}
+            className={`carousel3d-indicator ${
+              currentIndex === index ? "is-active" : ""
+            }`}
+            onClick={() => {
+              if (index !== currentIndex && !isAnimating) {
+                setCurrentIndex(index);
+              }
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="carousel3d-cta text-center">
+        <button
+          className="carousel3d-cta-button"
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-5px) scale(1.05)";
+            e.currentTarget.style.boxShadow = "0 15px 40px rgba(0, 119, 182, 0.5)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0) scale(1)";
+            e.currentTarget.style.boxShadow = "0 8px 25px rgba(0, 119, 182, 0.35)";
+          }}
+        >
+          🌴 Reserva tu Aventura
+        </button>
+
+        <div className="carousel3d-perks">
+          <div className="carousel3d-perk">
+            <span className="carousel3d-perk-icon">✓</span>
+            <span>Cancelación gratuita</span>
+          </div>
+          <div className="carousel3d-perk">
+            <span className="carousel3d-perk-icon">✓</span>
+            <span>Pago seguro</span>
+          </div>
+          <div className="carousel3d-perk">
+            <span className="carousel3d-perk-icon">✓</span>
+            <span>Mejor precio garantizado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     </div>
   );
 };

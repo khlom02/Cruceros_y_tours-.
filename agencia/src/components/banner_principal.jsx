@@ -29,7 +29,7 @@ const BannerPrincipal = ({ children }) => {
 						fontFamily: "'Chicago Police', sans-serif",
 						textShadow: "4px 4px 16px rgba(0, 0, 0, 0.5)",
 						letterSpacing: "1px",
-						fontSize: "3rem",
+						fontSize: "clamp(1.8rem, 5vw, 3rem)",
 					}}
 				>
 					 CRUCEROS Y TOURS: TU PRÓXIMA AVENTURA COMIENZA AQUÍ.
@@ -38,7 +38,7 @@ const BannerPrincipal = ({ children }) => {
 					className="lead text-white mb-5"
 					style={{
 						fontFamily: "'Lora', serif",
-						fontSize: "2rem",
+						fontSize: "clamp(1.1rem, 3vw, 2rem)",
 						opacity: "0.95",
 						textShadow: "4px 4px 16px rgba(0, 0, 0, 0.5)",
 					}}

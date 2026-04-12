@@ -3,7 +3,7 @@ import './styles/variables.css';
 import './styles/base.css';
 import 'animate.css';
 import { HelmetProvider } from 'react-helmet-async';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 import ResetPassword from './components/ResetPassword.jsx';
 import Header from './components/header.jsx';
 import Footer from './components/footer.jsx';
@@ -20,6 +20,23 @@ import Vuelos from "./components/vuelos.jsx";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import AdminPanel from "./components/AdminPanel.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
+import FAQ from "./components/FAQ.jsx";
+import GuiaDeUso from "./components/GuiaDeUso.jsx";
+import PoliticasPrivacidad from "./components/PoliticasPrivacidad.jsx";
+import Suscripciones from "./components/Suscripciones.jsx";
+import SobreNosotros from "./components/SobreNosotros.jsx";
+import NotFound from "./components/NotFound.jsx";
+
+const FloatingCTA = () => {
+  const location = useLocation();
+  if (location.pathname === '/contacto') return null;
+  return (
+    <Link to="/contacto" className="floating-cta" aria-label="Contactar un agente">
+      <span className="floating-cta__icon">✉</span>
+      <span className="floating-cta__label">Habla con un agente</span>
+    </Link>
+  );
+};
 
 export default function App() {
   return (
@@ -61,8 +78,15 @@ export default function App() {
             {/* Ruta para restablecer contraseña (destino del email de Supabase) */}
             <Route path="/reset-password" element={<ResetPassword />} />
 
-            {/* Ruta 404 — cualquier URL desconocida redirige al inicio */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* Rutas informativas del footer */}
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/guia-de-uso" element={<GuiaDeUso />} />
+            <Route path="/politicas-privacidad" element={<PoliticasPrivacidad />} />
+            <Route path="/suscripciones" element={<Suscripciones />} />
+            <Route path="/nosotros" element={<SobreNosotros />} />
+
+            {/* Ruta 404 personalizada */}
+            <Route path="*" element={<NotFound />} />
 
             {/* Ruta para el panel de administracion */}
             <Route

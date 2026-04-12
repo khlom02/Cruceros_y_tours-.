@@ -127,9 +127,9 @@ export const Trenesyvehiculos = () => {
     return (
       <div style={{
         textAlign: "center",
-        padding: "40px",
+        padding: "clamp(20px, 5vw, 40px)",
         color: "#666",
-        fontSize: "1.1rem"
+        fontSize: "clamp(0.95rem, 2vw, 1.1rem)"
       }}>
         Cargando trenes y vehículos...
       </div>
@@ -179,9 +179,9 @@ export const Trenesyvehiculos = () => {
                 background: "linear-gradient(135deg, #00b4d8 0%, #023e8a 100%)",
                 border: "none",
                 borderRadius: "50px",
-                padding: "10px 32px",
+                padding: "clamp(8px, 1.5vw, 10px) clamp(18px, 4vw, 32px)",
                 color: "white",
-                fontSize: "0.95rem",
+                fontSize: "clamp(0.85rem, 1.8vw, 0.95rem)",
                 fontWeight: "600",
                 cursor: "pointer",
                 fontFamily: "'Chicago Police', sans-serif",

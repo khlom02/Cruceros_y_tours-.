@@ -476,3 +476,36 @@ header .nav-item .nav-link:hover i {
     font-size: 1rem;
   }
 }
+
+/* Barra de contacto rápido */
+.header-topbar {
+  background: var(--color-primary-dark);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 24px;
+  padding: 6px 24px;
+  font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+}
+
+.header-topbar__phone,
+.header-topbar__whatsapp {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.header-topbar__phone:hover,
+.header-topbar__whatsapp:hover {
+  opacity: 0.8;
+  color: var(--color-primary);
+}
+
+@media (max-width: 480px) {
+  .header-topbar {
+    justify-content: center;
+    gap: 12px;
+    padding: 5px 12px;
+  }
+}

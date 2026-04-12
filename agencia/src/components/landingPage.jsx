@@ -5,13 +5,30 @@ import '../styles/tours_cards.css';
 import Carousel3D from './Carousel3D';
 import Aerolineas from "./Aerolineas.jsx";
 import Asistencia from "./Asistencia.jsx";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { fetchCarouselCruises } from '../backend/supabase_client';
+import { Link } from 'react-router-dom';
 import Trenesyvehiculos from './Trenes_vehiculos.jsx';
 import BannerPrincipal from './banner_principal.jsx';
 import DestinosSection from './DestinosSection.jsx';
+import Testimonios from './Testimonios.jsx';
+
+const CAROUSEL_FALLBACK = [
+  { id: 1, img: "/src/imagenes/MSC.jpg",       logo: "/src/assets/MSC_logo.png",            title: "Alaska" },
+  { id: 2, img: "/src/imagenes/promo_royal.jpeg", logo: "/src/assets/royal_caribbean_logo.jpg", title: "Europa" },
+  { id: 3, img: "/src/imagenes/serenade.mp4",   logo: "/src/assets/royal_caribbean_logo.jpg", title: "¡CRUCERO SIN VISA! (Hasta abril 2027)" },
+  { id: 4, img: "/src/imagenes/celebrity.jpg",  logo: "/src/assets/Celebrity_logo.jpg",       title: "Caribe Familiar" },
+  { id: 5, img: "/src/imagenes/costa.jpg",       logo: "/src/assets/costa_logo.png",           title: "Transatlánticos." },
+];
 
 const LandingPage = () => {
-  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [carouselDestinations, setCarouselDestinations] = useState([]);
+
+  useEffect(() => {
+    fetchCarouselCruises(5).then((data) => {
+      if (data.length > 0) setCarouselDestinations(data);
+    });
+  }, []);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -80,14 +97,9 @@ const LandingPage = () => {
           marginBottom: '15px',
           padding: '0 20px'
         }}>
-          <div style={{
-            display: 'inline-block',
-            marginBottom: '5px'
-          }}>
-          </div>
           <h1 className="fw-bold" style={{ 
             fontSize: 'clamp(4rem, 7vw, 6rem)',
-            marginBottom: '2px',
+            marginBottom: '40px',
             color: '#023e8a',
             letterSpacing: '-1px',
             fontFamily: "'Photogenic', serif",
@@ -96,11 +108,47 @@ const LandingPage = () => {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
-            margin: '-70px',
+            margin: '0 auto 40px',
           }}>
             Bienvenidos a <br/>
             Cruceros y Tours
           </h1>
+          <div style={{ marginBottom: '28px' }}>
+            <Link
+              to="/contacto"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: '#0FD3D3',
+                color: '#003366',
+                textDecoration: 'none',
+                padding: 'clamp(10px, 2vw, 14px) clamp(22px, 4vw, 36px)',
+                borderRadius: '30px',
+                fontWeight: '700',
+                fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
+                boxShadow: '0 4px 20px rgba(15, 211, 211, 0.4)',
+                border: '2px solid #0FD3D3',
+                transition: 'all 0.3s ease',
+                fontFamily: "'Chicago Police', sans-serif",
+                letterSpacing: '0.3px',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#003366';
+                e.currentTarget.style.color = '#0FD3D3';
+                e.currentTarget.style.transform = 'translateY(-3px)';
+                e.currentTarget.style.boxShadow = '0 8px 28px rgba(0,51,102,0.3)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = '#0FD3D3';
+                e.currentTarget.style.color = '#003366';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 20px rgba(15, 211, 211, 0.4)';
+              }}
+            >
+              ✉ Contactar un Agente de Viajes
+            </Link>
+          </div>
           
           <p style={{ 
             fontSize: 'clamp(1.1rem, 2vw, 1.5rem)',
@@ -142,7 +190,7 @@ const LandingPage = () => {
 
         {/* Carrusel 3D */}
         <div className="animate__animated animate__fadeInUp" style={{ marginBottom: '30px' }}>
-          <Carousel3D onModalChange={setIsGalleryOpen} />
+          <Carousel3D destinations={carouselDestinations.length > 0 ? carouselDestinations : CAROUSEL_FALLBACK} />
         </div>
 
       </div>
@@ -192,6 +240,7 @@ const LandingPage = () => {
 
       <Trenesyvehiculos />
 
+      <Testimonios />
 
       </main>
     </>

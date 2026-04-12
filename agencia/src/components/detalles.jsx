@@ -301,13 +301,43 @@ const Detalles = () => {
             
             <Rooms
                 serviceType={isSpecialService ? detalleTipo : ""}
-                title={isSpecialService ? "Opciones segun tu servicio" : "Opciones recomendadas"}
+                rooms={!isSpecialService ? detalle.rooms : undefined}
+                title={
+                    isSpecialService
+                        ? "Nuestros socios"
+                        : detalle.rooms?.length > 0
+                            ? "Cabinas y opciones disponibles"
+                            : ""
+                }
                 subtitle={
                     isSpecialService
                         ? "Selecciona la alternativa que mejor se ajuste a tu plan."
-                        : ""
+                        : detalle.rooms?.length > 0
+                            ? "Elige la opcion que mejor se adapte a tu viaje."
+                            : ""
                 }
             />
+
+            {/* CTA: Consultar este paquete */}
+            <section className="detalles-cta">
+              <div className="detalles-cta__content">
+                <h2 className="detalles-cta__title">¿Te interesa este paquete?</h2>
+                <p className="detalles-cta__text">Habla con uno de nuestros agentes y recibe una cotización personalizada sin costo.</p>
+                <div className="detalles-cta__actions">
+                  <a
+                    href={`https://wa.me/584224560111128?text=Hola,%20quiero%20información%20sobre%20el%20paquete:%20${encodeURIComponent(detalle.title)}`}
+                    className="detalles-cta__btn detalles-cta__btn--whatsapp"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    💬 Consultar por WhatsApp
+                  </a>
+                  <a href="/contacto" className="detalles-cta__btn detalles-cta__btn--contact">
+                    ✉ Enviar consulta
+                  </a>
+                </div>
+              </div>
+            </section>
         </div>
 
     );

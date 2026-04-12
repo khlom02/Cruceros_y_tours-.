@@ -1,0 +1,199 @@
+/* Estilos compartidos para páginas informativas: FAQ, Guía de uso, Privacidad, Suscripciones */
+
+.info-page {
+  min-height: 100vh;
+  background: var(--color-background);
+  padding: 80px 20px 60px;
+}
+
+.info-page__container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.info-page__title {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  color: var(--color-primary-dark);
+  margin-bottom: 12px;
+}
+
+.info-page__subtitle {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  color: var(--color-text-secondary);
+  margin-bottom: 40px;
+}
+
+/* FAQ — acordeón */
+.faq-item {
+  border-bottom: 1px solid var(--color-primary-transparent);
+  padding: 16px 0;
+}
+
+.faq-item__question {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0;
+  font-family: inherit;
+}
+
+.faq-item__question:hover {
+  color: var(--color-primary);
+}
+
+.faq-item__question span {
+  font-size: 1.2rem;
+  transition: transform 0.2s;
+}
+
+.faq-item__question.open span {
+  transform: rotate(45deg);
+}
+
+.faq-item__answer {
+  font-size: clamp(0.875rem, 1.8vw, 0.95rem);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-top: 10px;
+  display: none;
+}
+
+.faq-item__answer.open {
+  display: block;
+}
+
+/* Guía de uso — secciones */
+.guide-section {
+  margin-bottom: 36px;
+}
+
+.guide-section h2 {
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+  color: var(--color-primary);
+  margin-bottom: 10px;
+}
+
+.guide-section p,
+.guide-section li {
+  font-size: clamp(0.875rem, 1.8vw, 0.95rem);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+.guide-section ul {
+  padding-left: 20px;
+}
+
+/* Políticas de privacidad */
+.policy-section {
+  margin-bottom: 32px;
+}
+
+.policy-section h2 {
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  color: var(--color-primary-dark);
+  margin-bottom: 8px;
+}
+
+.policy-section p {
+  font-size: clamp(0.875rem, 1.8vw, 0.95rem);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+/* Suscripciones */
+.subs-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.subs-card {
+  border: 2px solid var(--color-primary-transparent);
+  border-radius: var(--border-radius);
+  padding: 28px 20px;
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.subs-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.subs-card.featured {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.subs-card__name {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  margin-bottom: 8px;
+}
+
+.subs-card__price {
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 16px;
+}
+
+.subs-card__price span {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+.subs-card ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.subs-card ul li {
+  font-size: clamp(0.8rem, 1.6vw, 0.9rem);
+  color: var(--color-text-secondary);
+  padding: 4px 0;
+}
+
+.subs-card ul li::before {
+  content: "✓ ";
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.subs-card__btn {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 24px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  width: 100%;
+}
+
+.subs-card__btn:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 600px) {
+  .info-page {
+    padding: 60px 16px 40px;
+  }
+}

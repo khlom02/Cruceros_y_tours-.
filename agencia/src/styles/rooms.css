@@ -14,7 +14,7 @@
 
 .rooms-title {
 	margin: 0 0 6px;
-	font-size: 24px;
+	font-size: clamp(18px, 2.2vw, 24px);
 	color: var(--color-text-primary);
 }
 
@@ -26,17 +26,17 @@
 .cheque_rooms {
 	display: grid;
 	justify-content: center;
-	gap: 24px;
+	gap: clamp(16px, 2vw, 24px);
 }
 
 .room-card {
 	background: var(--color-background-light);
 	border-radius: 18px;
 	border: 4px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
-	padding: 24px 28px;
+	padding: clamp(16px, 2vw, 24px) clamp(18px, 2.4vw, 28px);
 	display: grid;
-	grid-template-columns: 240px 1px minmax(0, 1fr) auto;
-	gap: 24px;
+	grid-template-columns: clamp(180px, 18vw, 240px) 1px minmax(0, 1fr) auto;
+	gap: clamp(16px, 2vw, 24px);
 	align-items: center;
 	box-shadow: var(--shadow-md);
 	width: 100%;
@@ -62,7 +62,7 @@
 
 .room-title {
 	margin: 0;
-	font-size: 20px;
+	font-size: clamp(16px, 1.8vw, 20px);
 	font-weight: 700;
 	color: var(--color-text-primary);
 }
@@ -77,7 +77,7 @@
 
 .room-image--contain {
 	object-fit: contain;
-	background: #ffffff;
+	background: var(--color-background);
 	padding: 12px;
 }
 
@@ -100,7 +100,7 @@
 	grid-template-columns: repeat(2, minmax(160px, 1fr));
 	gap: 12px 28px;
 	color: var(--color-text-secondary);
-	font-size: 14px;
+	font-size: clamp(13px, 1.2vw, 14px);
 }
 
 .room-features li {
@@ -131,9 +131,11 @@
 .room-cta {
 	border: none;
 	background: var(--color-primary);
-	color: #f4f4f4;
-	padding: 12px 28px;
+	color: var(--color-text-light);
+	padding: clamp(10px, 1vw, 12px) clamp(20px, 2.2vw, 28px);
 	border-radius: 999px;
+	font-family: "Chicago Police", sans-serif;
+	font-size: clamp(13px, 1.2vw, 15px);
 	font-weight: 600;
 	cursor: pointer;
 	box-shadow: var(--shadow-md);
@@ -146,6 +148,141 @@
 	background: var(--color-primary-dark);
 }
 
+/* ── Cards de producto (cabinas / opciones de viaje) ─────────────────────── */
+.room-card--product {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-background-light);
+    border-radius: 18px;
+    border: 4px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    max-width: 360px;
+    width: 100%;
+}
+
+.cheque_rooms:has(.room-card--product) {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
+}
+
+.room-product-image-wrap {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.room-product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.room-card--product:hover .room-product-image {
+    transform: scale(1.04);
+}
+
+.room-product-body {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.2vw, 12px);
+    padding: clamp(14px, 1.6vw, 20px) clamp(16px, 1.8vw, 22px) clamp(16px, 1.8vw, 22px);
+    flex: 1;
+}
+
+.room-product-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.room-product-header .room-title {
+    font-size: clamp(15px, 1.6vw, 18px);
+    flex: 1;
+    min-width: 100px;
+}
+
+.room-price {
+    font-size: clamp(0.78rem, 1.1vw, 0.85rem);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    padding-top: 2px;
+}
+
+.room-price strong {
+    display: block;
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    color: var(--color-primary-dark);
+}
+
+.room-product-desc {
+    margin: 0;
+    font-size: clamp(0.8rem, 1.1vw, 0.9rem);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    flex: 1;
+}
+
+.room-card--product .room-cta {
+    margin-top: auto;
+    width: 100%;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════ */
+/* RESPONSIVE BREAKPOINTS                                                     */
+/* ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1200px: Desktop estándar ───────────────────────────────────────────── */
+@media (max-width: 1200px) {
+	.room-card {
+		max-width: 860px;
+		padding: 22px 24px;
+	}
+
+	.room-image {
+		width: 180px;
+		height: 130px;
+	}
+
+	.room-card--brand .room-image {
+		height: 145px;
+	}
+}
+
+/* ── 1100px: Pantallas medianas ─────────────────────────────────────────── */
+@media (max-width: 1100px) {
+	.room-card {
+		grid-template-columns: 200px 1px minmax(0, 1fr) auto;
+		gap: 20px;
+		max-width: 780px;
+	}
+
+	.room-image {
+		width: 160px;
+		height: 120px;
+	}
+
+	.room-card--brand .room-image {
+		height: 130px;
+	}
+
+	.room-features {
+		gap: 10px 20px;
+	}
+
+	.cheque_rooms:has(.room-card--product) {
+		grid-template-columns: repeat(auto-fit, minmax(260px, 340px));
+	}
+
+	.room-product-image-wrap {
+		height: 185px;
+	}
+}
+
+/* ── 900px: Tablet landscape ────────────────────────────────────────────── */
 @media (max-width: 900px) {
 	.room-card {
 		grid-template-columns: 1fr;
@@ -171,8 +308,53 @@
 		width: 100%;
 		text-align: center;
 	}
+
+	.cheque_rooms:has(.room-card--product) {
+		grid-template-columns: repeat(auto-fit, minmax(240px, 320px));
+	}
 }
 
+/* ── 768px: Tablet / móvil grande ──────────────────────────────────────── */
+@media (max-width: 768px) {
+	.container-rooms {
+		padding: 20px 0 36px;
+	}
+
+	.rooms-header {
+		margin-bottom: 14px;
+	}
+
+	.cheque_rooms {
+		gap: 18px;
+	}
+
+	.room-card {
+		padding: 18px;
+		border-width: 3px;
+	}
+
+	.room-card--brand .room-image {
+		height: 140px;
+	}
+
+	.room-product-image-wrap {
+		height: 180px;
+	}
+
+	.room-product-body {
+		padding: 16px 18px 18px;
+	}
+
+	.cheque_rooms:has(.room-card--product) {
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	}
+
+	.room-card--product {
+		max-width: 100%;
+	}
+}
+
+/* ── 600px: Móvil medio ─────────────────────────────────────────────────── */
 @media (max-width: 600px) {
 	.container-rooms {
 		padding: 16px 0 32px;
@@ -188,16 +370,57 @@
 	}
 
 	.rooms-title {
-		font-size: 20px;
+		font-size: clamp(16px, 4vw, 20px);
+	}
+
+	.room-card--product {
+		max-width: 100%;
+		border-radius: 12px;
+	}
+
+	.room-product-image-wrap {
+		height: 170px;
+	}
+
+	.room-product-body {
+		padding: 16px;
+	}
+
+	.cheque_rooms:has(.room-card--product) {
+		grid-template-columns: 1fr;
 	}
 }
 
+/* ── 480px: Móvil pequeño ───────────────────────────────────────────────── */
 @media (max-width: 480px) {
 	.room-image {
-		height: 160px;
+		height: 150px;
 	}
 
-	.room-title {
-		font-size: 17px;
+	.room-card--brand .room-image {
+		height: 120px;
+	}
+
+	.room-card {
+		padding: 14px;
+		border-width: 2px;
+		border-radius: 10px;
+	}
+
+	.room-features {
+		gap: 8px 0;
+	}
+
+	.room-product-image-wrap {
+		height: 150px;
+	}
+
+	.room-product-body {
+		padding: 14px;
+		gap: 10px;
+	}
+
+	.room-cta {
+		padding: 10px 20px;
 	}
 }

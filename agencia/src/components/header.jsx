@@ -35,6 +35,20 @@ const Header = () => {
   return (
     // logo del header
     <>
+      {/* Barra de contacto rápido */}
+      <div className="header-topbar">
+        <a href="tel:+584224560111128" className="header-topbar__phone">
+          📞 +58 422 456 0111
+        </a>
+        <a
+          href="https://wa.me/584224560111128?text=Hola,%20quiero%20información%20sobre%20un%20viaje"
+          className="header-topbar__whatsapp"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          💬 Escribir por WhatsApp
+        </a>
+      </div>
       {/* Navbar Superior */}
       <nav className="container-fluid">
         <div className="row align-items-center">
