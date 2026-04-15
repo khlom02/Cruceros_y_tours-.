@@ -20,6 +20,7 @@ import Vuelos from "./components/vuelos.jsx";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import AdminPanel from "./components/AdminPanel.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
+import Perfil from "./components/Perfil.jsx";
 import FAQ from "./components/FAQ.jsx";
 import GuiaDeUso from "./components/GuiaDeUso.jsx";
 import PoliticasPrivacidad from "./components/PoliticasPrivacidad.jsx";
@@ -77,6 +78,9 @@ export default function App() {
 
             {/* Ruta para restablecer contraseña (destino del email de Supabase) */}
             <Route path="/reset-password" element={<ResetPassword />} />
+
+            {/* Perfil del cliente */}
+            <Route path="/perfil" element={<Perfil />} />
 
             {/* Rutas informativas del footer */}
             <Route path="/faq" element={<FAQ />} />

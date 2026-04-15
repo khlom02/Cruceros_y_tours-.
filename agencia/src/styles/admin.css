@@ -308,6 +308,7 @@ textarea.admin-field-error:focus {
   display: flex;
   gap: 8px;
   margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
 .admin-tab {
@@ -813,12 +814,9 @@ textarea.admin-field-error:focus {
     gap: 12px;
   }
 
-  .admin-tabs {
-    flex-direction: column;
-  }
-
   .admin-tab {
-    width: 100%;
+    flex: 1 1 calc(50% - 4px);
+    text-align: center;
   }
 
   .admin-edit-banner {
@@ -841,5 +839,402 @@ textarea.admin-field-error:focus {
 
   .admin-tabs {
     margin-bottom: 16px;
+  }
+}
+
+/* ── Tab badge (contador de nuevos) ──────────────────────────────────── */
+.admin-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #c0392b;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 20px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.admin-tab--active .admin-tab-badge {
+  background: #fff;
+  color: #c0392b;
+}
+
+/* ── Inbox de mensajes ────────────────────────────────────────────────── */
+.admin-inbox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-inbox-item {
+  border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+  border-radius: var(--border-radius);
+  background: var(--color-background);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.admin-inbox-item--nuevo {
+  border-left: 4px solid var(--color-primary);
+}
+
+.admin-inbox-item:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-inbox-item__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  cursor: pointer;
+  flex-wrap: wrap;
+}
+
+.admin-inbox-item__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-inbox-item__nombre {
+  font-weight: 700;
+  color: var(--color-text-primary);
+  font-size: 0.97rem;
+}
+
+.admin-inbox-item__email,
+.admin-inbox-item__tel {
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+}
+
+.admin-inbox-item__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.admin-inbox-item__asunto {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-align: right;
+}
+
+.admin-inbox-item__fecha {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+}
+
+.admin-inbox-item__estado {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.admin-inbox-item__estado--nuevo {
+  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  color: var(--color-primary-dark);
+  border: 1px solid var(--color-primary);
+}
+
+.admin-inbox-item__estado--leido {
+  background: color-mix(in srgb, #888 10%, transparent);
+  color: #555;
+  border: 1px solid #ccc;
+}
+
+.admin-inbox-item__estado--respondido {
+  background: color-mix(in srgb, #27ae60 12%, transparent);
+  color: #1e8449;
+  border: 1px solid #27ae60;
+}
+
+.admin-inbox-item__body {
+  padding: 0 16px 16px;
+  border-top: 1px solid color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+.admin-inbox-item__mensaje {
+  font-size: 0.93rem;
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+  margin: 12px 0;
+  line-height: 1.5;
+}
+
+.admin-inbox-item__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.admin-inbox-btn {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary-dark);
+  font-family: "Chicago Police", sans-serif;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-inbox-btn:hover:not(:disabled) {
+  background: var(--color-primary-light);
+}
+
+.admin-inbox-btn--active {
+  background: var(--color-primary);
+  color: #fff;
+  cursor: default;
+}
+
+.admin-inbox-btn--reply {
+  border-color: var(--color-primary-dark);
+  color: var(--color-primary-dark);
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.admin-inbox-btn--reply:hover {
+  background: var(--color-primary-dark);
+  color: #fff;
+}
+
+/* ── Reservas ────────────────────────────────────────────────────────── */
+.admin-reservas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-reserva-card {
+  background: var(--color-background);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+  border-radius: var(--border-radius);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-reserva-card--pendiente {
+  border-left: 4px solid #f39c12;
+}
+
+.admin-reserva-card--confirmada {
+  border-left: 4px solid var(--color-primary);
+}
+
+.admin-reserva-card--cancelada {
+  border-left: 4px solid #c0392b;
+  opacity: 0.8;
+}
+
+.admin-reserva-card--completada {
+  border-left: 4px solid #27ae60;
+}
+
+.admin-reserva-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-reserva-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.admin-reserva-card__paquete {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+}
+
+.admin-reserva-card__cliente,
+.admin-reserva-card__detalle,
+.admin-reserva-card__fecha-solicitud {
+  font-size: 0.83rem;
+  color: var(--color-text-secondary);
+}
+
+.admin-reserva-card__comentario {
+  font-size: 0.83rem;
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.admin-reserva-card__estado {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.admin-reserva-card__estado--pendiente {
+  background: color-mix(in srgb, #f39c12 15%, transparent);
+  color: #b7770d;
+  border: 1px solid #f39c12;
+}
+
+.admin-reserva-card__estado--confirmada {
+  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  color: var(--color-primary-dark);
+  border: 1px solid var(--color-primary);
+}
+
+.admin-reserva-card__estado--cancelada {
+  background: color-mix(in srgb, #c0392b 10%, transparent);
+  color: #c0392b;
+  border: 1px solid #c0392b;
+}
+
+.admin-reserva-card__estado--completada {
+  background: color-mix(in srgb, #27ae60 12%, transparent);
+  color: #1e8449;
+  border: 1px solid #27ae60;
+}
+
+.admin-reserva-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  padding-top: 10px;
+  border-top: 1px solid color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+@media (max-width: 600px) {
+  .admin-inbox-item__head {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .admin-inbox-item__right {
+    align-items: flex-start;
+  }
+
+  .admin-reserva-card__top {
+    flex-direction: column;
+  }
+}
+
+/* ════════════════════════════════════════════════
+   SUSCRIPCIONES
+════════════════════════════════════════════════ */
+.admin-subs-list {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-subs-card {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-primary-transparent);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--color-primary-transparent);
+}
+
+.admin-subs-card--pendiente_activacion {
+  border-left-color: #f39c12;
+}
+
+.admin-subs-card--activa {
+  border-left-color: var(--color-primary);
+}
+
+.admin-subs-card--cancelada {
+  border-left-color: #c0392b;
+  opacity: 0.8;
+}
+
+.admin-subs-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.admin-subs-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.admin-subs-card__plan {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+}
+
+.admin-subs-card__email {
+  font-size: 0.88rem;
+  color: var(--color-text-secondary);
+  word-break: break-all;
+}
+
+.admin-subs-card__fecha {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.admin-subs-card__payment {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.admin-subs-card__estado {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.admin-subs-card__estado--pendiente_activacion {
+  background: color-mix(in srgb, #f39c12 15%, transparent);
+  color: #7d5a00;
+}
+
+.admin-subs-card__estado--activa {
+  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  color: var(--color-primary-dark);
+}
+
+.admin-subs-card__estado--cancelada {
+  background: color-mix(in srgb, #c0392b 10%, transparent);
+  color: #c0392b;
+}
+
+@media (max-width: 600px) {
+  .admin-subs-card__top {
+    flex-direction: column;
   }
 }

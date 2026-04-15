@@ -218,6 +218,12 @@ const Header = () => {
                     aria-labelledby="userDropdown"
                   >
                     <li>
+                      <Link to="/perfil" className="dropdown-item">
+                        <i className="bi bi-person me-2"></i>
+                        Mi Perfil
+                      </Link>
+                    </li>
+                    <li>
                       <Link to="/admin" className="dropdown-item">
                         <i className="bi bi-sliders me-2"></i>
                         Panel de Administración
@@ -285,6 +291,9 @@ const Header = () => {
             <div className="header-nav-mobile__auth">
               {authLoading ? null : user ? (
                 <>
+                  <Link to="/perfil" className="header-nav-mobile__link" onClick={closeMenu}>
+                    <i className="bi bi-person me-2"></i>Mi Perfil
+                  </Link>
                   <Link to="/admin" className="header-nav-mobile__link" onClick={closeMenu}>
                     <i className="bi bi-sliders me-2"></i>Panel de Administración
                   </Link>

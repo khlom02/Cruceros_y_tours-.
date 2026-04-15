@@ -522,6 +522,228 @@ export const fetchCarouselCruises = async (limit = 5) => {
 };
 
 // ============================================
+// RESERVAS — CLIENTE
+// ============================================
+export const createReserva = async (reserva) => {
+  try {
+    const { data, error } = await supabase
+      .from("reservas")
+      .insert({
+        user_id: reserva.user_id || null,
+        nombre: reserva.nombre,
+        email: reserva.email,
+        telefono: reserva.telefono || null,
+        paquete_id: reserva.paquete_id || null,
+        paquete_nombre: reserva.paquete_nombre,
+        fecha_viaje: reserva.fecha_viaje || null,
+        pasajeros: reserva.pasajeros || 1,
+        comentarios: reserva.comentarios || null,
+        estado: "pendiente",
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error al crear reserva:", error);
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.error("Error inesperado al crear reserva:", err);
+    return null;
+  }
+};
+
+export const fetchReservasCliente = async (userId) => {
+  try {
+    const { data, error } = await supabase
+      .from("reservas")
+      .select("id, paquete_nombre, fecha_viaje, pasajeros, estado, created_at, comentarios")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error al obtener reservas del cliente:", error);
+      return [];
+    }
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return [];
+  }
+};
+
+// ============================================
+// ADMIN: RESERVAS
+// ============================================
+export const fetchReservasAdmin = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("reservas")
+      .select("id, nombre, email, telefono, paquete_nombre, fecha_viaje, pasajeros, comentarios, estado, created_at")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error al obtener reservas admin:", error);
+      return [];
+    }
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return [];
+  }
+};
+
+export const updateReservaEstado = async (id, estado) => {
+  try {
+    const { error } = await supabase
+      .from("reservas")
+      .update({ estado })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error al actualizar estado de reserva:", error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return false;
+  }
+};
+
+// ============================================
+// ADMIN: CONTACTOS
+// ============================================
+export const fetchContactosAdmin = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("contactos")
+      .select("id, nombre, email, telefono, asunto, mensaje, estado, created_at")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error al obtener contactos admin:", error);
+      return [];
+    }
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return [];
+  }
+};
+
+export const updateContactoEstado = async (id, estado) => {
+  try {
+    const { error } = await supabase
+      .from("contactos")
+      .update({ estado })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error al actualizar estado de contacto:", error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return false;
+  }
+};
+
+// ============================================
+// SUSCRIPCIONES — CLIENTE
+// ============================================
+export const createSuscripcion = async (userId, plan, email) => {
+  try {
+    const { data, error } = await supabase
+      .from("suscripciones")
+      .insert({
+        user_id: userId,
+        email: email || null,
+        plan,
+        estado: "pendiente_activacion",
+        fecha_inicio: new Date().toISOString().split("T")[0],
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error al crear suscripcion:", error);
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.error("Error inesperado al crear suscripcion:", err);
+    return null;
+  }
+};
+
+export const fetchSuscripcionCliente = async (userId) => {
+  try {
+    const { data, error } = await supabase
+      .from("suscripciones")
+      .select("id, plan, estado, fecha_inicio, fecha_fin, created_at")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Error al obtener suscripcion del cliente:", error);
+      return null;
+    }
+    return data || null;
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return null;
+  }
+};
+
+// ============================================
+// ADMIN: SUSCRIPCIONES
+// ============================================
+export const fetchSuscripcionesAdmin = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("suscripciones")
+      .select("id, user_id, email, plan, estado, fecha_inicio, fecha_fin, payment_provider, payment_id, created_at")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error al obtener suscripciones admin:", error);
+      return [];
+    }
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return [];
+  }
+};
+
+export const updateSuscripcionEstado = async (id, estado) => {
+  try {
+    const updates = { estado };
+    if (estado === "activa") {
+      updates.fecha_inicio = new Date().toISOString().split("T")[0];
+    }
+    const { error } = await supabase
+      .from("suscripciones")
+      .update(updates)
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error al actualizar estado de suscripcion:", error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("Error inesperado:", err);
+    return false;
+  }
+};
+
+// ============================================
 // NEWSLETTER
 // ============================================
 export const subscribeNewsletter = async (email) => {

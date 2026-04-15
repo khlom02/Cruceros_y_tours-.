@@ -6,6 +6,12 @@ import {
   fetchAllProductsAdmin,
   fetchProductAdminById,
   deleteProductAndRelated,
+  fetchContactosAdmin,
+  updateContactoEstado,
+  fetchReservasAdmin,
+  updateReservaEstado,
+  fetchSuscripcionesAdmin,
+  updateSuscripcionEstado,
 } from "../backend/supabase_client";
 
 // ─── Nombre del bucket de Supabase Storage donde se guardan las imagenes ───
@@ -141,6 +147,19 @@ const AdminPanel = () => {
   const [loadingLista, setLoadingLista] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
+  // ─── Contactos (tab Contactos) ────────────────────────────────────────────
+  const [contactosList, setContactosList] = useState([]);
+  const [loadingContactos, setLoadingContactos] = useState(false);
+  const [contactoExpandido, setContactoExpandido] = useState(null);
+
+  // ─── Reservas (tab Reservas) ──────────────────────────────────────────────
+  const [reservasList, setReservasList] = useState([]);
+  const [loadingReservas, setLoadingReservas] = useState(false);
+
+  // ─── Suscripciones (tab Suscripciones) ───────────────────────────────────
+  const [suscripcionesList, setSuscripcionesList] = useState([]);
+  const [loadingSuscripciones, setLoadingSuscripciones] = useState(false);
+
   // ─── Campos del producto principal ────────────────────────────────────────
   const [producto, setProducto] = useState(productoInicial);
 
@@ -176,10 +195,68 @@ const AdminPanel = () => {
 
   // ─── Carga los productos al abrir la tab Gestionar ────────────────────────
   useEffect(() => {
-    if (activeTab === "gestionar") {
-      loadProductosAdmin();
-    }
+    if (activeTab === "gestionar") loadProductosAdmin();
+    if (activeTab === "contactos") loadContactos();
+    if (activeTab === "reservas") loadReservas();
+    if (activeTab === "suscripciones") loadSuscripciones();
   }, [activeTab]);
+
+  const loadContactos = async () => {
+    setLoadingContactos(true);
+    try {
+      const data = await fetchContactosAdmin();
+      setContactosList(data || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingContactos(false);
+    }
+  };
+
+  const handleContactoEstado = async (id, nuevoEstado) => {
+    await updateContactoEstado(id, nuevoEstado);
+    setContactosList((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, estado: nuevoEstado } : c))
+    );
+  };
+
+  const loadReservas = async () => {
+    setLoadingReservas(true);
+    try {
+      const data = await fetchReservasAdmin();
+      setReservasList(data || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingReservas(false);
+    }
+  };
+
+  const handleReservaEstado = async (id, nuevoEstado) => {
+    await updateReservaEstado(id, nuevoEstado);
+    setReservasList((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, estado: nuevoEstado } : r))
+    );
+  };
+
+  const loadSuscripciones = async () => {
+    setLoadingSuscripciones(true);
+    try {
+      const data = await fetchSuscripcionesAdmin();
+      setSuscripcionesList(data || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingSuscripciones(false);
+    }
+  };
+
+  const handleSuscripcionEstado = async (id, nuevoEstado) => {
+    await updateSuscripcionEstado(id, nuevoEstado);
+    setSuscripcionesList((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, estado: nuevoEstado } : s))
+    );
+  };
 
   const loadProductosAdmin = async () => {
     setLoadingLista(true);
@@ -739,6 +816,39 @@ const AdminPanel = () => {
           onClick={() => { setActiveTab("gestionar"); setError(""); setSuccess(null); setFieldErrors({}); }}
         >
           Gestionar productos
+        </button>
+        <button
+          className={`admin-tab${activeTab === "contactos" ? " admin-tab--active" : ""}`}
+          onClick={() => { setActiveTab("contactos"); setError(""); setSuccess(null); setFieldErrors({}); }}
+        >
+          Mensajes
+          {contactosList.filter(c => c.estado === "nuevo").length > 0 && (
+            <span className="admin-tab-badge">
+              {contactosList.filter(c => c.estado === "nuevo").length}
+            </span>
+          )}
+        </button>
+        <button
+          className={`admin-tab${activeTab === "reservas" ? " admin-tab--active" : ""}`}
+          onClick={() => { setActiveTab("reservas"); setError(""); setSuccess(null); setFieldErrors({}); }}
+        >
+          Reservas
+          {reservasList.filter(r => r.estado === "pendiente").length > 0 && (
+            <span className="admin-tab-badge">
+              {reservasList.filter(r => r.estado === "pendiente").length}
+            </span>
+          )}
+        </button>
+        <button
+          className={`admin-tab${activeTab === "suscripciones" ? " admin-tab--active" : ""}`}
+          onClick={() => { setActiveTab("suscripciones"); setError(""); setSuccess(null); setFieldErrors({}); }}
+        >
+          Suscripciones
+          {suscripcionesList.filter(s => s.estado === "pendiente_activacion").length > 0 && (
+            <span className="admin-tab-badge">
+              {suscripcionesList.filter(s => s.estado === "pendiente_activacion").length}
+            </span>
+          )}
         </button>
       </div>
 
@@ -1316,6 +1426,229 @@ const AdminPanel = () => {
                       >
                         Eliminar
                       </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ════════════════════════════════════════════════
+          TAB: MENSAJES / CONTACTOS
+      ════════════════════════════════════════════════ */}
+      {activeTab === "contactos" && (
+        <div className="admin-gestionar">
+          <div className="admin-gestionar-header">
+            <p>{contactosList.length} mensajes en total</p>
+            <button className="admin-add" onClick={loadContactos} disabled={loadingContactos}>
+              {loadingContactos ? "Cargando..." : "Actualizar"}
+            </button>
+          </div>
+          {loadingContactos ? (
+            <p className="admin-help">Cargando mensajes...</p>
+          ) : contactosList.length === 0 ? (
+            <p className="admin-help">No hay mensajes aún.</p>
+          ) : (
+            <div className="admin-inbox">
+              {contactosList.map((c) => (
+                <div
+                  key={c.id}
+                  className={`admin-inbox-item${c.estado === "nuevo" ? " admin-inbox-item--nuevo" : ""}${contactoExpandido === c.id ? " admin-inbox-item--open" : ""}`}
+                >
+                  <div
+                    className="admin-inbox-item__head"
+                    onClick={() => setContactoExpandido(contactoExpandido === c.id ? null : c.id)}
+                  >
+                    <div className="admin-inbox-item__meta">
+                      <span className="admin-inbox-item__nombre">{c.nombre}</span>
+                      <span className="admin-inbox-item__email">{c.email}</span>
+                      {c.telefono && <span className="admin-inbox-item__tel">{c.telefono}</span>}
+                    </div>
+                    <div className="admin-inbox-item__right">
+                      <span className="admin-inbox-item__asunto">{c.asunto}</span>
+                      <span className="admin-inbox-item__fecha">
+                        {new Date(c.created_at).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })}
+                      </span>
+                      <span className={`admin-inbox-item__estado admin-inbox-item__estado--${c.estado}`}>
+                        {c.estado === "nuevo" ? "Nuevo" : c.estado === "leido" ? "Leído" : "Respondido"}
+                      </span>
+                    </div>
+                  </div>
+                  {contactoExpandido === c.id && (
+                    <div className="admin-inbox-item__body">
+                      <p className="admin-inbox-item__mensaje">{c.mensaje}</p>
+                      <div className="admin-inbox-item__actions">
+                        <span>Marcar como:</span>
+                        {["nuevo", "leido", "respondido"].map((est) => (
+                          <button
+                            key={est}
+                            className={`admin-inbox-btn${c.estado === est ? " admin-inbox-btn--active" : ""}`}
+                            onClick={() => handleContactoEstado(c.id, est)}
+                            disabled={c.estado === est}
+                          >
+                            {est === "nuevo" ? "Nuevo" : est === "leido" ? "Leído" : "Respondido"}
+                          </button>
+                        ))}
+                        <a
+                          href={`mailto:${c.email}?subject=Re: ${encodeURIComponent(c.asunto)}`}
+                          className="admin-inbox-btn admin-inbox-btn--reply"
+                        >
+                          Responder por email
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ════════════════════════════════════════════════
+          TAB: RESERVAS
+      ════════════════════════════════════════════════ */}
+      {activeTab === "reservas" && (
+        <div className="admin-gestionar">
+          <div className="admin-gestionar-header">
+            <p>{reservasList.length} solicitudes en total</p>
+            <button className="admin-add" onClick={loadReservas} disabled={loadingReservas}>
+              {loadingReservas ? "Cargando..." : "Actualizar"}
+            </button>
+          </div>
+          {loadingReservas ? (
+            <p className="admin-help">Cargando reservas...</p>
+          ) : reservasList.length === 0 ? (
+            <p className="admin-help">No hay solicitudes de reserva aún.</p>
+          ) : (
+            <div className="admin-reservas-list">
+              {reservasList.map((r) => (
+                <div key={r.id} className={`admin-reserva-card admin-reserva-card--${r.estado}`}>
+                  <div className="admin-reserva-card__top">
+                    <div className="admin-reserva-card__info">
+                      <span className="admin-reserva-card__paquete">{r.paquete_nombre}</span>
+                      <span className="admin-reserva-card__cliente">
+                        {r.nombre} · {r.email}
+                        {r.telefono && ` · ${r.telefono}`}
+                      </span>
+                      <span className="admin-reserva-card__detalle">
+                        {r.fecha_viaje
+                          ? new Date(r.fecha_viaje).toLocaleDateString("es-ES", { day: "2-digit", month: "long", year: "numeric" })
+                          : "Fecha por confirmar"}
+                        {" · "}
+                        {r.pasajeros} {r.pasajeros === 1 ? "pasajero" : "pasajeros"}
+                      </span>
+                      {r.comentarios && (
+                        <span className="admin-reserva-card__comentario">"{r.comentarios}"</span>
+                      )}
+                      <span className="admin-reserva-card__fecha-solicitud">
+                        Solicitado: {new Date(r.created_at).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })}
+                      </span>
+                    </div>
+                    <span className={`admin-reserva-card__estado admin-reserva-card__estado--${r.estado}`}>
+                      {r.estado === "pendiente" ? "Pendiente" : r.estado === "confirmada" ? "Confirmada" : r.estado === "cancelada" ? "Cancelada" : "Completada"}
+                    </span>
+                  </div>
+                  <div className="admin-reserva-card__actions">
+                    <span>Estado:</span>
+                    {["pendiente", "confirmada", "cancelada", "completada"].map((est) => (
+                      <button
+                        key={est}
+                        className={`admin-inbox-btn${r.estado === est ? " admin-inbox-btn--active" : ""}`}
+                        onClick={() => handleReservaEstado(r.id, est)}
+                        disabled={r.estado === est}
+                      >
+                        {est === "pendiente" ? "Pendiente" : est === "confirmada" ? "Confirmar" : est === "cancelada" ? "Cancelar" : "Completar"}
+                      </button>
+                    ))}
+                    <a
+                      href={`mailto:${r.email}?subject=Tu reserva: ${encodeURIComponent(r.paquete_nombre)}`}
+                      className="admin-inbox-btn admin-inbox-btn--reply"
+                    >
+                      Contactar cliente
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      {/* ════════════════════════════════════════════════
+          TAB: SUSCRIPCIONES
+      ════════════════════════════════════════════════ */}
+      {activeTab === "suscripciones" && (
+        <div className="admin-gestionar">
+          <div className="admin-gestionar-header">
+            <p>{suscripcionesList.length} suscripciones en total</p>
+            <button className="admin-add" onClick={loadSuscripciones} disabled={loadingSuscripciones}>
+              {loadingSuscripciones ? "Cargando..." : "Actualizar"}
+            </button>
+          </div>
+          {loadingSuscripciones ? (
+            <p className="admin-help">Cargando suscripciones...</p>
+          ) : suscripcionesList.length === 0 ? (
+            <p className="admin-help">No hay suscripciones registradas aún.</p>
+          ) : (
+            <div className="admin-subs-list">
+              {suscripcionesList.map((s) => (
+                <div key={s.id} className={`admin-subs-card admin-subs-card--${s.estado}`}>
+                  <div className="admin-subs-card__top">
+                    <div className="admin-subs-card__info">
+                      <span className="admin-subs-card__plan">
+                        Plan {s.plan.charAt(0).toUpperCase() + s.plan.slice(1)}
+                      </span>
+                      <span className="admin-subs-card__email">
+                        {s.email || s.user_id}
+                      </span>
+                      <span className="admin-subs-card__fecha">
+                        Solicitado:{" "}
+                        {new Date(s.created_at).toLocaleDateString("es-ES", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </span>
+                      {s.payment_provider && (
+                        <span className="admin-subs-card__payment">
+                          Pago: {s.payment_provider}
+                          {s.payment_id && ` · ${s.payment_id}`}
+                        </span>
+                      )}
+                    </div>
+                    <span className={`admin-subs-card__estado admin-subs-card__estado--${s.estado}`}>
+                      {s.estado === "pendiente_activacion"
+                        ? "Pendiente"
+                        : s.estado === "activa"
+                        ? "Activa"
+                        : "Cancelada"}
+                    </span>
+                  </div>
+                  <div className="admin-reserva-card__actions">
+                    <span>Estado:</span>
+                    {["pendiente_activacion", "activa", "cancelada"].map((est) => (
+                      <button
+                        key={est}
+                        className={`admin-inbox-btn${s.estado === est ? " admin-inbox-btn--active" : ""}`}
+                        onClick={() => handleSuscripcionEstado(s.id, est)}
+                        disabled={s.estado === est}
+                      >
+                        {est === "pendiente_activacion"
+                          ? "Pendiente"
+                          : est === "activa"
+                          ? "Activar"
+                          : "Cancelar"}
+                      </button>
+                    ))}
+                    {s.email && (
+                      <a
+                        href={`mailto:${s.email}?subject=Tu suscripción plan ${s.plan} - Cruceros y Tours`}
+                        className="admin-inbox-btn admin-inbox-btn--reply"
+                      >
+                        Contactar cliente
+                      </a>
                     )}
                   </div>
                 </div>
