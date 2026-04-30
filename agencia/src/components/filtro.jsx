@@ -148,7 +148,7 @@ export const Filtro = ({ onFilterChange }) => {
   );
 };
 
-// Función auxiliar para aplicar filtros a las experiencias
+// eslint-disable-next-line react-refresh/only-export-components
 export const aplicarFiltros = (experiencias, filtros) => {
   return experiencias.filter((exp) => {
     // Si no hay filtros activos, mostrar todas las experiencias

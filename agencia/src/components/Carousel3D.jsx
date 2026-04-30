@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import "../styles/carrusel3D.css";
 
@@ -41,37 +41,8 @@ const Carousel3D = ({ destinations = [], onModalChange }) => {
     currentX: 0,
   });
 
-  // Actualizar posiciones de las cards al cambiar slide o tamaño de pantalla
-  useEffect(() => {
-    updateCarousel();
-  }, [currentIndex, windowWidth]);
-
-  // Escuchar cambios de tamaño de ventana
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Cerrar modal con tecla Escape
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (!isModalOpen) return;
-      
-      if (e.key === 'Escape') {
-        closeModal();
-      } else if (e.key === 'ArrowLeft') {
-        navigateModal('prev');
-      } else if (e.key === 'ArrowRight') {
-        navigateModal('next');
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen, destinations.length]);
-
-  const updateCarousel = () => {
+  // Declarar funciones antes de usarlas en useEffect
+  const updateCarousel = useCallback(() => {
     const w = window.innerWidth;
     const { xSpacing } = getCarouselConfig(w);
     // En móvil pequeño (≤480) solo la card central; en el resto, central + adyacentes (±1)
@@ -106,7 +77,55 @@ const Carousel3D = ({ destinations = [], onModalChange }) => {
         ease: "power3.out",
       });
     });
-  };
+  }, [currentIndex]);
+
+  const closeModal = useCallback(() => {
+    setIsModalOpen(false);
+    console.log('🔴 GALERÍA CERRADA - Llamando onModalChange(false)');
+    if (onModalChange) {
+      onModalChange(false);
+    } else {
+      console.warn('⚠️ onModalChange no está definido');
+    }
+  }, [onModalChange]);
+
+  const navigateModal = useCallback((direction) => {
+    if (direction === 'next') {
+      setModalImageIndex((prev) => (prev + 1) % destinations.length);
+    } else {
+      setModalImageIndex((prev) => (prev - 1 + destinations.length) % destinations.length);
+    }
+  }, [destinations.length]);
+
+  // Actualizar posiciones de las cards al cambiar slide o tamaño de pantalla
+  useEffect(() => {
+    updateCarousel();
+  }, [currentIndex, windowWidth, updateCarousel]);
+
+  // Escuchar cambios de tamaño de ventana
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Cerrar modal con tecla Escape
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!isModalOpen) return;
+      
+      if (e.key === 'Escape') {
+        closeModal();
+      } else if (e.key === 'ArrowLeft') {
+        navigateModal('prev');
+      } else if (e.key === 'ArrowRight') {
+        navigateModal('next');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isModalOpen, destinations.length, closeModal, navigateModal]);
 
   const navigate = (direction) => {
     if (isAnimating) return;
@@ -175,24 +194,6 @@ const Carousel3D = ({ destinations = [], onModalChange }) => {
       onModalChange(true);
     } else {
       console.warn('⚠️ onModalChange no está definido');
-    }
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    console.log('🔴 GALERÍA CERRADA - Llamando onModalChange(false)');
-    if (onModalChange) {
-      onModalChange(false);
-    } else {
-      console.warn('⚠️ onModalChange no está definido');
-    }
-  };
-
-  const navigateModal = (direction) => {
-    if (direction === 'next') {
-      setModalImageIndex((prev) => (prev + 1) % destinations.length);
-    } else {
-      setModalImageIndex((prev) => (prev - 1 + destinations.length) % destinations.length);
     }
   };
 

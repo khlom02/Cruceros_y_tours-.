@@ -172,10 +172,6 @@ const AdminPanel = () => {
   const [amenities, setAmenities] = useState([]);
   const [highlights, setHighlights] = useState([{ ...emptyHighlight }]);
 
-  // ─── Galeria existente (modo edicion) ────────────────────────────────────
-  const [existingGallery, setExistingGallery] = useState([]); // [{ id, imagen_url }]
-  const [galleryToDelete, setGalleryToDelete] = useState([]);  // IDs a borrar al guardar
-
   // ─── Selector de amenities: dropdown predefinidos y picker custom ────────
   const [showPredefinedDropdown, setShowPredefinedDropdown] = useState(false);
   const [customAmenity, setCustomAmenity] = useState({ nombre: "", icono_emoji: "" });
@@ -350,8 +346,6 @@ const AdminPanel = () => {
     setRooms([{ ...emptyRoom }]);
     setAmenities([]);
     setHighlights([{ ...emptyHighlight }]);
-    setExistingGallery([]);
-    setGalleryToDelete([]);
     setShowPredefinedDropdown(false);
     setCustomAmenity({ nombre: "", icono_emoji: "" });
     setShowCustomEmojiPicker(false);

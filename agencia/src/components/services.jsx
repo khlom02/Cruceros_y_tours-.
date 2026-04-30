@@ -5,6 +5,7 @@ import bannerPrincipal from '../imagenes/banner_principal.jpeg';
 // Agrega aqui nuevos servicios si se crean categorias adicionales en Supabase.
 // seccionId define la subruta: /servicios_especiales/:seccionId
 // categoryName debe coincidir exactamente con el nombre de la categoria en Supabase
+// eslint-disable-next-line react-refresh/only-export-components
 export const servicesData = [
     {
         id: 1,

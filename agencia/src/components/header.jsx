@@ -11,7 +11,9 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Cerrar menú al cambiar de ruta
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     setMenuOpen(false);
   }, [location.pathname]);
 

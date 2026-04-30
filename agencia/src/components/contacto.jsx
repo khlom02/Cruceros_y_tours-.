@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import '../styles/contacto.css';
 import { createContact } from '../backend/supabase_client';
 import SEO from './SEO.jsx';

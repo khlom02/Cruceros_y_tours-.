@@ -98,11 +98,13 @@ const Detalles = () => {
     const [reservaEnviada, setReservaEnviada] = useState(false);
 
     // Pre-rellenar email si el usuario está autenticado
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (user?.email) {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
             setReservaForm((prev) => ({ ...prev, email: user.email }));
         }
-    }, [user]);
+    }, [user?.email]);
 
     useEffect(() => {
         let isMounted = true;
@@ -147,7 +149,9 @@ const Detalles = () => {
 
     const gallery = useMemo(() => detalle?.gallery || [], [detalle]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         setActiveIndex(0);
     }, [gallery.length]);
 

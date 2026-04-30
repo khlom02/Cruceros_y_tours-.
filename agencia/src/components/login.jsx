@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "../styles/auth.css";
@@ -49,6 +49,7 @@ export default function LoginForm() {
   // Contador de bloqueo
   useEffect(() => {
     if (!bloqueadoHasta) return;
+    
     timerRef.current = setInterval(() => {
       const restante = Math.ceil((bloqueadoHasta - Date.now()) / 1000);
       if (restante <= 0) {
@@ -63,7 +64,9 @@ export default function LoginForm() {
     return () => clearInterval(timerRef.current);
   }, [bloqueadoHasta]);
 
-  const estaBloquado = bloqueadoHasta && Date.now() < bloqueadoHasta;
+  const estaBloquado = useMemo(() => {
+    return bloqueadoHasta && Date.now() < bloqueadoHasta;
+  }, [bloqueadoHasta]);
 
   const handleLogin = async (e) => {
     e.preventDefault();

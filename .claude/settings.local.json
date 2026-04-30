@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -l \"@media\" agencia/src/styles/*.css)",
+      "Bash(xargs grep:*)",
+      "Bash(npm install:*)",
+      "Bash(grep -E \"\\\\.\\(jsx|js\\)$\")",
+      "Bash(npm run:*)",
+      "Bash(tmole 5173)",
+      "Bash(cmd.exe /c \"npx --yes tunnelmole 5173 2>&1\")",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(cat ~/.claude/plugins/marketplaces/claude-plugins-official/plugins/example-plugin/*.md)"
+    ]
+  }
+}
