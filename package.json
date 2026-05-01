@@ -1,8 +1,0 @@
-{
-  "private": true,
-  "scripts": {
-    "dev": "cd agencia && npm run dev",
-    "build": "cd agencia && npm install && npm run build",
-    "preview": "cd agencia && npm run preview"
-  }
-}
