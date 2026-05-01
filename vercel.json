@@ -2,13 +2,15 @@
   "version": 2,
   "builds": [
     {
-      "src": "package.json",
+      "src": "agencia/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "agencia/dist"
+        "distDir": "dist"
       }
     }
   ],
+  "installCommand": "npm install --prefix agencia",
+  "buildCommand": "npm run build --prefix agencia",
   "routes": [
     {
       "src": "/(.*)",
