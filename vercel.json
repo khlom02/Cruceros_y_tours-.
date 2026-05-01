@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "cd agencia && npm install && npm run build",
-  "outputDirectory": "agencia/dist",
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": "dist",
   "routes": [
     {
       "src": "/assets/(.*)",
