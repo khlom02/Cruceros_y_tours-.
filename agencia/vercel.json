@@ -2,9 +2,6 @@
   "version": 2,
   "buildCommand": "npm install && npm run build",
   "outputDirectory": "dist",
-  "redirects": [
-    { "source": "/test-redirect", "destination": "/" }
-  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
