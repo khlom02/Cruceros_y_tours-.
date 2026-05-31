@@ -119,7 +119,11 @@ export const CardGrid = ({
           // Mapear datos de la DB al formato que espera el componente
           const productosMapeados = productos.map(producto => ({
             id: producto.id,
-            imagen: producto.imagen ? getSupabaseImageUrl(producto.imagen) : getSupabaseImageUrl("imagenes/default.jpg"),
+            imagen: producto.imagen_url
+              ? getSupabaseImageUrl(producto.imagen_url)
+              : producto.imagen
+                ? getSupabaseImageUrl(producto.imagen)
+                : getSupabaseImageUrl("imagenes/default.jpg"),
             titulo: producto.titulo,
             ubicacion: producto.ubicacion,
             fechaInicio: producto.fecha_inicio?.slice(5, 10) || "N/A",

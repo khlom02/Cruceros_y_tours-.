@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "rootDirectory": "agencia",
   "buildCommand": "npm install && npm run build",
   "outputDirectory": "dist",
   "routes": [
@@ -15,6 +16,9 @@
       "dest": "/index.html"
     }
   ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -27,7 +31,7 @@
         { "key": "RateLimit-Limit", "value": "100" },
         { "key": "RateLimit-Window", "value": "1 minute" },
         { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://krpdacuthwpoyuccbihf.supabase.co" }
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://krpdacuthwpoyuccbihf.supabase.co wss://krpdacuthwpoyuccbihf.supabase.co" }
       ]
     }
   ]

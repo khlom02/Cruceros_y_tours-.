@@ -1,32 +1,26 @@
 // Helper para servir imágenes
-// Prioriza URLs locales en public/, con fallback a Supabase Storage
+// Usa Supabase Storage. Si una ruta local no está en Supabase, usa public/
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const BUCKET_NAME = "content media";
 
+const getSupabaseStorageUrl = (path) => {
+  const bucket = encodeURIComponent(BUCKET_NAME);
+  return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`;
+};
+
 /**
  * Genera la URL de una imagen
- * Usa URLs locales desde public/ (recomendado)
- * Con fallback a Supabase Storage si se configura
- * @param {string} path - Ruta de la imagen (ej: "imagenes/banner.jpg" o "assets/logo.png")
+ * - Si ya es URL completa (http), la devuelve tal cual
+ * - Si la ruta existe en Supabase Storage, usa la URL de Storage
+ * - Si no, usa la ruta local desde public/
+ * @param {string} path - Ruta de la imagen
  * @returns {string} URL pública completa
  */
 export const getSupabaseImageUrl = (path) => {
   if (!path) return "";
-  
-  // Si ya es una URL completa, devolverla tal cual
-  if (path.startsWith("http")) {
-    return path;
-  }
-
-  // PRIORIDAD 1: URLs locales desde public/
-  // Las imágenes están en public/imagenes/ y public/assets/
-  // Se sirven como /imagenes/ y /assets/ en producción
-  return `/${path}`;
-
-  // FALLBACK: Si necesitas Supabase en el futuro, descomentar:
-  // const encodedBucket = encodeURIComponent(BUCKET_NAME);
-  // return `${SUPABASE_URL}/storage/v1/object/public/${encodedBucket}/${path}`;
+  if (path.startsWith("http")) return path;
+  return getSupabaseStorageUrl(path);
 };
 
 /**

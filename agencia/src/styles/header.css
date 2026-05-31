@@ -415,9 +415,13 @@ header .nav-item .nav-link:hover i {
   position: relative;
 }
 
+.header-user-dropdown {
+  position: relative;
+}
+
 .header-user-menu {
   min-width: 200px;
-  z-index: 1050;
+  z-index: 1300;
   margin-top: 8px;
   border: 1px solid rgba(15, 211, 211, 0.2);
   border-radius: var(--border-radius);
