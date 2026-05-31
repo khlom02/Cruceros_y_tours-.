@@ -78,11 +78,7 @@ export const Trenesyvehiculos = () => {
           if (isMounted) {
           const trenesMapeados = productosTrenes.map(producto => ({
               id: producto.id,
-              imagen: producto.imagen_url
-                ? getSupabaseImageUrl(producto.imagen_url)
-                : producto.imagen
-                  ? getSupabaseImageUrl(producto.imagen)
-                  : getSupabaseImageUrl("imagenes/tren-default.jpg"),
+              imagen: producto.imagen ? getSupabaseImageUrl(producto.imagen) : getSupabaseImageUrl("imagenes/tren-default.jpg"),
               titulo: producto.titulo,
               ubicacion: producto.ubicacion,
               fechaInicio: producto.fecha_inicio?.slice(5, 10) || "N/A",
@@ -103,11 +99,7 @@ export const Trenesyvehiculos = () => {
           if (isMounted) {
             const vehiculosMapeados = productosVehiculos.map(producto => ({
               id: producto.id,
-              imagen: producto.imagen_url
-                ? getSupabaseImageUrl(producto.imagen_url)
-                : producto.imagen
-                  ? getSupabaseImageUrl(producto.imagen)
-                  : getSupabaseImageUrl("imagenes/vehiculo-default.jpg"),
+              imagen: producto.imagen ? getSupabaseImageUrl(producto.imagen) : getSupabaseImageUrl("imagenes/vehiculo-default.jpg"),
               titulo: producto.titulo,
               ubicacion: producto.ubicacion,
               fechaInicio: producto.fecha_inicio?.slice(5, 10) || "N/A",
