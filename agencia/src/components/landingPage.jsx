@@ -12,13 +12,14 @@ import Trenesyvehiculos from './Trenes_vehiculos.jsx';
 import BannerPrincipal from './banner_principal.jsx';
 import DestinosSection from './DestinosSection.jsx';
 import Testimonios from './Testimonios.jsx';
+import { getSupabaseImageUrl } from '../utils/imageHelper';
 
 const CAROUSEL_FALLBACK = [
-  { id: 1, img: "/src/imagenes/MSC.jpg",       logo: "/src/assets/MSC_logo.png",            title: "Alaska" },
-  { id: 2, img: "/src/imagenes/promo_royal.jpeg", logo: "/src/assets/royal_caribbean_logo.jpg", title: "Europa" },
-  { id: 3, img: "/src/imagenes/serenade.mp4",   logo: "/src/assets/royal_caribbean_logo.jpg", title: "¡CRUCERO SIN VISA! (Hasta abril 2027)" },
-  { id: 4, img: "/src/imagenes/celebrity.jpg",  logo: "/src/assets/Celebrity_logo.jpg",       title: "Caribe Familiar" },
-  { id: 5, img: "/src/imagenes/costa.jpg",       logo: "/src/assets/costa_logo.png",           title: "Transatlánticos." },
+  { id: 1, img: getSupabaseImageUrl("imagenes/MSC.jpg"),       logo: getSupabaseImageUrl("assets/MSC_logo.png"),            title: "Alaska" },
+  { id: 2, img: getSupabaseImageUrl("imagenes/promo_royal.jpeg"), logo: getSupabaseImageUrl("assets/royal_caribbean_logo.jpg"), title: "Europa" },
+  { id: 3, img: getSupabaseImageUrl("imagenes/serenade.mp4"),   logo: getSupabaseImageUrl("assets/royal_caribbean_logo.jpg"), title: "¡CRUCERO SIN VISA! (Hasta abril 2027)" },
+  { id: 4, img: getSupabaseImageUrl("imagenes/celebrity.jpg"),  logo: getSupabaseImageUrl("assets/Celebrity_logo.jpg"),       title: "Caribe Familiar" },
+  { id: 5, img: getSupabaseImageUrl("imagenes/costa.jpg"),       logo: getSupabaseImageUrl("assets/costa_logo.png"),           title: "Transatlánticos." },
 ];
 
 const LandingPage = () => {

@@ -61,13 +61,13 @@ USING (true);
 -- Los usuarios pueden leer su propio perfil
 CREATE POLICY "Usuarios pueden leer su propio perfil"
 ON profiles FOR SELECT
-USING (auth.uid() = user_id);
+USING (auth.uid() = id);
 
 -- Los usuarios pueden actualizar su propio perfil
 CREATE POLICY "Usuarios pueden actualizar su propio perfil"
 ON profiles FOR UPDATE
-USING (auth.uid() = user_id)
-WITH CHECK (auth.uid() = user_id);
+USING (auth.uid() = id)
+WITH CHECK (auth.uid() = id);
 
 -- =====================================================
 -- 4. POLÍTICAS DE ESCRITURA (SÓLO ADMIN)

@@ -1,7 +1,9 @@
+import { getSupabaseImageUrl } from '../utils/imageHelper';
+
 export const Banner = ({
   titulo = "Encuentra tu destino ideal",
   subtitulo = "Explora experiencias únicas y personalizadas alrededor del mundo.",
-  imagen = "/src/imagenes/banner_principal.jpeg",
+  imagen = getSupabaseImageUrl("imagenes/banner_principal.jpeg"),
   colorFondo = "#E8863B"
 }) => {
   return (

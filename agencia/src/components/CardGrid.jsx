@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Filtro, { aplicarFiltros } from "./filtro";
 import { fetchCategories, fetchProductsByCategory } from "../backend/supabase_client";
+import { getSupabaseImageUrl } from "../utils/imageHelper";
 
 /**
  * Componente de Card genérico reutilizable
@@ -118,7 +119,7 @@ export const CardGrid = ({
           // Mapear datos de la DB al formato que espera el componente
           const productosMapeados = productos.map(producto => ({
             id: producto.id,
-            imagen: producto.imagen || "/src/imagenes/default.jpg",
+            imagen: producto.imagen ? getSupabaseImageUrl(producto.imagen) : getSupabaseImageUrl("imagenes/default.jpg"),
             titulo: producto.titulo,
             ubicacion: producto.ubicacion,
             fechaInicio: producto.fecha_inicio?.slice(5, 10) || "N/A",

@@ -5,6 +5,7 @@ import { FaInstagramSquare } from "react-icons/fa";
 import { FaWhatsappSquare } from "react-icons/fa";
 import { BiLogoGmail } from "react-icons/bi";
 import { subscribeNewsletter } from "../backend/supabase_client";
+import { getSupabaseImageUrl } from "../utils/imageHelper";
 
 const Footer = () => {
   const [emailNews, setEmailNews] = useState("");
@@ -27,7 +28,7 @@ const Footer = () => {
         <div className="footer-section logo-social">
           <a href="/">
             <img
-              src="/src/imagenes/texto_logo_solo_color.png"
+              src={getSupabaseImageUrl("imagenes/texto_logo_solo_color.png")}
               alt="Cruceros y Tours"
               loading="lazy"
               decoding="async"

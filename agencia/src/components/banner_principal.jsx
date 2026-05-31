@@ -1,16 +1,17 @@
 import React from "react";
 import '../styles/banner_principal.css';
 import '../styles/landing.css';
+import { getSupabaseImageUrl } from "../utils/imageHelper";
 
 
 
 const BannerPrincipal = ({ children }) => {
+	const bannerBg = getSupabaseImageUrl("imagenes/banner_principal.jpeg");
 	return (
 		<header
 			className="position-relative"
 			style={{
-				backgroundImage:
-				"linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(/src/imagenes/banner_principal.jpeg)",
+				backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(${bannerBg})`,
 				backgroundSize: "cover",
 				backgroundPosition: "center 10%",
 				backgroundRepeat: "no-repeat",

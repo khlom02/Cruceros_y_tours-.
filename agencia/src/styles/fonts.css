@@ -5,7 +5,7 @@
 /* Chicago Police Font */
 @font-face {
   font-family: 'Chicago Police';
-  src: url('/src/assets/fonts/Chicago Police Font.otf') format('opentype');
+  src: url('/assets/fonts/Chicago Police Font.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -14,7 +14,7 @@
 /* Photogenic */
 @font-face {
   font-family: 'Photogenic';
-  src: url('/src/assets/fonts/photogenic.otf') format('opentype');
+  src: url('/assets/fonts/photogenic.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;

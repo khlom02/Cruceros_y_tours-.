@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/tours_cards.css";
 import { fetchCategories, fetchProductsByCategory } from "../backend/supabase_client";
+import { getSupabaseImageUrl } from "../utils/imageHelper";
 
 export const TourCard = ({ 
   imagen, 
@@ -75,9 +76,9 @@ export const Trenesyvehiculos = () => {
         if (categoriaTrenes) {
           const productosTrenes = await fetchProductsByCategory(categoriaTrenes.id);
           if (isMounted) {
-            const trenesMapeados = productosTrenes.map(producto => ({
+          const trenesMapeados = productosTrenes.map(producto => ({
               id: producto.id,
-              imagen: producto.imagen || "/src/imagenes/tren-default.jpg",
+              imagen: producto.imagen ? getSupabaseImageUrl(producto.imagen) : getSupabaseImageUrl("imagenes/tren-default.jpg"),
               titulo: producto.titulo,
               ubicacion: producto.ubicacion,
               fechaInicio: producto.fecha_inicio?.slice(5, 10) || "N/A",
@@ -98,7 +99,7 @@ export const Trenesyvehiculos = () => {
           if (isMounted) {
             const vehiculosMapeados = productosVehiculos.map(producto => ({
               id: producto.id,
-              imagen: producto.imagen || "/src/imagenes/vehiculo-default.jpg",
+              imagen: producto.imagen ? getSupabaseImageUrl(producto.imagen) : getSupabaseImageUrl("imagenes/vehiculo-default.jpg"),
               titulo: producto.titulo,
               ubicacion: producto.ubicacion,
               fechaInicio: producto.fecha_inicio?.slice(5, 10) || "N/A",
