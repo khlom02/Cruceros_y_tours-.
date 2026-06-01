@@ -491,39 +491,41 @@ const Carousel3D = ({ destinations = [], onModalChange }) => {
           }}
           onClick={closeModal}
         >
-          {/* Botón de cerrar - Estilizado según la página */}
+          {/* Botón de cerrar */}
           <button
             onClick={closeModal}
             style={{
               position: 'fixed',
               top: '15px',
               right: '15px',
-              width: '55px',
-              height: '55px',
+              width: '48px',
+              height: '48px',
               borderRadius: '50%',
-              border: '2px solid rgba(64, 224, 208, 0.5)',
-              background: 'linear-gradient(135deg, rgba(0, 180, 216, 0.9) 0%, rgba(0, 119, 182, 0.9) 100%)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              background: 'rgba(0,0,0,0.45)',
               color: 'white',
-              fontSize: '28px',
-              fontWeight: '300',
+              fontSize: '24px',
+              fontWeight: '400',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              transition: 'all 0.3s ease',
+              transition: 'all 0.25s ease',
               zIndex: 10002,
-              boxShadow: '0 8px 25px rgba(0, 180, 216, 0.4)',
-              backdropFilter: 'blur(10px)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+              lineHeight: 1,
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'linear-gradient(135deg, #40E0D0 0%, #00b4d8 100%)';
-              e.currentTarget.style.transform = 'scale(1.1)';
-              e.currentTarget.style.boxShadow = '0 12px 35px rgba(64, 224, 208, 0.6)';
+              e.currentTarget.style.background = 'rgba(255,255,255,0.15)';
+              e.currentTarget.style.transform = 'scale(1.12)';
+              e.currentTarget.style.boxShadow = '0 6px 25px rgba(0,0,0,0.35)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'linear-gradient(135deg, rgba(0, 180, 216, 0.9) 0%, rgba(0, 119, 182, 0.9) 100%)';
+              e.currentTarget.style.background = 'rgba(0,0,0,0.45)';
               e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 180, 216, 0.4)';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
             }}
           >
             ×
