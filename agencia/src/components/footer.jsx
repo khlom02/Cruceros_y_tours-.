@@ -38,7 +38,7 @@ const Footer = () => {
             <a href="https://instagram.com/crucerosytours" target="_blank" rel="noopener noreferrer">
               <FaInstagramSquare className="icon-instagram" size={50}/>
             </a>
-            <a href="https://wa.me/584224560111128?text=Hola,%20quiero%20información%20sobre%20un%20viaje" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/584224560128?text=Hola,%20quiero%20información%20sobre%20un%20viaje" target="_blank" rel="noopener noreferrer">
               <FaWhatsappSquare className="icon-whatsapp" size={50}/>
             </a>
             <a href="mailto:crucerosytours@gmail.com">
@@ -86,7 +86,7 @@ const Footer = () => {
         </div>
 
         <div className="footer-phone">
-          <a href="tel:+584224560111128">📞 +58 422 456 0111</a>
+          <a href="tel:+584224560128">📞 +58 422 456 0128</a>
         </div>
       </footer>
     </div>

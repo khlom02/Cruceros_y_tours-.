@@ -369,7 +369,7 @@ const Detalles = () => {
                       <strong>¡Solicitud enviada!</strong>
                       <p>Nos comunicaremos contigo en las próximas horas. También puedes escribirnos directamente:</p>
                       <a
-                        href={`https://wa.me/584224560111128?text=Hola,%20hice%20una%20solicitud%20para%20el%20paquete:%20${encodeURIComponent(detalle.title)}`}
+                        href={`https://wa.me/584224560128?text=Hola,%20hice%20una%20solicitud%20para%20el%20paquete:%20${encodeURIComponent(detalle.title)}`}
                         className="detalles-reserva__whatsapp"
                         target="_blank"
                         rel="noopener noreferrer"

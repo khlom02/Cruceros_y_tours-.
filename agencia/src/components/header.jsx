@@ -39,11 +39,11 @@ const Header = () => {
     <>
       {/* Barra de contacto rápido */}
       <div className="header-topbar">
-        <a href="tel:+584224560111128" className="header-topbar__phone">
-          📞 +58 422 456 0111
+        <a href="tel:+584224560128" className="header-topbar__phone">
+          📞 +58 422 456 0128
         </a>
         <a
-          href="https://wa.me/584224560111128?text=Hola,%20quiero%20información%20sobre%20un%20viaje"
+          href="https://wa.me/584224560128?text=Hola,%20quiero%20información%20sobre%20un%20viaje"
           className="header-topbar__whatsapp"
           target="_blank"
           rel="noopener noreferrer"
