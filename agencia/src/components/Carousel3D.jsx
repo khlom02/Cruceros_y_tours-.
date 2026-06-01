@@ -237,13 +237,8 @@ const Carousel3D = ({ destinations = [], onModalChange }) => {
   // Dimensiones responsive del carrusel
   const { cardW, cardH, containerH } = getCarouselConfig(windowWidth);
 
-  // Posición de los botones de navegación del modal:
-  // En pantallas > 1024px los botones van fuera del contenedor (left/right negativos).
-  // En pantallas ≤ 1024px van dentro, para que no queden fuera del viewport.
-  const modalNavButtonLeft = windowWidth > 1024 ? '-70px' : '8px';
-  const modalNavButtonRight = windowWidth > 1024 ? '-70px' : '8px';
-  const modalNavButtonSize = windowWidth <= 768 ? '44px' : '60px';
-  const modalNavButtonFontSize = windowWidth <= 768 ? '26px' : '32px';
+  const modalNavButtonSize = windowWidth <= 768 ? '44px' : '52px';
+  const modalNavButtonFontSize = windowWidth <= 768 ? '22px' : '26px';
 
   // tamaño de las cards y estilos generales (responsive)
   const cardStyle = {
@@ -565,37 +560,38 @@ const Carousel3D = ({ destinations = [], onModalChange }) => {
               }}
               style={{
                 position: 'absolute',
-                left: modalNavButtonLeft,
-                top: windowWidth <= 1024 ? '50%' : undefined,
-                transform: windowWidth <= 1024 ? 'translateY(-50%)' : undefined,
+                left: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
                 width: modalNavButtonSize,
                 height: modalNavButtonSize,
                 borderRadius: '50%',
-                border: '2px solid rgba(64, 224, 208, 0.6)',
-                background: 'linear-gradient(135deg, rgba(0, 180, 216, 0.95) 0%, rgba(0, 119, 182, 0.95) 100%)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                background: 'rgba(0,0,0,0.45)',
                 color: 'white',
                 fontSize: modalNavButtonFontSize,
-                fontWeight: '300',
+                fontWeight: '400',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                transition: 'all 0.3s ease',
+                transition: 'all 0.25s ease',
                 zIndex: 10001,
-                boxShadow: '0 8px 25px rgba(0, 180, 216, 0.4)',
-                backdropFilter: 'blur(10px)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'linear-gradient(135deg, #40E0D0 0%, #00b4d8 100%)';
-                e.currentTarget.style.transform = 'scale(1.15) translateX(-5px)';
-                e.currentTarget.style.boxShadow = '0 12px 35px rgba(64, 224, 208, 0.6)';
-                e.currentTarget.style.borderColor = '#40E0D0';
+                e.currentTarget.style.background = 'rgba(255,255,255,0.15)';
+                e.currentTarget.style.transform = 'translateY(-50%) scale(1.12)';
+                e.currentTarget.style.boxShadow = '0 6px 25px rgba(0,0,0,0.35)';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.35)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(0, 180, 216, 0.95) 0%, rgba(0, 119, 182, 0.95) 100%)';
-                e.currentTarget.style.transform = 'scale(1) translateX(0)';
-                e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 180, 216, 0.4)';
-                e.currentTarget.style.borderColor = 'rgba(64, 224, 208, 0.6)';
+                e.currentTarget.style.background = 'rgba(0,0,0,0.45)';
+                e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)';
               }}
             >
               ‹
@@ -744,7 +740,7 @@ const Carousel3D = ({ destinations = [], onModalChange }) => {
               </div>
             </div>
 
-            {/* Botón siguiente - Estilizado según la página */}
+            {/* Botón siguiente */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -752,37 +748,38 @@ const Carousel3D = ({ destinations = [], onModalChange }) => {
               }}
               style={{
                 position: 'absolute',
-                right: modalNavButtonRight,
-                top: windowWidth <= 1024 ? '50%' : undefined,
-                transform: windowWidth <= 1024 ? 'translateY(-50%)' : undefined,
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
                 width: modalNavButtonSize,
                 height: modalNavButtonSize,
                 borderRadius: '50%',
-                border: '2px solid rgba(64, 224, 208, 0.6)',
-                background: 'linear-gradient(135deg, rgba(0, 180, 216, 0.95) 0%, rgba(0, 119, 182, 0.95) 100%)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                background: 'rgba(0,0,0,0.45)',
                 color: 'white',
                 fontSize: modalNavButtonFontSize,
-                fontWeight: '300',
+                fontWeight: '400',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                transition: 'all 0.3s ease',
+                transition: 'all 0.25s ease',
                 zIndex: 10001,
-                boxShadow: '0 8px 25px rgba(0, 180, 216, 0.4)',
-                backdropFilter: 'blur(10px)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'linear-gradient(135deg, #40E0D0 0%, #00b4d8 100%)';
-                e.currentTarget.style.transform = 'scale(1.15) translateX(5px)';
-                e.currentTarget.style.boxShadow = '0 12px 35px rgba(64, 224, 208, 0.6)';
-                e.currentTarget.style.borderColor = '#40E0D0';
+                e.currentTarget.style.background = 'rgba(255,255,255,0.15)';
+                e.currentTarget.style.transform = 'translateY(-50%) scale(1.12)';
+                e.currentTarget.style.boxShadow = '0 6px 25px rgba(0,0,0,0.35)';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.35)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(0, 180, 216, 0.95) 0%, rgba(0, 119, 182, 0.95) 100%)';
-                e.currentTarget.style.transform = 'scale(1) translateX(0)';
-                e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 180, 216, 0.4)';
-                e.currentTarget.style.borderColor = 'rgba(64, 224, 208, 0.6)';
+                e.currentTarget.style.background = 'rgba(0,0,0,0.45)';
+                e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)';
               }}
             >
               ›
