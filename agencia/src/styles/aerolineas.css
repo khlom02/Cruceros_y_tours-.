@@ -83,13 +83,6 @@
   box-shadow: 0 8px 25px rgba(0, 119, 182, 0.28);
 }
 
-.airline-btn.active[data-airline="tap air portugal"] {
-  background: white;
-  color: #555;
-  border-color: #000000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
 /* Tarjeta de información */
 .airline-card {
   flex: 0 0 clamp(300px, 50vw, 460px);
