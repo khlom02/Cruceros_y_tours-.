@@ -1,7 +1,7 @@
 import 'animate.css';
 import '../styles/landing.css';
 import SEO from './SEO.jsx';
-import '../styles/tours_cards.css';
+import '../styles/card_cruceros.css';
 import Carousel3D from './Carousel3D';
 import Aerolineas from "./Aerolineas.jsx";
 import Asistencia from "./Asistencia.jsx";

@@ -54,11 +54,11 @@ header .container-fluid {
   box-shadow: 0 12px 35px rgba(0,0,0,0.25);
 }
 
-/* Logo - Destacado y con efecto hover */
+/* Logo */
 .kamima_store {
-  color: #e63dc1;
+  color: var(--color-primary);
   transition: all 0.3s ease;
-  text-shadow: 0 0 10px rgba(230, 61, 193, 0.5);
+  text-shadow: 0 0 10px rgba(15, 211, 211, 0.5);
 }
 
 .kamima_store a {
@@ -83,18 +83,18 @@ header .form-control {
 
 header .form-control:focus {
   background-color: white;
-  box-shadow: 0 0 0 0.2rem rgba(230, 61, 193, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(15, 211, 211, 0.25);
   color: #333;
-  border-color: #e63dc1;
+  border-color: var(--color-primary);
 }
 
 header .form-control::placeholder {
   color: #999;
 }
 
-/* Carrito - Destacado y llamativo */
+/* Carrito */
 header .header-cart .nav-link {
-  background: linear-gradient(135deg, rgba(230, 61, 193, 0.2) 0%, rgba(255, 107, 53, 0.2) 100%);
+  background: linear-gradient(135deg, rgba(15, 211, 211, 0.2) 0%, rgba(0, 51, 102, 0.2) 100%);
   padding: 10px 20px;
   border-radius: 25px;
   transition: all 0.3s ease;
@@ -104,14 +104,14 @@ header .header-cart .nav-link {
 }
 
 header .header-cart .nav-link:hover {
-  background: linear-gradient(135deg, rgba(230, 61, 193, 0.4) 0%, rgba(255, 107, 53, 0.4) 100%);
-  border-color: #e63dc1;
+  background: linear-gradient(135deg, rgba(15, 211, 211, 0.4) 0%, rgba(0, 51, 102, 0.4) 100%);
+  border-color: var(--color-primary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(230, 61, 193, 0.4);
+  box-shadow: 0 4px 15px rgba(15, 211, 211, 0.4);
 }
 
 header .position-relative .nav-link {
-  background: linear-gradient(135deg, rgba(230, 61, 193, 0.2) 0%, rgba(255, 107, 53, 0.2) 100%);
+  background: linear-gradient(135deg, rgba(15, 211, 211, 0.2) 0%, rgba(0, 51, 102, 0.2) 100%);
   padding: 10px 20px;
   border-radius: 25px;
   transition: all 0.3s ease;
@@ -120,20 +120,20 @@ header .position-relative .nav-link {
 }
 
 header .position-relative .nav-link:hover {
-  background: linear-gradient(135deg, rgba(230, 61, 193, 0.4) 0%, rgba(255, 107, 53, 0.4) 100%);
-  border-color: #e63dc1;
+  background: linear-gradient(135deg, rgba(15, 211, 211, 0.4) 0%, rgba(0, 51, 102, 0.4) 100%);
+  border-color: var(--color-primary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(230, 61, 193, 0.4);
+  box-shadow: 0 4px 15px rgba(15, 211, 211, 0.4);
 }
 
 .bi-cart3 {
-  color: #ff6b35;
+  color: var(--color-primary);
   font-size: 1rem;
   transition: all 0.3s ease;
 }
 
 header .position-relative .nav-link:hover .bi-cart3 {
-  color: #ffd700;
+  color: var(--color-primary-dark);
   transform: scale(1.2);
 }
 

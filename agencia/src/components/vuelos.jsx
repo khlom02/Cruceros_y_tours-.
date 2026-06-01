@@ -1,6 +1,6 @@
 import { Banner } from "./Banner";
 import { CardGrid } from "./CardGrid";
-import "../styles/grid_experiencias.css";
+import "../styles/card_cruceros.css";
 import SEO from './SEO.jsx';
 
 const Vuelos = () => {

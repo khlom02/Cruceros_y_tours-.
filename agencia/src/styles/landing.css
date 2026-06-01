@@ -32,12 +32,12 @@
 
 .btn_top_ventas:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(230, 61, 193, 0.4);
+  box-shadow: var(--shadow-md);
 }
 
 /* Promociones */
 .promociones {
-  background: linear-gradient(135deg, #e63dc1, #ff6b35);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   color: white;
   padding: 3rem 0;
   margin: 4rem 0;

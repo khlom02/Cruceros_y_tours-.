@@ -34,7 +34,7 @@
 
 .producto-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 35px rgba(230, 61, 193, 0.25);
+  box-shadow: var(--shadow-lg);
 }
 
 .producto-card img {
@@ -103,7 +103,7 @@
 
 .btn_ir_a_productos:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(230, 61, 193, 0.4);
+  box-shadow: var(--shadow-md);
 }
 
 /* Grid de productos - de products.css */

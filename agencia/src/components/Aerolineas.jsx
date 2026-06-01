@@ -7,8 +7,7 @@ const Aerolineas = () => {
   const defaultLogo = getSupabaseImageUrl("imagenes/tap_air.png");
   const resolveLogo = (logo) => {
     if (!logo || !logo.trim()) return defaultLogo;
-    // Si ya está en Supabase, usar tal cual; si no, convertir a Supabase
-    return logo.startsWith("http") ? logo : getSupabaseImageUrl(`imagenes/${logo}`);
+    return logo;
   };
   const getLogoStyle = (airline) => ({
     objectFit: airline.logoFit || "cover",

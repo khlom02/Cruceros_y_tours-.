@@ -5,11 +5,18 @@
   padding: 50px 64px;
   max-width: 1800px;
   margin: 0 auto;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 900px;
 }
 
 @media (max-width: 1200px) {
   .tours-grid {
     grid-template-columns: repeat(3, 1fr);
+    padding: 40px 40px;
+  }
+  .trenes-vehiculos-container {
+    gap: 60px;
+    padding: 40px 40px;
   }
 }
 
@@ -20,6 +27,8 @@
   padding: 50px 40px;
   max-width: 1800px;
   margin: 80px auto 0;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 600px;
 }
 
 .trenes-vehiculos-section {
@@ -29,11 +38,25 @@
   gap: 20px;
 }
 
+@media (max-width: 900px) {
+  .tours-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 30px 24px;
+  }
+  .trenes-vehiculos-container {
+    flex-direction: column;
+    gap: 40px;
+    padding: 30px 24px;
+    margin-top: 40px;
+  }
+}
+
 .section-title {
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
   font-weight: 600;
   color: #333;
-  font-family: "Chicago Police", sans-serif;
+  font-family: 'Lora', serif;
   margin: 0;
   text-align: center;
 }
@@ -261,9 +284,9 @@
 /* Responsivo */
 @media (max-width: 768px) {
   .tours-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
-    padding: 30px 32px;
+    padding: 24px 16px;
   }
 
   .grid-experiencia__card,
@@ -291,22 +314,67 @@
   }
 }
 
+@media (max-width: 600px) {
+  .tours-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    padding: 20px 14px;
+  }
+
+  .trenes-vehiculos-container {
+    padding: 24px 16px;
+    gap: 32px;
+  }
+
+  .cards-horizontal {
+    flex-direction: column;
+  }
+
+  .cards-horizontal .tour-card {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .tour-card {
+    min-height: 280px;
+  }
+
+  .tour-card__titulo,
+  .card_cruceros__titulo {
+    font-size: 1rem;
+  }
+
+  .tour-card__precio-valor,
+  .card_cruceros__precio-valor {
+    font-size: 1.4rem;
+  }
+}
+
 @media (max-width: 480px) {
   .tours-grid {
     grid-template-columns: 1fr;
     gap: 16px;
-    padding: 24px 20px;
+    padding: 16px 12px;
+  }
+
+  .trenes-vehiculos-container {
+    padding: 20px 12px;
   }
 
   .grid-experiencia__card,
   .tour-card,
   .card_cruceros {
-    min-height: 280px;
+    min-height: 260px;
   }
 
   .grid-experiencia__overlay,
   .tour-card__overlay,
   .card_cruceros__overlay {
-    padding: 20px;
+    padding: 16px;
+  }
+
+  .tour-card__precio-valor,
+  .card_cruceros__precio-valor {
+    font-size: 1.3rem;
   }
 }

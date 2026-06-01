@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { servicesData } from './services';
 import { CardGrid } from './CardGrid';
-import '../styles/tours_cards.css';
+import '../styles/card_cruceros.css';
 
 const tituloStyle = {
   textAlign: 'center',
