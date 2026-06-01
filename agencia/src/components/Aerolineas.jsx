@@ -107,7 +107,7 @@ const Aerolineas = () => {
       id: 12,
       nombre: "Turkish Airlines",
       tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/turkish.png"),
+      logo: getSupabaseImageUrl("imagenes/Turkish.png"),
       logoFit: "contain",
       logoScale: 1
     },
@@ -115,7 +115,7 @@ const Aerolineas = () => {
       id: 13,
       nombre: "American Airlines",
       tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/american_airlines.png"),
+      logo: getSupabaseImageUrl("imagenes/American_Airlines.png"),
       logoFit: "contain",
       logoScale: 2
     },
@@ -131,7 +131,7 @@ const Aerolineas = () => {
       id: 15,
       nombre: "Plus Ultra Líneas Aéreas",
       tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/plus_ultra.png"),
+      logo: getSupabaseImageUrl("imagenes/Plus_Ultra.png"),
       logoFit: "contain",
       logoScale: 1
     },
@@ -154,7 +154,7 @@ const Aerolineas = () => {
       id: 18,
       nombre: "Bolivariana de Aviación",
       tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/bolivariana.png"),
+      logo: getSupabaseImageUrl("imagenes/Bolivariana.png"),
       logoFit: "contain",
       logoScale: 1.5
     }
