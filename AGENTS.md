@@ -103,7 +103,7 @@ Cruceros_y_tours-./
 | `/login`, `/registro`, `/reset-password` | Auth pages |
 | `/perfil` | `Perfil` |
 | `/admin` | `AdminPanel` (protegido por `AdminRoute`) |
-| `*` | Redirige a `/` |
+| `*` | `NotFound` (página 404 personalizada con SEO noindex) |
 
 ---
 
@@ -176,11 +176,19 @@ Cruceros_y_tours-./
 - `rooms` — Tipos de habitaciones/cabinas con precios
 - `amenities` — Amenidades con iconos emoji
 - `highlights` — Descripciones destacadas
-- `profiles` — Perfiles de usuario (con campo `role`)
+- `profiles` — Perfiles de usuario (con campo `rol` varchar para privilegio admin)
 - `reservas` — Reservas con workflow de estados
 - `contactos` — Envíos del formulario de contacto
 - `suscripciones` — Planes de suscripción
 - `newsletter` — Suscripciones a newsletter
+
+### Campo de privilegio admin
+- Tabla: `profiles`
+- Campo: `rol` (VARCHAR, nullable)
+- Valor admin: cadena `'admin'`
+- La función `is_admin()` en Supabase encapsula la verificación.
+- Para asignar admin: `UPDATE profiles SET rol = 'admin' WHERE id = '<UUID>';`
+- **IMPORTANTE:** No existe campo `is_admin` boolean. El ejemplo comentado en `rls_supabase.sql` estaba equivocado.
 
 ---
 
@@ -219,6 +227,14 @@ El Dashboard de Vercel tiene **`Root Directory: agencia`**. Esto implica:
 1. **`vercel.json` debe estar en `agencia/vercel.json`**, no en la raíz del repo. El de la raíz es ignorado.
 2. **`buildCommand`** se ejecuta desde `agencia/`, por lo tanto es solo `npm install && npm run build` (sin `cd agencia`).
 3. **`outputDirectory`** es `dist` (relativo a `agencia/`).
+
+### Variables de entorno requeridas en Vercel Dashboard
+
+| Variable | Valor |
+|---|---|
+| `VITE_SUPABASE_URL` | URL del proyecto Supabase |
+| `VITE_SUPABASE_ANON_KEY` | Anon key pública de Supabase |
+| `VITE_TURNSTILE_SITE_KEY` | `0x4AAAAAADd6blXfpD5j1zCO` (clave pública Cloudflare Turnstile) |
 
 ### SPA fallback
 

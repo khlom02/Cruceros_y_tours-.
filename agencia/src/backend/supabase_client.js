@@ -5,7 +5,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export const TURNSTILE_SITE_KEY = "0x4AAAAAADd6blXfpD5j1zCO";
+export const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY ?? "0x4AAAAAADd6blXfpD5j1zCO";
 
 // ============================================
 // OBTENER CATEGORÍAS
