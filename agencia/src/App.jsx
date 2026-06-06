@@ -3,7 +3,9 @@ import './styles/variables.css';
 import './styles/base.css';
 import 'animate.css';
 import { HelmetProvider } from 'react-helmet-async';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useAuth, AuthProvider } from "./contexts/AuthContext.jsx";
 import ResetPassword from './components/ResetPassword.jsx';
 import Header from './components/header.jsx';
 import Footer from './components/footer.jsx';
@@ -17,7 +19,6 @@ import Cruceros from "./components/Cruceros.jsx";
 import ServiciosEspeciales from "./components/servicios_especiales.jsx";
 import ServicioCategoria from "./components/ServicioCategoria.jsx";
 import Vuelos from "./components/vuelos.jsx";
-import { AuthProvider } from "./contexts/AuthContext.jsx";
 import AdminPanel from "./components/AdminPanel.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
 import Perfil from "./components/Perfil.jsx";
@@ -27,6 +28,7 @@ import PoliticasPrivacidad from "./components/PoliticasPrivacidad.jsx";
 import Suscripciones from "./components/Suscripciones.jsx";
 import SobreNosotros from "./components/SobreNosotros.jsx";
 import NotFound from "./components/NotFound.jsx";
+import AutoLogout from "./components/AutoLogout.jsx";
 
 const FloatingCTA = () => {
   const location = useLocation();
@@ -39,11 +41,27 @@ const FloatingCTA = () => {
   );
 };
 
+const RecoveryGuard = () => {
+  const { isRecoverySession } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isRecoverySession && location.pathname !== "/reset-password") {
+      navigate("/reset-password", { replace: true });
+    }
+  }, [isRecoverySession, location.pathname, navigate]);
+
+  return null;
+};
+
 export default function App() {
   return (
     <HelmetProvider>
     <AuthProvider>
         <Router>
+          <RecoveryGuard />
+          <AutoLogout />
           <Header />
           <Routes>
             {/* Ruta para la página principal */}

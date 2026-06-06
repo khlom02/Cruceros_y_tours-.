@@ -36,10 +36,20 @@ const LandingPage = () => {
     "@type": "TravelAgency",
     "name": "Cruceros y Tours",
     "description": "Agencia de viajes especializada en cruceros de lujo, tours, vuelos y servicios especiales. Destinos en el Caribe, Mediterráneo y todo el mundo.",
-    "url": "https://crucerosytours.vercel.app",
-    "logo": "https://crucerosytours.vercel.app/logo_cruceros_y_tours_completo_color.png",
-    "image": "https://crucerosytours.vercel.app/logo_cruceros_y_tours_completo_color.png",
+    "url": "https://cruceros-y-tours.vercel.app",
+    "logo": "https://cruceros-y-tours.vercel.app/logo_cruceros_y_tours_completo_color.png",
+    "image": "https://cruceros-y-tours.vercel.app/logo_cruceros_y_tours_completo_color.png",
     "priceRange": "$$",
+    "telephone": "+58-424-560-1128",
+    "areaServed": { "@type": "Country", "name": "Venezuela" },
+    "foundingDate": "2015",
+    "sameAs": [
+      "https://wa.me/5842245601128"
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "VE"
+    },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "Servicios de viaje",

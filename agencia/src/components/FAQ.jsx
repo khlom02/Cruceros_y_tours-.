@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import SEO from './SEO.jsx';
 import '../styles/info-pages.css';
 
 const preguntas = [
@@ -37,8 +38,27 @@ const FAQ = () => {
 
   const toggle = (i) => setAbierto(abierto === i ? null : i);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": preguntas.map((item) => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.a
+      }
+    }))
+  };
+
   return (
     <main className="info-page">
+      <SEO
+        title="Preguntas Frecuentes"
+        description="Resuelve tus dudas sobre reservas, pagos, cancelaciones y más. Encuentra toda la información que necesitas para tu viaje con Cruceros y Tours."
+        canonical="/faq"
+        jsonLd={jsonLd}
+      />
       <div className="info-page__container">
         <h1 className="info-page__title">Preguntas Frecuentes</h1>
         <p className="info-page__subtitle">Resolvemos tus dudas más comunes sobre nuestros servicios.</p>

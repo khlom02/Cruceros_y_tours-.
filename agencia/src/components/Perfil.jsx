@@ -7,6 +7,7 @@ import {
   fetchReservasCliente,
   fetchSuscripcionCliente,
 } from "../backend/supabase_client";
+import SEO from './SEO.jsx';
 import "../styles/perfil.css";
 
 const ESTADOS_LABEL = {
@@ -93,7 +94,14 @@ export default function Perfil() {
       : user.email?.split("@")[0] || "Usuario";
 
   return (
-    <div className="perfil-page">
+    <>
+      <SEO
+        title="Mi Perfil"
+        description="Gestiona tu perfil, reservas y suscripciones en Cruceros y Tours. Revisa el estado de tus viajes y actualiza tu información personal."
+        canonical="/perfil"
+        noindex
+      />
+      <div className="perfil-page">
       <div className="perfil-container">
 
         {/* ── Cabecera ── */}
@@ -339,5 +347,6 @@ export default function Perfil() {
 
       </div>
     </div>
+    </>
   );
 }

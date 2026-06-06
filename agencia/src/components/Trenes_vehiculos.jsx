@@ -66,49 +66,46 @@ export const Trenesyvehiculos = () => {
       try {
         setCargando(true);
         
-        // Obtener categorías
         const categorias = await fetchCategories();
         
         if (!isMounted) return;
-        
-        // Cargar Trenes
+
         const categoriaTrenes = categorias.find(cat => cat.nombre.toLowerCase() === "trenes");
-        if (categoriaTrenes) {
-          const productosTrenes = await fetchProductsByCategory(categoriaTrenes.id);
-          if (isMounted) {
-          const trenesMapeados = productosTrenes.map(producto => ({
-              id: producto.id,
-              imagen: producto.imagen ? getSupabaseImageUrl(producto.imagen) : getSupabaseImageUrl("imagenes/tren-default.jpg"),
-              titulo: producto.titulo,
-              ubicacion: producto.ubicacion,
-              fechaInicio: producto.fecha_inicio?.slice(5, 10) || "N/A",
-              fechaFin: producto.fecha_fin?.slice(5, 10) || "N/A",
-              precio: producto.precio.toString(),
-              colorFondo: producto.color_fondo || "verde"
-            }));
-            setTrenesData(trenesMapeados);
-          }
-        }
-        
+        const categoriaVehiculos = categorias.find(cat => cat.nombre.toLowerCase() === "vehículos");
+
+        const [resultTrenes, resultVehiculos] = await Promise.all([
+          categoriaTrenes ? fetchProductsByCategory(categoriaTrenes.id) : Promise.resolve([]),
+          categoriaVehiculos ? fetchProductsByCategory(categoriaVehiculos.id) : Promise.resolve([]),
+        ]);
+
         if (!isMounted) return;
 
-        // Cargar Vehículos
-        const categoriaVehiculos = categorias.find(cat => cat.nombre.toLowerCase() === "vehículos");
+        if (categoriaTrenes) {
+          const trenesMapeados = resultTrenes.map(producto => ({
+            id: producto.id,
+            imagen: producto.imagen ? getSupabaseImageUrl(producto.imagen) : getSupabaseImageUrl("imagenes/tren-default.jpg"),
+            titulo: producto.titulo,
+            ubicacion: producto.ubicacion,
+            fechaInicio: producto.fecha_inicio?.slice(5, 10) || "N/A",
+            fechaFin: producto.fecha_fin?.slice(5, 10) || "N/A",
+            precio: producto.precio.toString(),
+            colorFondo: producto.color_fondo || "verde"
+          }));
+          setTrenesData(trenesMapeados);
+        }
+
         if (categoriaVehiculos) {
-          const productosVehiculos = await fetchProductsByCategory(categoriaVehiculos.id);
-          if (isMounted) {
-            const vehiculosMapeados = productosVehiculos.map(producto => ({
-              id: producto.id,
-              imagen: producto.imagen ? getSupabaseImageUrl(producto.imagen) : getSupabaseImageUrl("imagenes/vehiculo-default.jpg"),
-              titulo: producto.titulo,
-              ubicacion: producto.ubicacion,
-              fechaInicio: producto.fecha_inicio?.slice(5, 10) || "N/A",
-              fechaFin: producto.fecha_fin?.slice(5, 10) || "N/A",
-              precio: producto.precio.toString(),
-              colorFondo: producto.color_fondo || "verde"
-            }));
-            setVehiculosData(vehiculosMapeados);
-          }
+          const vehiculosMapeados = resultVehiculos.map(producto => ({
+            id: producto.id,
+            imagen: producto.imagen ? getSupabaseImageUrl(producto.imagen) : getSupabaseImageUrl("imagenes/vehiculo-default.jpg"),
+            titulo: producto.titulo,
+            ubicacion: producto.ubicacion,
+            fechaInicio: producto.fecha_inicio?.slice(5, 10) || "N/A",
+            fechaFin: producto.fecha_fin?.slice(5, 10) || "N/A",
+            precio: producto.precio.toString(),
+            colorFondo: producto.color_fondo || "verde"
+          }));
+          setVehiculosData(vehiculosMapeados);
         }
       } catch (error) {
         console.error("Error al cargar trenes y vehículos:", error);

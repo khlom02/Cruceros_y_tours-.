@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import '../styles/contacto.css';
 import { createContact } from '../backend/supabase_client';
 import SEO from './SEO.jsx';
+import TurnstileWidget from './TurnstileWidget.jsx';
 
 const RATE_LIMIT_KEY = "contacto_ultimo_envio";
 const RATE_LIMIT_MS = 60_000; // 60 segundos entre envíos
@@ -21,6 +22,8 @@ const Contacto = () => {
   const [enviado, setEnviado] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState(null);
+  const [turnstileKey, setTurnstileKey] = useState(0);
 
   const handleChange = (e) => {
     setFormData({
@@ -62,6 +65,11 @@ const Contacto = () => {
       return;
     }
 
+    if (!turnstileToken) {
+      setError("Esperando verificación de seguridad...");
+      return;
+    }
+
     setCargando(true);
 
     try {
@@ -70,20 +78,27 @@ const Contacto = () => {
         formData.email.trim(),
         formData.telefono.trim(),
         formData.asunto.trim(),
-        formData.mensaje.trim()
+        formData.mensaje.trim(),
+        turnstileToken
       );
 
       if (resultado) {
         localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
         setEnviado(true);
+        setTurnstileToken(null);
+        setTurnstileKey((k) => k + 1);
         setFormData({ nombre: "", email: "", telefono: "", asunto: "", mensaje: "" });
         setTimeout(() => setEnviado(false), 3000);
       } else {
         setError("Hubo un problema al enviar el mensaje. Intenta de nuevo.");
+        setTurnstileToken(null);
+        setTurnstileKey((k) => k + 1);
       }
     } catch (err) {
       console.error("Error al enviar contacto:", err);
       setError("Error al enviar el mensaje. Por favor intenta de nuevo.");
+      setTurnstileToken(null);
+      setTurnstileKey((k) => k + 1);
     } finally {
       setCargando(false);
     }
@@ -212,6 +227,7 @@ const Contacto = () => {
                   </small>
                 </div>
 
+                <TurnstileWidget key={turnstileKey} onToken={setTurnstileToken} />
                 <button type="submit" className="btn-send-message" disabled={cargando}>
                   {cargando ? "Enviando..." : "Enviar mensaje"}
                 </button>

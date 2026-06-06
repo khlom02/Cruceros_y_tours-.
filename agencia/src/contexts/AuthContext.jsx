@@ -16,6 +16,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isRecoverySession, setIsRecoverySession] = useState(
+    () => window.location.hash.includes("type=recovery")
+  );
 
   useEffect(() => {
     // Obtener la sesión actual
@@ -28,10 +31,11 @@ export const AuthProvider = ({ children }) => {
     // Escuchar cambios en la autenticación
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
+      if (event === "SIGNED_OUT") setIsRecoverySession(false);
     });
 
     return () => subscription.unsubscribe();
@@ -112,6 +116,7 @@ export const AuthProvider = ({ children }) => {
     user,
     session,
     loading,
+    isRecoverySession,
     signIn,
     signUp,
     signInWithOAuth,

@@ -12,6 +12,7 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^7.1.0",
     "@fortawesome/react-fontawesome": "^3.1.1",
+    "@marsidev/react-turnstile": "^1.5.2",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/supabase-js": "^2.81.1",
     "animate.css": "^4.1.1",

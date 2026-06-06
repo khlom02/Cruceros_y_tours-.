@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { servicesData } from './services';
 import { CardGrid } from './CardGrid';
+import SEO from './SEO.jsx';
 import '../styles/card_cruceros.css';
 
 const tituloStyle = {
@@ -36,6 +37,11 @@ const ServicioCategoria = () => {
 
   return (
     <div style={{ minHeight: '60vh', padding: '0 0 60px' }}>
+      <SEO
+        title={seccion.titulo}
+        description={`Explora nuestros servicios de ${seccion.titulo.toLowerCase()}. Encuentra las mejores opciones para tu viaje con Cruceros y Tours.`}
+        canonical={`/servicios_especiales/${categoria}`}
+      />
       <h2 style={tituloStyle}>{seccion.titulo}</h2>
       <CardGrid
         categoryName={seccion.categoryName}

@@ -5,6 +5,8 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+export const TURNSTILE_SITE_KEY = "0x4AAAAAADd6blXfpD5j1zCO";
+
 // ============================================
 // OBTENER CATEGORÍAS
 // ============================================
@@ -78,7 +80,6 @@ export const fetchProducts = async () => {
 // ============================================
 export const fetchProductById = async (id) => {
   try {
-    // Obtener producto base
     const { data: producto, error: errorProducto } = await supabase
       .from("productos")
       .select("id, titulo, descripcion, precio, imagen, imagen_url, ubicacion, rating, cantidad_reviews, categoria_id, fecha_inicio, fecha_fin")
@@ -90,47 +91,21 @@ export const fetchProductById = async (id) => {
       return null;
     }
 
-    // Obtener detalles específicos de cruceros (si aplica)
-    const { data: detallesCrucero } = await supabase
-      .from("detalles_cruceros")
-      .select("*")
-      .eq("producto_id", id)
-      .maybeSingle();
-
-    // Obtener galerías
-    const { data: galleries } = await supabase
-      .from("galleries")
-      .select("id, imagen_url, posicion_orden")
-      .eq("producto_id", id)
-      .order("posicion_orden", { ascending: true });
-
-    // Obtener habitaciones
-    const { data: rooms } = await supabase
-      .from("rooms")
-      .select("id, titulo, descripcion, precio, imagen_url")
-      .eq("producto_id", id)
-      .order("id", { ascending: true });
-
-    // Obtener amenidades
-    const { data: amenities } = await supabase
-      .from("amenities")
-      .select("id, nombre, icono_emoji")
-      .eq("producto_id", id);
-
-    // Obtener highlights
-    const { data: highlights } = await supabase
-      .from("highlights")
-      .select("id, descripcion")
-      .eq("producto_id", id)
-      .order("posicion_orden", { ascending: true });
+    const [resultCrucero, resultGalleries, resultRooms, resultAmenities, resultHighlights] = await Promise.all([
+      supabase.from("detalles_cruceros").select("*").eq("producto_id", id).maybeSingle(),
+      supabase.from("galleries").select("id, imagen_url, posicion_orden").eq("producto_id", id).order("posicion_orden", { ascending: true }),
+      supabase.from("rooms").select("id, titulo, descripcion, precio, imagen_url").eq("producto_id", id).order("id", { ascending: true }),
+      supabase.from("amenities").select("id, nombre, icono_emoji").eq("producto_id", id),
+      supabase.from("highlights").select("id, descripcion").eq("producto_id", id).order("posicion_orden", { ascending: true }),
+    ]);
 
     return {
       ...producto,
-      detalles_crucero: detallesCrucero || {},
-      gallery: galleries?.map(g => g.imagen_url) || [],
-      rooms: rooms || [],
-      amenities: amenities || [],
-      highlights: highlights?.map(h => h.descripcion) || [],
+      detalles_crucero: resultCrucero?.data || {},
+      gallery: resultGalleries?.data?.map(g => g.imagen_url) || [],
+      rooms: resultRooms?.data || [],
+      amenities: resultAmenities?.data || [],
+      highlights: resultHighlights?.data?.map(h => h.descripcion) || [],
     };
   } catch (err) {
     console.error("Error inesperado al obtener producto con detalles:", err);
@@ -385,42 +360,21 @@ export const fetchProductAdminById = async (id) => {
       return null;
     }
 
-    const { data: detallesCrucero } = await supabase
-      .from("detalles_cruceros")
-      .select("*")
-      .eq("producto_id", id)
-      .maybeSingle();
-
-    const { data: galleries } = await supabase
-      .from("galleries")
-      .select("id, imagen_url, posicion_orden")
-      .eq("producto_id", id)
-      .order("posicion_orden", { ascending: true });
-
-    const { data: rooms } = await supabase
-      .from("rooms")
-      .select("id, titulo, descripcion, precio, imagen_url")
-      .eq("producto_id", id)
-      .order("id", { ascending: true });
-
-    const { data: amenities } = await supabase
-      .from("amenities")
-      .select("id, nombre, icono_emoji")
-      .eq("producto_id", id);
-
-    const { data: highlights } = await supabase
-      .from("highlights")
-      .select("id, descripcion, posicion_orden")
-      .eq("producto_id", id)
-      .order("posicion_orden", { ascending: true });
+    const [resultCrucero, resultGalleries, resultRooms, resultAmenities, resultHighlights] = await Promise.all([
+      supabase.from("detalles_cruceros").select("*").eq("producto_id", id).maybeSingle(),
+      supabase.from("galleries").select("id, imagen_url, posicion_orden").eq("producto_id", id).order("posicion_orden", { ascending: true }),
+      supabase.from("rooms").select("id, titulo, descripcion, precio, imagen_url").eq("producto_id", id).order("id", { ascending: true }),
+      supabase.from("amenities").select("id, nombre, icono_emoji").eq("producto_id", id),
+      supabase.from("highlights").select("id, descripcion, posicion_orden").eq("producto_id", id).order("posicion_orden", { ascending: true }),
+    ]);
 
     return {
       ...producto,
-      detalles_crucero: detallesCrucero || null,
-      gallery: galleries || [],
-      rooms: rooms || [],
-      amenities: amenities || [],
-      highlights: highlights || [],
+      detalles_crucero: resultCrucero?.data || null,
+      gallery: resultGalleries?.data || [],
+      rooms: resultRooms?.data || [],
+      amenities: resultAmenities?.data || [],
+      highlights: resultHighlights?.data || [],
     };
   } catch (err) {
     console.error("Error inesperado al obtener producto admin:", err);
@@ -454,10 +408,42 @@ export const deleteProductAndRelated = async (id) => {
 };
 
 // ============================================
+// VALIDAR TOKEN DE TURNSTILE (Cloudflare)
+// ============================================
+async function validateTurnstileToken(token) {
+  if (!token) return false;
+  try {
+    const { data, error } = await supabase.functions.invoke("validate-turnstile", {
+      body: { token },
+    });
+    if (error) {
+      if (error.message?.includes("not found") || error.message?.includes("Failed to fetch")) {
+        console.warn("Edge Function validate-turnstile no disponible — saltando validación server-side");
+        return true;
+      }
+      console.error("Error al validar Turnstile:", error);
+      return false;
+    }
+    return data?.success === true;
+  } catch (err) {
+    console.error("Error inesperado validando Turnstile:", err);
+    return false;
+  }
+}
+
+// ============================================
 // FUNCIONES PARA CONTACTOS
 // ============================================
-export const createContact = async (nombre, email, telefono, asunto, mensaje) => {
+export const createContact = async (nombre, email, telefono, asunto, mensaje, turnstileToken) => {
   try {
+    if (turnstileToken) {
+      const valido = await validateTurnstileToken(turnstileToken);
+      if (!valido) {
+        console.error("Token de Turnstile inválido");
+        return null;
+      }
+    }
+
     const { data, error } = await supabase
       .from("contactos")
       .insert({
@@ -746,8 +732,15 @@ export const updateSuscripcionEstado = async (id, estado) => {
 // ============================================
 // NEWSLETTER
 // ============================================
-export const subscribeNewsletter = async (email) => {
+export const subscribeNewsletter = async (email, turnstileToken) => {
   try {
+    if (turnstileToken) {
+      const valido = await validateTurnstileToken(turnstileToken);
+      if (!valido) {
+        return { success: false, msg: "Error de verificación de seguridad. Intenta de nuevo." };
+      }
+    }
+
     const { error } = await supabase
       .from("newsletter")
       .insert({ email })
@@ -764,5 +757,24 @@ export const subscribeNewsletter = async (email) => {
   } catch (err) {
     console.error("Error inesperado newsletter:", err);
     return { success: false, msg: "Ocurrió un error. Intenta de nuevo." };
+  }
+};
+
+// ============================================
+// VERIFICAR SI UN EMAIL ESTÁ REGISTRADO
+// ============================================
+export const checkEmailExists = async (email) => {
+  try {
+    const { data, error } = await supabase.rpc("check_email_exists", {
+      email_to_check: email,
+    });
+    if (error) {
+      console.error("Error al verificar email:", error);
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.error("Error inesperado al verificar email:", err);
+    return null;
   }
 };

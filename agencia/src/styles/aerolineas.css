@@ -1,180 +1,82 @@
-/* ====================================================================== */
-/* COMPONENTE AEROLINEAS - ESTILOS OPTIMIZADOS */
-/* ====================================================================== */
-:root {
-  --btn-border-radius: 10px;
-}
+/* ═══════════════════════════════════════════════════
+   AEROLINEAS — Static card grid (SEO-optimized)
+   All content visible in HTML, each card links to /vuelos
+═══════════════════════════════════════════════════ */
 
 .aerolineas-container {
   padding: 72px 16px;
   background: white;
-  max-width: 100%;
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 700px;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
 .aerolineas-content {
-  display: flex;
-  gap: 48px;
-  max-width: 100%;
-  margin: 0 auto;
-  align-items: flex-start;
-  padding: 0 28px;
-}
-
-/* Sección de botones */
-.aerolineas-buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 14px;
-  flex: 1;
-  pointer-events: all;
-  z-index: 10;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
 }
 
-.airline-btn {
-  padding: 10px 12px;
-  border: 2px solid #000000;
-  background: white;
-  border-radius: var(--btn-border-radius);
-  font-size: 1.05rem;
-  font-family: 'Lora', serif;
-  color: #555;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  font-weight: 500;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-  text-align: center;
-  line-height: 1.4;
-  position: relative;
-  z-index: 1;
-  pointer-events: all;
-  user-select: none;
-  -webkit-user-select: none;
+/* ── Card individual ── */
+.airline-card-link {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 74px;
-}
-
-.airline-btn-logo {
-  width: 100%;
-  height: 46px;
-  object-fit: contain;
-  transform-origin: center;
-}
-
-.airline-btn-text {
-  text-align: left;
-}
-
-.airline-btn:hover {
-  border-color: #0077b6;
-  color: #0077b6;
-  background: rgba(0, 180, 216, 0.06);
-  box-shadow: 0 4px 12px rgba(0, 119, 182, 0.12);
-  transform: translateY(-2px);
-}
-
-.airline-btn.active {
-  background: linear-gradient(135deg, #00b4d8 0%, #0077b6 50%, #023e8a 100%);
-  color: white;
-  border-color: #023e8a;
-  box-shadow: 0 8px 25px rgba(0, 119, 182, 0.28);
-}
-
-/* Tarjeta de información */
-.airline-card {
-  flex: 0 0 clamp(300px, 50vw, 460px);
-  background: white;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06), 
-              0 10px 20px rgba(0, 119, 182, 0.1),
-              0 15px 35px rgba(0, 119, 182, 0.06);
-  padding: 44px;
-  position: sticky;
-  top: 100px;
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border: 3px solid #000;
+  text-align: center;
+  gap: 10px;
+  padding: 24px 16px 20px;
+  border: 2px solid #000;
   border-radius: 12px;
-  align-self: flex-start;
+  background: white;
+  text-decoration: none;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              box-shadow 0.25s ease,
+              border-color 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  contain: layout style;
 }
 
-.airline-card-content {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+.airline-card-link:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 119, 182, 0.15),
+              0 2px 6px rgba(0, 0, 0, 0.06);
+  border-color: #0077b6;
 }
 
+.airline-card-link:focus-visible {
+  outline: 3px solid #0077b6;
+  outline-offset: 2px;
+}
+
+/* ── Logo ── */
 .airline-card-logo {
-  width: 150px;
-  height: 66px;
+  width: 100%;
+  height: 56px;
   object-fit: contain;
-  align-self: flex-start;
-  transform-origin: center;
+  pointer-events: none;
 }
 
-.airline-name {
-  margin: 0;
-  font-size: 2.2rem;
+/* ── Nombre de la aerolínea ── */
+.airline-card-name {
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
   font-weight: 700;
-  background: linear-gradient(135deg, #023e8a 0%, #0077b6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-family: 'Photogenic', serif;
-  line-height: 1.2;
-  letter-spacing: -0.5px;
+  color: #003366;
+  font-family: 'Chicago Police', sans-serif;
+  line-height: 1.3;
+  margin-top: 4px;
 }
 
-.airline-tarifa {
+/* ── Tarifa ── */
+.airline-card-tarifa {
   margin: 0;
-  font-size: 0.98rem;
-  color: #666;
+  font-size: clamp(0.72rem, 1.5vw, 0.8rem);
+  color: #555;
   font-family: 'Lora', serif;
-  line-height: 1.9;
+  line-height: 1.5;
 }
 
-/* Responsivo */
-@media (max-width: 1200px) {
-  .aerolineas-content {
-    gap: 40px;
-    padding: 0 24px;
-  }
-
-  .airline-card {
-    flex: 0 0 420px;
-    padding: 40px;
-    min-height: 380px;
-  }
-
-  .airline-name {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 1024px) {
-  .aerolineas-container {
-    padding: 64px 16px;
-  }
-
-  .aerolineas-content {
-    flex-direction: column;
-    gap: 40px;
-    padding: 0;
-  }
-
-  .airline-card {
-    flex: 1;
-    position: static;
-  }
-
-  .aerolineas-buttons {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  }
-}
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════ */
 
 @media (max-width: 900px) {
   .aerolineas-container {
@@ -182,21 +84,16 @@
   }
 
   .aerolineas-content {
-    flex-direction: column;
-    gap: 32px;
-    padding: 0;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
   }
 
-  .airline-card {
-    flex: 1;
-    position: static;
-    padding: 36px;
-    min-height: auto;
+  .airline-card-link {
+    padding: 20px 14px 16px;
   }
 
-  .aerolineas-buttons {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
+  .airline-card-logo {
+    height: 46px;
   }
 }
 
@@ -205,100 +102,23 @@
     padding: 48px 12px;
   }
 
-  .aerolineas-buttons {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .airline-btn {
-    font-size: 0.85rem;
-    padding: 10px 12px;
-  }
-
-  .airline-card {
-    padding: 28px;
-    min-height: auto;
-    flex: 1;
-    position: static;
-  }
-
-  .airline-name {
-    font-size: 1.5rem;
-  }
-
-  .airline-tarifa {
-    font-size: 0.88rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .aerolineas-container {
-    padding: 52px 14px;
-  }
-
   .aerolineas-content {
-    gap: 30px;
-  }
-
-  .aerolineas-buttons {
     grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+    gap: 12px;
   }
 
-  .airline-btn {
-    font-size: 0.82rem;
-    padding: 10px 12px;
+  .airline-card-link {
+    padding: 16px 10px 14px;
+    border-width: 1.5px;
   }
 
-  .airline-name {
-    font-size: 1.7rem;
-  }
-
-  .airline-card {
-    padding: 36px;
-    min-height: auto;
-    border: 3px solid #000;
-  }
-
-  .airline-tarifa {
-    font-size: 0.9rem;
+  .airline-card-logo {
+    height: 38px;
   }
 }
 
-@media (max-width: 480px) {
-  .aerolineas-container {
-    padding: 44px 12px;
-  }
-
+@media (max-width: 400px) {
   .aerolineas-content {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .aerolineas-buttons {
     grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .airline-btn {
-    font-size: 0.78rem;
-    padding: 9px 11px;
-  }
-
-  .airline-card {
-    padding: 30px;
-    min-height: auto;
-    flex: 1;
-    position: static;
-    border: 3px solid #000;
-  }
-
-  .airline-name {
-    font-size: 1.25rem;
-  }
-
-  .airline-tarifa {
-    font-size: 0.9rem;
-    line-height: 1.7;
   }
 }

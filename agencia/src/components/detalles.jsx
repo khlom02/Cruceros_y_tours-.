@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import SEO from './SEO.jsx';
 import "../styles/detalles.css";
 import { fetchProductById, fetchSpecialServiceByKey, createReserva } from "../backend/supabase_client";
 import { useAuth } from "../contexts/AuthContext";
@@ -97,11 +98,9 @@ const Detalles = () => {
     const [reservaMsg, setReservaMsg] = useState(null);
     const [reservaEnviada, setReservaEnviada] = useState(false);
 
-    // Pre-rellenar email si el usuario está autenticado
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (user?.email) {
-            // eslint-disable-next-line react-hooks/rules-of-hooks
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setReservaForm((prev) => ({ ...prev, email: user.email }));
         }
     }, [user?.email]);
@@ -149,9 +148,8 @@ const Detalles = () => {
 
     const gallery = useMemo(() => detalle?.gallery || [], [detalle]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setActiveIndex(0);
     }, [gallery.length]);
 
@@ -199,8 +197,18 @@ const Detalles = () => {
         );
     }
 
+    const productTitle = detalle?.title || "Detalles del producto";
+    const productDescription = detalle?.description?.substring(0, 160) || `Información detallada sobre ${productTitle}. Reserva tu paquete con Cruceros y Tours.`;
+
     return (
-        <div className="detalles-page">
+        <>
+            <SEO
+                title={productTitle}
+                description={productDescription}
+                canonical={`/detalles?id=${detalleId}${detalleTipo ? `&tipo=${detalleTipo}` : ''}`}
+                image={detalle?.gallery?.[0] || undefined}
+            />
+            <div className="detalles-page">
             <section className="detalles-hero">
                 <div className="detalles-gallery">
                     {activeImage ? (
@@ -255,7 +263,7 @@ const Detalles = () => {
                         {detalle.location && (
                             <span className="detalles-location">{detalle.location}</span>
                         )}
-                        {detalle.rating && (
+                        {detalle.rating != null && (
                             <span className="detalles-rating">
                                 {detalle.rating}
                                 {detalle.reviews ? ` (${detalle.reviews})` : ""}
@@ -503,7 +511,7 @@ const Detalles = () => {
               </div>
             </section>
         </div>
-
+      </>
     );
 };
 

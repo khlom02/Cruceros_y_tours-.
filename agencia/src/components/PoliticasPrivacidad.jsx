@@ -1,9 +1,15 @@
 import React from "react";
+import SEO from './SEO.jsx';
 import '../styles/info-pages.css';
 
-const PoliticasPrivacidad = () => {
+const PoliticasPrivacidad = React.memo(() => {
   return (
     <main className="info-page">
+      <SEO
+        title="Políticas de Privacidad"
+        description="Conoce cómo manejamos tu información personal en Cruceros y Tours. Políticas de privacidad, cookies y protección de datos de nuestra plataforma de viajes."
+        canonical="/politicas-privacidad"
+      />
       <div className="info-page__container">
         <h1 className="info-page__title">Políticas de Privacidad</h1>
         <p className="info-page__subtitle">Última actualización: abril 2025</p>
@@ -63,6 +69,6 @@ const PoliticasPrivacidad = () => {
       </div>
     </main>
   );
-};
+});
 
 export default PoliticasPrivacidad;

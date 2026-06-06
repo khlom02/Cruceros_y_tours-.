@@ -1,10 +1,33 @@
 import React from "react";
+import SEO from './SEO.jsx';
 import '../styles/info-pages.css';
 import '../styles/sobre-nosotros.css';
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "Sobre Nosotros — Cruceros y Tours",
+  "description": "Agencia de viajes venezolana con más de 10 años de experiencia organizando cruceros, tours y vuelos internacionales.",
+  "mainContentOfPage": {
+    "@type": "WebPageElement",
+    "about": {
+      "@type": "TravelAgency",
+      "name": "Cruceros y Tours",
+      "foundingDate": "2015",
+      "areaServed": { "@type": "Country", "name": "Venezuela" }
+    }
+  }
+};
 
 const SobreNosotros = () => {
   return (
     <main className="info-page">
+      <SEO
+        title="Sobre Nosotros"
+        description="Agencia de viajes venezolana con más de 10 años de experiencia. Especialistas en cruceros de lujo, tours personalizados y vuelos internacionales."
+        canonical="/nosotros"
+        jsonLd={jsonLd}
+      />
       <div className="info-page__container">
         <h1 className="info-page__title">Sobre Nosotros</h1>
         <p className="info-page__subtitle">

@@ -5,6 +5,7 @@ import {
   createSuscripcion,
   fetchSuscripcionCliente,
 } from "../backend/supabase_client";
+import SEO from './SEO.jsx';
 import '../styles/info-pages.css';
 
 const PLANES = [
@@ -103,6 +104,11 @@ const Suscripciones = () => {
 
   return (
     <main className="info-page">
+      <SEO
+        title="Planes de Suscripción"
+        description="Elige tu plan de suscripción: Gratuito, Viajero o Premium. Disfruta de descuentos exclusivos, atención prioritaria y beneficios personalizados para tus viajes."
+        canonical="/suscripciones"
+      />
       <div className="info-page__container">
         <h1 className="info-page__title">Planes de Suscripción</h1>
         <p className="info-page__subtitle">

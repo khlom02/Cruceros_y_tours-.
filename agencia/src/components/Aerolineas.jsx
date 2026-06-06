@@ -1,215 +1,89 @@
-import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import "../styles/aerolineas.css";
 import { getSupabaseImageUrl } from "../utils/imageHelper";
 
-const Aerolineas = () => {
-  const [selectedAirline, setSelectedAirline] = useState(null);
-  const defaultLogo = getSupabaseImageUrl("imagenes/tap_air.png");
-  const resolveLogo = (logo) => {
-    if (!logo || !logo.trim()) return defaultLogo;
-    return logo;
-  };
-  const getLogoStyle = (airline) => ({
-    objectFit: airline.logoFit || "cover",
-    transform: `scale(${airline.logoScale ?? 1})`,
-  });
+const defaultLogo = getSupabaseImageUrl("imagenes/tap_air.png");
 
-  const airlines = [
-    {
-      id: 1,
-      nombre: "Tap air Portugal",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/tap_air.png"),
-      logoFit: "contain",
-      logoScale: 1
-    },
-    {
-      id: 2,
-      nombre: "Copa Airlines",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/copa_airlines.jpg"),
-      logoFit: "cover",
-      logoScale: 1.1
-    },
-    {
-      id: 3,
-      nombre: "turpial airlines",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/turpial.png"),
-      logoFit: "contain",
-      logoScale: 1.5
-    },
-    {
-      id: 4,
-      nombre: "Iberia",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/iberia.png"),
-      logoFit: "contain",
-      logoScale: 1.5
-    },
-    {
-      id: 5,
-      nombre: "Air Europa",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/air_europa.png"),
-      logoFit: "contain",
-      logoScale: 3
-    },
-    {
-      id: 6,
-      nombre: "Latam Airlines",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/latam.png"),
-      logoFit: "contain",
-      logoScale: 1
-    },
-    {
-      id: 7,
-      nombre: "Avior Airlines",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/avior.jpg"),
-      logoFit: "cover",
-      logoScale: 1
-    },
-    {
-      id: 8,
-      nombre: "Aeropostal",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/aeropostal.png"),
-      logoFit: "contain",
-      logoScale: 1.5
-    },
-    {
-      id: 9,
-      nombre: "Aerocaribe",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/aerocaribe.png"),
-      logoFit: "contain",
-      logoScale: 1
-    },
-    {
-      id: 10,
-      nombre: "Venezolana de aviación",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/venezolana.png"),
-      logoFit: "contain",
-      logoScale: 1
-    },
-    {
-      id: 11,
-      nombre: "Rutaca Airlines",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/rutaca.jpeg"),
-      logoFit: "cover",
-      logoScale: 1
-    },
-    {
-      id: 12,
-      nombre: "Turkish Airlines",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/Turkish.png"),
-      logoFit: "contain",
-      logoScale: 1
-    },
-    {
-      id: 13,
-      nombre: "American Airlines",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/American_Airlines.png"),
-      logoFit: "contain",
-      logoScale: 2
-    },
-    {
-      id: 14,
-      nombre: "Estelar Latinoamérica",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/estelar.jpeg"),
-      logoFit: "cover",
-      logoScale: 1
-    },
-    {
-      id: 15,
-      nombre: "Plus Ultra Líneas Aéreas",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/Plus_Ultra.png"),
-      logoFit: "contain",
-      logoScale: 1
-    },
-      {
-      id: 16,
-      nombre: "Conviasa",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/conviasa.png"),
-      logoFit: "contain",
-      logoScale:1
-    },
-      {
-      id: 17,
-      nombre: "Gol Airlines",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/gol.png"),
-      logoFit: "contain",
-      logoScale: 1
-    },  {
-      id: 18,
-      nombre: "Bolivariana de Aviación",
-      tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%",
-      logo: getSupabaseImageUrl("imagenes/Bolivariana.png"),
-      logoFit: "contain",
-      logoScale: 1.5
-    }
-  ];
+const resolveLogo = (logo) => {
+  if (!logo || !logo.trim()) return defaultLogo;
+  return logo;
+};
 
-  const defaultAirline = {
-    tarifa: "Haz clic en una de las opciones para ver los detalles",
-    logo: "",
-    logoFit: "cover",
-    logoScale: 1
-  };
+const getLogoStyle = (airline) => ({
+  objectFit: airline.logoFit || "cover",
+  transform: `scale(${airline.logoScale ?? 1})`,
+});
 
-  const airline = selectedAirline || defaultAirline;
+const airlines = [
+  { id: "tap", nombre: "Tap Air Portugal", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/tap_air.png"), logoFit: "contain", logoScale: 1 },
+  { id: "copa", nombre: "Copa Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/copa_airlines.jpg"), logoFit: "cover", logoScale: 1.1 },
+  { id: "turpial", nombre: "Turpial Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/turpial.png"), logoFit: "contain", logoScale: 1.5 },
+  { id: "iberia", nombre: "Iberia", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/iberia.png"), logoFit: "contain", logoScale: 1.5 },
+  { id: "air-europa", nombre: "Air Europa", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/air_europa.png"), logoFit: "contain", logoScale: 3 },
+  { id: "latam", nombre: "Latam Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/latam.png"), logoFit: "contain", logoScale: 1 },
+  { id: "avior", nombre: "Avior Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/avior.jpg"), logoFit: "cover", logoScale: 1 },
+  { id: "aeropostal", nombre: "Aeropostal", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/aeropostal.png"), logoFit: "contain", logoScale: 1.5 },
+  { id: "aerocaribe", nombre: "Aerocaribe", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/aerocaribe.png"), logoFit: "contain", logoScale: 1 },
+  { id: "venezolana", nombre: "Venezolana de Aviación", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/venezolana.png"), logoFit: "contain", logoScale: 1 },
+  { id: "rutaca", nombre: "Rutaca Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/rutaca.jpeg"), logoFit: "cover", logoScale: 1 },
+  { id: "turkish", nombre: "Turkish Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/Turkish.png"), logoFit: "contain", logoScale: 1 },
+  { id: "american", nombre: "American Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/American_Airlines.png"), logoFit: "contain", logoScale: 2 },
+  { id: "estelar", nombre: "Estelar Latinoamérica", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/estelar.jpeg"), logoFit: "cover", logoScale: 1 },
+  { id: "plus-ultra", nombre: "Plus Ultra Líneas Aéreas", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/Plus_Ultra.png"), logoFit: "contain", logoScale: 1 },
+  { id: "conviasa", nombre: "Conviasa", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/conviasa.png"), logoFit: "contain", logoScale: 1 },
+  { id: "gol", nombre: "Gol Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/gol.png"), logoFit: "contain", logoScale: 1 },
+  { id: "bolivariana", nombre: "Bolivariana de Aviación", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/Bolivariana.png"), logoFit: "contain", logoScale: 1.5 },
+];
 
-  return (
+const itemListJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Aerolíneas disponibles - Cruceros y Tours",
+  "description": "Lista de aerolíneas con tarifas comisionables para vuelos nacionales e internacionales.",
+  "numberOfItems": airlines.length,
+  "itemListElement": airlines.map((a, i) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "item": {
+      "@type": "Airline",
+      "name": a.nombre,
+      "description": a.tarifa,
+      "url": `https://cruceros-y-tours.vercel.app/vuelos?aerolinea=${a.id}`,
+    },
+  })),
+};
+
+const Aerolineas = () => (
+  <>
+    <Helmet>
+      <script type="application/ld+json">
+        {JSON.stringify(itemListJsonLd)}
+      </script>
+    </Helmet>
     <div className="aerolineas-container">
       <div className="aerolineas-content">
-        {/* Sección de botones */}
-        <div className="aerolineas-buttons">
-          {airlines.map((airline) => (
-            <button
-              key={airline.id}
-              className={`airline-btn ${selectedAirline?.id === airline.id ? "active" : ""}`}
-              data-airline={airline.nombre?.toLowerCase() || ""}
-              onClick={() => setSelectedAirline(airline)}
-            >
-              <img
-                className="airline-btn-logo"
-                src={resolveLogo(airline.logo)}
-                style={getLogoStyle(airline)}
-                alt=""
-                loading="lazy"
-                decoding="async"
-              />
-            </button>
-          ))}
-        </div>
-
-        {/* Sección de tarjeta de información */}
-        <div className="airline-card">
-          <div className="airline-card-content">
+        {airlines.map((airline) => (
+          <Link
+            key={airline.id}
+            to={`/vuelos?aerolinea=${airline.id}`}
+            className="airline-card-link"
+          >
             <img
               className="airline-card-logo"
               src={resolveLogo(airline.logo)}
               style={getLogoStyle(airline)}
-              alt=""
+              alt={`Logo ${airline.nombre}`}
               loading="lazy"
               decoding="async"
             />
-            <p className="airline-tarifa">{airline.tarifa}</p>
-          </div>
-        </div>
+            <span className="airline-card-name">{airline.nombre}</span>
+            <p className="airline-card-tarifa">{airline.tarifa}</p>
+          </Link>
+        ))}
       </div>
     </div>
-  );
-};
+  </>
+);
 
 export default Aerolineas;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import Filtro, { aplicarFiltros } from "./filtro";
 import { fetchCategories, fetchProductsByCategory } from "../backend/supabase_client";
@@ -8,7 +8,7 @@ import { getSupabaseImageUrl } from "../utils/imageHelper";
  * Componente de Card genérico reutilizable
  * Proporciona la estructura visual de una tarjeta de producto
  */
-export const ProductCard = ({ 
+export const ProductCard = memo(function ProductCard({ 
   imagen, 
   titulo, 
   ubicacion, 
@@ -19,7 +19,7 @@ export const ProductCard = ({
   onClick = null,
   cardRootClassName = "card",
   cardBaseClassName = ""
-}) => {
+}) {
   const colores = {
     verde: "#5a8a66",
     verdeOscuro: "#4a7556",
@@ -59,7 +59,7 @@ export const ProductCard = ({
       </div>
     </div>
   );
-};
+});
 
 /**
  * Grid genérico reutilizable para cualquier categoría
@@ -76,7 +76,8 @@ export const CardGrid = ({
   cardRootClassName = "",
   cardBaseClassName = "",
   cardClassName = "",
-  withFilters = true
+  withFilters = true,
+  airlineFilter = ""
 }) => {
   const navigate = useNavigate();
   const [datosProductos, setDatosProductos] = useState([]);
@@ -128,7 +129,15 @@ export const CardGrid = ({
             colorFondo: producto.color_fondo || "verde"
           }));
           
-          setDatosProductos(productosMapeados);
+          const productosConFiltro = airlineFilter
+            ? productosMapeados.filter((p) =>
+                [p.titulo, p.ubicacion].some((campo) =>
+                  campo.toLowerCase().includes(airlineFilter.toLowerCase())
+                )
+              )
+            : productosMapeados;
+
+          setDatosProductos(productosConFiltro);
         } else {
           console.warn(`Categoría '${categoryName}' no encontrada en la DB`);
           setDatosProductos([]);
@@ -146,7 +155,7 @@ export const CardGrid = ({
     return () => {
       isMounted = false;
     };
-  }, [categoryName]);
+  }, [categoryName, airlineFilter]);
 
   const handleFilterChange = (nuevosFiltros) => {
     setFiltros(nuevosFiltros);

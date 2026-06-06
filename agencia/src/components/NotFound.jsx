@@ -1,11 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import SEO from './SEO.jsx';
 import '../styles/info-pages.css';
 import '../styles/not-found.css';
 
-const NotFound = () => {
+const NotFound = React.memo(() => {
   return (
     <main className="notfound-page">
+      <SEO
+        title="Página no encontrada — Error 404"
+        description="La página que buscas no existe o fue movida. Explora nuestros cruceros, tours y vuelos para encontrar tu próximo destino."
+        noindex
+      />
       <div className="notfound-content">
         <span className="notfound-code">404</span>
         <h1 className="notfound-title">Página no encontrada</h1>
@@ -20,6 +26,6 @@ const NotFound = () => {
       </div>
     </main>
   );
-};
+});
 
 export default NotFound;

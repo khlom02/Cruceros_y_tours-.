@@ -3,17 +3,15 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import '../styles/header.css';
 
-const Header = () => {
+const Header = React.memo(() => {
   const { user, signOut, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [loggingOut, setLoggingOut] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Cerrar menú al cambiar de ruta
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMenuOpen(false);
   }, [location.pathname]);
 
@@ -319,6 +317,6 @@ const Header = () => {
       )}
     </>
   );
-};
+});
 
 export default Header;

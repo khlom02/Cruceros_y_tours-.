@@ -145,7 +145,6 @@ const AdminPanel = () => {
   // ─── Lista de productos (tab Gestionar) ───────────────────────────────────
   const [productosLista, setProductosLista] = useState([]);
   const [loadingLista, setLoadingLista] = useState(false);
-  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   // ─── Contactos (tab Contactos) ────────────────────────────────────────────
   const [contactosList, setContactosList] = useState([]);
@@ -179,6 +178,24 @@ const AdminPanel = () => {
 
   // ─── Guard contra doble submit ────────────────────────────────────────────
   const submittingRef = useRef(false);
+
+  // ─── Colapsar secciones del formulario ────────────────────────────────────
+  const [expandedSections, setExpandedSections] = useState({
+    producto: true,
+    crucero: true,
+    galeria: true,
+    rooms: true,
+    amenities: true,
+    highlights: true,
+  });
+  const toggleSection = (key) =>
+    setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  // ─── Busqueda en lista de productos ───────────────────────────────────────
+  const [productSearch, setProductSearch] = useState("");
+
+  // ─── Modal de confirmacion ────────────────────────────────────────────────
+  const [showDeleteModal, setShowDeleteModal] = useState(null); // product id to delete
 
   // ─── Carga las categorias desde Supabase al montar el componente ─────────
   useEffect(() => {
@@ -439,7 +456,6 @@ const AdminPanel = () => {
 
     if (ok) {
       setProductosLista((prev) => prev.filter((p) => p.id !== productId));
-      setConfirmDeleteId(null);
     } else {
       setError("Error al eliminar el producto.");
     }
@@ -790,6 +806,15 @@ const AdminPanel = () => {
   const nombreCategoria = (catId) =>
     categorias.find((c) => String(c.id) === String(catId))?.nombre || "—";
 
+  const productosFiltrados = useMemo(() => {
+    if (!productSearch.trim()) return productosLista;
+    const q = productSearch.toLowerCase();
+    return productosLista.filter((p) => {
+      const catNombre = categorias.find((c) => String(c.id) === String(p.categoria_id))?.nombre || "";
+      return p.titulo.toLowerCase().includes(q) || catNombre.toLowerCase().includes(q);
+    });
+  }, [productosLista, productSearch, categorias]);
+
   return (
     <div className="admin-container">
       <div className="admin-header">
@@ -803,18 +828,21 @@ const AdminPanel = () => {
           className={`admin-tab${activeTab === "crear" ? " admin-tab--active" : ""}`}
           onClick={() => { setActiveTab("crear"); setError(""); setSuccess(null); setFieldErrors({}); }}
         >
-          {editingProductId ? "Editar producto" : "Crear producto"}
+          <span className="admin-tab-icon">{editingProductId ? "✏️" : "✨"}</span>
+          {editingProductId ? "Editar" : "Crear"}
         </button>
         <button
           className={`admin-tab${activeTab === "gestionar" ? " admin-tab--active" : ""}`}
           onClick={() => { setActiveTab("gestionar"); setError(""); setSuccess(null); setFieldErrors({}); }}
         >
-          Gestionar productos
+          <span className="admin-tab-icon">📋</span>
+          Gestionar
         </button>
         <button
           className={`admin-tab${activeTab === "contactos" ? " admin-tab--active" : ""}`}
           onClick={() => { setActiveTab("contactos"); setError(""); setSuccess(null); setFieldErrors({}); }}
         >
+          <span className="admin-tab-icon">✉️</span>
           Mensajes
           {contactosList.filter(c => c.estado === "nuevo").length > 0 && (
             <span className="admin-tab-badge">
@@ -826,6 +854,7 @@ const AdminPanel = () => {
           className={`admin-tab${activeTab === "reservas" ? " admin-tab--active" : ""}`}
           onClick={() => { setActiveTab("reservas"); setError(""); setSuccess(null); setFieldErrors({}); }}
         >
+          <span className="admin-tab-icon">📅</span>
           Reservas
           {reservasList.filter(r => r.estado === "pendiente").length > 0 && (
             <span className="admin-tab-badge">
@@ -837,6 +866,7 @@ const AdminPanel = () => {
           className={`admin-tab${activeTab === "suscripciones" ? " admin-tab--active" : ""}`}
           onClick={() => { setActiveTab("suscripciones"); setError(""); setSuccess(null); setFieldErrors({}); }}
         >
+          <span className="admin-tab-icon">🔄</span>
           Suscripciones
           {suscripcionesList.filter(s => s.estado === "pendiente_activacion").length > 0 && (
             <span className="admin-tab-badge">
@@ -862,8 +892,12 @@ const AdminPanel = () => {
           )}
 
           {/* ── Datos principales del producto ── */}
-          <section className="admin-section">
-            <h2>Producto</h2>
+          <section className="admin-section admin-section-collapsible">
+            <div className="admin-collapsible-header" onClick={() => toggleSection("producto")}>
+              <h2>📦 Producto</h2>
+              <span className={`admin-collapsible-arrow${expandedSections.producto ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
+            </div>
+            <div className={`admin-collapsible-body${expandedSections.producto ? " admin-collapsible-body--open" : ""}`}>
 
             <label className={fieldErrors.titulo ? "admin-field-error-label" : ""}>
               Titulo
@@ -987,13 +1021,14 @@ const AdminPanel = () => {
               </label>
             </div>
 
-            <label className="admin-checkbox">
+            <label className="admin-toggle">
               <input
                 type="checkbox"
                 checked={producto.activo}
                 onChange={(e) => handleProductoChange("activo", e.target.checked)}
               />
-              Activo
+              <span className="admin-toggle-track"></span>
+              {producto.activo ? "Activo" : "Inactivo"}
             </label>
 
             <label className={fieldErrors.imagenFile ? "admin-field-error-label" : ""}>
@@ -1013,12 +1048,17 @@ const AdminPanel = () => {
               />
               {fieldErrors.imagenFile && <span className="admin-field-error-msg">Debes subir una imagen</span>}
             </label>
+            </div>
           </section>
 
           {/* ── Detalles crucero ── */}
           {isCrucero && (
-            <section className="admin-section">
-              <h2>Detalles crucero</h2>
+            <section className="admin-section admin-section-collapsible">
+              <div className="admin-collapsible-header" onClick={() => toggleSection("crucero")}>
+                <h2>🚢 Detalles crucero</h2>
+                <span className={`admin-collapsible-arrow${expandedSections.crucero ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
+              </div>
+              <div className={`admin-collapsible-body${expandedSections.crucero ? " admin-collapsible-body--open" : ""}`}>
               <div className="admin-grid">
                 <label>
                   Anos servicio
@@ -1081,12 +1121,17 @@ const AdminPanel = () => {
                   Viajando con ninos
                 </label>
               </div>
+              </div>
             </section>
           )}
 
           {/* ── Galeria ── */}
-          <section className="admin-section">
-            <h2>Galeria {editingProductId && "(agregar nuevas imagenes)"}</h2>
+          <section className="admin-section admin-section-collapsible">
+            <div className="admin-collapsible-header" onClick={() => toggleSection("galeria")}>
+              <h2>🖼️ Galeria {editingProductId && "(agregar nuevas)"}</h2>
+              <span className={`admin-collapsible-arrow${expandedSections.galeria ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
+            </div>
+            <div className={`admin-collapsible-body${expandedSections.galeria ? " admin-collapsible-body--open" : ""}`}>
             <label>
               Seleccionar imagenes
               <input
@@ -1099,11 +1144,16 @@ const AdminPanel = () => {
             {galleryFiles.length > 0 && (
               <p className="admin-help">{galleryFiles.length} imagenes seleccionadas</p>
             )}
+            </div>
           </section>
 
           {/* ── Rooms ── */}
-          <section className="admin-section">
-            <h2>Rooms</h2>
+          <section className="admin-section admin-section-collapsible">
+            <div className="admin-collapsible-header" onClick={() => toggleSection("rooms")}>
+              <h2>🛏️ Rooms</h2>
+              <span className={`admin-collapsible-arrow${expandedSections.rooms ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
+            </div>
+            <div className={`admin-collapsible-body${expandedSections.rooms ? " admin-collapsible-body--open" : ""}`}>
             <p className="admin-help">Solo se guardan rooms con titulo. Descripcion y precio son opcionales.</p>
             {rooms.map((room, index) => (
               <div className="admin-list" key={`room-${index}`}>
@@ -1160,11 +1210,16 @@ const AdminPanel = () => {
             <button type="button" className="admin-add" onClick={() => addListItem(setRooms, emptyRoom)}>
               + Agregar room
             </button>
+            </div>
           </section>
 
           {/* ── Amenities ── */}
-          <section className="admin-section">
-            <h2>Amenities</h2>
+          <section className="admin-section admin-section-collapsible">
+            <div className="admin-collapsible-header" onClick={() => toggleSection("amenities")}>
+              <h2>🎯 Amenities {amenities.length > 0 && <span className="admin-help" style={{fontWeight:400}}>({amenities.length})</span>}</h2>
+              <span className={`admin-collapsible-arrow${expandedSections.amenities ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
+            </div>
+            <div className={`admin-collapsible-body${expandedSections.amenities ? " admin-collapsible-body--open" : ""}`}>
 
             {/* Chips de amenities seleccionados */}
             <div className="admin-amenity-chips">
@@ -1304,11 +1359,16 @@ const AdminPanel = () => {
                 ))}
               </div>
             )}
+            </div>
           </section>
 
           {/* ── Highlights ── */}
-          <section className="admin-section">
-            <h2>Highlights</h2>
+          <section className="admin-section admin-section-collapsible">
+            <div className="admin-collapsible-header" onClick={() => toggleSection("highlights")}>
+              <h2>⭐ Highlights</h2>
+              <span className={`admin-collapsible-arrow${expandedSections.highlights ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
+            </div>
+            <div className={`admin-collapsible-body${expandedSections.highlights ? " admin-collapsible-body--open" : ""}`}>
             {highlights.map((highlight, index) => (
               <div className="admin-list" key={`highlight-${index}`}>
                 <label>
@@ -1330,6 +1390,7 @@ const AdminPanel = () => {
             <button type="button" className="admin-add" onClick={() => addListItem(setHighlights, emptyHighlight)}>
               + Agregar highlight
             </button>
+            </div>
           </section>
 
           {/* ── Mensajes ── */}
@@ -1363,15 +1424,52 @@ const AdminPanel = () => {
             </button>
           </div>
 
+          <div className="admin-search">
+            <input
+              type="text"
+              placeholder="Buscar por titulo o categoria..."
+              value={productSearch}
+              onChange={(e) => setProductSearch(e.target.value)}
+            />
+          </div>
+
+          {productSearch && productosFiltrados.length > 0 && (
+            <p className="admin-filter-info">
+              Mostrando <strong>{productosFiltrados.length}</strong> de {productosLista.length} productos
+            </p>
+          )}
+
           {error && <div className="admin-error">{error}</div>}
 
           {loadingLista ? (
-            <p className="admin-help">Cargando productos...</p>
-          ) : productosLista.length === 0 ? (
-            <p className="admin-help">No hay productos aun.</p>
+            <div className="admin-product-list">
+              {[1, 2, 3].map((n) => (
+                <div className="admin-skeleton-card" key={n}>
+                  <div className="admin-skeleton admin-skeleton--thumb" />
+                  <div className="admin-skeleton-card-body">
+                    <div className="admin-skeleton admin-skeleton--text" />
+                    <div className="admin-skeleton admin-skeleton--text-short" />
+                  </div>
+                  <div className="admin-skeleton admin-skeleton--btn" />
+                  <div className="admin-skeleton admin-skeleton--btn" />
+                </div>
+              ))}
+            </div>
+          ) : productosFiltrados.length === 0 ? (
+            <div className="admin-empty-state">
+              <div className="admin-empty-state-icon">{productSearch ? "🔍" : "📦"}</div>
+              <div className="admin-empty-state-title">
+                {productSearch ? "Sin resultados" : "No hay productos aun"}
+              </div>
+              <p className="admin-empty-state-desc">
+                {productSearch
+                  ? `No se encontraron productos que coincidan con "${productSearch}".`
+                  : "Crea tu primer producto desde la pestana Crear."}
+              </p>
+            </div>
           ) : (
             <div className="admin-product-list">
-              {productosLista.map((p) => (
+              {productosFiltrados.map((p) => (
                 <div className="admin-product-card" key={p.id}>
                   {p.imagen && (
                     <div className="admin-product-thumb">
@@ -1395,32 +1493,13 @@ const AdminPanel = () => {
                     >
                       Editar
                     </button>
-                    {confirmDeleteId === p.id ? (
-                      <div className="admin-delete-confirm">
-                        <span>¿Eliminar?</span>
-                        <button
-                          className="admin-btn-delete-confirm"
-                          onClick={() => handleDelete(p.id)}
-                          disabled={loading}
-                        >
-                          Si, eliminar
-                        </button>
-                        <button
-                          className="admin-btn-delete-cancel"
-                          onClick={() => setConfirmDeleteId(null)}
-                        >
-                          Cancelar
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        className="admin-btn-delete"
-                        onClick={() => setConfirmDeleteId(p.id)}
-                        disabled={loading}
-                      >
-                        Eliminar
-                      </button>
-                    )}
+                    <button
+                      className="admin-btn-delete"
+                      onClick={() => setShowDeleteModal(p.id)}
+                      disabled={loading}
+                    >
+                      Eliminar
+                    </button>
                   </div>
                 </div>
               ))}
@@ -1441,9 +1520,17 @@ const AdminPanel = () => {
             </button>
           </div>
           {loadingContactos ? (
-            <p className="admin-help">Cargando mensajes...</p>
+            <div>
+              <div className="admin-skeleton admin-skeleton-inbox" />
+              <div className="admin-skeleton admin-skeleton-inbox" />
+              <div className="admin-skeleton admin-skeleton-inbox" />
+            </div>
           ) : contactosList.length === 0 ? (
-            <p className="admin-help">No hay mensajes aún.</p>
+            <div className="admin-empty-state">
+              <div className="admin-empty-state-icon">✉️</div>
+              <div className="admin-empty-state-title">No hay mensajes aun</div>
+              <p className="admin-empty-state-desc">Los mensajes del formulario de contacto apareceran aqui.</p>
+            </div>
           ) : (
             <div className="admin-inbox">
               {contactosList.map((c) => (
@@ -1513,9 +1600,17 @@ const AdminPanel = () => {
             </button>
           </div>
           {loadingReservas ? (
-            <p className="admin-help">Cargando reservas...</p>
+            <div>
+              <div className="admin-skeleton admin-skeleton-inbox" />
+              <div className="admin-skeleton admin-skeleton-inbox" />
+              <div className="admin-skeleton admin-skeleton-inbox" />
+            </div>
           ) : reservasList.length === 0 ? (
-            <p className="admin-help">No hay solicitudes de reserva aún.</p>
+            <div className="admin-empty-state">
+              <div className="admin-empty-state-icon">📅</div>
+              <div className="admin-empty-state-title">No hay solicitudes de reserva aun</div>
+              <p className="admin-empty-state-desc">Las reservas realizadas por los clientes apareceran aqui.</p>
+            </div>
           ) : (
             <div className="admin-reservas-list">
               {reservasList.map((r) => (
@@ -1582,9 +1677,17 @@ const AdminPanel = () => {
             </button>
           </div>
           {loadingSuscripciones ? (
-            <p className="admin-help">Cargando suscripciones...</p>
+            <div>
+              <div className="admin-skeleton admin-skeleton-inbox" />
+              <div className="admin-skeleton admin-skeleton-inbox" />
+              <div className="admin-skeleton admin-skeleton-inbox" />
+            </div>
           ) : suscripcionesList.length === 0 ? (
-            <p className="admin-help">No hay suscripciones registradas aún.</p>
+            <div className="admin-empty-state">
+              <div className="admin-empty-state-icon">🔄</div>
+              <div className="admin-empty-state-title">No hay suscripciones registradas aun</div>
+              <p className="admin-empty-state-desc">Las suscripciones de los usuarios apareceran aqui.</p>
+            </div>
           ) : (
             <div className="admin-subs-list">
               {suscripcionesList.map((s) => (
@@ -1649,6 +1752,37 @@ const AdminPanel = () => {
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* ── Modal de confirmacion de eliminacion ── */}
+      {showDeleteModal && (
+        <div className="admin-modal-overlay" onClick={() => setShowDeleteModal(null)}>
+          <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal-icon">🗑️</div>
+            <div className="admin-modal-title">Eliminar producto</div>
+            <div className="admin-modal-desc">
+              Esta accion no se puede deshacer. Se eliminara el producto y todos sus datos asociados (detalles, galeria, rooms, amenities, highlights).
+            </div>
+            <div className="admin-modal-actions">
+              <button
+                className="admin-modal-btn admin-modal-btn--cancel"
+                onClick={() => setShowDeleteModal(null)}
+              >
+                Cancelar
+              </button>
+              <button
+                className="admin-modal-btn admin-modal-btn--danger"
+                onClick={() => {
+                  handleDelete(showDeleteModal);
+                  setShowDeleteModal(null);
+                }}
+                disabled={loading}
+              >
+                {loading ? "Eliminando..." : "Si, eliminar"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

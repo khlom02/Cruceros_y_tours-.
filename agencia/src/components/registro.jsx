@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import SEO from './SEO.jsx';
 import "../styles/auth.css";
 
 function nivelFortaleza(password) {
@@ -22,9 +23,11 @@ const Register = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [registroBloqueado, setRegistroBloqueado] = useState(false);
   const { signUp, signInWithOAuth, user } = useAuth();
   const navigate = useNavigate();
   const fortaleza = nivelFortaleza(password);
+  const emailRef = useRef(null);
 
   useEffect(() => {
     if (user) navigate("/");
@@ -35,6 +38,11 @@ const Register = () => {
     setError(null);
     setSuccess(false);
 
+    if (registroBloqueado) {
+      setError("Demasiados intentos. Espera unos minutos.");
+      return;
+    }
+
     if (password.length < 8) {
       setError("La contraseña debe tener al menos 8 caracteres.");
       return;
@@ -44,15 +52,26 @@ const Register = () => {
       return;
     }
 
+    const intentos = parseInt(sessionStorage.getItem("reg_intentos") || "0", 10);
+    if (intentos >= 3) {
+      setRegistroBloqueado(true);
+      setError("Demasiados intentos. Espera 5 minutos.");
+      setTimeout(() => { setRegistroBloqueado(false); sessionStorage.setItem("reg_intentos", "0"); }, 300_000);
+      return;
+    }
+
     setLoading(true);
-    const { error } = await signUp(email, password);
+    const trimmedEmail = email.trim();
+    const { error } = await signUp(trimmedEmail, password);
+
+    setLoading(false);
 
     if (error) {
+      sessionStorage.setItem("reg_intentos", String(intentos + 1));
       setError(error.message);
-      setLoading(false);
     } else {
+      sessionStorage.removeItem("reg_intentos");
       setSuccess(true);
-      setLoading(false);
       setTimeout(() => navigate("/"), 3000);
     }
   };
@@ -67,44 +86,67 @@ const Register = () => {
     }
   };
 
+  const regErrorId = "reg-error";
+  const regEmailId = "reg-email";
+  const regPasswordId = "reg-password";
+  const regConfirmId = "reg-confirm";
+  const regPasswordReqsId = "reg-password-reqs";
+
   return (
-    <div className="container mt-5 mb-5 auth-page">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card shadow-lg auth-card">
-            <div className="card-body p-4 auth-card__body">
-              <h3 className="card-title text-center mb-4 auth-title">Crear Cuenta</h3>
-              <form onSubmit={handleRegister}>
+    <>
+      <SEO
+        title="Crear Cuenta"
+        description="Regístrate en Cruceros y Tours para acceder a reservas, planes de suscripción y ofertas exclusivas. Crea tu cuenta gratis en minutos."
+        canonical="/registro"
+        noindex
+      />
+      <div className="container mt-5 mb-5 auth-page">
+        <div className="row justify-content-center">
+          <div className="col-md-6">
+            <div className="card shadow-lg auth-card">
+              <div className="card-body p-4 auth-card__body">
+                <h1 className="card-title text-center mb-4 auth-title" style={{fontSize:'1.5rem'}}>Crear Cuenta</h1>
+              <form onSubmit={handleRegister} noValidate>
                 <div className="mb-3">
-                  <label htmlFor="email" className="form-label fw-semibold auth-label">
+                  <label htmlFor={regEmailId} className="form-label fw-semibold auth-label">
                     Correo Electrónico
                   </label>
                   <input
+                    ref={emailRef}
                     type="email"
-                    id="email"
+                    id={regEmailId}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     className="form-control rounded-pill auth-input"
                     placeholder="Ingresa tu correo"
+                    autoComplete="email"
+                    aria-invalid={error ? "true" : undefined}
+                    aria-describedby={error ? regErrorId : undefined}
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="password" className="form-label fw-semibold auth-label">
+                  <label htmlFor={regPasswordId} className="form-label fw-semibold auth-label">
                     Contraseña
                   </label>
                   <input
                     type="password"
-                    id="password"
+                    id={regPasswordId}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={8}
                     className="form-control rounded-pill auth-input"
                     placeholder="Mínimo 8 caracteres"
+                    autoComplete="new-password"
+                    aria-describedby={regPasswordReqsId}
+                    aria-invalid={password.length > 0 && fortaleza.nivel < 2 ? "true" : undefined}
                   />
+                  <p id={regPasswordReqsId} className="visually-hidden">
+                    La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.
+                  </p>
                   {password.length > 0 && (
-                    <div className="mt-2">
+                    <div className="mt-2" role="status" aria-live="polite" aria-label={`Fortaleza: ${fortaleza.texto}`}>
                       <div style={{
                         height: "4px",
                         borderRadius: "2px",
@@ -123,25 +165,31 @@ const Register = () => {
                   )}
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="confirmPassword" className="form-label fw-semibold auth-label">
+                  <label htmlFor={regConfirmId} className="form-label fw-semibold auth-label">
                     Confirmar contraseña
                   </label>
                   <input
                     type="password"
-                    id="confirmPassword"
+                    id={regConfirmId}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                     className="form-control rounded-pill auth-input"
                     placeholder="Repite tu contraseña"
+                    autoComplete="new-password"
+                    aria-invalid={confirmPassword.length > 0 && password !== confirmPassword ? "true" : undefined}
                   />
                   {confirmPassword.length > 0 && password !== confirmPassword && (
-                    <small className="text-danger">Las contraseñas no coinciden.</small>
+                    <small className="text-danger" role="alert">Las contraseñas no coinciden.</small>
                   )}
                 </div>
-                {error && <p className="text-danger mb-3">{error}</p>}
+                {error && (
+                  <p id={regErrorId} className="text-danger mb-3" role="alert" aria-live="assertive">
+                    {error}
+                  </p>
+                )}
                 {success && (
-                  <div className="alert auth-alert mb-3">
+                  <div className="alert auth-alert mb-3" role="status" aria-live="polite">
                     <strong>¡Registro exitoso!</strong> Revisa tu correo para confirmar tu cuenta.
                     Serás redirigido en unos segundos...
                   </div>
@@ -150,7 +198,7 @@ const Register = () => {
                   <button
                     type="submit"
                     className="btn rounded-pill auth-btn-primary"
-                    disabled={loading}
+                    disabled={loading || registroBloqueado}
                   >
                     {loading ? "Registrando..." : "Registrarse"}
                   </button>
@@ -187,7 +235,8 @@ const Register = () => {
         </div>
       </div>
     </div>
+    </>
   );
-};
+}
 
 export default Register;

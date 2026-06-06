@@ -1,9 +1,15 @@
 import React from "react";
+import SEO from './SEO.jsx';
 import '../styles/info-pages.css';
 
 const GuiaDeUso = () => {
   return (
     <main className="info-page">
+      <SEO
+        title="Guía de Uso"
+        description="Aprende a usar nuestra plataforma de reservas: cómo explorar destinos, crear tu cuenta, realizar reservas y contactar a un agente de viajes."
+        canonical="/guia-de-uso"
+      />
       <div className="info-page__container">
         <h1 className="info-page__title">Guía de Uso</h1>
         <p className="info-page__subtitle">Aprende a sacarle el máximo provecho a nuestra plataforma.</p>

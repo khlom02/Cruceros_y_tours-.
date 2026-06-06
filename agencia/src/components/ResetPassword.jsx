@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { supabase } from "../backend/supabase_client";
+import SEO from './SEO.jsx';
 import "../styles/auth.css";
 
 function nivelFortaleza(password) {
@@ -23,16 +25,43 @@ export default function ResetPassword() {
   const [loading, setLoading] = useState(false);
   const [listo, setListo] = useState(false);
 
-  const { updatePassword, user } = useAuth();
+  const { updatePassword, signOut, user } = useAuth();
   const navigate = useNavigate();
   const fortaleza = nivelFortaleza(password);
 
-  // Supabase establece la sesión de recuperación automáticamente al cargar la URL
-  // con el token. Esperamos a que AuthContext resuelva el usuario.
+  // Esperar a que Supabase procese el token de recovery del hash de la URL
   useEffect(() => {
-    // Damos un momento para que onAuthStateChange procese el token de la URL
-    const timeout = setTimeout(() => setListo(true), 800);
-    return () => clearTimeout(timeout);
+    let cancelled = false;
+
+    const init = async () => {
+      // 1. Intentar obtener sesión directamente (si el hash ya se procesó)
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!cancelled && session?.user) {
+        setListo(true);
+        return;
+      }
+
+      // 2. Si no hay sesión aún, escuchar el evento de auth
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        if (!cancelled && (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") && session?.user) {
+          setListo(true);
+        }
+      });
+
+      // 3. Timeout de seguridad por si algo falla silenciosamente
+      const safetyTimeout = setTimeout(() => {
+        if (!cancelled) setListo(true);
+      }, 15000);
+
+      return () => {
+        subscription.unsubscribe();
+        clearTimeout(safetyTimeout);
+      };
+    };
+
+    init();
+
+    return () => { cancelled = true; };
   }, []);
 
   const handleSubmit = async (e) => {
@@ -55,6 +84,7 @@ export default function ResetPassword() {
     if (error) {
       setError("No se pudo actualizar la contraseña. El enlace puede haber expirado.");
     } else {
+      await signOut();
       setSuccess(true);
       setTimeout(() => navigate("/login"), 3000);
     }
@@ -93,14 +123,21 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="container mt-5 mb-5 auth-page">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card shadow-lg auth-card">
-            <div className="card-body p-4 auth-card__body">
-              <h3 className="card-title text-center mb-4 auth-title">
-                Nueva contraseña
-              </h3>
+    <>
+      <SEO
+        title="Restablecer Contraseña"
+        description="Crea una nueva contraseña para tu cuenta de Cruceros y Tours. El enlace de recuperación es de un solo uso."
+        canonical="/reset-password"
+        noindex
+      />
+      <div className="container mt-5 mb-5 auth-page">
+        <div className="row justify-content-center">
+          <div className="col-md-6">
+            <div className="card shadow-lg auth-card">
+              <div className="card-body p-4 auth-card__body">
+                <h1 className="card-title text-center mb-4 auth-title" style={{fontSize:'1.5rem'}}>
+                  Nueva contraseña
+                </h1>
 
               {success ? (
                 <div className="alert auth-alert text-center">
@@ -175,5 +212,6 @@ export default function ResetPassword() {
         </div>
       </div>
     </div>
+    </>
   );
 }

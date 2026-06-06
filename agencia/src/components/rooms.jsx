@@ -1,5 +1,5 @@
 import "../styles/rooms.css";
-import { useMemo } from "react";
+import { useMemo, memo } from "react";
 import PropTypes from "prop-types";
 import railEuropa from "../imagenes/rail_europa.png";
 import renfeLogo from "../imagenes/Renfe.png";
@@ -141,7 +141,7 @@ const IconCheck = () => (
 );
 
 // ─── Card para opciones de marca (servicios especiales) ──────────────────────
-const BrandCard = ({ room }) => (
+const BrandCard = memo(({ room }) => (
     <article className="room-card room-card--brand">
         <div className="room-media">
             <h3 className="room-title">{room.title}</h3>
@@ -167,10 +167,11 @@ const BrandCard = ({ room }) => (
 
         <button className="room-cta" type="button">Cotizar ahora</button>
     </article>
-);
+));
+BrandCard.displayName = "BrandCard";
 
 // ─── Card para cabinas/opciones del producto (cruceros, tours, etc.) ─────────
-const ProductRoomCard = ({ room }) => (
+const ProductRoomCard = memo(({ room }) => (
     <article className="room-card room-card--product">
         {room.imageUrl && (
             <div className="room-product-image-wrap">
@@ -198,7 +199,8 @@ const ProductRoomCard = ({ room }) => (
             <button className="room-cta" type="button">Reservar ahora</button>
         </div>
     </article>
-);
+));
+ProductRoomCard.displayName = "ProductRoomCard";
 
 // ─── Componente principal ─────────────────────────────────────────────────────
 // Props:

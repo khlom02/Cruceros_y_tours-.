@@ -6,9 +6,10 @@ Disallow: /admin
 Disallow: /login
 Disallow: /registro
 Disallow: /reset-password
+Disallow: /perfil
 
 # Sitemap
-Sitemap: https://crucerosytours.vercel.app/sitemap.xml
+Sitemap: https://cruceros-y-tours.vercel.app/sitemap.xml
 
 # Crawlers de IA — permitidos explícitamente
 User-agent: GPTBot
