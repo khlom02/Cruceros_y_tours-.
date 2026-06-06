@@ -126,7 +126,7 @@
 .grid-experiencia__titulo,
 .card_cruceros__titulo {
   margin: 0;
-  font-size: 1.3rem;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
   font-weight: 600;
   color: white;
   font-family: "Chicago Police", sans-serif;
@@ -176,7 +176,7 @@
 
 .grid-experiencia__precio-valor,
 .card_cruceros__precio-valor {
-  font-size: 1.8rem;
+  font-size: clamp(1.3rem, 3.5vw, 1.8rem);
   font-weight: 700;
   color: white;
   font-family: "Chicago Police", sans-serif;

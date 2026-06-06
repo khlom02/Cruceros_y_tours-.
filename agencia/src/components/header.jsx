@@ -149,8 +149,8 @@ const Header = React.memo(() => {
                 </Link>
               </li>
               <li className="nav-item">
-                <a
-                  href="/servicios_especiales"
+                <Link
+                  to="/servicios_especiales"
                   className="nav-link px-3 text-dark"
                   style={{
                     fontFamily: "'Lora', serif",
@@ -166,11 +166,11 @@ const Header = React.memo(() => {
                   }
                 >
                   Servicios Especiales
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a
-                  href="/contacto"
+                <Link
+                  to="/contacto"
                   className="nav-link px-3 text-dark"
                   style={{
                     fontFamily: "'Lora', serif",
@@ -186,7 +186,7 @@ const Header = React.memo(() => {
                   }
                 >
                   Contacto
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

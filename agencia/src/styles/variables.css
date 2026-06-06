@@ -6,6 +6,8 @@
   /* Paleta de colores principal */
   --color-primary: #0FD3D3;      /* Turquesa */
   --color-primary-dark: #003366; /* Azul oscuro */
+  --color-secondary: #003366;    /* Azul oscuro (alias) */
+  --color-accent: #D4AF37;       /* Dorado */
   --color-background: #FFFFFF;   /* Blanco */
   --color-text-dark: #000000;    /* Negro */
   

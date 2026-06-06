@@ -102,6 +102,11 @@ Cruceros_y_tours-./
 | `/contacto` | `contacto` |
 | `/login`, `/registro`, `/reset-password` | Auth pages |
 | `/perfil` | `Perfil` |
+| `/faq` | `FAQ` |
+| `/guia-de-uso` | `GuiaDeUso` |
+| `/politicas-privacidad` | `PoliticasPrivacidad` |
+| `/suscripciones` | `Suscripciones` |
+| `/nosotros` | `SobreNosotros` |
 | `/admin` | `AdminPanel` (protegido por `AdminRoute`) |
 | `*` | `NotFound` (página 404 personalizada con SEO noindex) |
 

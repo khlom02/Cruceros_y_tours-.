@@ -31,14 +31,14 @@ const Footer = React.memo(() => {
     <div className="footer-container">
       <footer className="footer">
         <div className="footer-section logo-social">
-          <a href="/">
+          <Link to="/">
             <img
               src={getSupabaseImageUrl("imagenes/texto_logo_solo_color.png")}
               alt="Cruceros y Tours"
               loading="lazy"
               decoding="async"
             />
-          </a>
+          </Link>
           <section className="socials_media">
             <a href="https://instagram.com/crucerosytours" target="_blank" rel="noopener noreferrer">
               <FaInstagramSquare className="icon-instagram" size={50}/>
