@@ -900,10 +900,7 @@ const AdminPanel = () => {
   };
 
   const handleDestinoImageAdd = (index, files) => {
-    const fileArray = [];
-    for (let i = 0; i < Math.min(files.length, 3); i++) {
-      fileArray.push(files[i]);
-    }
+    const fileArray = Array.from(files || []).slice(0, 3);
     setDestinosItems((prev) =>
       prev.map((item, i) => {
         if (i !== index) return item;
