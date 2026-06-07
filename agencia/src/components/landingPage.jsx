@@ -124,7 +124,7 @@ const LandingPage = () => {
             Bienvenidos a <br/>
             Cruceros y Tours
           </h1>
-          <div style={{ marginBottom: '28px' }}>
+          {/* <div style={{ marginBottom: '28px' }}>
             <Link
               to="/contacto"
               style={{
@@ -159,7 +159,7 @@ const LandingPage = () => {
             >
               ✉ Contactar un Agente de Viajes
             </Link>
-          </div>
+          </div> */}
           
           <p style={{ 
             fontSize: 'clamp(1.1rem, 2vw, 1.5rem)',
