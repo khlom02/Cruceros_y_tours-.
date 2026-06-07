@@ -119,7 +119,7 @@ const LandingPage = () => {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
-            margin: '0 auto 40px',
+            margin: '0 auto 10px',
           }}>
             Bienvenidos a <br/>
             Cruceros y Tours
