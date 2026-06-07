@@ -43,7 +43,7 @@ export default function ResetPassword() {
 
       // 2. Si no hay sesión aún, escuchar el evento de auth
       const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-        if (!cancelled && (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") && session?.user) {
+        if (!cancelled && (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "PASSWORD_RECOVERY") && session?.user) {
           setListo(true);
         }
       });
@@ -78,11 +78,24 @@ export default function ResetPassword() {
     }
 
     setLoading(true);
+
+    // Refrescar la sesión antes de actualizar por si el token expiró
+    const { data: { session } } = await supabase.auth.refreshSession();
+    if (!session) {
+      setLoading(false);
+      setError("Tu sesión ha expirado. Solicita un nuevo enlace de recuperación desde la página de inicio de sesión.");
+      return;
+    }
+
     const { error } = await updatePassword(password);
     setLoading(false);
 
     if (error) {
-      setError("No se pudo actualizar la contraseña. El enlace puede haber expirado.");
+      const msg = error.message?.toLowerCase() || '';
+      if (msg.includes("expired") || msg.includes("invalid") || msg.includes("token"))
+        setError("El enlace de recuperación ha expirado. Solicita uno nuevo desde la página de inicio de sesión.");
+      else
+        setError("No se pudo actualizar la contraseña. Intenta de nuevo.");
     } else {
       await signOut();
       setSuccess(true);

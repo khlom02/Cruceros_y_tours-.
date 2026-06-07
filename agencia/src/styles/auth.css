@@ -24,6 +24,7 @@
 	border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
 	color: var(--color-text-primary);
 	background: #ffffff;
+	text-transform: none;
 }
 
 .auth-input:focus {
