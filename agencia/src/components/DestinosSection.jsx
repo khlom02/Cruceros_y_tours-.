@@ -65,9 +65,10 @@ const DestinosSection = () => {
                 id: p.id,
                 imagen: p.imagen ? getSupabaseImageUrl(p.imagen) : getSupabaseImageUrl('imagenes/default.jpg'),
                 imagenes,
-                titulo: p.ubicacion || p.titulo,
-                subtitulo: p.titulo,
+                titulo: p.titulo,
+                ubicacion: p.ubicacion,
                 precio: p.precio,
+                descripcion: p.descripcion,
               };
             })
           );
@@ -97,72 +98,59 @@ const DestinosSection = () => {
     const onNext = () => setPage((p) => (p + 1) % totalPaginas);
 
     return (
-      <>
+      <div className="destinos-section-wrapper">
         <h2 style={tituloStyle}>{titulo}</h2>
-        <div className={`destinos-grid${esCarousel ? ' destinos-grid--carousel' : ''}`}>
-          {visibles.length > 0 ? visibles.map((dest, idx) => (
-            <DestinationCard
-              key={dest.id}
-              imagen={dest.imagen}
-              imagenes={dest.imagenes}
-              titulo={dest.titulo}
-              subtitulo={dest.subtitulo}
-              precio={dest.precio}
-              onClick={() => navigate(`/detalles?id=${dest.id}`)}
-              showWhatsapp
-              isLastVisible={esCarousel && idx === visibles.length - 1}
-            />
-          )) : (
-            <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#666' }}>
-              No hay {titulo.toLowerCase()} disponibles.
-            </p>
+
+        <div className={esCarousel ? 'destinos-carousel-section' : undefined}>
+          <div className={`destinos-grid${esCarousel ? ' destinos-grid--carousel' : ''}`}>
+            {visibles.length > 0 ? visibles.map((dest) => (
+              <DestinationCard
+                key={dest.id}
+                imagen={dest.imagen}
+                imagenes={dest.imagenes}
+                titulo={dest.titulo}
+                precio={dest.precio}
+                onClick={() => navigate(`/detalles?id=${dest.id}`)}
+              />
+            )) : (
+              <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#666' }}>
+                No hay {titulo.toLowerCase()} disponibles.
+              </p>
+            )}
+          </div>
+
+          {esCarousel && (
+            <>
+              <button
+                type="button"
+                className="carousel3d-indicator-row__arrow carousel3d-indicator-row__arrow--prev"
+                onClick={onPrev}
+                aria-label="Anterior"
+              >‹</button>
+              <button
+                type="button"
+                className="carousel3d-indicator-row__arrow carousel3d-indicator-row__arrow--next"
+                onClick={onNext}
+                aria-label="Siguiente"
+              >›</button>
+
+              <div className="carousel3d-indicators">
+                <div className="carousel3d-indicator-row">
+                  {Array.from({ length: totalPaginas }, (_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      className={`carousel3d-indicator${i === page ? ' is-active' : ''}`}
+                      onClick={() => setPage(i)}
+                      aria-label={`Ir a página ${i + 1}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </>
           )}
         </div>
-
-        {esCarousel && (
-          <>
-            <button
-              type="button"
-              className="carousel3d-indicator-row__arrow carousel3d-indicator-row__arrow--prev"
-              onClick={onPrev}
-              aria-label="Anterior"
-            >‹</button>
-            <button
-              type="button"
-              className="carousel3d-indicator-row__arrow carousel3d-indicator-row__arrow--next"
-              onClick={onNext}
-              aria-label="Siguiente"
-            >›</button>
-
-            <div className="carousel3d-indicators">
-              <div className="carousel3d-indicator-row">
-                {Array.from({ length: totalPaginas }, (_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    className={`carousel3d-indicator${i === page ? ' is-active' : ''}`}
-                    onClick={() => setPage(i)}
-                    aria-label={`Ir a página ${i + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {visibles.length > 0 && (
-              <a
-                href={`https://wa.me/584142783669?text=${encodeURIComponent(`Hola, quiero información sobre los destinos de ${titulo}`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="destination-card__whatsapp-float"
-                onClick={(e) => e.stopPropagation()}
-                aria-label="Contactar por WhatsApp"
-              >
-                <FaWhatsappSquare size={28} />
-              </a>
-            )}
-          </>
-        )}
-      </>
+      </div>
     );
   };
 
@@ -178,6 +166,16 @@ const DestinosSection = () => {
     <>
       {renderSeccion(nacionales, 'Destinos Nacionales', pageNac, setPageNac)}
       {renderSeccion(internacionales, 'Destinos Internacionales', pageInt, setPageInt)}
+
+      <a
+        href={`https://wa.me/584142783669?text=${encodeURIComponent('Hola, quiero información sobre los destinos')}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="whatsapp-float"
+        aria-label="Contactar por WhatsApp"
+      >
+        <FaWhatsappSquare size={30} />
+      </a>
     </>
   );
 };
