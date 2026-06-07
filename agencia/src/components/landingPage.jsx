@@ -75,7 +75,7 @@ const LandingPage = () => {
       <main className="landing_page" style={{ 
         background: 'white',
         minHeight: '100vh', 
-        padding: '100px 0 100px',
+        padding: '40px 0 100px',
         position: 'relative'
       }}>
       {/* Elementos decorativos de fondo */}
