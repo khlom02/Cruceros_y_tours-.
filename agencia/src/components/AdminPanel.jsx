@@ -899,18 +899,30 @@ const AdminPanel = () => {
     );
   };
 
-  const handleDestinoImageAdd = (index, files) => {
+  const handleDestinoImageAdd = async (index, files, inputEl) => {
     const fileArray = Array.from(files || []).slice(0, 3);
-    setDestinosItems((prev) =>
-      prev.map((item, i) => {
-        if (i !== index) return item;
-        const combined = [...item.imagenes, ...fileArray].slice(0, 3);
-        const newPreviews = combined.map((f) =>
-          typeof f === 'string' ? f : URL.createObjectURL(f)
+    const toDataUrl = (f) =>
+      typeof f === 'string'
+        ? Promise.resolve(f)
+        : new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(f);
+          });
+
+    setDestinosItems((prev) => {
+      const item = prev[index];
+      if (!item) return prev;
+      const combined = [...item.imagenes, ...fileArray].slice(0, 3);
+      Promise.all(combined.map(toDataUrl)).then((allUrls) => {
+        setDestinosItems((p) =>
+          p.map((it, i) => (i === index ? { ...it, previewUrls: allUrls } : it))
         );
-        return { ...item, imagenes: combined, previewUrls: newPreviews };
-      })
-    );
+      });
+      return prev.map((it, i) => (i === index ? { ...it, imagenes: combined } : it));
+    });
+
+    if (inputEl) inputEl.value = '';
   };
 
   const handleDestinoImageRemove = (index, imgIndex) => {
@@ -1151,15 +1163,15 @@ const AdminPanel = () => {
                               {item.previewUrls.length < 3 && (
                                 <label className="admin-destino-preview__add-more">
                                   + Agregar imagen ({item.previewUrls.length}/3)
-                                  <input type="file" accept="image/*" multiple onChange={(e) => handleDestinoImageAdd(idx, e.target.files)} style={{ display: 'none' }} />
-                                </label>
-                              )}
+<input type="file" accept="image/*" multiple onChange={(e) => handleDestinoImageAdd(idx, e.target.files, e.target)} style={{ display: 'none' }} />
+                            </label>
+                          )}
                             </>
                           ) : (
                             <label className="admin-destino-preview__upload">
                               <span className="admin-destino-preview__upload-icon">📷</span>
                               <span>Subir imágenes (máx. 3)</span>
-                              <input type="file" accept="image/*" multiple onChange={(e) => handleDestinoImageAdd(idx, e.target.files)} style={{ display: 'none' }} />
+                              <input type="file" accept="image/*" multiple onChange={(e) => handleDestinoImageAdd(idx, e.target.files, e.target)} style={{ display: 'none' }} />
                             </label>
                           )}
                         </div>

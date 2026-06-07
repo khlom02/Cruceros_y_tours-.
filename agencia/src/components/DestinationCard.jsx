@@ -10,11 +10,7 @@ const DestinationCard = ({
   onClick = null,
   className = '',
 }) => {
-  const allImages = [];
-  if (imagen) allImages.push(imagen);
-  imagenes.forEach((img) => {
-    if (img && !allImages.includes(img)) allImages.push(img);
-  });
+  const allImages = [imagen, ...imagenes].filter(Boolean);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const hasMultiple = allImages.length > 1;

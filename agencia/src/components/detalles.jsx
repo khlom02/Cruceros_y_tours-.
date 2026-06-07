@@ -10,12 +10,12 @@ import DetallesNavieras from "./detalles_navieras.jsx";
 const normalizeDetalle = (data) => {
     if (!data) return null;
 
-    // Usar galería de la DB o fallback a imagen principal
-    const gallery = Array.isArray(data.gallery)
-        ? data.gallery
-        : data.imagen || data.imagen_url
-            ? [data.imagen || data.imagen_url]
-            : [];
+    // Combinar imagen principal + galería extra de la DB
+    const dbGallery = Array.isArray(data.gallery) ? data.gallery : [];
+    const mainImage = data.imagen || data.imagen_url;
+    const gallery = mainImage
+      ? [mainImage, ...dbGallery]
+      : dbGallery;
 
     return {
         id: data.id,
@@ -44,11 +44,11 @@ const serviceTypes = ["tren", "auto", "asistencia"];
 const normalizeServiceDetalle = (data) => {
     if (!data) return null;
 
-    const gallery = Array.isArray(data.gallery)
-        ? data.gallery
-        : data.imagen_url
-            ? [data.imagen_url]
-            : [];
+    const dbGallery = Array.isArray(data.gallery) ? data.gallery : [];
+    const mainImage = data.imagen_url;
+    const gallery = mainImage
+      ? [mainImage, ...dbGallery]
+      : dbGallery;
 
     return {
         id: data.id,
