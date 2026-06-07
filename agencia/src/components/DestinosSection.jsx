@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
+import { FaWhatsappSquare } from 'react-icons/fa';
 import DestinationCard from './DestinationCard';
 import { fetchCategories, fetchProductsByCategory, supabase } from '../backend/supabase_client';
 import { getSupabaseImageUrl } from '../utils/imageHelper';
 import { useNavigate } from 'react-router-dom';
 import '../styles/destination_card.css';
+
+const ITEMS_POR_PAGINA = 4;
 
 const tituloStyle = {
   textAlign: 'center',
@@ -21,6 +24,8 @@ const DestinosSection = () => {
   const [nacionales, setNacionales] = useState([]);
   const [internacionales, setInternacionales] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [pageNac, setPageNac] = useState(0);
+  const [pageInt, setPageInt] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -82,6 +87,85 @@ const DestinosSection = () => {
     return () => { cancelled = true; };
   }, []);
 
+  const renderSeccion = (items, titulo, page, setPage) => {
+    const esCarousel = items.length > ITEMS_POR_PAGINA;
+    const totalPaginas = esCarousel ? Math.ceil(items.length / ITEMS_POR_PAGINA) : 1;
+    const inicio = esCarousel ? page * ITEMS_POR_PAGINA : 0;
+    const visibles = items.slice(inicio, inicio + ITEMS_POR_PAGINA);
+
+    const onPrev = () => setPage((p) => (p - 1 + totalPaginas) % totalPaginas);
+    const onNext = () => setPage((p) => (p + 1) % totalPaginas);
+
+    return (
+      <>
+        <h2 style={tituloStyle}>{titulo}</h2>
+        <div className={`destinos-grid${esCarousel ? ' destinos-grid--carousel' : ''}`}>
+          {visibles.length > 0 ? visibles.map((dest, idx) => (
+            <DestinationCard
+              key={dest.id}
+              imagen={dest.imagen}
+              imagenes={dest.imagenes}
+              titulo={dest.titulo}
+              subtitulo={dest.subtitulo}
+              precio={dest.precio}
+              onClick={() => navigate(`/detalles?id=${dest.id}`)}
+              showWhatsapp
+              isLastVisible={esCarousel && idx === visibles.length - 1}
+            />
+          )) : (
+            <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#666' }}>
+              No hay {titulo.toLowerCase()} disponibles.
+            </p>
+          )}
+        </div>
+
+        {esCarousel && (
+          <>
+            <button
+              type="button"
+              className="carousel3d-indicator-row__arrow carousel3d-indicator-row__arrow--prev"
+              onClick={onPrev}
+              aria-label="Anterior"
+            >‹</button>
+            <button
+              type="button"
+              className="carousel3d-indicator-row__arrow carousel3d-indicator-row__arrow--next"
+              onClick={onNext}
+              aria-label="Siguiente"
+            >›</button>
+
+            <div className="carousel3d-indicators">
+              <div className="carousel3d-indicator-row">
+                {Array.from({ length: totalPaginas }, (_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    className={`carousel3d-indicator${i === page ? ' is-active' : ''}`}
+                    onClick={() => setPage(i)}
+                    aria-label={`Ir a página ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {visibles.length > 0 && (
+              <a
+                href={`https://wa.me/584142783669?text=${encodeURIComponent(`Hola, quiero información sobre los destinos de ${titulo}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="destination-card__whatsapp-float"
+                onClick={(e) => e.stopPropagation()}
+                aria-label="Contactar por WhatsApp"
+              >
+                <FaWhatsappSquare size={28} />
+              </a>
+            )}
+          </>
+        )}
+      </>
+    );
+  };
+
   if (cargando) {
     return (
       <div style={{ textAlign: 'center', padding: '40px', color: '#666', fontSize: '1.1rem' }}>
@@ -92,45 +176,8 @@ const DestinosSection = () => {
 
   return (
     <>
-      {/* ── Destinos Nacionales ── */}
-      <h2 style={tituloStyle}>Destinos Nacionales</h2>
-      <div className="destinos-grid">
-        {nacionales.length > 0 ? nacionales.map(dest => (
-          <DestinationCard
-            key={dest.id}
-            imagen={dest.imagen}
-            imagenes={dest.imagenes}
-            titulo={dest.titulo}
-            subtitulo={dest.subtitulo}
-            precio={dest.precio}
-            onClick={() => navigate(`/detalles?id=${dest.id}`)}
-          />
-        )) : (
-          <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#666' }}>
-            No hay destinos nacionales disponibles.
-          </p>
-        )}
-      </div>
-
-      {/* ── Destinos Internacionales ── */}
-      <h2 style={tituloStyle}>Destinos Internacionales</h2>
-      <div className="destinos-grid">
-        {internacionales.length > 0 ? internacionales.map(dest => (
-          <DestinationCard
-            key={dest.id}
-            imagen={dest.imagen}
-            imagenes={dest.imagenes}
-            titulo={dest.titulo}
-            subtitulo={dest.subtitulo}
-            precio={dest.precio}
-            onClick={() => navigate(`/detalles?id=${dest.id}`)}
-          />
-        )) : (
-          <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#666' }}>
-            No hay destinos internacionales disponibles.
-          </p>
-        )}
-      </div>
+      {renderSeccion(nacionales, 'Destinos Nacionales', pageNac, setPageNac)}
+      {renderSeccion(internacionales, 'Destinos Internacionales', pageInt, setPageInt)}
     </>
   );
 };

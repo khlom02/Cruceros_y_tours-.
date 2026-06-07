@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FaWhatsappSquare } from 'react-icons/fa';
 import '../styles/destination_card.css';
 
 const DestinationCard = ({
@@ -9,6 +10,8 @@ const DestinationCard = ({
   precio = null,
   onClick = null,
   className = '',
+  showWhatsapp = false,
+  isLastVisible = false,
 }) => {
   const allImages = [imagen, ...imagenes].filter(Boolean);
 
@@ -23,9 +26,13 @@ const DestinationCard = ({
     });
   };
 
+  const whatsappLink = titulo
+    ? `https://wa.me/584142783669?text=${encodeURIComponent(`Hola, quiero información sobre el destino: ${titulo}`)}`
+    : 'https://wa.me/584142783669';
+
   return (
     <div
-      className={`destination-card ${className}`}
+      className={`destination-card ${className}${isLastVisible ? ' destination-card--last-visible' : ''}`}
       style={{ backgroundImage: allImages.length > 0 ? `url(${allImages[currentIndex]})` : 'none' }}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
@@ -59,6 +66,19 @@ const DestinationCard = ({
             ))}
           </div>
         </>
+      )}
+
+      {showWhatsapp && (
+        <a
+          href={whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="destination-card__whatsapp"
+          onClick={(e) => e.stopPropagation()}
+          aria-label="Contactar por WhatsApp"
+        >
+          <FaWhatsappSquare size={20} />
+        </a>
       )}
 
       <div className="destination-card__content">

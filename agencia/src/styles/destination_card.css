@@ -308,3 +308,250 @@
     width: 18px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   WHATSAPP ICON — Card badge (20×20)
+   ═══════════════════════════════════════════════════════════════ */
+
+.destination-card__whatsapp {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  text-decoration: none;
+  color: #25d366;
+}
+
+.destination-card__whatsapp:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+  color: #1da851;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   WHATSAPP FLOATING — Last-visible card floating button
+   ═══════════════════════════════════════════════════════════════ */
+
+.destination-card--last-visible {
+  position: relative;
+}
+
+.destination-card__whatsapp-float {
+  position: absolute;
+  right: -38px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #25d366;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  color: #fff;
+  animation: pulse-whatsapp 2s infinite;
+}
+
+.destination-card__whatsapp-float:hover {
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.55);
+  background: #1da851;
+}
+
+@keyframes pulse-whatsapp {
+  0%, 100% { box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4); }
+  50% { box-shadow: 0 4px 24px rgba(37, 211, 102, 0.7); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CAROUSEL MODE — Grid as carousel
+   ═══════════════════════════════════════════════════════════════ */
+
+.destinos-grid--carousel {
+  position: relative;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CAROUSEL NAV — Reusable arrows & indicators
+   ═══════════════════════════════════════════════════════════════
+   Estilos unificados de navegación para carruseles.
+   Importar en cualquier componente que necesite navegación
+   con flechas + dots estilo carrusel3D.
+   ═══════════════════════════════════════════════════════════════ */
+
+.carousel3d-indicator-row__arrow {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid var(--color-primary);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--color-primary-dark);
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  line-height: 1;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+}
+
+.carousel3d-indicator-row__arrow:hover {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 16px rgba(15, 211, 211, 0.35);
+}
+
+.carousel3d-indicator-row__arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.carousel3d-indicator-row__arrow--prev {
+  left: 12px;
+}
+
+.carousel3d-indicator-row__arrow--next {
+  right: 12px;
+}
+
+/* ── Indicators (dots) — reutilizable ── */
+
+.carousel3d-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  width: min(92vw, 900px);
+  margin: 16px auto 0;
+  padding-bottom: 24px;
+}
+
+.carousel3d-indicator-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.carousel3d-indicator {
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  line-height: 1;
+  border-radius: 7px;
+  border: none;
+  background: var(--color-primary-transparent);
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: none;
+}
+
+.carousel3d-indicator.is-active {
+  width: 45px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-dark)
+  );
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 900px) {
+  .carousel3d-indicators {
+    gap: 12px;
+    width: min(94vw, 900px);
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel3d-indicator-row__arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .carousel3d-indicator-row__arrow--prev {
+    left: 6px;
+  }
+
+  .carousel3d-indicator-row__arrow--next {
+    right: 6px;
+  }
+
+  .carousel3d-indicators {
+    gap: 12px;
+  }
+
+  .destination-card__whatsapp-float {
+    right: -32px;
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 600px) {
+  .carousel3d-indicators {
+    gap: 10px;
+    width: min(96vw, 900px);
+  }
+
+  .carousel3d-indicator-row__arrow {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel3d-indicators {
+    gap: 8px;
+  }
+
+  .carousel3d-indicator {
+    width: 10px;
+    height: 10px;
+  }
+
+  .carousel3d-indicator.is-active {
+    width: 32px;
+  }
+
+  .carousel3d-indicator-row__arrow {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .carousel3d-indicator-row__arrow--prev {
+    left: 4px;
+  }
+
+  .carousel3d-indicator-row__arrow--next {
+    right: 4px;
+  }
+
+  .destination-card__whatsapp-float {
+    right: -28px;
+    width: 34px;
+    height: 34px;
+  }
+}
