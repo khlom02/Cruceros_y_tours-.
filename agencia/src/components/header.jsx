@@ -37,11 +37,11 @@ const Header = React.memo(() => {
     <>
       {/* Barra de contacto rápido */}
       <div className="header-topbar">
-        <a href="tel:+584224560128" className="header-topbar__phone">
-          📞 +58 422 456 0128
+        <a href="tel:+584142783669" className="header-topbar__phone">
+          📞 +584142783669
         </a>
         <a
-          href="https://wa.me/584224560128?text=Hola,%20quiero%20información%20sobre%20un%20viaje"
+          href="https://wa.me/584142783669?text=Hola,%20quiero%20información%20sobre%20un%20viaje"
           className="header-topbar__whatsapp"
           target="_blank"
           rel="noopener noreferrer"
