@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "../styles/admin.css";
+import SEO from './SEO.jsx';
 import {
   supabase,
   fetchCategories,
@@ -816,7 +817,13 @@ const AdminPanel = () => {
   }, [productosLista, productSearch, categorias]);
 
   return (
-    <div className="admin-container">
+    <>
+      <SEO
+        title="Panel de Administracion"
+        description="Panel de administracion para gestionar productos, categorias, reservas y contenido del sitio."
+        noindex
+      />
+      <div className="admin-container">
       <div className="admin-header">
         <h1>Panel de Administracion</h1>
         <p>Crear, editar y gestionar productos del catalogo.</p>
@@ -1786,6 +1793,7 @@ const AdminPanel = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

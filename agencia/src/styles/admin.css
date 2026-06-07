@@ -162,7 +162,7 @@ textarea.admin-field-error:focus {
 
 .admin-field-error-msg::before {
   content: "⚠";
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
   font-weight: bold;
 }
 
@@ -576,7 +576,7 @@ textarea.admin-field-error:focus {
 }
 
 .admin-amenity-chip-emoji {
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
   line-height: 1;
 }
 
@@ -651,7 +651,7 @@ textarea.admin-field-error:focus {
 }
 
 .admin-amenity-emoji-preview {
-  font-size: 1.6rem;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
   min-width: 38px;
   text-align: center;
   background: var(--color-background);
@@ -721,7 +721,7 @@ textarea.admin-field-error:focus {
   background: transparent;
   border: 1px solid rgba(15, 211, 211, 0.3);
   border-radius: 6px;
-  font-size: 1.4rem;
+  font-size: clamp(1.1rem, 2.8vw, 1.4rem);
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -848,7 +848,7 @@ textarea.admin-field-error:focus {
   align-items: center;
   justify-content: center;
   background: #c0392b;
-  color: #fff;
+  color: var(--color-text-light);
   font-size: 0.7rem;
   font-weight: 700;
   min-width: 18px;
@@ -860,7 +860,7 @@ textarea.admin-field-error:focus {
 }
 
 .admin-tab--active .admin-tab-badge {
-  background: #fff;
+  background: var(--color-background);
   color: #c0392b;
 }
 
@@ -1000,7 +1000,7 @@ textarea.admin-field-error:focus {
 
 .admin-inbox-btn--active {
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-text-light);
   cursor: default;
 }
 
@@ -1014,7 +1014,7 @@ textarea.admin-field-error:focus {
 
 .admin-inbox-btn--reply:hover {
   background: var(--color-primary-dark);
-  color: #fff;
+  color: var(--color-text-light);
 }
 
 /* ── Reservas ────────────────────────────────────────────────────────── */
@@ -1581,7 +1581,7 @@ textarea.admin-field-error:focus {
 
 .admin-modal-btn--danger {
   background: var(--color-danger);
-  color: #fff;
+  color: var(--color-text-light);
 }
 
 .admin-modal-btn--danger:hover {
@@ -1638,7 +1638,7 @@ textarea.admin-field-error:focus {
   left: 3px;
   width: 18px;
   height: 18px;
-  background: #fff;
+  background: var(--color-background);
   border-radius: 50%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);

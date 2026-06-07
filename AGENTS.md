@@ -271,3 +271,6 @@ La tarjeta `.airline-card` con `position: sticky` se solapaba con el header stic
 - **Fix:** `top: 30px` → `top: 100px` (clear header height)
 - **Fix:** agregar `align-self: flex-start`
 - **Font-family:** evitar doble quoting: `'Lora', serif` no `"'Lora', serif"`
+
+### MCP tools
+cuando necesites buscar documentacion, usa 'context7' tools.
