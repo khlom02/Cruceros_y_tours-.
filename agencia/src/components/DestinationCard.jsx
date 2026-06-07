@@ -123,7 +123,6 @@ const DestinationCard = ({
           <div className="destination-card__price-area">
             <span className="destination-card__price-from">Desde</span>
             <span className="destination-card__price-value">US${precio}</span>
-            <span className="destination-card__price-label">Precio Total</span>
           </div>
         )}
 
