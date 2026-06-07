@@ -14,6 +14,7 @@ import {
   fetchSuscripcionesAdmin,
   updateSuscripcionEstado,
 } from "../backend/supabase_client";
+import DestinationCard from "./DestinationCard";
 
 // ─── Nombre del bucket de Supabase Storage donde se guardan las imagenes ───
 const BUCKET_NAME = "content media";
@@ -189,6 +190,15 @@ const AdminPanel = () => {
     amenities: true,
     highlights: true,
   });
+
+  // ─── Formulario especial para Destinos Nacionales / Internacionales ────
+  const emptyDestino = { destino: '', pais: '', precio: '', imagenes: [], previewUrls: [] };
+  const [destinosItems, setDestinosItems] = useState([{ ...emptyDestino }]);
+  const [destinoImageIndex, setDestinoImageIndex] = useState({});
+  const isDestinosCategory = useMemo(() => {
+    const nombre = categorias.find((c) => String(c.id) === String(producto.categoria_id))?.nombre || '';
+    return nombre.toLowerCase().includes('destinos nacionales') || nombre.toLowerCase().includes('destinos internacionales');
+  }, [categorias, producto.categoria_id]);
   const toggleSection = (key) =>
     setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -371,6 +381,7 @@ const AdminPanel = () => {
     setFieldErrors({});
     setError("");
     submittingRef.current = false;
+    resetDestinosForm();
   };
 
   // ─── Cargar producto en el formulario para edicion ────────────────────────
@@ -467,6 +478,80 @@ const AdminPanel = () => {
     event.preventDefault();
     setError("");
     setSuccess(null);
+
+    // ── MODO ESPECIAL: Destinos Nacionales / Internacionales ──────────────
+    if (isDestinosCategory) {
+      const validItems = destinosItems.filter((d) => d.destino.trim() && d.pais.trim() && d.precio);
+      if (validItems.length === 0) {
+        setError("Debes agregar al menos un destino con destino, país y precio.");
+        return;
+      }
+      for (const item of validItems) {
+        if (item.imagenes.length === 0) {
+          setError(`El destino "${item.destino}" debe tener al menos una imagen.`);
+          return;
+        }
+      }
+
+      try {
+        setLoading(true);
+        const catId = parseNumber(producto.categoria_id);
+
+        for (const item of validItems) {
+          // Subir imágenes
+          const imageUrls = [];
+          for (const file of item.imagenes) {
+            const url = await uploadFile(file, 'productos/destinos');
+            imageUrls.push(url);
+          }
+
+          // Crear producto
+          const { data: prod, error: prodErr } = await supabase
+            .from('productos')
+            .insert({
+              titulo: item.destino.trim(),
+              descripcion: `${item.destino.trim()}, ${item.pais.trim()}`,
+              precio: parseNumber(item.precio),
+              imagen: imageUrls[0] || null,
+              ubicacion: `${item.destino.trim()}, ${item.pais.trim()}`,
+              categoria_id: catId,
+              activo: true,
+              color_fondo: 'verde',
+            })
+            .select()
+            .single();
+
+          if (prodErr) throw prodErr;
+
+          // Guardar imágenes extra en galería
+          if (imageUrls.length > 1) {
+            const galleryRows = imageUrls.slice(1).map((url, idx) => ({
+              producto_id: prod.id,
+              imagen_url: url,
+              posicion_orden: idx + 1,
+            }));
+            const { error: gErr } = await supabase.from('galleries').insert(galleryRows);
+            if (gErr) throw gErr;
+          }
+        }
+
+        setSuccess({
+          titulo: `${validItems.length} destino(s)`,
+          categoria: categoriaNombre,
+          ruta: rutaPorCategoria(categoriaNombre),
+          modo: 'creado',
+        });
+        resetForm();
+      } catch (err) {
+        console.error('Error al guardar destinos:', err);
+        setError(`Error al guardar: ${err?.message || 'Error desconocido'}`);
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
+    // ── MODO REGULAR ──────────────────────────────────────────────────────
     const newFieldErrors = {};
 
     // Validaciones básicas
@@ -807,6 +892,65 @@ const AdminPanel = () => {
   const nombreCategoria = (catId) =>
     categorias.find((c) => String(c.id) === String(catId))?.nombre || "—";
 
+  // ─── Handlers para formulario de Destinos ──────────────────────────────
+  const handleDestinoChange = (index, field, value) => {
+    setDestinosItems((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+    );
+  };
+
+  const handleDestinoImageAdd = (index, files) => {
+    const newFiles = Array.from(files || []).slice(0, 3);
+    setDestinosItems((prev) =>
+      prev.map((item, i) => {
+        if (i !== index) return item;
+        const combined = [...item.imagenes, ...newFiles].slice(0, 3);
+        const newPreviews = combined.map((f) =>
+          typeof f === 'string' ? f : URL.createObjectURL(f)
+        );
+        return { ...item, imagenes: combined, previewUrls: newPreviews };
+      })
+    );
+  };
+
+  const handleDestinoImageRemove = (index, imgIndex) => {
+    setDestinosItems((prev) =>
+      prev.map((item, i) => {
+        if (i !== index) return item;
+        const newImgs = item.imagenes.filter((_, j) => j !== imgIndex);
+        const newPreviews = item.previewUrls.filter((_, j) => j !== imgIndex);
+        return { ...item, imagenes: newImgs, previewUrls: newPreviews };
+      })
+    );
+    setDestinoImageIndex((prev) => ({ ...prev, [index]: 0 }));
+  };
+
+  const addDestinoItem = () => {
+    setDestinosItems((prev) => [...prev, { ...emptyDestino }]);
+  };
+
+  const removeDestinoItem = (index) => {
+    if (destinosItems.length <= 1) return;
+    setDestinosItems((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const navigateDestinoImage = (itemIndex, dir) => {
+    setDestinoImageIndex((prev) => {
+      const current = prev[itemIndex] || 0;
+      const total = destinosItems[itemIndex]?.previewUrls?.length || 0;
+      if (total === 0) return prev;
+      const next = dir === 'next'
+        ? (current + 1) % total
+        : (current - 1 + total) % total;
+      return { ...prev, [itemIndex]: next };
+    });
+  };
+
+  const resetDestinosForm = () => {
+    setDestinosItems([{ ...emptyDestino }]);
+    setDestinoImageIndex({});
+  };
+
   const productosFiltrados = useMemo(() => {
     if (!productSearch.trim()) return productosLista;
     const q = productSearch.toLowerCase();
@@ -960,6 +1104,91 @@ const AdminPanel = () => {
                 {fieldErrors.categoria_id && <span className="admin-field-error-msg">Selecciona una categoría</span>}
               </label>
 
+              {/* ── Formulario especial para Destinos Nacionales / Internacionales ── */}
+              {isDestinosCategory && (
+                <div className="admin-destinos-form" style={{ gridColumn: '1 / -1' }}>
+                  <p className="admin-help" style={{ marginBottom: '16px', fontSize: '0.95rem', color: 'var(--color-primary-dark)', fontWeight: 600 }}>
+                    Formulario especial de destinos — Máximo 3 imágenes por producto, navegables con flechas
+                  </p>
+
+                  {destinosItems.map((item, idx) => (
+                    <div key={`destino-${idx}`} className="admin-destino-card">
+                      <div className="admin-destino-card__header">
+                        <span className="admin-destino-card__number">{idx + 1}</span>
+                        <span className="admin-destino-card__label">Destino {idx + 1}</span>
+                        {destinosItems.length > 1 && (
+                          <button type="button" className="admin-btn-delete" onClick={() => removeDestinoItem(idx)} style={{ marginLeft: 'auto', padding: '5px 12px', fontSize: '0.8rem' }}>
+                            Quitar
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="admin-destino-card__body">
+                        {/* Preview de imágenes con flechas */}
+                        <div className="admin-destino-preview">
+                          {item.previewUrls.length > 0 ? (
+                            <>
+                              <div className="admin-destino-preview__image-wrapper">
+                                <img
+                                  src={item.previewUrls[destinoImageIndex[idx] || 0]}
+                                  alt={`Preview ${idx + 1}`}
+                                  className="admin-destino-preview__image"
+                                />
+                                {item.previewUrls.length > 1 && (
+                                  <>
+                                    <button type="button" className="admin-destino-preview__arrow admin-destino-preview__arrow--left" onClick={() => navigateDestinoImage(idx, 'prev')}>‹</button>
+                                    <button type="button" className="admin-destino-preview__arrow admin-destino-preview__arrow--right" onClick={() => navigateDestinoImage(idx, 'next')}>›</button>
+                                    <div className="admin-destino-preview__counter">
+                                      {(destinoImageIndex[idx] || 0) + 1} / {item.previewUrls.length}
+                                    </div>
+                                  </>
+                                )}
+                                <button type="button" className="admin-destino-preview__remove" onClick={() => handleDestinoImageRemove(idx, destinoImageIndex[idx] || 0)} title="Eliminar imagen">✕</button>
+                              </div>
+                              {item.previewUrls.length < 3 && (
+                                <label className="admin-destino-preview__add-more">
+                                  + Agregar imagen ({item.previewUrls.length}/3)
+                                  <input type="file" accept="image/*" multiple onChange={(e) => handleDestinoImageAdd(idx, e.target.files)} style={{ display: 'none' }} />
+                                </label>
+                              )}
+                            </>
+                          ) : (
+                            <label className="admin-destino-preview__upload">
+                              <span className="admin-destino-preview__upload-icon">📷</span>
+                              <span>Subir imágenes (máx. 3)</span>
+                              <input type="file" accept="image/*" multiple onChange={(e) => handleDestinoImageAdd(idx, e.target.files)} style={{ display: 'none' }} />
+                            </label>
+                          )}
+                        </div>
+
+                        {/* Campos de texto */}
+                        <div className="admin-destino-fields">
+                          <label>
+                            Destino
+                            <input type="text" placeholder="ej: Miami" value={item.destino} onChange={(e) => handleDestinoChange(idx, 'destino', e.target.value)} required />
+                          </label>
+                          <label>
+                            País
+                            <input type="text" placeholder="ej: Estados Unidos de América" value={item.pais} onChange={(e) => handleDestinoChange(idx, 'pais', e.target.value)} required />
+                          </label>
+                          <label>
+                            Precio Desde (USD)
+                            <input type="number" min="0" step="1" placeholder="ej: 450" value={item.precio} onChange={(e) => handleDestinoChange(idx, 'precio', e.target.value)} onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()} required />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <button type="button" className="admin-destinos-add-btn" onClick={addDestinoItem}>
+                    <span className="admin-destinos-add-btn__icon">+</span>
+                    <span>Agregar otro destino</span>
+                  </button>
+                </div>
+              )}
+
+              {!isDestinosCategory && (
+              <>
               <label>
                 Ubicacion
                 <input
@@ -1026,8 +1255,12 @@ const AdminPanel = () => {
                   onChange={(e) => handleProductoChange("fecha_fin", e.target.value)}
                 />
               </label>
+              </>
+              )}
             </div>
 
+            {!isDestinosCategory && (
+            <>
             <label className="admin-toggle">
               <input
                 type="checkbox"
@@ -1055,6 +1288,8 @@ const AdminPanel = () => {
               />
               {fieldErrors.imagenFile && <span className="admin-field-error-msg">Debes subir una imagen</span>}
             </label>
+              </>
+              )}
             </div>
           </section>
 
@@ -1133,6 +1368,8 @@ const AdminPanel = () => {
           )}
 
           {/* ── Galeria ── */}
+          {!isDestinosCategory && (
+          <>
           <section className="admin-section admin-section-collapsible">
             <div className="admin-collapsible-header" onClick={() => toggleSection("galeria")}>
               <h2>🖼️ Galeria {editingProductId && "(agregar nuevas)"}</h2>
@@ -1399,6 +1636,8 @@ const AdminPanel = () => {
             </button>
             </div>
           </section>
+          </>
+          )}
 
           {/* ── Mensajes ── */}
           {error && <div className="admin-error">{error}</div>}
@@ -1414,7 +1653,7 @@ const AdminPanel = () => {
           )}
 
           <button className="admin-submit" type="submit" disabled={loading}>
-            {loading ? "Guardando..." : editingProductId ? "Guardar cambios" : "Crear producto"}
+            {loading ? "Guardando..." : isDestinosCategory ? "Crear destino(s)" : editingProductId ? "Guardar cambios" : "Crear producto"}
           </button>
         </form>
       )}

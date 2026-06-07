@@ -1,0 +1,268 @@
+/* ═══════════════════════════════════════════════════════════════
+   DESTINATION CARD — Luxury Travel Aesthetic
+   ═══════════════════════════════════════════════════════════════ */
+
+.destination-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 340px;
+  display: flex;
+  align-items: flex-end;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.destination-card:hover {
+  transform: translateY(-10px) scale(1.015);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.25),
+    0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.destination-card:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* ── Overlay — cinematic gradient ── */
+
+.destination-card__overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.02) 40%,
+      rgba(0, 0, 0, 0.45) 75%,
+      rgba(0, 0, 0, 0.7) 100%
+    );
+  z-index: 1;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.destination-card:hover .destination-card__overlay {
+  opacity: 0.9;
+}
+
+/* ── Content block ── */
+
+.destination-card__content {
+  position: relative;
+  z-index: 2;
+  padding: 28px 24px 24px;
+  width: 100%;
+}
+
+.destination-card__titulo {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+  font-weight: 700;
+  color: var(--color-text-light);
+  font-family: 'Lora', serif;
+  line-height: 1.25;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  letter-spacing: -0.3px;
+}
+
+.destination-card__subtitulo {
+  margin: 5px 0 0;
+  font-size: clamp(0.82rem, 1.4vw, 0.95rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.88);
+  font-family: 'Lora', serif;
+  line-height: 1.4;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+}
+
+.destination-card__precio {
+  margin: 10px 0 0;
+  display: inline-block;
+  font-size: clamp(0.78rem, 1.2vw, 0.9rem);
+  font-weight: 700;
+  color: var(--color-primary);
+  font-family: 'Chicago Police', sans-serif;
+  letter-spacing: 0.5px;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(15, 211, 211, 0.2);
+}
+
+/* ── Flechas de navegación — glass morphism ── */
+
+.destination-card__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.35);
+  color: white;
+  font-size: 22px;
+  font-weight: 300;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  line-height: 1;
+  opacity: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.destination-card:hover .destination-card__arrow {
+  opacity: 1;
+}
+
+.destination-card__arrow:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-50%) scale(1.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.destination-card__arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.destination-card__arrow--left {
+  left: 12px;
+}
+
+.destination-card__arrow--right {
+  right: 12px;
+}
+
+/* ── Puntos indicadores — pill style ── */
+
+.destination-card__dots {
+  position: absolute;
+  bottom: 78px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  gap: 7px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 20px;
+}
+
+.destination-card__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  border: none;
+  padding: 0;
+}
+
+.destination-card__dot:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.destination-card__dot--active {
+  width: 24px;
+  border-radius: 5px;
+  background: var(--color-primary);
+  box-shadow: 0 0 10px rgba(15, 211, 211, 0.4);
+}
+
+/* ── Image crossfade wrapper ── */
+
+.destination-card__image-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 768px) {
+  .destination-card {
+    min-height: 280px;
+    border-radius: 16px;
+  }
+
+  .destination-card__content {
+    padding: 22px 20px 20px;
+  }
+
+  .destination-card__arrow {
+    width: 34px;
+    height: 34px;
+    font-size: 20px;
+  }
+
+  .destination-card__dots {
+    bottom: 70px;
+    gap: 6px;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .destination-card {
+    min-height: 240px;
+    border-radius: 14px;
+  }
+
+  .destination-card__content {
+    padding: 18px 16px 16px;
+  }
+
+  .destination-card__titulo {
+    font-size: 1.1rem;
+  }
+
+  .destination-card__subtitulo {
+    font-size: 0.82rem;
+  }
+
+  .destination-card__precio {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+  }
+
+  .destination-card__arrow {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    opacity: 1;
+  }
+
+  .destination-card__dots {
+    bottom: 62px;
+  }
+
+  .destination-card__dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .destination-card__dot--active {
+    width: 18px;
+  }
+}
