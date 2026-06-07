@@ -2,11 +2,53 @@
    DESTINATION CARD — Luxury Travel Aesthetic
    ═══════════════════════════════════════════════════════════════ */
 
+/* ── Grid de destinos — matching tour cards ── */
+
+.destinos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  padding: 0 64px;
+  max-width: 1800px;
+  margin: 0 auto 60px;
+}
+
+@media (max-width: 1200px) {
+  .destinos-grid {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 40px;
+  }
+}
+
+@media (max-width: 900px) {
+  .destinos-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .destinos-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .destinos-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 12px;
+  }
+}
+
 .destination-card {
   position: relative;
   border-radius: 18px;
   overflow: hidden;
-  min-height: 340px;
+  min-height: 400px;
   display: flex;
   align-items: flex-end;
   background-size: cover;
@@ -202,7 +244,7 @@
 
 @media (max-width: 768px) {
   .destination-card {
-    min-height: 280px;
+    min-height: 300px;
     border-radius: 16px;
   }
 
@@ -225,7 +267,7 @@
 
 @media (max-width: 480px) {
   .destination-card {
-    min-height: 240px;
+    min-height: 260px;
     border-radius: 14px;
   }
 

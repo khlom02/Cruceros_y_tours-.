@@ -565,7 +565,7 @@ const AdminPanel = () => {
       setError("Debes seleccionar una categoría.");
     }
 
-    if (!producto.precio || Number(producto.precio) <= 0) {
+    if (!isDestinosCategory && (!producto.precio || Number(producto.precio) <= 0)) {
       newFieldErrors.precio = true;
       setError("El precio es obligatorio y debe ser mayor a 0.");
     }
@@ -604,7 +604,7 @@ const AdminPanel = () => {
     }
 
     // En modo crear, la imagen es obligatoria. En edicion es opcional (se mantiene la existente)
-    if (!editingProductId && !producto.imagenFile) {
+    if (!isDestinosCategory && !editingProductId && !producto.imagenFile) {
       newFieldErrors.imagenFile = true;
       setError("Debes subir una imagen principal.");
     }
@@ -900,11 +900,14 @@ const AdminPanel = () => {
   };
 
   const handleDestinoImageAdd = (index, files) => {
-    const newFiles = Array.from(files || []).slice(0, 3);
+    const fileArray = [];
+    for (let i = 0; i < Math.min(files.length, 3); i++) {
+      fileArray.push(files[i]);
+    }
     setDestinosItems((prev) =>
       prev.map((item, i) => {
         if (i !== index) return item;
-        const combined = [...item.imagenes, ...newFiles].slice(0, 3);
+        const combined = [...item.imagenes, ...fileArray].slice(0, 3);
         const newPreviews = combined.map((f) =>
           typeof f === 'string' ? f : URL.createObjectURL(f)
         );
@@ -1072,6 +1075,7 @@ const AdminPanel = () => {
             </label>
 
             <div className="admin-grid">
+              {!isDestinosCategory && (
               <label className={fieldErrors.precio ? "admin-field-error-label" : ""}>
                 Precio (0 - 999,999)
                 <input
@@ -1087,6 +1091,7 @@ const AdminPanel = () => {
                 />
                 {fieldErrors.precio && <span className="admin-field-error-msg">⚠️ Precio máximo: 999,999</span>}
               </label>
+              )}
 
               <label className={fieldErrors.categoria_id ? "admin-field-error-label" : ""}>
                 Categoria
@@ -1130,6 +1135,7 @@ const AdminPanel = () => {
                             <>
                               <div className="admin-destino-preview__image-wrapper">
                                 <img
+                                  key={item.previewUrls[destinoImageIndex[idx] || 0]}
                                   src={item.previewUrls[destinoImageIndex[idx] || 0]}
                                   alt={`Preview ${idx + 1}`}
                                   className="admin-destino-preview__image"

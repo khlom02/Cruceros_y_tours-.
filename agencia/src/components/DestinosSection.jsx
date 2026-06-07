@@ -16,15 +16,6 @@ const tituloStyle = {
   fontFamily: "'Photogenic', serif"
 };
 
-const gridStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-  gap: '24px',
-  padding: '0 24px',
-  maxWidth: '1300px',
-  margin: '0 auto 60px',
-};
-
 const DestinosSection = () => {
   const navigate = useNavigate();
   const [nacionales, setNacionales] = useState([]);
@@ -103,7 +94,7 @@ const DestinosSection = () => {
     <>
       {/* ── Destinos Nacionales ── */}
       <h2 style={tituloStyle}>Destinos Nacionales</h2>
-      <div style={gridStyle}>
+      <div className="destinos-grid">
         {nacionales.length > 0 ? nacionales.map(dest => (
           <DestinationCard
             key={dest.id}
@@ -123,7 +114,7 @@ const DestinosSection = () => {
 
       {/* ── Destinos Internacionales ── */}
       <h2 style={tituloStyle}>Destinos Internacionales</h2>
-      <div style={gridStyle}>
+      <div className="destinos-grid">
         {internacionales.length > 0 ? internacionales.map(dest => (
           <DestinationCard
             key={dest.id}
