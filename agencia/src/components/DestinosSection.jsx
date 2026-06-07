@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { FaWhatsappSquare } from 'react-icons/fa';
 import DestinationCard from './DestinationCard';
 import { fetchCategories, fetchProductsByCategory, supabase } from '../backend/supabase_client';
@@ -6,7 +6,7 @@ import { getSupabaseImageUrl } from '../utils/imageHelper';
 import { useNavigate } from 'react-router-dom';
 import '../styles/destination_card.css';
 
-const ITEMS_POR_PAGINA = 4;
+const AUTOPLAY_DELAY = 7000;
 
 const tituloStyle = {
   textAlign: 'center',
@@ -24,8 +24,6 @@ const DestinosSection = () => {
   const [nacionales, setNacionales] = useState([]);
   const [internacionales, setInternacionales] = useState([]);
   const [cargando, setCargando] = useState(true);
-  const [pageNac, setPageNac] = useState(0);
-  const [pageInt, setPageInt] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -88,72 +86,6 @@ const DestinosSection = () => {
     return () => { cancelled = true; };
   }, []);
 
-  const renderSeccion = (items, titulo, page, setPage) => {
-    const esCarousel = items.length > ITEMS_POR_PAGINA;
-    const totalPaginas = esCarousel ? Math.ceil(items.length / ITEMS_POR_PAGINA) : 1;
-    const inicio = esCarousel ? page * ITEMS_POR_PAGINA : 0;
-    const visibles = items.slice(inicio, inicio + ITEMS_POR_PAGINA);
-
-    const onPrev = () => setPage((p) => (p - 1 + totalPaginas) % totalPaginas);
-    const onNext = () => setPage((p) => (p + 1) % totalPaginas);
-
-    return (
-      <div className="destinos-section-wrapper">
-        <h2 style={tituloStyle}>{titulo}</h2>
-
-        <div className={esCarousel ? 'destinos-carousel-section' : undefined}>
-          <div className={`destinos-grid${esCarousel ? ' destinos-grid--carousel' : ''}`}>
-            {visibles.length > 0 ? visibles.map((dest) => (
-              <DestinationCard
-                key={dest.id}
-                imagen={dest.imagen}
-                imagenes={dest.imagenes}
-                titulo={dest.titulo}
-                precio={dest.precio}
-                onClick={() => navigate(`/detalles?id=${dest.id}`)}
-              />
-            )) : (
-              <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#666' }}>
-                No hay {titulo.toLowerCase()} disponibles.
-              </p>
-            )}
-          </div>
-
-          {esCarousel && (
-            <>
-              <button
-                type="button"
-                className="carousel3d-indicator-row__arrow carousel3d-indicator-row__arrow--prev"
-                onClick={onPrev}
-                aria-label="Anterior"
-              >‹</button>
-              <button
-                type="button"
-                className="carousel3d-indicator-row__arrow carousel3d-indicator-row__arrow--next"
-                onClick={onNext}
-                aria-label="Siguiente"
-              >›</button>
-
-              <div className="carousel3d-indicators">
-                <div className="carousel3d-indicator-row">
-                  {Array.from({ length: totalPaginas }, (_, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      className={`carousel3d-indicator${i === page ? ' is-active' : ''}`}
-                      onClick={() => setPage(i)}
-                      aria-label={`Ir a página ${i + 1}`}
-                    />
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    );
-  };
-
   if (cargando) {
     return (
       <div style={{ textAlign: 'center', padding: '40px', color: '#666', fontSize: '1.1rem' }}>
@@ -164,8 +96,16 @@ const DestinosSection = () => {
 
   return (
     <>
-      {renderSeccion(nacionales, 'Destinos Nacionales', pageNac, setPageNac)}
-      {renderSeccion(internacionales, 'Destinos Internacionales', pageInt, setPageInt)}
+      <DestinosCarousel
+        items={nacionales}
+        titulo="Destinos Nacionales"
+        navigate={navigate}
+      />
+      <DestinosCarousel
+        items={internacionales}
+        titulo="Destinos Internacionales"
+        navigate={navigate}
+      />
 
       <a
         href={`https://wa.me/584142783669?text=${encodeURIComponent('Hola, quiero información sobre los destinos')}`}
@@ -177,6 +117,150 @@ const DestinosSection = () => {
         <FaWhatsappSquare size={30} />
       </a>
     </>
+  );
+};
+
+const getSlidesPerView = () => {
+  const w = window.innerWidth;
+  if (w <= 600) return 1;
+  if (w <= 900) return 2;
+  if (w <= 1200) return 3;
+  return 4;
+};
+
+const DestinosCarousel = ({ items, titulo, navigate }) => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [slidesPerView, setSlidesPerView] = useState(getSlidesPerView);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const autoplayRef = useRef(null);
+  const containerRef = useRef(null);
+
+  const totalSlides = items.length;
+  const isLoop = totalSlides > slidesPerView;
+  const slideWidth = containerWidth / slidesPerView;
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      setSlidesPerView(getSlidesPerView());
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+    };
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
+  const goNext = useCallback(() => {
+    if (isLoop) {
+      setCurrentSlide((prev) => (prev + 1) % totalSlides);
+    } else {
+      setCurrentSlide((prev) => Math.min(prev + 1, Math.max(0, totalSlides - slidesPerView)));
+    }
+  }, [isLoop, totalSlides, slidesPerView]);
+
+  const goPrev = useCallback(() => {
+    if (isLoop) {
+      setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+    } else {
+      setCurrentSlide((prev) => Math.max(prev - 1, 0));
+    }
+  }, [isLoop, totalSlides]);
+
+  useEffect(() => {
+    if (isHovered || !isLoop) return;
+
+    autoplayRef.current = setInterval(goNext, AUTOPLAY_DELAY);
+
+    return () => {
+      if (autoplayRef.current) clearInterval(autoplayRef.current);
+    };
+  }, [isHovered, isLoop, goNext]);
+
+  const translateX = -currentSlide * slideWidth;
+
+  const visibleBullets = isLoop ? totalSlides : Math.max(1, totalSlides - slidesPerView + 1);
+  const currentBullet = isLoop
+    ? currentSlide % totalSlides
+    : Math.min(currentSlide, visibleBullets - 1);
+
+  const handleBulletClick = (index) => {
+    if (isLoop) {
+      setCurrentSlide(index % totalSlides);
+    } else {
+      setCurrentSlide(Math.min(index, totalSlides - slidesPerView));
+    }
+  };
+
+  return (
+    <div className="destinos-section-wrapper">
+      <h2 style={tituloStyle}>{titulo}</h2>
+
+      {items.length === 0 ? (
+        <p style={{ textAlign: 'center', color: '#666' }}>
+          No hay {titulo.toLowerCase()} disponibles.
+        </p>
+      ) : (
+        <div
+          className="destinos-carousel"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <div className="destinos-carousel__viewport" ref={containerRef}>
+            <div
+              className="destinos-carousel__track"
+              style={{ transform: `translateX(${translateX}px)` }}
+            >
+              {items.map((dest) => (
+                <div
+                  key={dest.id}
+                  className="destinos-carousel__slide"
+                  style={{ flex: `0 0 ${100 / slidesPerView}%` }}
+                >
+                  <DestinationCard
+                    imagen={dest.imagen}
+                    imagenes={dest.imagenes}
+                    titulo={dest.titulo}
+                    precio={dest.precio}
+                    onClick={() => navigate(`/detalles?id=${dest.id}`)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {(isLoop || totalSlides > slidesPerView) && (
+            <>
+              <button
+                type="button"
+                className="destinos-carousel__arrow destinos-carousel__arrow--prev"
+                onClick={goPrev}
+                aria-label="Anterior"
+              >‹</button>
+              <button
+                type="button"
+                className="destinos-carousel__arrow destinos-carousel__arrow--next"
+                onClick={goNext}
+                aria-label="Siguiente"
+              >›</button>
+
+              <div className="destinos-carousel__pagination">
+                {Array.from({ length: visibleBullets }, (_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    className={`destinos-carousel__bullet${i === currentBullet ? ' destinos-carousel__bullet--active' : ''}`}
+                    onClick={() => handleBulletClick(i)}
+                    aria-label={`Ir a página ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 
