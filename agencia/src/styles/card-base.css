@@ -1,0 +1,319 @@
+/* ═══════════════════════════════════════════════════════════════
+   CARD BASE — Sistema reutilizable de tarjetas
+   ═══════════════════════════════════════════════════════════════
+   
+   USO: Importar este archivo en cualquier componente card.
+   Aplica las variables de card-base a través de clases utilitarias.
+   
+   CLASES DISPONIBLES:
+   - .card              → Base genérica
+   - .card--hero        → Card principal (destinos, tours, cruceros)
+   - .card--content     → Card de contenido (testimonios, info)
+   - .card--utility     → Card de utilidad (admin, paneles)
+   - .card--compact     → Card compacta (aerolíneas, badges)
+   
+   MODIFICADORES:
+   - .card--hover       → Efecto hover con elevación
+   - .card--border      → Borde decorativo
+   - .card--glass       → Efecto vidrio esmerilado
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Base ── */
+
+.card {
+  position: relative;
+  border-radius: var(--card-hero-radius);
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: var(--card-transition);
+}
+
+.card *,
+.card *::before,
+.card *::after {
+  box-sizing: border-box;
+}
+
+/* ── Tier: Hero (productos principales) ── */
+
+.card--hero {
+  min-height: var(--card-hero-min-height);
+  border-radius: var(--card-hero-radius);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.card--hero .card__body {
+  padding: var(--card-hero-padding);
+  gap: var(--card-hero-gap);
+}
+
+.card--hero .card__title {
+  margin: 0;
+  font-size: var(--card-font-title);
+  font-weight: 600;
+  font-family: 'Lora', serif;
+  line-height: 1.3;
+  color: var(--color-text-light);
+}
+
+.card--hero .card__subtitle {
+  font-size: var(--card-font-subtitle);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Lora', serif;
+}
+
+.card--hero .card__price {
+  font-size: var(--card-font-price);
+  font-weight: 700;
+  color: var(--color-text-light);
+  font-family: 'Lora', serif;
+  line-height: 1.1;
+}
+
+.card--hero .card__label {
+  font-size: var(--card-font-label);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: 'Lora', serif;
+  text-transform: uppercase;
+}
+
+.card--hero .card__badge {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-size: var(--card-font-badge);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: 'Chicago Police', sans-serif;
+  letter-spacing: 0.3px;
+  background: var(--color-primary);
+  color: var(--color-text-light);
+}
+
+.card--hero .card__btn {
+  flex-shrink: 0;
+  padding: var(--card-btn-padding);
+  border: 2px solid var(--color-text-light);
+  border-radius: var(--card-btn-radius);
+  background: transparent;
+  color: var(--color-text-light);
+  font-size: var(--card-font-btn);
+  font-weight: 700;
+  font-family: 'Chicago Police', sans-serif;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.card--hero .card__btn:hover {
+  background: var(--color-text-light);
+  color: var(--color-text-primary);
+}
+
+/* ── Tier: Content (testimonios, info) ── */
+
+.card--content {
+  min-height: var(--card-content-min-height);
+  border-radius: var(--card-content-radius);
+  padding: var(--card-content-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-content-gap);
+  background: var(--color-background);
+  box-shadow: var(--shadow-sm);
+}
+
+.card--content .card__title {
+  margin: 0;
+  font-size: var(--card-font-title);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-family: 'Lora', serif;
+}
+
+.card--content .card__text {
+  font-size: var(--card-font-body);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Tier: Utility (admin, paneles) ── */
+
+.card--utility {
+  border-radius: var(--card-utility-radius);
+  padding: var(--card-utility-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-utility-gap);
+  background: var(--color-background);
+  border: 1px solid var(--color-primary-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.card--utility .card__title {
+  margin: 0;
+  font-size: var(--card-font-subtitle);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* ── Tier: Compact (aerolíneas, tags) ── */
+
+.card--compact {
+  border-radius: var(--card-compact-radius);
+  padding: var(--card-compact-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-compact-gap);
+  background: var(--color-background);
+  border: 2px solid var(--color-text-dark);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.card--compact .card__title {
+  margin: 0;
+  font-size: var(--card-font-subtitle);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MODIFICADORES
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Hover elevación ── */
+
+.card--hover {
+  cursor: pointer;
+}
+
+.card--hover:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.card--hover:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* ── Borde decorativo ── */
+
+.card--border {
+  border: 2px solid var(--color-primary);
+}
+
+/* ── Efecto vidrio ── */
+
+.card--glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GRID DE CARDS — Responsive automático
+   ═══════════════════════════════════════════════════════════════ */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--card-grid-gap);
+  padding: var(--card-grid-padding);
+  max-width: 1800px;
+  margin: 0 auto 60px;
+}
+
+.card-grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.card-grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.card-grid--auto {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE — Cards
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1200px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+    padding: var(--card-grid-padding-md);
+  }
+}
+
+@media (max-width: 900px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--card-grid-gap-md);
+    padding: var(--card-grid-padding-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--card-grid-gap-sm);
+    padding: 24px 16px;
+  }
+
+  .card--hero {
+    min-height: var(--card-hero-min-height-md);
+  }
+
+  .card--hero .card__body {
+    padding: var(--card-hero-padding-md);
+  }
+
+  .card--content {
+    padding: var(--card-content-padding-md);
+  }
+
+  .card--compact {
+    padding: var(--card-compact-padding-md);
+  }
+
+  .card--hero .card__btn {
+    padding: var(--card-btn-padding-md);
+  }
+}
+
+@media (max-width: 600px) {
+  .card--hero {
+    min-height: var(--card-hero-min-height-sm);
+  }
+
+  .card--hero .card__btn {
+    padding: var(--card-btn-padding-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: var(--card-grid-gap-sm);
+    padding: var(--card-grid-padding-xs);
+  }
+
+  .card--hero {
+    min-height: var(--card-hero-min-height-xs);
+  }
+
+  .card--hero .card__body {
+    padding: var(--card-hero-padding-sm);
+  }
+
+  .card--content {
+    padding: var(--card-content-padding-sm);
+  }
+}
