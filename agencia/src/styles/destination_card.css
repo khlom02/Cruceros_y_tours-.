@@ -1,99 +1,80 @@
 /* ═══════════════════════════════════════════════════════════════
-   DESTINATION CARD — Full-bg image cards with overlaid content
+   DESTINATION CARD — Tour cards with full-bg image
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── Section wrapper ── */
+/* ── Grid de destinos ── */
 
 .destinos-section-wrapper {
   position: relative;
 }
 
-/* ── Grid de destinos ── */
-
 .destinos-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding: 0 64px;
+  gap: 30px;
+  padding: 50px 64px;
   max-width: 1800px;
   margin: 0 auto 60px;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 900px;
 }
 
 @media (max-width: 1200px) {
   .destinos-grid {
     grid-template-columns: repeat(3, 1fr);
-    padding: 0 40px;
+    padding: 40px 40px;
   }
 }
 
 @media (max-width: 900px) {
   .destinos-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    padding: 0 24px;
+    gap: 20px;
+    padding: 30px 24px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .destinos-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    padding: 0 16px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 24px 16px;
   }
 }
 
 @media (max-width: 480px) {
   .destinos-grid {
-    gap: 12px;
-    padding: 0 12px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 20px 12px;
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   CARD — Full background image with overlaid content
-   ═══════════════════════════════════════════════════════════════ */
+/* ── Card — full background image with overlaid content ── */
 
 .destination-card {
   position: relative;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  min-height: 420px;
+  min-height: 400px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  align-items: flex-end;
   background-size: cover;
   background-position: center;
   cursor: pointer;
-  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
-              box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  text-decoration: none;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .destination-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
 }
 
 .destination-card:focus-visible {
   outline: 3px solid var(--color-primary);
   outline-offset: 3px;
-}
-
-/* ── Overlay — gradient from top to bottom ── */
-
-.destination-card__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.35) 0%,
-    rgba(0, 0, 0, 0.15) 40%,
-    rgba(0, 0, 0, 0.15) 60%,
-    rgba(0, 0, 0, 0.5) 100%
-  );
-  z-index: 1;
-  pointer-events: none;
 }
 
 /* ── Image layer ── */
@@ -105,11 +86,26 @@
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .destination-card:hover .destination-card__image {
-  transform: scale(1.06);
+  transform: scale(1.05);
+}
+
+/* ── Overlay — gradient from top to bottom ── */
+
+.destination-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.1) 40%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* ── Top content (title, features, badge) ── */
@@ -117,16 +113,17 @@
 .destination-card__top {
   position: relative;
   z-index: 2;
-  padding: 20px 20px 0;
+  padding: 24px;
+  width: 100%;
 }
 
 .destination-card__titulo {
   margin: 0;
-  font-size: clamp(1rem, 2vw, 1.35rem);
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: 600;
   color: #fff;
   font-family: 'Lora', serif;
-  line-height: 1.25;
+  line-height: 1.3;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
 }
 
@@ -145,10 +142,9 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: clamp(0.68rem, 0.9vw, 0.78rem);
+  font-size: 0.9rem;
   font-weight: 700;
   color: #fff;
-  text-transform: uppercase;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   font-family: 'Chicago Police', sans-serif;
   white-space: nowrap;
@@ -166,7 +162,7 @@
   margin-top: 12px;
   padding: 5px 14px;
   border-radius: 6px;
-  font-size: clamp(0.65rem, 0.9vw, 0.75rem);
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   font-family: 'Chicago Police', sans-serif;
@@ -198,11 +194,12 @@
 .destination-card__ribbon {
   position: relative;
   z-index: 2;
-  padding: 0 20px 20px;
+  padding: 0 24px 24px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 12px;
+  width: 100%;
 }
 
 .destination-card__price-area {
@@ -211,29 +208,29 @@
 }
 
 .destination-card__price-from {
-  font-size: clamp(0.65rem, 0.8vw, 0.72rem);
+  font-size: 0.85rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.8);
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-  font-family: 'Chicago Police', sans-serif;
+  font-family: 'Lora', serif;
   text-transform: uppercase;
 }
 
 .destination-card__price-value {
-  font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+  font-size: 1.8rem;
   font-weight: 700;
   color: #fff;
-  font-family: 'Chicago Police', sans-serif;
+  font-family: 'Lora', serif;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   line-height: 1.1;
 }
 
 .destination-card__price-label {
-  font-size: clamp(0.6rem, 0.75vw, 0.68rem);
+  font-size: 0.85rem;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.75);
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-  font-family: 'Chicago Police', sans-serif;
+  font-family: 'Lora', serif;
 }
 
 /* ── See button ── */
@@ -245,7 +242,7 @@
   border-radius: 8px;
   background: transparent;
   color: #fff;
-  font-size: clamp(0.8rem, 1vw, 0.9rem);
+  font-size: 0.9rem;
   font-weight: 700;
   font-family: 'Chicago Police', sans-serif;
   text-transform: uppercase;
@@ -267,23 +264,24 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 3;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: rgba(0, 0, 0, 0.3);
   color: white;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 300;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   line-height: 1;
   opacity: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .destination-card:hover .destination-card__arrow {
@@ -296,34 +294,38 @@
   transform: translateY(-50%) scale(1.1);
 }
 
+.destination-card__arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
 .destination-card__arrow--left {
-  left: 8px;
+  left: 10px;
 }
 
 .destination-card__arrow--right {
-  right: 8px;
+  right: 10px;
 }
 
 /* ── Image dots ── */
 
 .destination-card__dots {
   position: absolute;
-  bottom: 12px;
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
   display: flex;
-  gap: 5px;
-  padding: 4px 8px;
+  gap: 6px;
+  padding: 4px 10px;
   background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
 }
 
 .destination-card__dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.4);
   cursor: pointer;
@@ -337,13 +339,13 @@
 }
 
 .destination-card__dot--active {
-  width: 18px;
-  border-radius: 3px;
+  width: 20px;
+  border-radius: 4px;
   background: var(--color-primary);
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   CAROUSEL — Swiper-like slide animation
+   CAROUSEL — Slide animation
    ═══════════════════════════════════════════════════════════════ */
 
 .destinos-carousel {
@@ -367,7 +369,7 @@
   min-width: 0;
 }
 
-/* ── Carousel nav arrows — outside container ── */
+/* ── Carousel nav arrows ── */
 
 .destinos-carousel__arrow {
   position: absolute;
@@ -499,25 +501,42 @@
 
 @media (max-width: 768px) {
   .destination-card {
-    min-height: 360px;
+    min-height: 300px;
   }
 
   .destination-card__top {
-    padding: 16px 16px 0;
+    padding: 18px;
   }
 
   .destination-card__ribbon {
-    padding: 0 16px 16px;
+    padding: 0 18px 18px;
   }
 
-  .destination-card__features {
-    gap: 8px;
+  .destination-card__titulo {
+    font-size: 1.1rem;
+  }
+
+  .destination-card__feature {
+    font-size: 0.85rem;
+  }
+
+  .destination-card__badge {
+    font-size: 0.7rem;
+  }
+
+  .destination-card__price-value {
+    font-size: 1.5rem;
+  }
+
+  .destination-card__see-btn {
+    padding: 8px 20px;
+    font-size: 0.85rem;
   }
 
   .destination-card__arrow {
-    width: 28px;
-    height: 28px;
-    font-size: 16px;
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
   }
 
   .destinos-carousel__arrow {
@@ -554,41 +573,41 @@
   }
 
   .destination-card {
-    min-height: 340px;
+    min-height: 280px;
   }
 }
 
 @media (max-width: 480px) {
   .destination-card {
-    min-height: 320px;
+    min-height: 260px;
   }
 
   .destination-card__titulo {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .destination-card__feature {
-    font-size: 0.65rem;
+    font-size: 0.8rem;
   }
 
   .destination-card__badge {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     padding: 4px 10px;
   }
 
   .destination-card__price-value {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
   }
 
   .destination-card__see-btn {
-    padding: 8px 20px;
-    font-size: 0.75rem;
+    padding: 8px 16px;
+    font-size: 0.8rem;
   }
 
   .destination-card__arrow {
-    width: 26px;
-    height: 26px;
-    font-size: 14px;
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
     opacity: 1;
   }
 
