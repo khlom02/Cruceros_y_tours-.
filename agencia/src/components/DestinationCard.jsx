@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { FaMapMarkerAlt, FaMoon, FaHiking } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaMoon, FaTicketAlt } from 'react-icons/fa';
 import '../styles/destination_card.css';
 
 const BADGE_CLASSES = {
+  packages: 'destination-card__badge--packages',
   exclusive: 'destination-card__badge--exclusive',
-  package: 'destination-card__badge--package',
   recommended: 'destination-card__badge--recommended',
 };
 
@@ -46,83 +46,87 @@ const DestinationCard = ({
   return (
     <div
       className={`destination-card ${className}`}
+      style={{ backgroundImage: allImages[currentIndex] ? `url(${allImages[currentIndex]})` : 'none' }}
       onClick={handleCardClick}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
-      <div className="destination-card__image-wrapper">
-        <img
-          className="destination-card__image"
-          src={allImages[currentIndex] || ''}
-          alt={titulo || 'Destino'}
-          loading="lazy"
-        />
+      <img
+        className="destination-card__image"
+        src={allImages[currentIndex] || ''}
+        alt={titulo || 'Destino'}
+        loading="lazy"
+      />
 
-        {hasMultiple && (
-          <>
-            <button
-              className="destination-card__arrow destination-card__arrow--left"
-              onClick={(e) => goTo(e, 'prev')}
-              aria-label="Imagen anterior"
-            >
-              ‹
-            </button>
-            <button
-              className="destination-card__arrow destination-card__arrow--right"
-              onClick={(e) => goTo(e, 'next')}
-              aria-label="Siguiente imagen"
-            >
-              ›
-            </button>
-            <div className="destination-card__dots">
-              {allImages.map((_, i) => (
-                <span
-                  key={i}
-                  className={`destination-card__dot${i === currentIndex ? ' destination-card__dot--active' : ''}`}
-                  onClick={(e) => { e.stopPropagation(); setCurrentIndex(i); }}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
+      <div className="destination-card__overlay" />
 
-      <div className="destination-card__content">
-        {badge && (
-          <span className={`destination-card__badge ${BADGE_CLASSES[badgeType] || 'destination-card__badge--default'}`}>
-            {badge}
-          </span>
-        )}
+      {hasMultiple && (
+        <>
+          <button
+            className="destination-card__arrow destination-card__arrow--left"
+            onClick={(e) => goTo(e, 'prev')}
+            aria-label="Imagen anterior"
+          >
+            ‹
+          </button>
+          <button
+            className="destination-card__arrow destination-card__arrow--right"
+            onClick={(e) => goTo(e, 'next')}
+            aria-label="Siguiente imagen"
+          >
+            ›
+          </button>
+          <div className="destination-card__dots">
+            {allImages.map((_, i) => (
+              <span
+                key={i}
+                className={`destination-card__dot${i === currentIndex ? ' destination-card__dot--active' : ''}`}
+                onClick={(e) => { e.stopPropagation(); setCurrentIndex(i); }}
+              />
+            ))}
+          </div>
+        </>
+      )}
 
+      <div className="destination-card__top">
         <h3 className="destination-card__titulo">{titulo}</h3>
 
         {(destinosCount || nightsCount || activityCount) && (
-          <div className="destination-card__stats">
+          <div className="destination-card__features">
             {destinosCount && (
-              <span className="destination-card__stat">
-                <FaMapMarkerAlt className="destination-card__stat-icon" />
-                {destinosCount} {destinosCount === 1 ? 'Destino' : 'Destinos'}
+              <span className="destination-card__feature">
+                <FaMapMarkerAlt className="destination-card__feature-icon" />
+                {destinosCount} {destinosCount === 1 ? 'Destination' : 'Destinations'}
               </span>
             )}
             {nightsCount && (
-              <span className="destination-card__stat">
-                <FaMoon className="destination-card__stat-icon" />
-                {nightsCount} {nightsCount === 1 ? 'Noche' : 'Noches'}
+              <span className="destination-card__feature">
+                <FaMoon className="destination-card__feature-icon" />
+                {nightsCount} {nightsCount === 1 ? 'Night' : 'Nights'}
               </span>
             )}
             {activityCount && (
-              <span className="destination-card__stat">
-                <FaHiking className="destination-card__stat-icon" />
-                {activityCount} {activityCount === 1 ? 'Actividad' : 'Actividades'}
+              <span className="destination-card__feature">
+                <FaTicketAlt className="destination-card__feature-icon" />
+                {activityCount} {activityCount === 1 ? 'Activity' : 'Activities'}
               </span>
             )}
           </div>
         )}
 
+        {badge && (
+          <span className={`destination-card__badge ${BADGE_CLASSES[badgeType] || 'destination-card__badge--default'}`}>
+            {badge}
+          </span>
+        )}
+      </div>
+
+      <div className="destination-card__ribbon">
         {precio !== null && (
           <div className="destination-card__price-area">
-            <span className="destination-card__price-from">Desde</span>
+            <span className="destination-card__price-from">From</span>
             <span className="destination-card__price-value">US${precio}</span>
+            <span className="destination-card__price-label">Total Price</span>
           </div>
         )}
 
@@ -131,7 +135,7 @@ const DestinationCard = ({
           className="destination-card__see-btn"
           onClick={handleSeeClick}
         >
-          Ver
+          See
         </button>
       </div>
     </div>
