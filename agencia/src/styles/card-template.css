@@ -1,0 +1,348 @@
+/* ═══════════════════════════════════════════════════════════════
+   CARD TEMPLATE — Plantilla para nuevas cards
+   ═══════════════════════════════════════════════════════════════
+   
+   INSTRUCCIONES:
+   1. Copia este archivo como tu-card.css
+   2. Reemplaza "mi-card" con el nombre de tu card
+   3. Importa variables.css y card-base.css si usas las clases base
+   4. Ajusta los valores según tu necesidad
+   5. Agrega breakpoints según los estándares del proyecto
+   
+   VARIABLES DISPONIBLES (en variables.css):
+   - --card-hero-*     → Cards principales (destinos, tours)
+   - --card-content-*  → Cards de contenido (testimonios)
+   - --card-utility-*  → Cards de admin/paneles
+   - --card-compact-*  → Cards compactas (aerolíneas)
+   - --card-font-*     → Tipografía fluida para cards
+   - --card-btn-*      → Botones de cards
+   - --card-grid-*     → Grid responsive
+   - --card-shadow-*   → Sombras
+   - --card-transition → Transiciones
+   
+   RESPONSIVE (orden de breakpoints):
+   - max-width: 1200px → Desktop estándar
+   - max-width: 900px  → Tablet landscape
+   - max-width: 768px  → Tablet / móvil grande
+   - max-width: 600px  → Móvil medio
+   - max-width: 480px  → Móvil pequeño
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Importar variables (si no están ya importadas) ── */
+/* @import './variables.css'; */
+/* @import './card-base.css'; */
+
+/* ═══════════════════════════════════════════════════════════════
+   EJEMPLO 1: Card Hero (tipo destino/tour)
+   ═══════════════════════════════════════════════════════════════ */
+
+/*
+.mi-card {
+  position: relative;
+  border-radius: var(--card-hero-radius);
+  overflow: hidden;
+  min-height: var(--card-hero-min-height);
+  display: flex;
+  align-items: flex-end;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: var(--card-transition);
+  box-shadow: var(--card-shadow);
+}
+
+.mi-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.mi-card__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.mi-card:hover .mi-card__image {
+  transform: scale(1.05);
+}
+
+.mi-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.1) 40%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+.mi-card__content {
+  position: relative;
+  z-index: 2;
+  padding: var(--card-hero-padding);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-hero-gap);
+}
+
+.mi-card__title {
+  margin: 0;
+  font-size: var(--card-font-title);
+  font-weight: 600;
+  color: var(--color-text-light);
+  font-family: 'Lora', serif;
+  line-height: 1.3;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+}
+
+.mi-card__subtitle {
+  font-size: var(--card-font-subtitle);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Lora', serif;
+}
+
+.mi-card__footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mi-card__price {
+  font-size: var(--card-font-price);
+  font-weight: 700;
+  color: var(--color-text-light);
+  font-family: 'Lora', serif;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  line-height: 1.1;
+}
+
+.mi-card__btn {
+  flex-shrink: 0;
+  padding: var(--card-btn-padding);
+  border: 2px solid var(--color-text-light);
+  border-radius: var(--card-btn-radius);
+  background: transparent;
+  color: var(--color-text-light);
+  font-size: var(--card-font-btn);
+  font-weight: 700;
+  font-family: 'Chicago Police', sans-serif;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mi-card__btn:hover {
+  background: var(--color-text-light);
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 768px) {
+  .mi-card {
+    min-height: var(--card-hero-min-height-md);
+  }
+  .mi-card__content {
+    padding: var(--card-hero-padding-md);
+  }
+  .mi-card__btn {
+    padding: var(--card-btn-padding-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .mi-card {
+    min-height: var(--card-hero-min-height-xs);
+  }
+  .mi-card__content {
+    padding: var(--card-hero-padding-sm);
+  }
+}
+*/
+
+/* ═══════════════════════════════════════════════════════════════
+   EJEMPLO 2: Card Content (tipo testimonio/info)
+   ═══════════════════════════════════════════════════════════════ */
+
+/*
+.mi-card {
+  border-radius: var(--card-content-radius);
+  padding: var(--card-content-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-content-gap);
+  background: var(--color-background);
+  box-shadow: var(--shadow-sm);
+  transition: var(--card-transition);
+}
+
+.mi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.mi-card__icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.mi-card__title {
+  margin: 0;
+  font-size: var(--card-font-title);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-family: 'Lora', serif;
+}
+
+.mi-card__text {
+  font-size: var(--card-font-body);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.mi-card__meta {
+  font-size: var(--card-font-label);
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .mi-card {
+    padding: var(--card-content-padding-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .mi-card {
+    padding: var(--card-content-padding-sm);
+  }
+}
+*/
+
+/* ═══════════════════════════════════════════════════════════════
+   EJEMPLO 3: Card Utility (tipo admin/panel)
+   ═══════════════════════════════════════════════════════════════ */
+
+/*
+.mi-card {
+  border-radius: var(--card-utility-radius);
+  padding: var(--card-utility-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-utility-gap);
+  background: var(--color-background);
+  border: 1px solid var(--color-primary-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.mi-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mi-card__title {
+  margin: 0;
+  font-size: var(--card-font-subtitle);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.mi-card__badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: var(--card-font-badge);
+  font-weight: 700;
+}
+
+.mi-card__body {
+  font-size: var(--card-font-body);
+  color: var(--color-text-secondary);
+}
+
+.mi-card__footer {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+@media (max-width: 768px) {
+  .mi-card {
+    padding: var(--card-utility-padding-sm);
+  }
+}
+*/
+
+/* ═══════════════════════════════════════════════════════════════
+   EJEMPLO 4: Card Compact (tipo aerolínea/tag)
+   ═══════════════════════════════════════════════════════════════ */
+
+/*
+.mi-card {
+  border-radius: var(--card-compact-radius);
+  padding: var(--card-compact-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-compact-gap);
+  background: var(--color-background);
+  border: 2px solid var(--color-text-dark);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: var(--card-transition);
+}
+
+.mi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.mi-card__logo {
+  height: 56px;
+  object-fit: contain;
+}
+
+.mi-card__title {
+  margin: 0;
+  font-size: var(--card-font-subtitle);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.mi-card__detail {
+  font-size: var(--card-font-label);
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 600px) {
+  .mi-card {
+    padding: var(--card-compact-padding-md);
+  }
+  .mi-card__logo {
+    height: 38px;
+  }
+}
+*/
+
+/* ═══════════════════════════════════════════════════════════════
+   CHECKLIST DE RESPONSIVE
+   ═══════════════════════════════════════════════════════════════
+   
+   Antes de entregar tu card, verifica:
+   
+   [ ] Usa variables CSS (no valores hardcodeados)
+   [ ] font-size usa clamp() para fluidez
+   [ ] Grid usa auto-fit/minmax o repeat con breakpoints
+   [ ] padding/margin se reduce en móvil
+   [ ] Imágenes tienen width:100% y object-fit
+   [ ] Hover funciona tanto en desktop como mobile
+   [ ] Focus-visible está definido para accesibilidad
+   [ ] Breakpoints: 1200, 900, 768, 600, 480
+   [ ] Probado en 375px, 768px y 1280px
+   ═══════════════════════════════════════════════════════════════ */

@@ -124,9 +124,8 @@ const DestinationCard = ({
       <div className="destination-card__ribbon">
         {precio !== null && (
           <div className="destination-card__price-area">
-            <span className="destination-card__price-from">From</span>
+            <span className="destination-card__price-from">Desde</span>
             <span className="destination-card__price-value">US${precio}</span>
-            <span className="destination-card__price-label">Total Price</span>
           </div>
         )}
 
@@ -135,7 +134,7 @@ const DestinationCard = ({
           className="destination-card__see-btn"
           onClick={handleSeeClick}
         >
-          See
+          Ver
         </button>
       </div>
     </div>
