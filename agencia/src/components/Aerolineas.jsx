@@ -27,13 +27,13 @@ const airlines = [
   { id: "iberia", nombre: "Iberia", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/iberia.png"), logoFit: "contain", logoScale: 1.5 },
   { id: "plus-ultra", nombre: "Plus Ultra Líneas Aéreas", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/Plus_Ultra.png"), logoFit: "contain", logoScale: 1 },
   { id: "tap", nombre: "Tap Air Portugal", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/tap_air.png"), logoFit: "contain", logoScale: 1 },
-  { id: "copa", nombre: "Copa Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/copa_airlines.jpg"), logoFit: "cover", logoScale: 1.1 },
-  { id: "latam", nombre: "Latam Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/latam.png"), logoFit: "contain", logoScale: 1 },
-  { id: "aerocaribe", nombre: "Aerocaribe", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/aerocaribe.png"), logoFit: "contain", logoScale: 1 },
   { id: "turkish", nombre: "Turkish Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/Turkish.png"), logoFit: "contain", logoScale: 1 },
   { id: "american", nombre: "American Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/American_Airlines.png"), logoFit: "contain", logoScale: 2 },
-  { id: "gol", nombre: "Gol Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/gol.png"), logoFit: "contain", logoScale: 1 },
   { id: "bolivariana", nombre: "Bolivariana de Aviación", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/Bolivariana.png"), logoFit: "contain", logoScale: 1.5 },
+  { id: "copa", nombre: "Copa Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/copa_airlines.jpg"), logoFit: "cover", logoScale: 1.1 },
+  { id: "gol", nombre: "Gol Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/gol.png"), logoFit: "contain", logoScale: 1 },
+  { id: "latam", nombre: "Latam Airlines", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/latam.png"), logoFit: "contain", logoScale: 1 },
+  { id: "aerocaribe", nombre: "Aerocaribe", tarifa: "Tarifas Comisionables al 6% en rutas nacionales y 3% en rutas internacionales. Comisiona 50%", logo: getSupabaseImageUrl("imagenes/aerocaribe.png"), logoFit: "contain", logoScale: 1 },
 ];
 
 const itemListJsonLd = {
