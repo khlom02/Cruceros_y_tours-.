@@ -6,6 +6,7 @@ import { fetchProductById, fetchSpecialServiceByKey, createReserva } from "../ba
 import { useAuth } from "../contexts/AuthContext";
 import Rooms from "./rooms.jsx";
 import DetallesNavieras from "./detalles_navieras.jsx";
+import Timeline from "./Timeline.jsx";
 
 const normalizeDetalle = (data) => {
     if (!data) return null;
@@ -36,6 +37,7 @@ const normalizeDetalle = (data) => {
         cabinaSingle: data.detalles_crucero?.cabina_single ?? data.cabina_single ?? false,
         viajandoConNinos: data.detalles_crucero?.viajando_con_ninos ?? data.viajando_con_ninos ?? false,
         gallery,
+        itinerarios: Array.isArray(data.itinerarios) ? data.itinerarios : [],
     };
 };
 
@@ -317,6 +319,8 @@ const Detalles = () => {
                     <p>{detalle.description}</p>
                 </section>
             )}
+
+            <Timeline itinerarios={detalle.itinerarios} />
 
             {detalle.facilities.length > 0 && (
                 <section className="detalles-section">

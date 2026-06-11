@@ -91,12 +91,13 @@ export const fetchProductById = async (id) => {
       return null;
     }
 
-    const [resultCrucero, resultGalleries, resultRooms, resultAmenities, resultHighlights] = await Promise.all([
+    const [resultCrucero, resultGalleries, resultRooms, resultAmenities, resultHighlights, resultItinerarios] = await Promise.all([
       supabase.from("detalles_cruceros").select("*").eq("producto_id", id).maybeSingle(),
       supabase.from("galleries").select("id, imagen_url, posicion_orden").eq("producto_id", id).order("posicion_orden", { ascending: true }),
       supabase.from("rooms").select("id, titulo, descripcion, precio, imagen_url").eq("producto_id", id).order("id", { ascending: true }),
       supabase.from("amenities").select("id, nombre, icono_emoji").eq("producto_id", id),
       supabase.from("highlights").select("id, descripcion").eq("producto_id", id).order("posicion_orden", { ascending: true }),
+      supabase.from("itinerarios").select("id, dia, titulo, descripcion, categoria, posicion_orden").eq("producto_id", id).order("dia", { ascending: true }).order("posicion_orden", { ascending: true }),
     ]);
 
     return {
@@ -106,6 +107,7 @@ export const fetchProductById = async (id) => {
       rooms: resultRooms?.data || [],
       amenities: resultAmenities?.data || [],
       highlights: resultHighlights?.data?.map(h => h.descripcion) || [],
+      itinerarios: resultItinerarios?.data || [],
     };
   } catch (err) {
     console.error("Error inesperado al obtener producto con detalles:", err);
@@ -634,6 +636,30 @@ export const updateContactoEstado = async (id, estado) => {
   } catch (err) {
     console.error("Error inesperado:", err);
     return false;
+  }
+};
+
+// ============================================
+// ITINERARIOS
+// ============================================
+export const fetchItinerariosByProducto = async (productoId) => {
+  try {
+    const { data, error } = await supabase
+      .from("itinerarios")
+      .select("id, dia, titulo, descripcion, categoria, posicion_orden")
+      .eq("producto_id", productoId)
+      .order("dia", { ascending: true })
+      .order("posicion_orden", { ascending: true });
+
+    if (error) {
+      console.error("Error al obtener itinerarios:", error);
+      return [];
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado al obtener itinerarios:", err);
+    return [];
   }
 };
 
