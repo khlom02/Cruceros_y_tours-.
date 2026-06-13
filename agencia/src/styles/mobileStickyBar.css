@@ -1,0 +1,56 @@
+/* ====================================================================== */
+/* MobileStickyBar — Fixed bottom bar solo en mobile */
+/* ====================================================================== */
+
+.mobile-sticky-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9990;
+  background: var(--color-background);
+  border-top: 1px solid var(--color-primary-transparent);
+  padding: 10px 16px;
+  gap: 10px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-sticky-bar__btn {
+  flex: 1;
+  text-align: center;
+  padding: 12px 16px;
+  border-radius: 30px;
+  font-family: "Chicago Police", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.mobile-sticky-bar__btn:active {
+  transform: scale(0.97);
+}
+
+.mobile-sticky-bar__btn--wa {
+  background: #25d366;
+  color: #fff;
+}
+
+.mobile-sticky-bar__btn--cta {
+  background: var(--color-primary-dark);
+  color: #fff;
+}
+
+/* Visible solo en mobile/tablet */
+@media (max-width: 991px) {
+  .mobile-sticky-bar {
+    display: flex;
+  }
+
+  body {
+    padding-bottom: 70px;
+  }
+}
