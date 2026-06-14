@@ -13,6 +13,7 @@ import Rooms from "./rooms.jsx";
 import StickyBookingBar from "./StickyBookingBar.jsx";
 import MobileStickyBar from "./MobileStickyBar.jsx";
 import AlojamientoCard from "./AlojamientoCard.jsx";
+import CardGrid from "./CardGrid.jsx";
 
 const normalizeDetalle = (data) => {
     if (!data) return null;
@@ -189,11 +190,11 @@ const Detalles = () => {
                         </div>
 
                         {hasAlojamientos ? (
-                            <div className="card-grid card-grid--destino">
+                            <CardGrid variant="destino">
                                 {detalle.alojamientos.map((alo) => (
                                     <AlojamientoCard key={alo.id} alojamiento={alo} />
                                 ))}
-                            </div>
+                            </CardGrid>
                         ) : (
                             <div className="detalles-state">
                                 No hay opciones de alojamiento disponibles para este destino.
