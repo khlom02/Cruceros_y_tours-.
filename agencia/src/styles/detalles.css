@@ -138,24 +138,9 @@
 }
 
 /* ── Grid de cards destino ──
-     Usa .card-grid de card-base.css para el layout.
-     Aqui solo van las reglas especificas de card--destino.
+     Usa .card-grid de card-base.css + destinoCard.css para el layout.
+     Sin reglas duplicadas — el min-height responsive vive en destinoCard.css.
   ── */
-.card-grid--destino .card--destino:not(.card--destino--compact) {
-  min-height: var(--card-hero-min-height);
-}
-
-@media (max-width: 768px) {
-  .card-grid--destino .card--destino:not(.card--destino--compact) {
-    min-height: var(--card-hero-min-height-md);
-  }
-}
-
-@media (max-width: 600px) {
-  .card-grid--destino .card--destino:not(.card--destino--compact) {
-    min-height: var(--card-hero-min-height-sm);
-  }
-}
 
 @media (max-width: 480px) {
   .detalles-page {
@@ -164,9 +149,5 @@
 
   .detalles-facilities {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .card-grid--destino .card--destino:not(.card--destino--compact) {
-    min-height: var(--card-hero-min-height-xs);
   }
 }
