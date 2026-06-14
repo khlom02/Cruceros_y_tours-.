@@ -40,8 +40,8 @@
 /* ── Precio badge top-right ── */
 .card--destino__precio {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: var(--card-hero-padding);
+  right: var(--card-hero-padding);
   z-index: 3;
   background: var(--color-primary);
   color: var(--color-text-light);
@@ -49,9 +49,9 @@
   font-size: clamp(1rem, 2.5vw, 1.25rem);
   font-weight: 700;
   padding: 6px 14px;
-  border-radius: 8px;
+  border-radius: var(--card-btn-radius);
   line-height: 1.2;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--card-shadow);
 }
 
 /* ── Body: contenido sobre la imagen ── */
