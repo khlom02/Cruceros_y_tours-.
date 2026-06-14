@@ -82,14 +82,14 @@
   display: flex;
   align-items: flex-end;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: var(--card-transition);
   box-shadow: var(--card-shadow);
 }
 
 .grid-experiencia__card:hover,
 .card_cruceros:hover {
   transform: translateY(-12px) scale(1.02);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--card-shadow-hover);
 }
 
 .grid-experiencia__card::after,
@@ -192,13 +192,13 @@
   display: flex;
   align-items: flex-end;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: var(--card-transition);
   box-shadow: var(--card-shadow);
 }
 
 .tour-card:hover {
   transform: translateY(-12px) scale(1.02);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--card-shadow-hover);
 }
 
 /* Sombra para mejorar la legibilidad del texto sobre la imagen de fondo */

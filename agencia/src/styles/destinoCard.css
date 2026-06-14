@@ -15,12 +15,13 @@
   background-repeat: no-repeat;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--card-shadow);
+  transition: var(--card-transition);
 }
 
 .card--destino:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: var(--card-shadow-hover);
 }
 
 /* ── Overlay oscuro para legibilidad ── */
@@ -57,10 +58,10 @@
 .card--destino__body {
   position: relative;
   z-index: 2;
-  padding: 24px 20px 20px;
+  padding: var(--card-hero-padding);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--card-hero-gap);
   color: var(--color-text-light);
 }
 
@@ -99,12 +100,12 @@
 .card--destino__btn {
   margin-top: 10px;
   align-self: center;
-  padding: 10px 32px;
+  padding: var(--card-btn-padding);
   border: 2px solid var(--color-text-light);
-  border-radius: 8px;
+  border-radius: var(--card-btn-radius);
   background: transparent;
   color: var(--color-text-light);
-  font-size: clamp(0.85rem, 2vw, 0.95rem);
+  font-size: var(--card-font-btn);
   font-weight: 700;
   font-family: 'Chicago Police', sans-serif;
   text-transform: uppercase;
@@ -125,7 +126,7 @@
   }
 
   .card--destino__body {
-    padding: 18px 16px 16px;
+    padding: var(--card-hero-padding-md);
   }
 
   .card--destino__precio {
