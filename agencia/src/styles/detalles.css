@@ -137,40 +137,12 @@
   margin-right: auto;
 }
 
-/* ── Grid de cards destino ── */
-.card-grid--destino {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  padding: 16px 0 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
+/* ── Grid de cards destino ──
+     Usa .card-grid de card-base.css para el layout.
+     Aqui solo van las reglas especificas de card--destino.
+  ── */
 .card-grid--destino .card--destino:not(.card--destino--compact) {
   min-height: var(--card-hero-min-height);
-}
-
-@media (max-width: 1200px) {
-  .card-grid--destino {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-
-  .card-grid--destino .card--destino:not(.card--destino--compact) {
-    min-height: var(--card-hero-min-height);
-  }
-}
-
-@media (max-width: 900px) {
-  .card-grid--destino {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-
-  .card-grid--destino .card--destino:not(.card--destino--compact) {
-    min-height: var(--card-hero-min-height);
-  }
 }
 
 @media (max-width: 768px) {
@@ -180,12 +152,6 @@
 }
 
 @media (max-width: 600px) {
-  .card-grid--destino {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 8px 0 32px;
-  }
-
   .card-grid--destino .card--destino:not(.card--destino--compact) {
     min-height: var(--card-hero-min-height-sm);
   }
