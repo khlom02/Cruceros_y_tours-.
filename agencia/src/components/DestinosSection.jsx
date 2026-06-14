@@ -137,7 +137,10 @@ const DestinosCarousel = ({ items, titulo, navigate }) => {
   const autoplayRef = useRef(null);
   const containerRef = useRef(null);
   const currentSlideRef = useRef(currentSlide);
-  currentSlideRef.current = currentSlide;
+
+  useEffect(() => {
+    currentSlideRef.current = currentSlide;
+  }, [currentSlide]);
 
   const totalSlides = items.length;
   const isLoop = totalSlides > slidesPerView;
@@ -182,7 +185,7 @@ const DestinosCarousel = ({ items, titulo, navigate }) => {
     } else {
       setCurrentSlide((prev) => Math.max(prev - 1, 0));
     }
-  }, [isLoop, totalSlides, maxSlide]);
+  }, [isLoop, maxSlide]);
 
   useEffect(() => {
     if (isHovered || !isLoop) return;

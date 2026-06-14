@@ -1217,8 +1217,72 @@ textarea.admin-field-error:focus {
 }
 
 /* ════════════════════════════════════════════════
+   FILTROS DE GESTIÓN
+   ════════════════════════════════════════════════ */
+.admin-filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.admin-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+  flex: 1 1 240px;
+}
+
+.admin-filter-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.admin-filter-group select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--border-radius);
+  border: 2px solid rgba(15, 211, 211, 0.25);
+  font-family: "Chicago Police", sans-serif;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  background: var(--color-background);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  appearance: auto;
+}
+
+.admin-filter-group select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.admin-filters .admin-search {
+  flex: 1 1 240px;
+  max-width: 400px;
+}
+
+@media (max-width: 768px) {
+  .admin-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .admin-filter-group,
+  .admin-filters .admin-search {
+    flex: 1 1 auto;
+    max-width: 100%;
+    min-width: auto;
+  }
+}
+
+/* ════════════════════════════════════════════════
    SKELETON LOADERS
-════════════════════════════════════════════════ */
+   ════════════════════════════════════════════════ */
 .admin-skeleton {
   background: linear-gradient(
     90deg,
