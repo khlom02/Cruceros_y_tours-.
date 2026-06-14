@@ -138,9 +138,21 @@
 }
 
 /* ── Grid de cards destino ──
-     Usa .card-grid de card-base.css + destinoCard.css para el layout.
-     Sin reglas duplicadas — el min-height responsive vive en destinoCard.css.
+     Dentro de .detalles-page (max-width: 1200px) las cards necesitan
+     menos columnas porque el contenedor es mas estrecho que el viewport.
+     El padding horizontal ya lo da .detalles-page, se anula aqui.
   ── */
+.card-grid--destino {
+  padding-left: 0;
+  padding-right: 0;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 768px) {
+  .card-grid--destino {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 @media (max-width: 480px) {
   .detalles-page {
@@ -149,5 +161,9 @@
 
   .detalles-facilities {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .card-grid--destino {
+    grid-template-columns: 1fr;
   }
 }

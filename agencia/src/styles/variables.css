@@ -75,6 +75,12 @@
   --card-compact-padding-md: 16px 12px;
   --card-compact-gap: 10px;
 
+  /* Card compact — hijos (body, badge, btn) */
+  --card-compact-body-padding: 12px 14px 14px;
+  --card-compact-badge-padding: 3px 10px;
+  --card-compact-badge-radius: 6px;
+  --card-compact-btn-padding: 4px 16px;
+
   /* ── Tipografía de cards (fluid) ── */
   --card-font-title: clamp(1rem, 2vw + 0.5rem, 1.3rem);
   --card-font-subtitle: clamp(0.85rem, 1.6vw + 0.3rem, 0.95rem);

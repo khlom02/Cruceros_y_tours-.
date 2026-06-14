@@ -28,7 +28,7 @@ const Estrellas = ({ count }) => {
   return <span className="destino-card__stars">{filled}{empty}</span>;
 };
 
-const DestinoCard = ({ alojamiento, compact }) => {
+const AlojamientoCard = ({ alojamiento, compact }) => {
   const {
     titulo,
     precio,
@@ -93,4 +93,4 @@ const DestinoCard = ({ alojamiento, compact }) => {
   );
 };
 
-export default DestinoCard;
+export default AlojamientoCard;

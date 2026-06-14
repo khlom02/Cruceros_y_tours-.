@@ -6,22 +6,17 @@ import { FaWhatsappSquare } from "react-icons/fa";
 import { BiLogoGmail } from "react-icons/bi";
 import { subscribeNewsletter } from "../backend/supabase_client";
 import { getSupabaseImageUrl } from "../utils/imageHelper";
-import TurnstileWidget from './TurnstileWidget.jsx';
 
 const Footer = React.memo(() => {
   const [emailNews, setEmailNews] = useState("");
   const [statusNews, setStatusNews] = useState(null);
-  const [turnstileToken, setTurnstileToken] = useState(null);
-  const [turnstileKey, setTurnstileKey] = useState(0);
 
   const handleSubscribe = async () => {
     if (!emailNews) return;
-    const result = await subscribeNewsletter(emailNews, turnstileToken);
+    const result = await subscribeNewsletter(emailNews);
     if (result.success) {
       setStatusNews({ ok: true, msg: "¡Suscrito exitosamente!" });
       setEmailNews("");
-      setTurnstileToken(null);
-      setTurnstileKey((k) => k + 1);
     } else {
       setStatusNews({ ok: false, msg: result.msg });
     }
@@ -81,7 +76,6 @@ const Footer = React.memo(() => {
               value={emailNews}
               onChange={(e) => setEmailNews(e.target.value)}
             />
-            <TurnstileWidget key={turnstileKey} onToken={setTurnstileToken} />
             <button className="subscribe-button" onClick={handleSubscribe}>Suscribirse ahora</button>
           </div>
           {statusNews && (

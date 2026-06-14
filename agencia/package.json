@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@marsidev/react-turnstile": "^1.5.2",
     "@supabase/supabase-js": "^2.81.1",
     "animate.css": "^4.1.1",
     "bootstrap": "^5.3.8",
