@@ -32,9 +32,7 @@ const TAMANO_MAX_MB = 5;
 const parseNumber = (value) => {
   if (!value || value === "" || value === null || value === undefined) return null;
   const num = Number(value);
-  // Validar que sea un número válido
   if (isNaN(num) || !isFinite(num)) return null;
-  // Limitar a números razonables (evitar overflow)
   if (Math.abs(num) > 999999999) return null;
   return num;
 };
@@ -47,33 +45,6 @@ function validarArchivo(file) {
     throw new Error(`El archivo no debe superar ${TAMANO_MAX_MB}MB.`);
   }
 }
-
-
-
-const productoInicial = {
-  titulo: "",
-  descripcion: "",
-  precio: "",
-  ubicacion: "",
-  rating: "",
-  cantidad_reviews: "",
-  fecha_inicio: "",
-  fecha_fin: "",
-  categoria_id: "",
-  activo: true,
-  imagenFile: null,
-  imagen: "", // URL existente (solo en modo edicion)
-};
-
-const detalleInicial = {
-  anos_servicio: "",
-  pasajeros_max: "",
-  tripulantes: "",
-  ratio_espacio: "",
-  ratio_servicio: "",
-  cabina_single: false,
-  viajando_con_ninos: false,
-};
 
 const emptyAlojamiento = {
   id: null,
@@ -98,11 +69,13 @@ const AdminPanel = () => {
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(null); // { titulo, categoria, ruta, modo }
-  const [fieldErrors, setFieldErrors] = useState({}); // Rastrear errores por campo
+  const [success, setSuccess] = useState(null);
 
   // ─── Modo edicion ─────────────────────────────────────────────────────────
   const [editingProductId, setEditingProductId] = useState(null);
+
+  // ─── Categoria seleccionada ──────────────────────────────────────────────
+  const [categoria_id, setCategoria_id] = useState("");
 
   // ─── Lista de productos (tab Gestionar) ───────────────────────────────────
   const [productosLista, setProductosLista] = useState([]);
@@ -121,12 +94,6 @@ const AdminPanel = () => {
   const [suscripcionesList, setSuscripcionesList] = useState([]);
   const [loadingSuscripciones, setLoadingSuscripciones] = useState(false);
 
-  // ─── Campos del producto principal ────────────────────────────────────────
-  const [producto, setProducto] = useState(productoInicial);
-
-  // ─── Campos extra solo para cruceros (tabla detalles_cruceros) ───────────
-  const [detalleCrucero, setDetalleCrucero] = useState(detalleInicial);
-
   // ─── Alojamientos para edición de destinos ────────────────────────────────
   const [alojamientos, setAlojamientos] = useState([]);
   const [alojamientosToDelete, setAlojamientosToDelete] = useState([]);
@@ -136,8 +103,6 @@ const AdminPanel = () => {
 
   // ─── Colapsar secciones del formulario ────────────────────────────────────
   const [expandedSections, setExpandedSections] = useState({
-    producto: true,
-    crucero: true,
     alojamientos: true,
   });
 
@@ -146,9 +111,9 @@ const AdminPanel = () => {
   const [destinosItems, setDestinosItems] = useState([{ ...emptyDestino }]);
   const [destinoImageIndex, setDestinoImageIndex] = useState({});
   const isDestinosCategory = useMemo(() => {
-    const nombre = categorias.find((c) => String(c.id) === String(producto.categoria_id))?.nombre || '';
+    const nombre = categorias.find((c) => String(c.id) === String(categoria_id))?.nombre || '';
     return nombre.toLowerCase().includes('destinos nacionales') || nombre.toLowerCase().includes('destinos internacionales');
-  }, [categorias, producto.categoria_id]);
+  }, [categorias, categoria_id]);
   const toggleSection = (key) =>
     setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -156,7 +121,7 @@ const AdminPanel = () => {
   const [productSearch, setProductSearch] = useState("");
 
   // ─── Modal de confirmacion ────────────────────────────────────────────────
-  const [showDeleteModal, setShowDeleteModal] = useState(null); // product id to delete
+  const [showDeleteModal, setShowDeleteModal] = useState(null);
 
   // ─── Carga las categorias desde Supabase al montar el componente ─────────
   useEffect(() => {
@@ -247,11 +212,8 @@ const AdminPanel = () => {
 
   // ─── Nombre legible de la categoria seleccionada ─────────────────────────
   const categoriaNombre = useMemo(() => {
-    return categorias.find((cat) => String(cat.id) === String(producto.categoria_id))?.nombre || "";
-  }, [categorias, producto.categoria_id]);
-
-  // Muestra la seccion de detalles solo si la categoria es "cruceros"
-  const isCrucero = categoriaNombre.toLowerCase() === "cruceros";
+    return categorias.find((cat) => String(cat.id) === String(categoria_id))?.nombre || "";
+  }, [categorias, categoria_id]);
 
   // ─── Mapeo de categoria → ruta de la app ─────────────────────────────────
   const rutaPorCategoria = (nombre) => {
@@ -265,23 +227,6 @@ const AdminPanel = () => {
     if (n.includes("tour") || n.includes("destino")) return "/destinos";
     if (n.includes("vuelo") || n.includes("aerol")) return "/vuelos";
     return "/destinos";
-  };
-
-  // ─── Handlers de cambio de campo ──────────────────────────────────────────
-  const handleProductoChange = (field, value) => {
-    setProducto((prev) => ({ ...prev, [field]: value }));
-    // Limpiar error del campo cuando el usuario empieza a escribir
-    if (fieldErrors[field]) {
-      setFieldErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[field];
-        return newErrors;
-      });
-    }
-  };
-
-  const handleDetalleChange = (field, value) => {
-    setDetalleCrucero((prev) => ({ ...prev, [field]: value }));
   };
 
   // ─── Sube un archivo a Supabase Storage y retorna la URL publica ──────────
@@ -305,10 +250,9 @@ const AdminPanel = () => {
 
   // ─── Limpia todos los campos del formulario ────────────────────────────────
   const resetForm = () => {
-    setProducto(productoInicial);
-    setDetalleCrucero(detalleInicial);
+    setCategoria_id("");
     setEditingProductId(null);
-    setFieldErrors({});
+    
     setError("");
     submittingRef.current = false;
     resetDestinosForm();
@@ -320,29 +264,14 @@ const AdminPanel = () => {
   const handleEdit = async (productId) => {
     setError("");
     setSuccess(null);
-    setFieldErrors({});
+    
     setLoading(true);
 
     try {
       const data = await fetchProductAdminById(productId);
       if (!data) throw new Error("Producto no encontrado");
 
-      setProducto({
-        titulo: data.titulo || "",
-        descripcion: data.descripcion || "",
-        precio: String(data.precio ?? ""),
-        ubicacion: data.ubicacion || "",
-        rating: data.rating != null ? String(data.rating) : "",
-        cantidad_reviews: data.cantidad_reviews != null ? String(data.cantidad_reviews) : "",
-        fecha_inicio: data.fecha_inicio || "",
-        fecha_fin: data.fecha_fin || "",
-        color_fondo: data.color_fondo || "verde",
-        categoria_id: String(data.categoria_id || ""),
-        activo: data.activo !== false,
-        imagenFile: null,
-        imagen: data.imagen || "",
-      });
-
+      setCategoria_id(String(data.categoria_id || ""));
       setEditingProductId(productId);
       setActiveTab("crear");
 
@@ -396,7 +325,7 @@ const AdminPanel = () => {
 
       try {
         setLoading(true);
-        const catId = parseNumber(producto.categoria_id);
+        const catId = parseNumber(categoria_id);
 
         for (const item of validItems) {
           const imageUrls = [];
@@ -451,37 +380,8 @@ const AdminPanel = () => {
 
     // ── MODO EDICION INDIVIDUAL DE DESTINO ────────────────────────────────
     if (isDestinosCategory && editingProductId) {
-      if (!producto.titulo || !producto.titulo.trim()) {
-        setError("El título es obligatorio.");
-        return;
-      }
-
       try {
         setLoading(true);
-
-        const imagenUrl = producto.imagenFile
-          ? await uploadFile(producto.imagenFile, "productos")
-          : producto.imagen;
-
-        const { error: updateError } = await supabase
-          .from("productos")
-          .update({
-            titulo: producto.titulo,
-            descripcion: producto.descripcion,
-            precio: parseNumber(producto.precio),
-            imagen: imagenUrl,
-            ubicacion: producto.ubicacion,
-            rating: parseNumber(producto.rating),
-            cantidad_reviews: parseNumber(producto.cantidad_reviews),
-            fecha_inicio: producto.fecha_inicio || null,
-            fecha_fin: producto.fecha_fin || null,
-            color_fondo: producto.color_fondo,
-            categoria_id: parseNumber(producto.categoria_id),
-            activo: Boolean(producto.activo),
-          })
-          .eq("id", editingProductId);
-
-        if (updateError) throw updateError;
 
         for (const id of alojamientosToDelete) {
           await deleteAlojamiento(id);
@@ -513,14 +413,14 @@ const AdminPanel = () => {
         }
 
         setSuccess({
-          titulo: producto.titulo,
+          titulo: "Alojamientos actualizados",
           categoria: categoriaNombre,
           ruta: rutaPorCategoria(categoriaNombre),
           modo: "editado",
         });
         resetForm();
       } catch (err) {
-        console.error("Error al guardar destino:", err);
+        console.error("Error al guardar:", err);
         setError(`Error al guardar: ${err?.message || "Error desconocido"}`);
       } finally {
         setLoading(false);
@@ -528,207 +428,8 @@ const AdminPanel = () => {
       return;
     }
 
-    // ── MODO REGULAR ──────────────────────────────────────────────────────
-    const newFieldErrors = {};
-
-    // Validaciones básicas
-    if (!producto.titulo || !producto.titulo.trim()) {
-      newFieldErrors.titulo = true;
-      setError("El título es obligatorio.");
-    }
-
-    if (!producto.categoria_id) {
-      newFieldErrors.categoria_id = true;
-      setError("Debes seleccionar una categoría.");
-    }
-
-    if (!isDestinosCategory && (!producto.precio || Number(producto.precio) <= 0)) {
-      newFieldErrors.precio = true;
-      setError("El precio es obligatorio y debe ser mayor a 0.");
-    }
-
-    // Validar que los números sean válidos (no NaN, no infinitos)
-    if (producto.rating && isNaN(Number(producto.rating))) {
-      newFieldErrors.rating = true;
-      setError("El rating debe ser un número válido.");
-    }
-
-    if (producto.rating && Number(producto.rating) > 10) {
-      newFieldErrors.rating = true;
-      setError("El rating no puede ser mayor a 10.");
-    }
-
-    if (producto.cantidad_reviews && isNaN(Number(producto.cantidad_reviews))) {
-      newFieldErrors.cantidad_reviews = true;
-      setError("La cantidad de reviews debe ser un número válido.");
-    }
-
-    if (producto.cantidad_reviews && Number(producto.cantidad_reviews) > 999999) {
-      newFieldErrors.cantidad_reviews = true;
-      setError("La cantidad de reviews es demasiado grande (máximo 999,999).");
-    }
-
-    if (producto.precio && Number(producto.precio) > 999999) {
-      newFieldErrors.precio = true;
-      setError("El precio es demasiado grande (máximo 999,999).");
-    }
-
-    // Validación adicional: verificar que categoria_id tenga un valor válido
-    const parsedCategoryId = parseNumber(producto.categoria_id);
-    if (!parsedCategoryId) {
-      newFieldErrors.categoria_id = true;
-      setError("Categoría inválida. Por favor selecciona una categoría válida.");
-    }
-
-    // En modo crear, la imagen es obligatoria. En edicion es opcional (se mantiene la existente)
-    if (!isDestinosCategory && !editingProductId && !producto.imagenFile) {
-      newFieldErrors.imagenFile = true;
-      setError("Debes subir una imagen principal.");
-    }
-
-    // Si hay errores, mostrarlos y salir
-    if (Object.keys(newFieldErrors).length > 0) {
-      setFieldErrors(newFieldErrors);
-      return;
-    }
-
-    // Limpiar errores si pasa validación
-    setFieldErrors({});
-
-    // Limpiar errores si pasa validación
-    setFieldErrors({});
-
-    try {
-      setLoading(true);
-
-      // ── MODO EDICION ──────────────────────────────────────────────────────
-      if (editingProductId) {
-        const imagenUrl = producto.imagenFile
-          ? await uploadFile(producto.imagenFile, "productos")
-          : producto.imagen;
-
-        const { error: updateError } = await supabase
-          .from("productos")
-          .update({
-            titulo: producto.titulo,
-            descripcion: producto.descripcion,
-            precio: parseNumber(producto.precio),
-            imagen: imagenUrl,
-            ubicacion: producto.ubicacion,
-            rating: parseNumber(producto.rating),
-            cantidad_reviews: parseNumber(producto.cantidad_reviews),
-            fecha_inicio: producto.fecha_inicio || null,
-            fecha_fin: producto.fecha_fin || null,
-            color_fondo: producto.color_fondo,
-            categoria_id: parseNumber(producto.categoria_id),
-            activo: Boolean(producto.activo),
-          })
-          .eq("id", editingProductId);
-
-        if (updateError) throw updateError;
-
-        // Upsert detalles crucero
-        if (isCrucero) {
-          const { data: existeDetalle } = await supabase
-            .from("detalles_cruceros")
-            .select("id")
-            .eq("producto_id", editingProductId)
-            .maybeSingle();
-
-          const detallePayload = {
-            producto_id: editingProductId,
-            anos_servicio: parseNumber(detalleCrucero.anos_servicio),
-            pasajeros_max: parseNumber(detalleCrucero.pasajeros_max),
-            tripulantes: parseNumber(detalleCrucero.tripulantes),
-            ratio_espacio: parseNumber(detalleCrucero.ratio_espacio),
-            ratio_servicio: parseNumber(detalleCrucero.ratio_servicio),
-            cabina_single: detalleCrucero.cabina_single,
-            viajando_con_ninos: detalleCrucero.viajando_con_ninos,
-          };
-
-          if (existeDetalle) {
-            await supabase
-              .from("detalles_cruceros")
-              .update(detallePayload)
-              .eq("producto_id", editingProductId);
-          } else {
-            await supabase.from("detalles_cruceros").insert(detallePayload);
-          }
-        }
-
-        setSuccess({ titulo: producto.titulo, categoria: categoriaNombre, ruta: rutaPorCategoria(categoriaNombre), modo: "editado" });
-        resetForm();
-        return;
-      }
-
-      // ── MODO CREAR ────────────────────────────────────────────────────────
-      const imagenUrl = await uploadFile(producto.imagenFile, "productos");
-
-      const { data: productoInsertado, error: productoError } = await supabase
-        .from("productos")
-        .insert({
-          titulo: producto.titulo,
-          descripcion: producto.descripcion,
-          precio: parseNumber(producto.precio),
-          imagen: imagenUrl,
-          ubicacion: producto.ubicacion,
-          rating: parseNumber(producto.rating),
-          cantidad_reviews: parseNumber(producto.cantidad_reviews),
-          fecha_inicio: producto.fecha_inicio || null,
-          fecha_fin: producto.fecha_fin || null,
-          color_fondo: producto.color_fondo,
-          categoria_id: parseNumber(producto.categoria_id),
-          activo: Boolean(producto.activo),
-        })
-        .select()
-        .single();
-
-      if (productoError) throw productoError;
-
-      const productoId = productoInsertado.id;
-
-      if (isCrucero) {
-        const { error: detalleError } = await supabase.from("detalles_cruceros").insert({
-          producto_id: productoId,
-          anos_servicio: parseNumber(detalleCrucero.anos_servicio),
-          pasajeros_max: parseNumber(detalleCrucero.pasajeros_max),
-          tripulantes: parseNumber(detalleCrucero.tripulantes),
-          ratio_espacio: parseNumber(detalleCrucero.ratio_espacio),
-          ratio_servicio: parseNumber(detalleCrucero.ratio_servicio),
-          cabina_single: detalleCrucero.cabina_single,
-          viajando_con_ninos: detalleCrucero.viajando_con_ninos,
-        });
-        if (detalleError) throw detalleError;
-      }
-
-      setSuccess({
-        titulo: producto.titulo,
-        categoria: categoriaNombre,
-        ruta: rutaPorCategoria(categoriaNombre),
-        modo: "creado",
-      });
-      resetForm();
-    } catch (err) {
-      console.error("Error al guardar producto:", err);
-      const errorMsg = err?.message || "Error desconocido";
-      
-      // Proporcionar mensajes más específicos para errores comunes
-      if (errorMsg.includes("numeric field overflow")) {
-        setFieldErrors({
-          precio: true,
-          rating: true,
-          cantidad_reviews: true,
-        });
-        setError("🔴 ERROR DE OVERFLOW: Verifica que Precio, Rating y Reviews estén dentro de los límites.");
-      } else if (errorMsg.includes("foreign key")) {
-        setFieldErrors({ categoria_id: true });
-        setError("🔴 ERROR: La categoría seleccionada no existe. Selecciona una categoría válida.");
-      } else {
-        setError(`🔴 Error al guardar: ${errorMsg}`);
-      }
-    } finally {
-      setLoading(false);
-    }
+    // ── SIN GESTOR ────────────────────────────────────────────────────────
+    setError("Gestor próximo para esta categoría.");
   };
 
   // ─── Nombre de categoria por id (para lista) ──────────────────────────────
@@ -859,6 +560,15 @@ const AdminPanel = () => {
     });
   }, [productosLista, productSearch, categorias]);
 
+  const canSubmit = isDestinosCategory;
+  const submitBtnText = loading
+    ? "Guardando..."
+    : isDestinosCategory && !editingProductId
+      ? "Crear destino(s)"
+      : editingProductId
+        ? "Guardar cambios"
+        : "Crear producto";
+
   return (
     <>
       <SEO
@@ -876,21 +586,21 @@ const AdminPanel = () => {
       <div className="admin-tabs">
         <button
           className={`admin-tab${activeTab === "crear" ? " admin-tab--active" : ""}`}
-          onClick={() => { setActiveTab("crear"); setError(""); setSuccess(null); setFieldErrors({}); }}
+          onClick={() => { setActiveTab("crear"); setError(""); setSuccess(null);  }}
         >
           <span className="admin-tab-icon">{editingProductId ? "✏️" : "✨"}</span>
           {editingProductId ? "Editar" : "Crear"}
         </button>
         <button
           className={`admin-tab${activeTab === "gestionar" ? " admin-tab--active" : ""}`}
-          onClick={() => { setActiveTab("gestionar"); setError(""); setSuccess(null); setFieldErrors({}); }}
+          onClick={() => { setActiveTab("gestionar"); setError(""); setSuccess(null);  }}
         >
           <span className="admin-tab-icon">📋</span>
           Gestionar
         </button>
         <button
           className={`admin-tab${activeTab === "contactos" ? " admin-tab--active" : ""}`}
-          onClick={() => { setActiveTab("contactos"); setError(""); setSuccess(null); setFieldErrors({}); }}
+          onClick={() => { setActiveTab("contactos"); setError(""); setSuccess(null);  }}
         >
           <span className="admin-tab-icon">✉️</span>
           Mensajes
@@ -902,7 +612,7 @@ const AdminPanel = () => {
         </button>
         <button
           className={`admin-tab${activeTab === "reservas" ? " admin-tab--active" : ""}`}
-          onClick={() => { setActiveTab("reservas"); setError(""); setSuccess(null); setFieldErrors({}); }}
+          onClick={() => { setActiveTab("reservas"); setError(""); setSuccess(null);  }}
         >
           <span className="admin-tab-icon">📅</span>
           Reservas
@@ -914,7 +624,7 @@ const AdminPanel = () => {
         </button>
         <button
           className={`admin-tab${activeTab === "suscripciones" ? " admin-tab--active" : ""}`}
-          onClick={() => { setActiveTab("suscripciones"); setError(""); setSuccess(null); setFieldErrors({}); }}
+          onClick={() => { setActiveTab("suscripciones"); setError(""); setSuccess(null);  }}
         >
           <span className="admin-tab-icon">🔄</span>
           Suscripciones
@@ -941,73 +651,37 @@ const AdminPanel = () => {
             </div>
           )}
 
-          {/* ── Datos principales del producto ── */}
-          <section className="admin-section admin-section-collapsible">
-            <div className="admin-collapsible-header" onClick={() => toggleSection("producto")}>
-              <h2>📦 Producto</h2>
-              <span className={`admin-collapsible-arrow${expandedSections.producto ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
-            </div>
-            <div className={`admin-collapsible-body${expandedSections.producto ? " admin-collapsible-body--open" : ""}`}>
-
-            <label className={fieldErrors.titulo ? "admin-field-error-label" : ""}>
-              Titulo
-              <input
-                type="text"
-                className={fieldErrors.titulo ? "admin-field-error" : ""}
-                value={producto.titulo}
-                onChange={(e) => handleProductoChange("titulo", e.target.value)}
+          {/* ── Selector de categoría centrado (solo crear) ── */}
+          {!editingProductId && (
+            <section className="admin-categoria-selector">
+              <h2>Categoria</h2>
+              <select
+                id="admin-categoria"
+                value={categoria_id}
+                onChange={(e) => setCategoria_id(e.target.value)}
                 required
-              />
-              {fieldErrors.titulo && <span className="admin-field-error-msg">El título es obligatorio</span>}
-            </label>
+              >
+                <option value="">Selecciona una categoria</option>
+                {categorias.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.nombre}</option>
+                ))}
+              </select>
+            </section>
+          )}
 
-            <label>
-              Descripcion
-              <textarea
-                rows={4}
-                value={producto.descripcion}
-                onChange={(e) => handleProductoChange("descripcion", e.target.value)}
-              />
-            </label>
+          {editingProductId && (
+            <div className="admin-categoria-info">
+              ⚠️ Trabajando actualmente en la categoría: <strong>{categoriaNombre}</strong>
+            </div>
+          )}
 
-            <div className="admin-grid">
-              {(!isDestinosCategory || editingProductId) && (
-              <label className={fieldErrors.precio ? "admin-field-error-label" : ""}>
-                Precio (0 - 999,999)
-                <input
-                  type="number"
-                  className={fieldErrors.precio ? "admin-field-error" : ""}
-                  step="0.01"
-                  min="0"
-                  max="999999"
-                  value={producto.precio}
-                  onChange={(e) => handleProductoChange("precio", e.target.value)}
-                  onKeyDown={(e) => ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()}
-                  required
-                />
-                {fieldErrors.precio && <span className="admin-field-error-msg">⚠️ Precio máximo: 999,999</span>}
-              </label>
-              )}
-
-              <label className={fieldErrors.categoria_id ? "admin-field-error-label" : ""}>
-                Categoria
-                <select
-                  className={fieldErrors.categoria_id ? "admin-field-error" : ""}
-                  value={producto.categoria_id}
-                  onChange={(e) => handleProductoChange("categoria_id", e.target.value)}
-                  required
-                >
-                  <option value="">Selecciona</option>
-                  {categorias.map((cat) => (
-                    <option key={cat.id} value={cat.id}>{cat.nombre}</option>
-                  ))}
-                </select>
-                {fieldErrors.categoria_id && <span className="admin-field-error-msg">Selecciona una categoría</span>}
-              </label>
+          {/* ── Contenido dinámico según categoría ── */}
+          {categoria_id && (
+            <>
 
               {/* ── Formulario especial para Destinos Nacionales / Internacionales ── */}
               {isDestinosCategory && !editingProductId && (
-                <div className="admin-destinos-form" style={{ gridColumn: '1 / -1' }}>
+                <div className="admin-destinos-form">
                   <p className="admin-help" style={{ marginBottom: '16px', fontSize: '0.95rem', color: 'var(--color-primary-dark)', fontWeight: 600 }}>
                     Formulario especial de destinos — Máximo 3 imágenes por producto, navegables con flechas
                   </p>
@@ -1050,9 +724,9 @@ const AdminPanel = () => {
                               {item.previewUrls.length < 3 && (
                                 <label className="admin-destino-preview__add-more">
                                   + Agregar imagen ({item.previewUrls.length}/3)
-<input type="file" accept="image/*" multiple onChange={(e) => handleDestinoImageAdd(idx, e.target.files, e.target)} style={{ display: 'none' }} />
-                            </label>
-                          )}
+                                  <input type="file" accept="image/*" multiple onChange={(e) => handleDestinoImageAdd(idx, e.target.files, e.target)} style={{ display: 'none' }} />
+                                </label>
+                              )}
                             </>
                           ) : (
                             <label className="admin-destino-preview__upload">
@@ -1089,310 +763,132 @@ const AdminPanel = () => {
                 </div>
               )}
 
-              {(!isDestinosCategory || editingProductId) && (
-              <>
-              <label>
-                Ubicacion
-                <input
-                  type="text"
-                  value={producto.ubicacion}
-                  onChange={(e) => handleProductoChange("ubicacion", e.target.value)}
-                />
-              </label>
+              {/* ── Alojamientos (solo edicion de destinos) ── */}
+              {isDestinosCategory && editingProductId && (
+                <section className="admin-section admin-section-collapsible">
+                  <div className="admin-collapsible-header" onClick={() => toggleSection("alojamientos")}>
+                    <h2>🏨 Alojamientos</h2>
+                    <span className={`admin-collapsible-arrow${expandedSections.alojamientos ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
+                  </div>
+                  <div className={`admin-collapsible-body${expandedSections.alojamientos ? " admin-collapsible-body--open" : ""}`}>
 
-              <label>
-                Color fondo
-                <select
-                  value={producto.color_fondo}
-                  onChange={(e) => handleProductoChange("color_fondo", e.target.value)}
-                >
-                  <option value="verde">Verde</option>
-                  <option value="verdeOscuro">Verde oscuro</option>
-                  <option value="grisClaro">Gris claro</option>
-                  <option value="naranja">Naranja</option>
-                </select>
-              </label>
+                    {alojamientos.length === 0 && (
+                      <p className="admin-help" style={{ marginBottom: "16px", color: "#666" }}>
+                        No hay opciones de alojamiento registradas. Agrega una a continuacion.
+                      </p>
+                    )}
 
-              <label className={fieldErrors.rating ? "admin-field-error-label" : ""}>
-                Rating (0 - 10)
-                <input
-                  type="number"
-                  className={fieldErrors.rating ? "admin-field-error" : ""}
-                  step="0.1"
-                  min="0"
-                  max="10"
-                  value={producto.rating}
-                  onChange={(e) => handleProductoChange("rating", e.target.value)}
-                />
-                {fieldErrors.rating && <span className="admin-field-error-msg">⚠️ Rating debe ser 0-10</span>}
-              </label>
-
-              <label className={fieldErrors.cantidad_reviews ? "admin-field-error-label" : ""}>
-                Reviews (0 - 999,999)
-                <input
-                  type="number"
-                  className={fieldErrors.cantidad_reviews ? "admin-field-error" : ""}
-                  min="0"
-                  max="999999"
-                  value={producto.cantidad_reviews}
-                  onChange={(e) => handleProductoChange("cantidad_reviews", e.target.value)}
-                />
-                {fieldErrors.cantidad_reviews && <span className="admin-field-error-msg">⚠️ Reviews máximo: 999,999</span>}
-              </label>
-
-              <label>
-                Fecha inicio
-                <input
-                  type="date"
-                  value={producto.fecha_inicio}
-                  onChange={(e) => handleProductoChange("fecha_inicio", e.target.value)}
-                />
-              </label>
-
-              <label>
-                Fecha fin
-                <input
-                  type="date"
-                  value={producto.fecha_fin}
-                  onChange={(e) => handleProductoChange("fecha_fin", e.target.value)}
-                />
-              </label>
-              </>
-              )}
-            </div>
-
-            {(!isDestinosCategory || editingProductId) && (
-            <>
-            <label className="admin-toggle">
-              <input
-                type="checkbox"
-                checked={producto.activo}
-                onChange={(e) => handleProductoChange("activo", e.target.checked)}
-              />
-              <span className="admin-toggle-track"></span>
-              {producto.activo ? "Activo" : "Inactivo"}
-            </label>
-
-            <label className={fieldErrors.imagenFile ? "admin-field-error-label" : ""}>
-              Imagen principal {editingProductId ? "(dejar vacio para mantener la actual)" : "(subir archivo)"}
-              {editingProductId && producto.imagen && (
-                <div className="admin-current-image">
-                  <img src={producto.imagen} alt="Imagen actual" />
-                  <span>Imagen actual</span>
-                </div>
-              )}
-              <input
-                type="file"
-                className={fieldErrors.imagenFile ? "admin-field-error" : ""}
-                accept="image/*"
-                onChange={(e) => handleProductoChange("imagenFile", e.target.files[0])}
-                required={!editingProductId}
-              />
-              {fieldErrors.imagenFile && <span className="admin-field-error-msg">Debes subir una imagen</span>}
-            </label>
-              </>
-              )}
-            </div>
-          </section>
-
-          {/* ── Detalles crucero ── */}
-          {isCrucero && (
-            <section className="admin-section admin-section-collapsible">
-              <div className="admin-collapsible-header" onClick={() => toggleSection("crucero")}>
-                <h2>🚢 Detalles crucero</h2>
-                <span className={`admin-collapsible-arrow${expandedSections.crucero ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
-              </div>
-              <div className={`admin-collapsible-body${expandedSections.crucero ? " admin-collapsible-body--open" : ""}`}>
-              <div className="admin-grid">
-                <label>
-                  Anos servicio
-                  <input
-                    type="number"
-                    value={detalleCrucero.anos_servicio}
-                    onChange={(e) => handleDetalleChange("anos_servicio", e.target.value)}
-                  />
-                </label>
-                <label>
-                  Pasajeros max
-                  <input
-                    type="number"
-                    value={detalleCrucero.pasajeros_max}
-                    onChange={(e) => handleDetalleChange("pasajeros_max", e.target.value)}
-                  />
-                </label>
-                <label>
-                  Tripulantes
-                  <input
-                    type="number"
-                    value={detalleCrucero.tripulantes}
-                    onChange={(e) => handleDetalleChange("tripulantes", e.target.value)}
-                  />
-                </label>
-                <label>
-                  Ratio espacio
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={detalleCrucero.ratio_espacio}
-                    onChange={(e) => handleDetalleChange("ratio_espacio", e.target.value)}
-                  />
-                </label>
-                <label>
-                  Ratio servicio
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={detalleCrucero.ratio_servicio}
-                    onChange={(e) => handleDetalleChange("ratio_servicio", e.target.value)}
-                  />
-                </label>
-              </div>
-              <div className="admin-checkboxes">
-                <label className="admin-checkbox">
-                  <input
-                    type="checkbox"
-                    checked={detalleCrucero.cabina_single}
-                    onChange={(e) => handleDetalleChange("cabina_single", e.target.checked)}
-                  />
-                  Cabina single
-                </label>
-                <label className="admin-checkbox">
-                  <input
-                    type="checkbox"
-                    checked={detalleCrucero.viajando_con_ninos}
-                    onChange={(e) => handleDetalleChange("viajando_con_ninos", e.target.checked)}
-                  />
-                  Viajando con ninos
-                </label>
-              </div>
-              </div>
-            </section>
-          )}
-
-          {/* ── Alojamientos (solo edicion de destinos) ── */}
-          {isDestinosCategory && editingProductId && (
-            <section className="admin-section admin-section-collapsible">
-              <div className="admin-collapsible-header" onClick={() => toggleSection("alojamientos")}>
-                <h2>🏨 Alojamientos</h2>
-                <span className={`admin-collapsible-arrow${expandedSections.alojamientos ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
-              </div>
-              <div className={`admin-collapsible-body${expandedSections.alojamientos ? " admin-collapsible-body--open" : ""}`}>
-
-                {alojamientos.length === 0 && (
-                  <p className="admin-help" style={{ marginBottom: "16px", color: "#666" }}>
-                    No hay opciones de alojamiento registradas. Agrega una a continuacion.
-                  </p>
-                )}
-
-                <div className="admin-alojamientos-list">
-                  {alojamientos.map((item, idx) => (
-                    <div key={idx} className="admin-alojamiento-card">
-                      <div className="admin-alojamiento-card__header">
-                        <span className="admin-alojamiento-card__number">{idx + 1}</span>
-                        <span className="admin-alojamiento-card__label">{item.titulo || "Nuevo alojamiento"}</span>
-                        <div className="admin-alojamiento-card__actions">
-                          <button type="button" className="admin-btn-reorder" onClick={() => moveAlojamiento(idx, -1)} disabled={idx === 0} title="Subir">&#8593;</button>
-                          <button type="button" className="admin-btn-reorder" onClick={() => moveAlojamiento(idx, 1)} disabled={idx === alojamientos.length - 1} title="Bajar">&#8595;</button>
-                          <button type="button" className="admin-btn-delete" onClick={() => removeAlojamiento(idx)}>Quitar</button>
-                        </div>
-                      </div>
-
-                      <div className="admin-alojamiento-card__body">
-                        <div className="admin-alojamiento-fields">
-                          <div className="admin-grid">
-                            <label>
-                              Titulo
-                              <input type="text" value={item.titulo} onChange={(e) => handleAlojamientoChange(idx, "titulo", e.target.value)} placeholder="ej: Hotel Playa Dorada" />
-                            </label>
-                            <label>
-                              Precio (USD)
-                              <input type="number" min="0" step="0.01" value={item.precio} onChange={(e) => handleAlojamientoChange(idx, "precio", e.target.value)} placeholder="ej: 150" />
-                            </label>
-                            <label>
-                              Estrellas (1-5)
-                              <input type="number" min="1" max="5" step="1" value={item.estrellas} onChange={(e) => handleAlojamientoChange(idx, "estrellas", Number(e.target.value))} />
-                            </label>
-                            <label>
-                              Distancia centro
-                              <input type="text" value={item.distancia_centro} onChange={(e) => handleAlojamientoChange(idx, "distancia_centro", e.target.value)} placeholder="ej: 2.5 km" />
-                            </label>
-                            <label>
-                              Categoria
-                              <select value={item.categoria} onChange={(e) => handleAlojamientoChange(idx, "categoria", e.target.value)}>
-                                <option value="">Seleccionar</option>
-                                <option value="todo incluido">Todo incluido</option>
-                                <option value="solo alojamiento">Solo alojamiento</option>
-                                <option value="desayunos">Desayunos</option>
-                                <option value="media pension">Media pension</option>
-                              </select>
-                            </label>
-                            <label>
-                              Tipo habitacion
-                              <select value={item.tipo_habitacion} onChange={(e) => handleAlojamientoChange(idx, "tipo_habitacion", e.target.value)}>
-                                <option value="">Seleccionar</option>
-                                <option value="superior">Superior</option>
-                                <option value="primera calidad">Primera calidad</option>
-                                <option value="doble superior">Doble superior</option>
-                                <option value="doble premium">Doble premium</option>
-                              </select>
-                            </label>
-                            <label style={{ gridColumn: "1 / -1" }}>
-                              Enlace externo (Booking, Despegar, etc.)
-                              <input type="url" value={item.enlace_externo} onChange={(e) => handleAlojamientoChange(idx, "enlace_externo", e.target.value)} placeholder="https://..." />
-                            </label>
-                            <label style={{ gridColumn: "1 / -1" }}>
-                              Imagen
-                              <input type="file" accept="image/*" onChange={(e) => {
-                                const file = e.target.files[0];
-                                if (file) handleAlojamientoImage(idx, file);
-                              }} />
-                            </label>
+                    <div className="admin-alojamientos-list">
+                      {alojamientos.map((item, idx) => (
+                        <div key={idx} className="admin-alojamiento-card">
+                          <div className="admin-alojamiento-card__header">
+                            <span className="admin-alojamiento-card__number">{idx + 1}</span>
+                            <span className="admin-alojamiento-card__label">{item.titulo || "Nuevo alojamiento"}</span>
+                            <div className="admin-alojamiento-card__actions">
+                              <button type="button" className="admin-btn-reorder" onClick={() => moveAlojamiento(idx, -1)} disabled={idx === 0} title="Subir">&#8593;</button>
+                              <button type="button" className="admin-btn-reorder" onClick={() => moveAlojamiento(idx, 1)} disabled={idx === alojamientos.length - 1} title="Bajar">&#8595;</button>
+                              <button type="button" className="admin-btn-delete" onClick={() => removeAlojamiento(idx)}>Quitar</button>
+                            </div>
                           </div>
-                          {item.previewUrl && (
-                            <div className="admin-alojamiento-img-preview">
-                              <img src={item.previewUrl} alt="Preview" />
-                            </div>
-                          )}
-                          {item.imagen_url && !item.previewUrl && (
-                            <div className="admin-alojamiento-img-preview">
-                              <img src={item.imagen_url} alt="Actual" />
-                              <span className="admin-alojamiento-img-label">Imagen actual</span>
-                            </div>
-                          )}
-                        </div>
 
-                        <div className="admin-alojamiento-preview">
-                          <DestinoCard
-                            compact
-                            alojamiento={{
-                              titulo: item.titulo || "Vista previa",
-                              precio: item.precio ? parseNumber(item.precio) : null,
-                              imagen_url: item.previewUrl || item.imagen_url,
-                              estrellas: item.estrellas,
-                              distancia_centro: item.distancia_centro,
-                              categoria: item.categoria,
-                              tipo_habitacion: item.tipo_habitacion,
-                              enlace_externo: item.enlace_externo,
-                            }}
-                          />
+                          <div className="admin-alojamiento-card__body">
+                            <div className="admin-alojamiento-fields">
+                              <div className="admin-grid">
+                                <label>
+                                  Titulo
+                                  <input type="text" value={item.titulo} onChange={(e) => handleAlojamientoChange(idx, "titulo", e.target.value)} placeholder="ej: Hotel Playa Dorada" />
+                                </label>
+                                <label>
+                                  Precio (USD)
+                                  <input type="number" min="0" step="0.01" value={item.precio} onChange={(e) => handleAlojamientoChange(idx, "precio", e.target.value)} placeholder="ej: 150" />
+                                </label>
+                                <label>
+                                  Estrellas (1-5)
+                                  <input type="number" min="1" max="5" step="1" value={item.estrellas} onChange={(e) => handleAlojamientoChange(idx, "estrellas", Number(e.target.value))} />
+                                </label>
+                                <label>
+                                  Distancia centro
+                                  <input type="text" value={item.distancia_centro} onChange={(e) => handleAlojamientoChange(idx, "distancia_centro", e.target.value)} placeholder="ej: 2.5 km" />
+                                </label>
+                                <label>
+                                  Categoria
+                                  <select value={item.categoria} onChange={(e) => handleAlojamientoChange(idx, "categoria", e.target.value)}>
+                                    <option value="">Seleccionar</option>
+                                    <option value="todo incluido">Todo incluido</option>
+                                    <option value="solo alojamiento">Solo alojamiento</option>
+                                    <option value="desayunos">Desayunos</option>
+                                    <option value="media pension">Media pension</option>
+                                  </select>
+                                </label>
+                                <label>
+                                  Tipo habitacion
+                                  <select value={item.tipo_habitacion} onChange={(e) => handleAlojamientoChange(idx, "tipo_habitacion", e.target.value)}>
+                                    <option value="">Seleccionar</option>
+                                    <option value="superior">Superior</option>
+                                    <option value="primera calidad">Primera calidad</option>
+                                    <option value="doble superior">Doble superior</option>
+                                    <option value="doble premium">Doble premium</option>
+                                  </select>
+                                </label>
+                                <label style={{ gridColumn: "1 / -1" }}>
+                                  Enlace externo (Booking, Despegar, etc.)
+                                  <input type="url" value={item.enlace_externo} onChange={(e) => handleAlojamientoChange(idx, "enlace_externo", e.target.value)} placeholder="https://..." />
+                                </label>
+                                <label style={{ gridColumn: "1 / -1" }}>
+                                  Imagen
+                                  <input type="file" accept="image/*" onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (file) handleAlojamientoImage(idx, file);
+                                  }} />
+                                </label>
+                              </div>
+                              {item.previewUrl && (
+                                <div className="admin-alojamiento-img-preview">
+                                  <img src={item.previewUrl} alt="Preview" />
+                                </div>
+                              )}
+                              {item.imagen_url && !item.previewUrl && (
+                                <div className="admin-alojamiento-img-preview">
+                                  <img src={item.imagen_url} alt="Actual" />
+                                  <span className="admin-alojamiento-img-label">Imagen actual</span>
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="admin-alojamiento-preview">
+                              <DestinoCard
+                                compact
+                                alojamiento={{
+                                  titulo: item.titulo || "Vista previa",
+                                  precio: item.precio ? parseNumber(item.precio) : null,
+                                  imagen_url: item.previewUrl || item.imagen_url,
+                                  estrellas: item.estrellas,
+                                  distancia_centro: item.distancia_centro,
+                                  categoria: item.categoria,
+                                  tipo_habitacion: item.tipo_habitacion,
+                                  enlace_externo: item.enlace_externo,
+                                }}
+                              />
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
 
-                <button type="button" className="admin-destinos-add-btn" onClick={addAlojamiento}>
-                  <span className="admin-destinos-add-btn__icon">+</span>
-                  <span>Agregar alojamiento</span>
-                </button>
-              </div>
-            </section>
+                    <button type="button" className="admin-destinos-add-btn" onClick={addAlojamiento}>
+                      <span className="admin-destinos-add-btn__icon">+</span>
+                      <span>Agregar alojamiento</span>
+                    </button>
+                  </div>
+                </section>
+              )}
+            </>
           )}
 
           {/* ── Mensajes ── */}
-          {error && <div className="admin-error">{error}</div>}
+          {error && <div className="admin-error" role="alert">{error}</div>}
           {success && (
-            <div className="admin-success">
+            <div className="admin-success" role="alert">
               <strong>Producto {success.modo} correctamente</strong>
               <ul className="admin-success-detail">
                 <li><span>Nombre:</span> {success.titulo}</li>
@@ -1402,8 +898,8 @@ const AdminPanel = () => {
             </div>
           )}
 
-          <button className="admin-submit" type="submit" disabled={loading}>
-            {loading ? "Guardando..." : isDestinosCategory && !editingProductId ? "Crear destino(s)" : editingProductId ? "Guardar cambios" : "Crear producto"}
+          <button className="admin-submit" type="submit" disabled={loading || !canSubmit}>
+            {submitBtnText}
           </button>
         </form>
       )}
