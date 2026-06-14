@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/card_cruceros.css";
+import "../styles/tours_cards.css";
 import { fetchCategories, fetchProductsByCategory } from "../backend/supabase_client";
 import { getSupabaseImageUrl } from "../utils/imageHelper";
 

@@ -47,7 +47,8 @@
   min-width: 200px;
 }
 
-.tour-card {
+.tour-card,
+.grid-experiencia__card {
   position: relative;
   border-radius: var(--card-hero-radius);
   overflow: hidden;
@@ -59,12 +60,14 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-.tour-card:hover {
+.tour-card:hover,
+.grid-experiencia__card:hover {
   transform: translateY(-12px) scale(1.02);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
 }
 
-.tour-card::after {
+.tour-card::after,
+.grid-experiencia__card::after {
   content: "";
   position: absolute;
   top: 0;
@@ -75,7 +78,8 @@
   z-index: 1;
 }
 
-.tour-card__overlay {
+.tour-card__overlay,
+.grid-experiencia__overlay {
   position: relative;
   z-index: 2;
   width: 100%;
@@ -85,13 +89,15 @@
   justify-content: flex-end;
 }
 
-.tour-card__content {
+.tour-card__content,
+.grid-experiencia__content {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.tour-card__titulo {
+.tour-card__titulo,
+.grid-experiencia__titulo {
   margin: 0;
   font-size: 1.3rem;
   font-weight: 600;
@@ -100,7 +106,8 @@
   line-height: 1.3;
 }
 
-.tour-card__ubicacion {
+.tour-card__ubicacion,
+.grid-experiencia__ubicacion {
   margin: 0;
   font-size: 0.95rem;
   color: rgba(255, 255, 255, 0.9);
@@ -108,35 +115,40 @@
   font-weight: 400;
 }
 
-.tour-card__fechas {
+.tour-card__fechas,
+.grid-experiencia__fechas {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-top: 8px;
 }
 
-.tour-card__fechas span {
+.tour-card__fechas span,
+.grid-experiencia__fechas span {
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.85);
   font-family: "Lora", serif;
   font-weight: 500;
 }
 
-.tour-card__precio {
+.tour-card__precio,
+.grid-experiencia__precio {
   display: flex;
   align-items: baseline;
   gap: 8px;
   margin-top: 12px;
 }
 
-.tour-card__precio-label {
+.tour-card__precio-label,
+.grid-experiencia__precio-label {
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.8);
   font-family: "Lora", serif;
   font-weight: 400;
 }
 
-.tour-card__precio-valor {
+.tour-card__precio-valor,
+.grid-experiencia__precio-valor {
   font-size: 1.8rem;
   font-weight: 700;
   color: white;
@@ -178,19 +190,23 @@
     padding: 24px 16px;
   }
 
-  .tour-card {
+  .tour-card,
+  .grid-experiencia__card {
     min-height: var(--card-hero-min-height-md);
   }
 
-  .tour-card__titulo {
+  .tour-card__titulo,
+  .grid-experiencia__titulo {
     font-size: 1.1rem;
   }
 
-  .tour-card__ubicacion {
+  .tour-card__ubicacion,
+  .grid-experiencia__ubicacion {
     font-size: 0.9rem;
   }
 
-  .tour-card__precio-valor {
+  .tour-card__precio-valor,
+  .grid-experiencia__precio-valor {
     font-size: 1.5rem;
   }
 }
@@ -216,15 +232,18 @@
     width: 100%;
   }
 
-  .tour-card {
+  .tour-card,
+  .grid-experiencia__card {
     min-height: var(--card-hero-min-height-sm);
   }
 
-  .tour-card__titulo {
+  .tour-card__titulo,
+  .grid-experiencia__titulo {
     font-size: 1rem;
   }
 
-  .tour-card__precio-valor {
+  .tour-card__precio-valor,
+  .grid-experiencia__precio-valor {
     font-size: 1.4rem;
   }
 }
@@ -240,15 +259,18 @@
     padding: 20px 12px;
   }
 
-  .tour-card {
+  .tour-card,
+  .grid-experiencia__card {
     min-height: var(--card-hero-min-height-xs);
   }
 
-  .tour-card__overlay {
+  .tour-card__overlay,
+  .grid-experiencia__overlay {
     padding: 16px;
   }
 
-  .tour-card__precio-valor {
+  .tour-card__precio-valor,
+  .grid-experiencia__precio-valor {
     font-size: 1.3rem;
   }
 }

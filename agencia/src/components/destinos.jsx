@@ -1,6 +1,7 @@
 import { Banner } from "./Banner";
 import { CardGrid } from "./CardGrid";
 import "../styles/card_cruceros.css";
+import "../styles/tours_cards.css";
 import SEO from './SEO.jsx';
 
 export const Destinos = () => {

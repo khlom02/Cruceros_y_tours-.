@@ -3,6 +3,7 @@ import { servicesData } from './services';
 import { CardGrid } from './CardGrid';
 import SEO from './SEO.jsx';
 import '../styles/card_cruceros.css';
+import '../styles/tours_cards.css';
 
 const tituloStyle = {
   textAlign: 'center',

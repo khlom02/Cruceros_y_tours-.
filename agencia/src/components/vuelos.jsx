@@ -2,6 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { Banner } from "./Banner";
 import { CardGrid } from "./CardGrid";
 import "../styles/card_cruceros.css";
+import "../styles/tours_cards.css";
 import SEO from './SEO.jsx';
 
 const Vuelos = () => {
