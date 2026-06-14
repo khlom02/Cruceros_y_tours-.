@@ -133,11 +133,15 @@ const DestinosCarousel = ({ items, titulo, navigate }) => {
   const [slidesPerView, setSlidesPerView] = useState(getSlidesPerView);
   const [containerWidth, setContainerWidth] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   const autoplayRef = useRef(null);
   const containerRef = useRef(null);
+  const currentSlideRef = useRef(currentSlide);
+  currentSlideRef.current = currentSlide;
 
   const totalSlides = items.length;
   const isLoop = totalSlides > slidesPerView;
+  const maxSlide = Math.max(0, totalSlides - slidesPerView);
   const slideWidth = containerWidth / slidesPerView;
 
   useEffect(() => {
@@ -154,19 +158,31 @@ const DestinosCarousel = ({ items, titulo, navigate }) => {
 
   const goNext = useCallback(() => {
     if (isLoop) {
-      setCurrentSlide((prev) => (prev + 1) % totalSlides);
+      if (currentSlideRef.current >= maxSlide) {
+        setIsResetting(true);
+        setCurrentSlide(0);
+        requestAnimationFrame(() => requestAnimationFrame(() => setIsResetting(false)));
+      } else {
+        setCurrentSlide((prev) => prev + 1);
+      }
     } else {
       setCurrentSlide((prev) => Math.min(prev + 1, Math.max(0, totalSlides - slidesPerView)));
     }
-  }, [isLoop, totalSlides, slidesPerView]);
+  }, [isLoop, totalSlides, slidesPerView, maxSlide]);
 
   const goPrev = useCallback(() => {
     if (isLoop) {
-      setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+      if (currentSlideRef.current <= 0) {
+        setIsResetting(true);
+        setCurrentSlide(maxSlide);
+        requestAnimationFrame(() => requestAnimationFrame(() => setIsResetting(false)));
+      } else {
+        setCurrentSlide((prev) => prev - 1);
+      }
     } else {
       setCurrentSlide((prev) => Math.max(prev - 1, 0));
     }
-  }, [isLoop, totalSlides]);
+  }, [isLoop, totalSlides, maxSlide]);
 
   useEffect(() => {
     if (isHovered || !isLoop) return;
@@ -180,16 +196,14 @@ const DestinosCarousel = ({ items, titulo, navigate }) => {
 
   const translateX = -currentSlide * slideWidth;
 
-  const visibleBullets = isLoop ? totalSlides : Math.max(1, totalSlides - slidesPerView + 1);
-  const currentBullet = isLoop
-    ? currentSlide % totalSlides
-    : Math.min(currentSlide, visibleBullets - 1);
+  const visibleBullets = isLoop ? maxSlide + 1 : Math.max(1, maxSlide + 1);
+  const currentBullet = Math.min(currentSlide, maxSlide);
 
   const handleBulletClick = (index) => {
     if (isLoop) {
-      setCurrentSlide(index % totalSlides);
+      setCurrentSlide(Math.min(index, maxSlide));
     } else {
-      setCurrentSlide(Math.min(index, totalSlides - slidesPerView));
+      setCurrentSlide(Math.min(index, maxSlide));
     }
   };
 
@@ -209,7 +223,7 @@ const DestinosCarousel = ({ items, titulo, navigate }) => {
         >
           <div className="destinos-carousel__viewport" ref={containerRef}>
             <div
-              className="destinos-carousel__track"
+              className={`destinos-carousel__track${isResetting ? ' destinos-carousel__track--resetting' : ''}`}
               style={{ transform: `translateX(${translateX}px)` }}
             >
               {items.map((dest) => (

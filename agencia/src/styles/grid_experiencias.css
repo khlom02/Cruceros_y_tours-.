@@ -52,14 +52,14 @@
 /* Estilos para grid-experiencias */
 .grid-experiencia__card {
   position: relative;
-  border-radius: 16px;
+  border-radius: var(--card-hero-radius);
   overflow: hidden;
-  min-height: 400px;
+  min-height: var(--card-hero-min-height);
   display: flex;
   align-items: flex-end;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--card-shadow);
 }
 
 .grid-experiencia__card:hover {
@@ -149,14 +149,14 @@
 /* Estilos para tour-card (tours y otros) */
 .tour-card {
   position: relative;
-  border-radius: 16px;
+  border-radius: var(--card-hero-radius);
   overflow: hidden;
-  min-height: 400px;
+  min-height: var(--card-hero-min-height);
   display: flex;
   align-items: flex-end;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--card-shadow);
 }
 
 .tour-card:hover {
@@ -254,7 +254,7 @@
 
   .grid-experiencia__card,
   .tour-card {
-    min-height: 300px;
+    min-height: var(--card-hero-min-height-md);
   }
 
   .grid-experiencia__titulo,
@@ -273,6 +273,13 @@
   }
 }
 
+@media (max-width: 600px) {
+  .grid-experiencia__card,
+  .tour-card {
+    min-height: var(--card-hero-min-height-sm);
+  }
+}
+
 @media (max-width: 480px) {
   .tours-grid {
     grid-template-columns: 1fr;
@@ -282,7 +289,7 @@
 
   .grid-experiencia__card,
   .tour-card {
-    min-height: 280px;
+    min-height: var(--card-hero-min-height-xs);
   }
 
   .grid-experiencia__overlay,

@@ -13,7 +13,7 @@
 	position: relative;
 	border-radius: var(--border-radius);
 	overflow: hidden;
-	min-height: 320px;
+	min-height: var(--card-servicio-min-height);
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 	align-items: stretch;
@@ -31,7 +31,7 @@
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
-	min-height: 320px;
+	min-height: var(--card-servicio-min-height);
 }
 
 .card_servicio__panel {
@@ -123,11 +123,11 @@
 	}
 
 	.card_servicio {
-		min-height: 300px;
+		min-height: var(--card-servicio-min-height-md);
 	}
 
 	.card_servicio__media {
-		min-height: 300px;
+		min-height: var(--card-servicio-min-height-md);
 	}
 }
 
@@ -164,11 +164,11 @@
 	}
 
 	.card_servicio {
-		min-height: 260px;
+		min-height: var(--card-servicio-min-height-xs);
 	}
 
 	.card_servicio__media {
-		min-height: 220px;
+		min-height: var(--card-servicio-media-min-height-xs);
 	}
 
 	.card_servicio__overlay {

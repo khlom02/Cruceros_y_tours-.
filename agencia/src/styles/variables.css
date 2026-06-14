@@ -55,6 +55,13 @@
   --card-content-padding-sm: 16px;
   --card-content-gap: 16px;
 
+  /* Card servicio (horizontal split layout) */
+  --card-servicio-min-height: 320px;
+  --card-servicio-min-height-md: 300px;
+  --card-servicio-min-height-sm: 260px;
+  --card-servicio-min-height-xs: 260px;
+  --card-servicio-media-min-height-xs: 220px;
+
   /* Card utility (admin, panel, dashboard) */
   --card-utility-radius: var(--border-radius);
   --card-utility-padding: 16px;

@@ -41,6 +41,29 @@ export const AuthProvider = ({ children }) => {
     return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (session || loading) return;
+    if (import.meta.env.VITE_ENABLE_AUTO_LOGIN !== 'true') return;
+
+    const tryAutoLogin = async () => {
+      try {
+        const res = await fetch('/api/auto-login');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.access_token) {
+          await supabase.auth.setSession({
+            access_token: data.access_token,
+            refresh_token: data.refresh_token,
+          });
+        }
+      } catch {
+        // Silently fail — endpoint only works in preview deployments
+      }
+    };
+
+    tryAutoLogin();
+  }, [session, loading]);
+
   // Función para iniciar sesión con email/password
   const signIn = async (email, password) => {
     const { data, error } = await supabase.auth.signInWithPassword({
