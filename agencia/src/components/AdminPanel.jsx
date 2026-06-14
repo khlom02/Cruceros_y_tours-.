@@ -60,6 +60,16 @@ const emptyAlojamiento = {
   enlace_externo: "",
 };
 
+const emptyEditFields = {
+  titulo: "",
+  descripcion: "",
+  precio: "",
+  ubicacion: "",
+  activo: true,
+  imagen: "",
+  imagenFile: null,
+};
+
 const AdminPanel = () => {
 
   // ─── Tabs ─────────────────────────────────────────────────────────────────
@@ -97,6 +107,12 @@ const AdminPanel = () => {
   // ─── Alojamientos para edición de destinos ────────────────────────────────
   const [alojamientos, setAlojamientos] = useState([]);
   const [alojamientosToDelete, setAlojamientosToDelete] = useState([]);
+
+  // ─── Campos editables del producto en modo edicion ──────────────────────
+  const [editFields, setEditFields] = useState({ ...emptyEditFields });
+  const handleEditFieldChange = (field, value) => {
+    setEditFields((prev) => ({ ...prev, [field]: value }));
+  };
 
   // ─── Guard contra doble submit ────────────────────────────────────────────
   const submittingRef = useRef(false);
@@ -252,6 +268,7 @@ const AdminPanel = () => {
   const resetForm = () => {
     setCategoria_id("");
     setEditingProductId(null);
+    setEditFields({ ...emptyEditFields });
     
     setError("");
     submittingRef.current = false;
@@ -274,6 +291,15 @@ const AdminPanel = () => {
       setCategoria_id(String(data.categoria_id || ""));
       setEditingProductId(productId);
       setActiveTab("crear");
+      setEditFields({
+        titulo: data.titulo || "",
+        descripcion: data.descripcion || "",
+        precio: String(data.precio ?? ""),
+        ubicacion: data.ubicacion || "",
+        activo: data.activo !== false,
+        imagen: data.imagen || "",
+        imagenFile: null,
+      });
 
       // Cargar alojamientos si es un destino
       const cat = categorias.find((c) => String(c.id) === String(data.categoria_id));
@@ -309,80 +335,103 @@ const AdminPanel = () => {
     setError("");
     setSuccess(null);
 
-    // ── MODO ESPECIAL: Creación masiva de Destinos ─────────────────────────
-    if (isDestinosCategory && !editingProductId) {
-      const validItems = destinosItems.filter((d) => d.destino.trim() && d.pais.trim() && d.precio);
-      if (validItems.length === 0) {
-        setError("Debes agregar al menos un destino con destino, país y precio.");
-        return;
-      }
-      for (const item of validItems) {
-        if (item.imagenes.length === 0) {
-          setError(`El destino "${item.destino}" debe tener al menos una imagen.`);
+    // ── MODO CREACION ──────────────────────────────────────────────────────
+    if (!editingProductId) {
+      if (isDestinosCategory) {
+        const validItems = destinosItems.filter((d) => d.destino.trim() && d.pais.trim() && d.precio);
+        if (validItems.length === 0) {
+          setError("Debes agregar al menos un destino con destino, país y precio.");
           return;
         }
-      }
-
-      try {
-        setLoading(true);
-        const catId = parseNumber(categoria_id);
-
         for (const item of validItems) {
-          const imageUrls = [];
-          for (const file of item.imagenes) {
-            const url = await uploadFile(file, 'productos/destinos');
-            imageUrls.push(url);
-          }
-
-          const { data: prod, error: prodErr } = await supabase
-            .from('productos')
-            .insert({
-              titulo: item.destino.trim(),
-              descripcion: `${item.destino.trim()}, ${item.pais.trim()}`,
-              precio: parseNumber(item.precio),
-              imagen: imageUrls[0] || null,
-              ubicacion: `${item.destino.trim()}, ${item.pais.trim()}`,
-              categoria_id: catId,
-              activo: true,
-              color_fondo: 'verde',
-            })
-            .select()
-            .single();
-
-          if (prodErr) throw prodErr;
-
-          if (imageUrls.length > 1) {
-            const galleryRows = imageUrls.slice(1).map((url, idx) => ({
-              producto_id: prod.id,
-              imagen_url: url,
-              posicion_orden: idx + 1,
-            }));
-            const { error: gErr } = await supabase.from('galleries').insert(galleryRows);
-            if (gErr) throw gErr;
+          if (item.imagenes.length === 0) {
+            setError(`El destino "${item.destino}" debe tener al menos una imagen.`);
+            return;
           }
         }
 
-        setSuccess({
-          titulo: `${validItems.length} destino(s)`,
-          categoria: categoriaNombre,
-          ruta: rutaPorCategoria(categoriaNombre),
-          modo: 'creado',
-        });
-        resetForm();
-      } catch (err) {
-        console.error('Error al guardar destinos:', err);
-        setError(`Error al guardar: ${err?.message || 'Error desconocido'}`);
-      } finally {
-        setLoading(false);
+        try {
+          setLoading(true);
+          const catId = parseNumber(categoria_id);
+
+          for (const item of validItems) {
+            const imageUrls = [];
+            for (const file of item.imagenes) {
+              const url = await uploadFile(file, 'productos/destinos');
+              imageUrls.push(url);
+            }
+
+            const { data: prod, error: prodErr } = await supabase
+              .from('productos')
+              .insert({
+                titulo: item.destino.trim(),
+                descripcion: `${item.destino.trim()}, ${item.pais.trim()}`,
+                precio: parseNumber(item.precio),
+                imagen: imageUrls[0] || null,
+                ubicacion: `${item.destino.trim()}, ${item.pais.trim()}`,
+                categoria_id: catId,
+                activo: true,
+                color_fondo: 'verde',
+              })
+              .select()
+              .single();
+
+            if (prodErr) throw prodErr;
+
+            if (imageUrls.length > 1) {
+              const galleryRows = imageUrls.slice(1).map((url, idx) => ({
+                producto_id: prod.id,
+                imagen_url: url,
+                posicion_orden: idx + 1,
+              }));
+              const { error: gErr } = await supabase.from('galleries').insert(galleryRows);
+              if (gErr) throw gErr;
+            }
+          }
+
+          setSuccess({
+            titulo: `${validItems.length} destino(s)`,
+            categoria: categoriaNombre,
+            ruta: rutaPorCategoria(categoriaNombre),
+            modo: 'creado',
+          });
+          resetForm();
+        } catch (err) {
+          console.error('Error al guardar destinos:', err);
+          setError(`Error al guardar: ${err?.message || 'Error desconocido'}`);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setError("Gestor próximo para esta categoría.");
       }
       return;
     }
 
-    // ── MODO EDICION INDIVIDUAL DE DESTINO ────────────────────────────────
-    if (isDestinosCategory && editingProductId) {
-      try {
-        setLoading(true);
+    // ── MODO EDICION (cualquier categoria) ────────────────────────────────
+    try {
+      setLoading(true);
 
+      const imagenUrl = editFields.imagenFile
+        ? await uploadFile(editFields.imagenFile, "productos")
+        : editFields.imagen;
+
+      const { error: updateError } = await supabase
+        .from("productos")
+        .update({
+          titulo: editFields.titulo,
+          descripcion: editFields.descripcion,
+          precio: parseNumber(editFields.precio),
+          imagen: imagenUrl,
+          ubicacion: editFields.ubicacion,
+          activo: Boolean(editFields.activo),
+        })
+        .eq("id", editingProductId);
+
+      if (updateError) throw updateError;
+
+      // Alojamientos (solo destinos)
+      if (isDestinosCategory) {
         for (const id of alojamientosToDelete) {
           await deleteAlojamiento(id);
         }
@@ -411,25 +460,21 @@ const AdminPanel = () => {
             await insertAlojamiento(payload);
           }
         }
-
-        setSuccess({
-          titulo: "Alojamientos actualizados",
-          categoria: categoriaNombre,
-          ruta: rutaPorCategoria(categoriaNombre),
-          modo: "editado",
-        });
-        resetForm();
-      } catch (err) {
-        console.error("Error al guardar:", err);
-        setError(`Error al guardar: ${err?.message || "Error desconocido"}`);
-      } finally {
-        setLoading(false);
       }
-      return;
-    }
 
-    // ── SIN GESTOR ────────────────────────────────────────────────────────
-    setError("Gestor próximo para esta categoría.");
+      setSuccess({
+        titulo: editFields.titulo,
+        categoria: categoriaNombre,
+        ruta: rutaPorCategoria(categoriaNombre),
+        modo: "editado",
+      });
+      resetForm();
+    } catch (err) {
+      console.error("Error al guardar:", err);
+      setError(`Error al guardar: ${err?.message || "Error desconocido"}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // ─── Nombre de categoria por id (para lista) ──────────────────────────────
@@ -560,7 +605,7 @@ const AdminPanel = () => {
     });
   }, [productosLista, productSearch, categorias]);
 
-  const canSubmit = isDestinosCategory;
+  const canSubmit = isDestinosCategory || !!editingProductId;
   const submitBtnText = loading
     ? "Guardando..."
     : isDestinosCategory && !editingProductId
@@ -673,6 +718,46 @@ const AdminPanel = () => {
             <div className="admin-categoria-info">
               ⚠️ Trabajando actualmente en la categoría: <strong>{categoriaNombre}</strong>
             </div>
+          )}
+
+          {/* ── Formulario de edicion del producto (cualquier categoria) ── */}
+          {editingProductId && (
+            <section className="admin-section">
+              <h2>📦 Datos del producto</h2>
+              <div className="admin-grid">
+                <label style={{ gridColumn: '1 / -1' }}>
+                  Titulo
+                  <input type="text" value={editFields.titulo} onChange={(e) => handleEditFieldChange('titulo', e.target.value)} required />
+                </label>
+                <label style={{ gridColumn: '1 / -1' }}>
+                  Descripcion
+                  <textarea rows={3} value={editFields.descripcion} onChange={(e) => handleEditFieldChange('descripcion', e.target.value)} />
+                </label>
+                <label>
+                  Precio
+                  <input type="number" min="0" step="1" value={editFields.precio} onChange={(e) => handleEditFieldChange('precio', e.target.value)} onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()} />
+                </label>
+                <label>
+                  Ubicacion
+                  <input type="text" value={editFields.ubicacion} onChange={(e) => handleEditFieldChange('ubicacion', e.target.value)} />
+                </label>
+                <label className="admin-toggle" style={{ gridColumn: '1 / -1' }}>
+                  <input type="checkbox" checked={editFields.activo} onChange={(e) => handleEditFieldChange('activo', e.target.checked)} />
+                  <span className="admin-toggle-track"></span>
+                  {editFields.activo ? 'Activo' : 'Inactivo'}
+                </label>
+                <label style={{ gridColumn: '1 / -1' }}>
+                  Imagen {editFields.imagen ? '(dejar vacio para mantener la actual)' : ''}
+                  {editFields.imagen && !editFields.imagenFile && (
+                    <div className="admin-current-image">
+                      <img src={editFields.imagen} alt="Imagen actual" />
+                      <span>Imagen actual</span>
+                    </div>
+                  )}
+                  <input type="file" accept="image/*" onChange={(e) => setEditFields((prev) => ({ ...prev, imagenFile: e.target.files[0] }))} />
+                </label>
+              </div>
+            </section>
           )}
 
           {/* ── Contenido dinámico según categoría ── */}
