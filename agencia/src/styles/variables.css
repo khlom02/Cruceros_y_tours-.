@@ -68,8 +68,9 @@
   --card-utility-padding-sm: 14px;
   --card-utility-gap: 16px;
 
-  /* Card compact (aerolíneas, badges, tags) */
+  /* Card compact (aerolíneas, badges, tags, admin preview) */
   --card-compact-radius: 12px;
+  --card-compact-min-height: 200px;
   --card-compact-padding: 20px 16px;
   --card-compact-padding-md: 16px 12px;
   --card-compact-gap: 10px;

@@ -152,7 +152,7 @@
    COMPACT — Versión reducida para previsualización en Admin
    ═══════════════════════════════════════════════════════════════ */
 .card--destino--compact {
-  min-height: 200px;
+  min-height: var(--card-compact-min-height);
   cursor: default;
 }
 

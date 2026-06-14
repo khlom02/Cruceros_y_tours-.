@@ -2056,7 +2056,7 @@ textarea.admin-field-error:focus {
 }
 
 .admin-alojamiento-preview .card--destino {
-  border-radius: 10px;
+  border-radius: var(--card-hero-radius);
 }
 
 /* ── Responsive ── */
