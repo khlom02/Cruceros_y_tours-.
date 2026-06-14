@@ -99,6 +99,20 @@
   cursor: not-allowed;
 }
 
+.admin-categoria-info {
+  text-align: center;
+  padding: 16px 20px;
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: var(--border-radius);
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  color: var(--color-text-primary);
+}
+
+.admin-categoria-info strong {
+  color: var(--color-primary-dark);
+}
+
 @media (max-width: 600px) {
   .admin-categoria-selector {
     padding: 20px 12px;

@@ -651,22 +651,29 @@ const AdminPanel = () => {
             </div>
           )}
 
-          {/* ── Selector de categoría centrado ── */}
-          <section className="admin-categoria-selector">
-            <h2>Categoria</h2>
-            <select
-              id="admin-categoria"
-              value={categoria_id}
-              onChange={(e) => setCategoria_id(e.target.value)}
-              required
-              disabled={!!editingProductId}
-            >
-              <option value="">Selecciona una categoria</option>
-              {categorias.map((cat) => (
-                <option key={cat.id} value={cat.id}>{cat.nombre}</option>
-              ))}
-            </select>
-          </section>
+          {/* ── Selector de categoría centrado (solo crear) ── */}
+          {!editingProductId && (
+            <section className="admin-categoria-selector">
+              <h2>Categoria</h2>
+              <select
+                id="admin-categoria"
+                value={categoria_id}
+                onChange={(e) => setCategoria_id(e.target.value)}
+                required
+              >
+                <option value="">Selecciona una categoria</option>
+                {categorias.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.nombre}</option>
+                ))}
+              </select>
+            </section>
+          )}
+
+          {editingProductId && (
+            <div className="admin-categoria-info">
+              ⚠️ Trabajando actualmente en la categoría: <strong>{categoriaNombre}</strong>
+            </div>
+          )}
 
           {/* ── Contenido dinámico según categoría ── */}
           {categoria_id && (
