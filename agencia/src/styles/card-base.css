@@ -181,6 +181,31 @@
   color: var(--color-text-primary);
 }
 
+/* ── Tier: Destino (opciones de alojamiento) ── */
+
+.card--destino {
+  border-radius: var(--card-hero-radius);
+  overflow: hidden;
+}
+
+.card--destino .card--destino__precio {
+  font-size: var(--card-font-price);
+  font-weight: 700;
+  font-family: 'Lora', serif;
+  line-height: 1.1;
+}
+
+.card--destino .card--destino__titulo {
+  font-size: var(--card-font-title);
+}
+
+.card--destino .card--destino__btn {
+  border-radius: var(--card-btn-radius);
+  padding: var(--card-btn-padding);
+  border-width: 2px;
+  font-size: var(--card-font-btn);
+}
+
 /* ═══════════════════════════════════════════════════════════════
    MODIFICADORES
    ═══════════════════════════════════════════════════════════════ */

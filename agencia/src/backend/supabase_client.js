@@ -91,21 +91,27 @@ export const fetchProductById = async (id) => {
       return null;
     }
 
-    const [resultCrucero, resultGalleries, resultRooms, resultAmenities, resultHighlights] = await Promise.all([
+    const [resultCrucero, resultGalleries, resultRooms, resultAmenities, resultHighlights, resultItinerarios, resultCategoria, resultAlojamientos] = await Promise.all([
       supabase.from("detalles_cruceros").select("*").eq("producto_id", id).maybeSingle(),
       supabase.from("galleries").select("id, imagen_url, posicion_orden").eq("producto_id", id).order("posicion_orden", { ascending: true }),
       supabase.from("rooms").select("id, titulo, descripcion, precio, imagen_url").eq("producto_id", id).order("id", { ascending: true }),
       supabase.from("amenities").select("id, nombre, icono_emoji").eq("producto_id", id),
       supabase.from("highlights").select("id, descripcion").eq("producto_id", id).order("posicion_orden", { ascending: true }),
+      supabase.from("itinerarios").select("id, dia, titulo, descripcion, categoria, posicion_orden").eq("producto_id", id).order("dia", { ascending: true }).order("posicion_orden", { ascending: true }),
+      supabase.from("categorias").select("nombre").eq("id", producto.categoria_id).maybeSingle(),
+      supabase.from("alojamientos").select("*").eq("producto_id", id).order("posicion_orden", { ascending: true }),
     ]);
 
     return {
       ...producto,
+      categoria_nombre: resultCategoria?.data?.nombre || "",
       detalles_crucero: resultCrucero?.data || {},
       gallery: resultGalleries?.data?.map(g => g.imagen_url) || [],
       rooms: resultRooms?.data || [],
       amenities: resultAmenities?.data || [],
       highlights: resultHighlights?.data?.map(h => h.descripcion) || [],
+      itinerarios: resultItinerarios?.data || [],
+      alojamientos: resultAlojamientos?.data || [],
     };
   } catch (err) {
     console.error("Error inesperado al obtener producto con detalles:", err);
@@ -360,21 +366,12 @@ export const fetchProductAdminById = async (id) => {
       return null;
     }
 
-    const [resultCrucero, resultGalleries, resultRooms, resultAmenities, resultHighlights] = await Promise.all([
-      supabase.from("detalles_cruceros").select("*").eq("producto_id", id).maybeSingle(),
-      supabase.from("galleries").select("id, imagen_url, posicion_orden").eq("producto_id", id).order("posicion_orden", { ascending: true }),
-      supabase.from("rooms").select("id, titulo, descripcion, precio, imagen_url").eq("producto_id", id).order("id", { ascending: true }),
-      supabase.from("amenities").select("id, nombre, icono_emoji").eq("producto_id", id),
-      supabase.from("highlights").select("id, descripcion, posicion_orden").eq("producto_id", id).order("posicion_orden", { ascending: true }),
-    ]);
+    const { data: resultCrucero } = await supabase
+      .from("detalles_cruceros").select("*").eq("producto_id", id).maybeSingle();
 
     return {
       ...producto,
-      detalles_crucero: resultCrucero?.data || null,
-      gallery: resultGalleries?.data || [],
-      rooms: resultRooms?.data || [],
-      amenities: resultAmenities?.data || [],
-      highlights: resultHighlights?.data || [],
+      detalles_crucero: resultCrucero || null,
     };
   } catch (err) {
     console.error("Error inesperado al obtener producto admin:", err);
@@ -392,6 +389,7 @@ export const deleteProductAndRelated = async (id) => {
     await supabase.from("rooms").delete().eq("producto_id", id);
     await supabase.from("galleries").delete().eq("producto_id", id);
     await supabase.from("detalles_cruceros").delete().eq("producto_id", id);
+    await supabase.from("alojamientos").delete().eq("producto_id", id);
 
     const { error } = await supabase.from("productos").delete().eq("id", id);
 
@@ -633,6 +631,108 @@ export const updateContactoEstado = async (id, estado) => {
     return true;
   } catch (err) {
     console.error("Error inesperado:", err);
+    return false;
+  }
+};
+
+// ============================================
+// ITINERARIOS
+// ============================================
+export const fetchItinerariosByProducto = async (productoId) => {
+  try {
+    const { data, error } = await supabase
+      .from("itinerarios")
+      .select("id, dia, titulo, descripcion, categoria, posicion_orden")
+      .eq("producto_id", productoId)
+      .order("dia", { ascending: true })
+      .order("posicion_orden", { ascending: true });
+
+    if (error) {
+      console.error("Error al obtener itinerarios:", error);
+      return [];
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado al obtener itinerarios:", err);
+    return [];
+  }
+};
+
+// ============================================
+// ALOJAMIENTOS (opciones de alojamiento para destinos)
+// ============================================
+export const fetchAlojamientosByProducto = async (productoId) => {
+  try {
+    const { data, error } = await supabase
+      .from("alojamientos")
+      .select("*")
+      .eq("producto_id", productoId)
+      .order("posicion_orden", { ascending: true });
+
+    if (error) {
+      console.error("Error al obtener alojamientos:", error);
+      return [];
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado al obtener alojamientos:", err);
+    return [];
+  }
+};
+
+export const insertAlojamiento = async (payload) => {
+  try {
+    const { data, error } = await supabase
+      .from("alojamientos")
+      .insert(payload)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error al insertar alojamiento:", error);
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.error("Error inesperado al insertar alojamiento:", err);
+    return null;
+  }
+};
+
+export const updateAlojamiento = async (id, payload) => {
+  try {
+    const { error } = await supabase
+      .from("alojamientos")
+      .update(payload)
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error al actualizar alojamiento:", error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("Error inesperado al actualizar alojamiento:", err);
+    return false;
+  }
+};
+
+export const deleteAlojamiento = async (id) => {
+  try {
+    const { error } = await supabase
+      .from("alojamientos")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error al eliminar alojamiento:", error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("Error inesperado al eliminar alojamiento:", err);
     return false;
   }
 };

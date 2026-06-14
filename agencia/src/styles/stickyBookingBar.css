@@ -1,0 +1,205 @@
+/* ====================================================================== */
+/* StickyBookingBar — Sidebar con formulario de solicitud */
+/* ====================================================================== */
+
+.booking-bar {
+  background: var(--color-background-light);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 100px;
+}
+
+.booking-bar__title {
+  margin: 0 0 8px;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--color-primary-dark);
+}
+
+.booking-bar__text {
+  margin: 0 0 20px;
+  font-size: 0.88rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* ── Formulario ── */
+.booking-bar__form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.booking-bar__field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.booking-bar__field label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.booking-bar__field input,
+.booking-bar__field textarea {
+  padding: 10px 12px;
+  border-radius: var(--border-radius);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+  font-family: "Chicago Police", sans-serif;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  background: var(--color-background);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.booking-bar__field input:focus,
+.booking-bar__field textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.booking-bar__field textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.booking-bar__row {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  gap: 10px;
+}
+
+/* ── Botones ── */
+.booking-bar__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.booking-bar__btn {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 30px;
+  font-family: "Chicago Police", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  box-sizing: border-box;
+}
+
+.booking-bar__btn:hover {
+  transform: translateY(-2px);
+}
+
+.booking-bar__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.booking-bar__btn--primary {
+  background: var(--color-primary-dark);
+  color: #fff;
+}
+
+.booking-bar__btn--primary:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: var(--color-primary-dark);
+}
+
+.booking-bar__btn--secondary {
+  background: var(--color-primary);
+  color: var(--color-primary-dark);
+}
+
+.booking-bar__btn--wa {
+  background: #25d366;
+  color: #fff;
+}
+
+.booking-bar__error {
+  color: #c0392b;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* ── Login required ── */
+.booking-bar__login {
+  text-align: center;
+}
+
+/* ── Success ── */
+.booking-bar__success {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.booking-bar__success-icon {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1.3;
+}
+
+.booking-bar__success strong {
+  display: block;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  margin-bottom: 6px;
+}
+
+.booking-bar__success p {
+  font-size: 0.88rem;
+  color: var(--color-text-secondary);
+  margin: 0 0 12px;
+}
+
+.booking-bar__whatsapp {
+  display: inline-block;
+  background: #25d366;
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.booking-bar__whatsapp:hover {
+  opacity: 0.85;
+}
+
+/* ====================================================================== */
+/* RESPONSIVE — en móvil el sidebar se vuelve inline */
+/* ====================================================================== */
+@media (max-width: 991px) {
+  .booking-bar {
+    position: static;
+    margin-top: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .booking-bar {
+    padding: 18px 16px;
+  }
+
+  .booking-bar__row {
+    grid-template-columns: 1fr;
+  }
+}
