@@ -21,7 +21,12 @@ const getCarouselConfig = (w) => {
 };
 
 const Carousel3D = ({ destinations = [], onModalChange }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(() => {
+  const videoIndex = destinations.findIndex(
+    (dest) => dest.img === "/imagenes/serenade.mp4"
+  );
+  return videoIndex >= 0 ? videoIndex : 0;
+});
   const [isAnimating, setIsAnimating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
