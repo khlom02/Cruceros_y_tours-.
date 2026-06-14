@@ -49,9 +49,9 @@
 
 .tour-card {
   position: relative;
-  border-radius: 16px;
+  border-radius: var(--card-hero-radius);
   overflow: hidden;
-  min-height: 400px;
+  min-height: var(--card-hero-min-height);
   display: flex;
   align-items: flex-end;
   cursor: pointer;
@@ -179,7 +179,7 @@
   }
 
   .tour-card {
-    min-height: 300px;
+    min-height: var(--card-hero-min-height-md);
   }
 
   .tour-card__titulo {
@@ -217,7 +217,7 @@
   }
 
   .tour-card {
-    min-height: 280px;
+    min-height: var(--card-hero-min-height-sm);
   }
 
   .tour-card__titulo {
@@ -241,7 +241,7 @@
   }
 
   .tour-card {
-    min-height: 260px;
+    min-height: var(--card-hero-min-height-xs);
   }
 
   .tour-card__overlay {

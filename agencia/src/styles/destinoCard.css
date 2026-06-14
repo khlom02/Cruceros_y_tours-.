@@ -6,7 +6,7 @@
 .card--destino {
   position: relative;
   border-radius: var(--card-hero-radius);
-  min-height: 420px;
+  min-height: var(--card-hero-min-height);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -121,7 +121,7 @@
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .card--destino {
-    min-height: 360px;
+    min-height: var(--card-hero-min-height-md);
   }
 
   .card--destino__body {
@@ -135,9 +135,15 @@
   }
 }
 
+@media (max-width: 600px) {
+  .card--destino {
+    min-height: var(--card-hero-min-height-sm);
+  }
+}
+
 @media (max-width: 480px) {
   .card--destino {
-    min-height: 320px;
+    min-height: var(--card-hero-min-height-xs);
   }
 }
 

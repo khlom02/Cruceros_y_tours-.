@@ -185,6 +185,7 @@
 
 .card--destino {
   border-radius: var(--card-hero-radius);
+  min-height: var(--card-hero-min-height);
   overflow: hidden;
 }
 

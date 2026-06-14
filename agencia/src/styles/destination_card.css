@@ -54,17 +54,16 @@
 
 .destination-card {
   position: relative;
-  border-radius: 16px;
+  border-radius: var(--card-hero-radius);
   overflow: hidden;
-  min-height: 400px;
+  min-height: var(--card-hero-min-height);
   display: flex;
   align-items: flex-end;
   background-size: cover;
   background-position: center;
   cursor: pointer;
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-              box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transition: var(--card-transition);
+  box-shadow: var(--card-shadow);
 }
 
 .destination-card:hover {
@@ -501,7 +500,7 @@
 
 @media (max-width: 768px) {
   .destination-card {
-    min-height: 300px;
+    min-height: var(--card-hero-min-height-md);
   }
 
   .destination-card__top {
@@ -556,7 +555,7 @@
   }
 
   .destination-card {
-    min-height: 280px;
+    min-height: var(--card-hero-min-height-sm);
   }
 
   .destination-card__see-btn {
@@ -566,7 +565,7 @@
 
 @media (max-width: 480px) {
   .destination-card {
-    min-height: 260px;
+    min-height: var(--card-hero-min-height-xs);
   }
 
   .destination-card__badge {

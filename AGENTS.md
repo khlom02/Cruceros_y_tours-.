@@ -133,6 +133,22 @@ Cruceros_y_tours-./
 - Font global: `'Chicago Police', sans-serif` (definida en `base.css`)
 - Usar `clamp()` para `font-size`
 
+### Cards — Tamaño uniforme OBLIGATORIO
+**Todas las cards del proyecto deben usar las variables CSS del sistema de diseño definido en `variables.css`** para mantener un tamaño uniforme. NO se aceptan valores hardcodeados de `min-height`, `border-radius`, `box-shadow`, ni `padding` en las cards.
+
+| Variable | Desktop | 768px | 600px | 480px |
+|---|---|---|---|---|
+| `--card-hero-min-height` | 400px | 300px | 280px | 260px |
+| `--card-hero-radius` | 16px | — | — | — |
+| `--card-servicio-min-height` | 320px | 300px | — | 260px |
+
+Reglas:
+- Hero cards (`.card--hero`, `.card--destino`, `.destination-card`, `.card_cruceros`, `.tour-card`, `.grid-experiencia__card`): usar `var(--card-hero-min-height)` y sus variantes responsive `*‑md`, `*‑sm`, `*‑xs`
+- Service cards (`.card_servicio`): usar `var(--card-servicio-min-height)`
+- `border-radius` siempre con `var(--card-hero-radius)` en hero cards
+- `box-shadow` siempre con `var(--card-shadow)` / `var(--card-shadow-hover)`
+- Cualquier card nueva debe usar estas variables desde su creación
+
 ---
 
 ## Responsividad — Regla OBLIGATORIA
@@ -164,11 +180,11 @@ Cruceros_y_tours-./
 
 - **Componentes:** funcionales con hooks, lógica dentro del mismo componente
 - **CSS:** archivo propio por componente si necesita estilos, usando variables de `variables.css`
-- **No modificar** componentes no relacionados a la tarea actual
+- **No modificar** SUMAMENTE IMPORTANTE componentes no relacionados a la tarea actual
 - **Consultas Supabase:** todas en `src/backend/supabase_client.js`
 - **NO hardcodear** colores, spacings ni valores de estilo — usar variables CSS
 - **Código optimizado** para rendimiento y SEO
-- **Prohibido** tocar archivos fuera del alcance de la tarea actual
+- **Prohibido** tocar archivos fuera del alcance de la tarea actual SUMAMENTE IMPORTANTE
 
 ---
 
