@@ -173,6 +173,12 @@
   }
 }
 
+@media (max-width: 768px) {
+  .card-grid--destino .card--destino:not(.card--destino--compact) {
+    min-height: var(--card-hero-min-height-md);
+  }
+}
+
 @media (max-width: 600px) {
   .card-grid--destino {
     grid-template-columns: 1fr;
@@ -182,12 +188,6 @@
 
   .card-grid--destino .card--destino:not(.card--destino--compact) {
     min-height: var(--card-hero-min-height-sm);
-  }
-}
-
-@media (max-width: 768px) {
-  .card-grid--destino .card--destino:not(.card--destino--compact) {
-    min-height: var(--card-hero-min-height-md);
   }
 }
 
