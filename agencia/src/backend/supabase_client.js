@@ -485,7 +485,7 @@ export const fetchCarouselCruises = async (limit = 5) => {
       .select("id, titulo, imagen_url, imagen, ubicacion")
       .eq("categoria_id", categoria.id)
       .eq("activo", true)
-      .order("fecha_creacion", { ascending: false })
+      .order("fecha_creacion", { ascending: true })
       .limit(limit);
 
     if (error) {

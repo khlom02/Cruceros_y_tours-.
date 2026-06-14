@@ -21,7 +21,7 @@ const getCarouselConfig = (w) => {
 };
 
 const Carousel3D = ({ destinations = [], onModalChange }) => {
-  const [currentIndex, setCurrentIndex] = useState(2);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
