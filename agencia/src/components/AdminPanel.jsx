@@ -132,8 +132,9 @@ const AdminPanel = () => {
   const toggleSection = (key) =>
     setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  // ─── Busqueda en lista de productos ───────────────────────────────────────
+  // ─── Busqueda y filtro por categoria en lista de productos ────────────────
   const [productSearch, setProductSearch] = useState("");
+  const [gestionarCategoriaId, setGestionarCategoriaId] = useState("");
 
   // ─── Modal de confirmacion ────────────────────────────────────────────────
   const [showDeleteModal, setShowDeleteModal] = useState(null);
@@ -596,13 +597,20 @@ const AdminPanel = () => {
   };
 
   const productosFiltrados = useMemo(() => {
-    if (!productSearch.trim()) return productosLista;
+    let result = productosLista;
+
+    if (gestionarCategoriaId) {
+      result = result.filter((p) => String(p.categoria_id) === String(gestionarCategoriaId));
+    }
+
+    if (!productSearch.trim()) return result;
+
     const q = productSearch.toLowerCase();
-    return productosLista.filter((p) => {
+    return result.filter((p) => {
       const catNombre = categorias.find((c) => String(c.id) === String(p.categoria_id))?.nombre || "";
       return p.titulo.toLowerCase().includes(q) || catNombre.toLowerCase().includes(q);
     });
-  }, [productosLista, productSearch, categorias]);
+  }, [productosLista, productSearch, categorias, gestionarCategoriaId]);
 
   const canSubmit = isDestinosCategory || !!editingProductId;
   const submitBtnText = loading
@@ -994,22 +1002,42 @@ const AdminPanel = () => {
       {activeTab === "gestionar" && (
         <div className="admin-gestionar">
           <div className="admin-gestionar-header">
-            <p>{productosLista.length} productos en total</p>
+            <p>
+              {gestionarCategoriaId
+                ? `${productosFiltrados.length} de ${productosLista.length} productos`
+                : `${productosLista.length} productos en total`}
+            </p>
             <button className="admin-add" onClick={loadProductosAdmin} disabled={loadingLista}>
               {loadingLista ? "Cargando..." : "Actualizar lista"}
             </button>
           </div>
 
-          <div className="admin-search">
-            <input
-              type="text"
-              placeholder="Buscar por titulo o categoria..."
-              value={productSearch}
-              onChange={(e) => setProductSearch(e.target.value)}
-            />
+          <div className="admin-filters">
+            <div className="admin-filter-group">
+              <label htmlFor="admin-gestionar-categoria">Categoría</label>
+              <select
+                id="admin-gestionar-categoria"
+                value={gestionarCategoriaId}
+                onChange={(e) => setGestionarCategoriaId(e.target.value)}
+              >
+                <option value="">Todas las categorías</option>
+                {categorias.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.nombre}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="admin-search">
+              <input
+                type="text"
+                placeholder="Buscar por titulo o categoria..."
+                value={productSearch}
+                onChange={(e) => setProductSearch(e.target.value)}
+              />
+            </div>
           </div>
 
-          {productSearch && productosFiltrados.length > 0 && (
+          {(gestionarCategoriaId || productSearch) && productosFiltrados.length > 0 && (
             <p className="admin-filter-info">
               Mostrando <strong>{productosFiltrados.length}</strong> de {productosLista.length} productos
             </p>
@@ -1035,11 +1063,11 @@ const AdminPanel = () => {
             <div className="admin-empty-state">
               <div className="admin-empty-state-icon">{productSearch ? "🔍" : "📦"}</div>
               <div className="admin-empty-state-title">
-                {productSearch ? "Sin resultados" : "No hay productos aun"}
+                {productSearch || gestionarCategoriaId ? "Sin resultados" : "No hay productos aun"}
               </div>
               <p className="admin-empty-state-desc">
-                {productSearch
-                  ? `No se encontraron productos que coincidan con "${productSearch}".`
+                {productSearch || gestionarCategoriaId
+                  ? `No se encontraron productos${productSearch ? ` que coincidan con "${productSearch}"` : ""}${gestionarCategoriaId ? ` en la categoría seleccionada` : ""}.`
                   : "Crea tu primer producto desde la pestana Crear."}
               </p>
             </div>

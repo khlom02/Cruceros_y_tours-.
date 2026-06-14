@@ -1,0 +1,15 @@
+.detalles-alojamiento-page {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--section-padding, 2rem);
+  background-color: var(--color-background-light, #f8f9fa);
+}
+
+.detalles-alojamiento__title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: var(--color-text-primary, #003366);
+  text-align: center;
+  margin: 0;
+}
