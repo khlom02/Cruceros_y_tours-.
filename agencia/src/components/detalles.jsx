@@ -12,7 +12,7 @@ import Timeline from "./Timeline.jsx";
 import Rooms from "./rooms.jsx";
 import StickyBookingBar from "./StickyBookingBar.jsx";
 import MobileStickyBar from "./MobileStickyBar.jsx";
-import DestinoCard from "./DestinoCard.jsx";
+import AlojamientoCard from "./AlojamientoCard.jsx";
 
 const normalizeDetalle = (data) => {
     if (!data) return null;
@@ -191,7 +191,7 @@ const Detalles = () => {
                         {hasAlojamientos ? (
                             <div className="card-grid card-grid--destino">
                                 {detalle.alojamientos.map((alo) => (
-                                    <DestinoCard key={alo.id} alojamiento={alo} />
+                                    <AlojamientoCard key={alo.id} alojamiento={alo} />
                                 ))}
                             </div>
                         ) : (

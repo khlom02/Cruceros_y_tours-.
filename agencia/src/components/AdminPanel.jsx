@@ -18,8 +18,7 @@ import {
   updateAlojamiento,
   deleteAlojamiento,
 } from "../backend/supabase_client";
-import DestinationCard from "./DestinationCard";
-import DestinoCard from "./DestinoCard";
+import AlojamientoCard from "./AlojamientoCard";
 
 // ─── Nombre del bucket de Supabase Storage donde se guardan las imagenes ───
 const BUCKET_NAME = "content media";
@@ -941,7 +940,7 @@ const AdminPanel = () => {
                             </div>
 
                             <div className="admin-alojamiento-preview">
-                              <DestinoCard
+                              <AlojamientoCard
                                 compact
                                 alojamiento={{
                                   titulo: item.titulo || "Vista previa",

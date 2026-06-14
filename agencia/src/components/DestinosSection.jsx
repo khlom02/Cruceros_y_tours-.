@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { FaWhatsappSquare } from 'react-icons/fa';
-import DestinationCard from './DestinationCard';
+import TourCard from './TourCard';
 import { fetchCategories, fetchProductsByCategory, supabase } from '../backend/supabase_client';
 import { getSupabaseImageUrl } from '../utils/imageHelper';
 import { useNavigate } from 'react-router-dom';
@@ -232,7 +232,7 @@ const DestinosCarousel = ({ items, titulo, navigate }) => {
                   className="destinos-carousel__slide"
                   style={{ flex: `0 0 ${100 / slidesPerView}%` }}
                 >
-                  <DestinationCard
+                  <TourCard
                     imagen={dest.imagen}
                     imagenes={dest.imagenes}
                     titulo={dest.titulo}

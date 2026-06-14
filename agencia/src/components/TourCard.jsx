@@ -8,7 +8,7 @@ const BADGE_CLASSES = {
   recommended: 'destination-card__badge--recommended',
 };
 
-const DestinationCard = ({
+const TourCard = ({
   imagen,
   imagenes = [],
   titulo,
@@ -141,4 +141,4 @@ const DestinationCard = ({
   );
 };
 
-export default DestinationCard;
+export default TourCard;
