@@ -5,6 +5,7 @@ import 'animate.css';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useAuth, AuthProvider } from "./contexts/AuthContext.jsx";
 import ResetPassword from './components/ResetPassword.jsx';
 import Header from './components/header.jsx';
@@ -125,6 +126,7 @@ export default function App() {
             />
           </Routes>
           <Footer />
+          <SpeedInsights />
         </Router>
     </AuthProvider>
     </HelmetProvider>
