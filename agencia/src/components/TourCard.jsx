@@ -89,7 +89,7 @@ const TourCard = ({
       )}
 
       <div className="destination-card__top">
-        <h3 className="destination-card__titulo">{titulo}</h3>
+        <h4 className="destination-card__titulo">{titulo}</h4>
 
         {(destinosCount || nightsCount || activityCount) && (
           <div className="destination-card__features">

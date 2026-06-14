@@ -1,5 +1,6 @@
 import "../styles/card-base.css";
 import "../styles/destinoCard.css";
+import { useNavigate } from "react-router-dom";
 
 const CATEGORIA_LABELS = {
   "todo incluido": "Todo incluido",
@@ -30,6 +31,7 @@ const Estrellas = ({ count }) => {
 
 const AlojamientoCard = ({ alojamiento, compact }) => {
   const {
+    id,
     titulo,
     precio,
     imagen_url,
@@ -37,17 +39,16 @@ const AlojamientoCard = ({ alojamiento, compact }) => {
     distancia_centro,
     categoria,
     tipo_habitacion,
-    enlace_externo,
   } = alojamiento;
+
+  const navigate = useNavigate();
 
   const backgroundStyle = imagen_url
     ? { backgroundImage: `url(${imagen_url})` }
     : {};
 
   const handleVisitar = () => {
-    if (enlace_externo) {
-      window.open(enlace_externo, "_blank", "noopener,noreferrer");
-    }
+    navigate(`/detalles-alojamiento?id=${id}`);
   };
 
   return (

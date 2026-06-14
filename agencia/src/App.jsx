@@ -14,6 +14,7 @@ import LoginForm from './components/login.jsx';
 import Register from './components/registro.jsx';
 import Contacto from './components/contacto.jsx';
 import Detalles from './components/detalles.jsx';
+import DetallesAlojamiento from './components/detalles_alojamiento.jsx';
 import { Destinos } from "./components/destinos.jsx";
 import Cruceros from "./components/Cruceros.jsx";
 import ServiciosEspeciales from "./components/servicios_especiales.jsx";
@@ -87,6 +88,9 @@ export default function App() {
 
               {/* Ruta para la página de detalles del viaje */}
             <Route path="/detalles" element={<Detalles />} />
+
+            {/* Ruta para la página de detalles del alojamiento */}
+            <Route path="/detalles-alojamiento" element={<DetallesAlojamiento />} />
 
             {/* Ruta para la página contacto */}
             <Route path="/contacto" element={<Contacto />} />
