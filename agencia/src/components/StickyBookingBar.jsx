@@ -80,7 +80,7 @@ const StickyBookingBar = ({ user, detalle }) => {
             <strong>¡Solicitud enviada!</strong>
             <p>Nos comunicaremos contigo en las próximas horas.</p>
             <a
-              href={`https://wa.me/584224560128?text=Hola,%20hice%20una%20solicitud%20para%20el%20paquete:%20${encodeURIComponent(detalle.title)}`}
+              href={`https://wa.me/584142783669?text=Hola,%20hice%20una%20solicitud%20para%20el%20paquete:%20${encodeURIComponent(detalle.title)}`}
               className="booking-bar__whatsapp"
               target="_blank"
               rel="noopener noreferrer"
@@ -131,7 +131,7 @@ const StickyBookingBar = ({ user, detalle }) => {
             {loading ? "Enviando..." : "Solicitar información"}
           </button>
 
-          <a href={`https://wa.me/584224560111128?text=${waText}`} className="booking-bar__btn booking-bar__btn--wa" target="_blank" rel="noopener noreferrer">
+          <a href={`https://wa.me/584142783669?text=${waText}`} className="booking-bar__btn booking-bar__btn--wa" target="_blank" rel="noopener noreferrer">
             💬 WhatsApp
           </a>
         </form>

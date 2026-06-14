@@ -13,7 +13,7 @@ const MobileStickyBar = ({ detalle }) => {
   return (
     <div className="mobile-sticky-bar">
       <a
-        href={`https://wa.me/584224560111128?text=${waText}`}
+        href={`https://wa.me/584142783669?text=${waText}`}
         className="mobile-sticky-bar__btn mobile-sticky-bar__btn--wa"
         target="_blank"
         rel="noopener noreferrer"
