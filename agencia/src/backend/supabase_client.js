@@ -5,8 +5,6 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY ?? "0x4AAAAAADd6blXfpD5j1zCO";
-
 // ============================================
 // OBTENER CATEGORÍAS
 // ============================================
@@ -406,42 +404,10 @@ export const deleteProductAndRelated = async (id) => {
 };
 
 // ============================================
-// VALIDAR TOKEN DE TURNSTILE (Cloudflare)
-// ============================================
-async function validateTurnstileToken(token) {
-  if (!token) return false;
-  try {
-    const { data, error } = await supabase.functions.invoke("validate-turnstile", {
-      body: { token },
-    });
-    if (error) {
-      if (error.message?.includes("not found") || error.message?.includes("Failed to fetch")) {
-        console.warn("Edge Function validate-turnstile no disponible — saltando validación server-side");
-        return true;
-      }
-      console.error("Error al validar Turnstile:", error);
-      return false;
-    }
-    return data?.success === true;
-  } catch (err) {
-    console.error("Error inesperado validando Turnstile:", err);
-    return false;
-  }
-}
-
-// ============================================
 // FUNCIONES PARA CONTACTOS
 // ============================================
-export const createContact = async (nombre, email, telefono, asunto, mensaje, turnstileToken) => {
+export const createContact = async (nombre, email, telefono, asunto, mensaje) => {
   try {
-    if (turnstileToken) {
-      const valido = await validateTurnstileToken(turnstileToken);
-      if (!valido) {
-        console.error("Token de Turnstile inválido");
-        return null;
-      }
-    }
-
     const { data, error } = await supabase
       .from("contactos")
       .insert({
@@ -832,15 +798,8 @@ export const updateSuscripcionEstado = async (id, estado) => {
 // ============================================
 // NEWSLETTER
 // ============================================
-export const subscribeNewsletter = async (email, turnstileToken) => {
+export const subscribeNewsletter = async (email) => {
   try {
-    if (turnstileToken) {
-      const valido = await validateTurnstileToken(turnstileToken);
-      if (!valido) {
-        return { success: false, msg: "Error de verificación de seguridad. Intenta de nuevo." };
-      }
-    }
-
     const { error } = await supabase
       .from("newsletter")
       .insert({ email })
