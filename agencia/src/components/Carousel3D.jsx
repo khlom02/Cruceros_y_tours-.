@@ -845,15 +845,14 @@ const Carousel3D = ({ destinations = [], onModalChange }) => {
                 <img
                   src={dest.img}
                   alt={dest.title}
-                  loading="lazy"
                   decoding="async"
                   style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    pointerEvents: 'none',
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    pointerEvents: "none",
+                    userSelect: "none",
                   }}
-                  draggable="false"
                 />
               </div>
             ))}
