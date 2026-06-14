@@ -18,6 +18,7 @@ import {
   updateAlojamiento,
   deleteAlojamiento,
 } from "../backend/supabase_client";
+import DestinationCard from "./DestinationCard";
 import DestinoCard from "./DestinoCard";
 
 // ─── Nombre del bucket de Supabase Storage donde se guardan las imagenes ───
@@ -140,6 +141,10 @@ const AdminPanel = () => {
     alojamientos: true,
   });
 
+  // ─── Formulario especial para Destinos Nacionales / Internacionales ────
+  const emptyDestino = { destino: '', pais: '', precio: '', imagenes: [], previewUrls: [] };
+  const [destinosItems, setDestinosItems] = useState([{ ...emptyDestino }]);
+  const [destinoImageIndex, setDestinoImageIndex] = useState({});
   const isDestinosCategory = useMemo(() => {
     const nombre = categorias.find((c) => String(c.id) === String(producto.categoria_id))?.nombre || '';
     return nombre.toLowerCase().includes('destinos nacionales') || nombre.toLowerCase().includes('destinos internacionales');
@@ -306,6 +311,7 @@ const AdminPanel = () => {
     setFieldErrors({});
     setError("");
     submittingRef.current = false;
+    resetDestinosForm();
     setAlojamientos([]);
     setAlojamientosToDelete([]);
   };
@@ -373,6 +379,75 @@ const AdminPanel = () => {
     event.preventDefault();
     setError("");
     setSuccess(null);
+
+    // ── MODO ESPECIAL: Creación masiva de Destinos ─────────────────────────
+    if (isDestinosCategory && !editingProductId) {
+      const validItems = destinosItems.filter((d) => d.destino.trim() && d.pais.trim() && d.precio);
+      if (validItems.length === 0) {
+        setError("Debes agregar al menos un destino con destino, país y precio.");
+        return;
+      }
+      for (const item of validItems) {
+        if (item.imagenes.length === 0) {
+          setError(`El destino "${item.destino}" debe tener al menos una imagen.`);
+          return;
+        }
+      }
+
+      try {
+        setLoading(true);
+        const catId = parseNumber(producto.categoria_id);
+
+        for (const item of validItems) {
+          const imageUrls = [];
+          for (const file of item.imagenes) {
+            const url = await uploadFile(file, 'productos/destinos');
+            imageUrls.push(url);
+          }
+
+          const { data: prod, error: prodErr } = await supabase
+            .from('productos')
+            .insert({
+              titulo: item.destino.trim(),
+              descripcion: `${item.destino.trim()}, ${item.pais.trim()}`,
+              precio: parseNumber(item.precio),
+              imagen: imageUrls[0] || null,
+              ubicacion: `${item.destino.trim()}, ${item.pais.trim()}`,
+              categoria_id: catId,
+              activo: true,
+              color_fondo: 'verde',
+            })
+            .select()
+            .single();
+
+          if (prodErr) throw prodErr;
+
+          if (imageUrls.length > 1) {
+            const galleryRows = imageUrls.slice(1).map((url, idx) => ({
+              producto_id: prod.id,
+              imagen_url: url,
+              posicion_orden: idx + 1,
+            }));
+            const { error: gErr } = await supabase.from('galleries').insert(galleryRows);
+            if (gErr) throw gErr;
+          }
+        }
+
+        setSuccess({
+          titulo: `${validItems.length} destino(s)`,
+          categoria: categoriaNombre,
+          ruta: rutaPorCategoria(categoriaNombre),
+          modo: 'creado',
+        });
+        resetForm();
+      } catch (err) {
+        console.error('Error al guardar destinos:', err);
+        setError(`Error al guardar: ${err?.message || 'Error desconocido'}`);
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
 
     // ── MODO EDICION INDIVIDUAL DE DESTINO ────────────────────────────────
     if (isDestinosCategory && editingProductId) {
@@ -467,7 +542,7 @@ const AdminPanel = () => {
       setError("Debes seleccionar una categoría.");
     }
 
-    if (!producto.precio || Number(producto.precio) <= 0) {
+    if (!isDestinosCategory && (!producto.precio || Number(producto.precio) <= 0)) {
       newFieldErrors.precio = true;
       setError("El precio es obligatorio y debe ser mayor a 0.");
     }
@@ -506,7 +581,7 @@ const AdminPanel = () => {
     }
 
     // En modo crear, la imagen es obligatoria. En edicion es opcional (se mantiene la existente)
-    if (!editingProductId && !producto.imagenFile) {
+    if (!isDestinosCategory && !editingProductId && !producto.imagenFile) {
       newFieldErrors.imagenFile = true;
       setError("Debes subir una imagen principal.");
     }
@@ -626,31 +701,6 @@ const AdminPanel = () => {
         if (detalleError) throw detalleError;
       }
 
-      // Guardar alojamientos si es un destino
-      if (isDestinosCategory && alojamientos.length > 0) {
-        for (let i = 0; i < alojamientos.length; i++) {
-          const a = alojamientos[i];
-          let imgUrl = a.imagen_url;
-          if (a.imagenFile) {
-            imgUrl = await uploadFile(a.imagenFile, "productos/alojamientos");
-          }
-          const payload = {
-            producto_id: productoId,
-            titulo: a.titulo,
-            precio: parseNumber(a.precio),
-            imagen_url: imgUrl || null,
-            estrellas: a.estrellas,
-            distancia_centro: a.distancia_centro || null,
-            categoria: a.categoria || null,
-            tipo_habitacion: a.tipo_habitacion || null,
-            enlace_externo: a.enlace_externo || null,
-            posicion_orden: i,
-          };
-          const { error: aErr } = await supabase.from("alojamientos").insert(payload);
-          if (aErr) throw aErr;
-        }
-      }
-
       setSuccess({
         titulo: producto.titulo,
         categoria: categoriaNombre,
@@ -684,6 +734,77 @@ const AdminPanel = () => {
   // ─── Nombre de categoria por id (para lista) ──────────────────────────────
   const nombreCategoria = (catId) =>
     categorias.find((c) => String(c.id) === String(catId))?.nombre || "—";
+
+  // ─── Handlers para formulario de Destinos ──────────────────────────────
+  const handleDestinoChange = (index, field, value) => {
+    setDestinosItems((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+    );
+  };
+
+  const handleDestinoImageAdd = async (index, files, inputEl) => {
+    const fileArray = Array.from(files || []).slice(0, 3);
+    const toDataUrl = (f) =>
+      typeof f === 'string'
+        ? Promise.resolve(f)
+        : new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(f);
+          });
+
+    setDestinosItems((prev) => {
+      const item = prev[index];
+      if (!item) return prev;
+      const combined = [...item.imagenes, ...fileArray].slice(0, 3);
+      Promise.all(combined.map(toDataUrl)).then((allUrls) => {
+        setDestinosItems((p) =>
+          p.map((it, i) => (i === index ? { ...it, previewUrls: allUrls } : it))
+        );
+      });
+      return prev.map((it, i) => (i === index ? { ...it, imagenes: combined } : it));
+    });
+
+    if (inputEl) inputEl.value = '';
+  };
+
+  const handleDestinoImageRemove = (index, imgIndex) => {
+    setDestinosItems((prev) =>
+      prev.map((item, i) => {
+        if (i !== index) return item;
+        const newImgs = item.imagenes.filter((_, j) => j !== imgIndex);
+        const newPreviews = item.previewUrls.filter((_, j) => j !== imgIndex);
+        return { ...item, imagenes: newImgs, previewUrls: newPreviews };
+      })
+    );
+    setDestinoImageIndex((prev) => ({ ...prev, [index]: 0 }));
+  };
+
+  const addDestinoItem = () => {
+    setDestinosItems((prev) => [...prev, { ...emptyDestino }]);
+  };
+
+  const removeDestinoItem = (index) => {
+    if (destinosItems.length <= 1) return;
+    setDestinosItems((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const navigateDestinoImage = (itemIndex, dir) => {
+    setDestinoImageIndex((prev) => {
+      const current = prev[itemIndex] || 0;
+      const total = destinosItems[itemIndex]?.previewUrls?.length || 0;
+      if (total === 0) return prev;
+      const next = dir === 'next'
+        ? (current + 1) % total
+        : (current - 1 + total) % total;
+      return { ...prev, [itemIndex]: next };
+    });
+  };
+
+  const resetDestinosForm = () => {
+    setDestinosItems([{ ...emptyDestino }]);
+    setDestinoImageIndex({});
+  };
 
   // ─── Handlers para alojamientos destinos ──────────────────────────────────
   const handleAlojamientoChange = (index, field, value) => {
@@ -850,6 +971,7 @@ const AdminPanel = () => {
             </label>
 
             <div className="admin-grid">
+              {(!isDestinosCategory || editingProductId) && (
               <label className={fieldErrors.precio ? "admin-field-error-label" : ""}>
                 Precio (0 - 999,999)
                 <input
@@ -865,6 +987,7 @@ const AdminPanel = () => {
                 />
                 {fieldErrors.precio && <span className="admin-field-error-msg">⚠️ Precio máximo: 999,999</span>}
               </label>
+              )}
 
               <label className={fieldErrors.categoria_id ? "admin-field-error-label" : ""}>
                 Categoria
@@ -882,6 +1005,92 @@ const AdminPanel = () => {
                 {fieldErrors.categoria_id && <span className="admin-field-error-msg">Selecciona una categoría</span>}
               </label>
 
+              {/* ── Formulario especial para Destinos Nacionales / Internacionales ── */}
+              {isDestinosCategory && !editingProductId && (
+                <div className="admin-destinos-form" style={{ gridColumn: '1 / -1' }}>
+                  <p className="admin-help" style={{ marginBottom: '16px', fontSize: '0.95rem', color: 'var(--color-primary-dark)', fontWeight: 600 }}>
+                    Formulario especial de destinos — Máximo 3 imágenes por producto, navegables con flechas
+                  </p>
+
+                  {destinosItems.map((item, idx) => (
+                    <div key={`destino-${idx}`} className="admin-destino-card">
+                      <div className="admin-destino-card__header">
+                        <span className="admin-destino-card__number">{idx + 1}</span>
+                        <span className="admin-destino-card__label">Destino {idx + 1}</span>
+                        {destinosItems.length > 1 && (
+                          <button type="button" className="admin-btn-delete" onClick={() => removeDestinoItem(idx)} style={{ marginLeft: 'auto', padding: '5px 12px', fontSize: '0.8rem' }}>
+                            Quitar
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="admin-destino-card__body">
+                        {/* Preview de imágenes con flechas */}
+                        <div className="admin-destino-preview">
+                          {item.previewUrls.length > 0 ? (
+                            <>
+                              <div className="admin-destino-preview__image-wrapper">
+                                <img
+                                  key={item.previewUrls[destinoImageIndex[idx] || 0]}
+                                  src={item.previewUrls[destinoImageIndex[idx] || 0]}
+                                  alt={`Preview ${idx + 1}`}
+                                  className="admin-destino-preview__image"
+                                />
+                                {item.previewUrls.length > 1 && (
+                                  <>
+                                    <button type="button" className="admin-destino-preview__arrow admin-destino-preview__arrow--left" onClick={() => navigateDestinoImage(idx, 'prev')}>‹</button>
+                                    <button type="button" className="admin-destino-preview__arrow admin-destino-preview__arrow--right" onClick={() => navigateDestinoImage(idx, 'next')}>›</button>
+                                    <div className="admin-destino-preview__counter">
+                                      {(destinoImageIndex[idx] || 0) + 1} / {item.previewUrls.length}
+                                    </div>
+                                  </>
+                                )}
+                                <button type="button" className="admin-destino-preview__remove" onClick={() => handleDestinoImageRemove(idx, destinoImageIndex[idx] || 0)} title="Eliminar imagen">✕</button>
+                              </div>
+                              {item.previewUrls.length < 3 && (
+                                <label className="admin-destino-preview__add-more">
+                                  + Agregar imagen ({item.previewUrls.length}/3)
+<input type="file" accept="image/*" multiple onChange={(e) => handleDestinoImageAdd(idx, e.target.files, e.target)} style={{ display: 'none' }} />
+                            </label>
+                          )}
+                            </>
+                          ) : (
+                            <label className="admin-destino-preview__upload">
+                              <span className="admin-destino-preview__upload-icon">📷</span>
+                              <span>Subir imágenes (máx. 3)</span>
+                              <input type="file" accept="image/*" multiple onChange={(e) => handleDestinoImageAdd(idx, e.target.files, e.target)} style={{ display: 'none' }} />
+                            </label>
+                          )}
+                        </div>
+
+                        {/* Campos de texto */}
+                        <div className="admin-destino-fields">
+                          <label>
+                            Destino
+                            <input type="text" placeholder="ej: Miami" value={item.destino} onChange={(e) => handleDestinoChange(idx, 'destino', e.target.value)} required />
+                          </label>
+                          <label>
+                            País
+                            <input type="text" placeholder="ej: Estados Unidos de América" value={item.pais} onChange={(e) => handleDestinoChange(idx, 'pais', e.target.value)} required />
+                          </label>
+                          <label>
+                            Precio Desde (USD)
+                            <input type="number" min="0" step="1" placeholder="ej: 450" value={item.precio} onChange={(e) => handleDestinoChange(idx, 'precio', e.target.value)} onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()} required />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <button type="button" className="admin-destinos-add-btn" onClick={addDestinoItem}>
+                    <span className="admin-destinos-add-btn__icon">+</span>
+                    <span>Agregar otro destino</span>
+                  </button>
+                </div>
+              )}
+
+              {(!isDestinosCategory || editingProductId) && (
+              <>
               <label>
                 Ubicacion
                 <input
@@ -948,8 +1157,12 @@ const AdminPanel = () => {
                   onChange={(e) => handleProductoChange("fecha_fin", e.target.value)}
                 />
               </label>
+              </>
+              )}
             </div>
 
+            {(!isDestinosCategory || editingProductId) && (
+            <>
             <label className="admin-toggle">
               <input
                 type="checkbox"
@@ -977,6 +1190,8 @@ const AdminPanel = () => {
               />
               {fieldErrors.imagenFile && <span className="admin-field-error-msg">Debes subir una imagen</span>}
             </label>
+              </>
+              )}
             </div>
           </section>
 
@@ -1054,8 +1269,8 @@ const AdminPanel = () => {
             </section>
           )}
 
-          {/* ── Alojamientos (para destinos) ── */}
-          {isDestinosCategory && (
+          {/* ── Alojamientos (solo edicion de destinos) ── */}
+          {isDestinosCategory && editingProductId && (
             <section className="admin-section admin-section-collapsible">
               <div className="admin-collapsible-header" onClick={() => toggleSection("alojamientos")}>
                 <h2>🏨 Alojamientos</h2>
@@ -1188,7 +1403,7 @@ const AdminPanel = () => {
           )}
 
           <button className="admin-submit" type="submit" disabled={loading}>
-            {loading ? "Guardando..." : editingProductId ? "Guardar cambios" : "Crear producto"}
+            {loading ? "Guardando..." : isDestinosCategory && !editingProductId ? "Crear destino(s)" : editingProductId ? "Guardar cambios" : "Crear producto"}
           </button>
         </form>
       )}
