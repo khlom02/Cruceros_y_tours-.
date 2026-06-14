@@ -362,21 +362,12 @@ export const fetchProductAdminById = async (id) => {
       return null;
     }
 
-    const [resultCrucero, resultGalleries, resultRooms, resultAmenities, resultHighlights] = await Promise.all([
-      supabase.from("detalles_cruceros").select("*").eq("producto_id", id).maybeSingle(),
-      supabase.from("galleries").select("id, imagen_url, posicion_orden").eq("producto_id", id).order("posicion_orden", { ascending: true }),
-      supabase.from("rooms").select("id, titulo, descripcion, precio, imagen_url").eq("producto_id", id).order("id", { ascending: true }),
-      supabase.from("amenities").select("id, nombre, icono_emoji").eq("producto_id", id),
-      supabase.from("highlights").select("id, descripcion, posicion_orden").eq("producto_id", id).order("posicion_orden", { ascending: true }),
-    ]);
+    const { data: resultCrucero } = await supabase
+      .from("detalles_cruceros").select("*").eq("producto_id", id).maybeSingle();
 
     return {
       ...producto,
-      detalles_crucero: resultCrucero?.data || null,
-      gallery: resultGalleries?.data || [],
-      rooms: resultRooms?.data || [],
-      amenities: resultAmenities?.data || [],
-      highlights: resultHighlights?.data || [],
+      detalles_crucero: resultCrucero || null,
     };
   } catch (err) {
     console.error("Error inesperado al obtener producto admin:", err);

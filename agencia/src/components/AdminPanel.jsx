@@ -43,64 +43,6 @@ function validarArchivo(file) {
   }
 }
 
-// ─── Plantillas vacias para cada item de lista dinamica ─────────────────────
-const emptyRoom = { titulo: "", descripcion: "", precio: "", imagenFile: null, existingImageUrl: null };
-const emptyHighlight = { descripcion: "" };
-
-// ─── Emojis para amenities (viajes / alojamiento) ────────────────────────────
-const EMOJIS_TRAVEL = [
-  "🏊","🍽️","🍷","💆","🏋️","📶","🎭","🅿️","🌊","⛵","❄️","🧺",
-  "🎪","🌿","🚌","💳","📺","☕","🍳","🚿","🛁","🏖️","🎵","👶",
-  "🎰","⚓","🧴","🔒","🌅","🛎️","🎯","🚢","✈️","🏝️","🌴","🏄",
-  "🤿","🎿","🧘","🎬","🌺","💐","🍦","🎠","🎡","🎋","⛳","🎾",
-  "🏌️","🧗","🛶","🌄","🌃","🎆","🥂","🍾","🎁","🌐","🗺️","🧭",
-];
-
-// ─── Lista predefinida de amenities con nombre + emoji ────────────────────────
-const AMENITIES_PREDEFINIDOS = [
-  { nombre: "Piscina", icono_emoji: "🏊" },
-  { nombre: "Restaurante", icono_emoji: "🍽️" },
-  { nombre: "Bar / Vino", icono_emoji: "🍷" },
-  { nombre: "Spa", icono_emoji: "💆" },
-  { nombre: "Gimnasio", icono_emoji: "🏋️" },
-  { nombre: "WiFi", icono_emoji: "📶" },
-  { nombre: "Teatro / Shows", icono_emoji: "🎭" },
-  { nombre: "Estacionamiento", icono_emoji: "🅿️" },
-  { nombre: "Deportes acuáticos", icono_emoji: "🌊" },
-  { nombre: "Excursiones en velero", icono_emoji: "⛵" },
-  { nombre: "Aire acondicionado", icono_emoji: "❄️" },
-  { nombre: "Lavandería", icono_emoji: "🧺" },
-  { nombre: "Entretenimiento", icono_emoji: "🎪" },
-  { nombre: "Jardines / Áreas verdes", icono_emoji: "🌿" },
-  { nombre: "Traslados incluidos", icono_emoji: "🚌" },
-  { nombre: "Todo incluido", icono_emoji: "💳" },
-  { nombre: "Smart TV", icono_emoji: "📺" },
-  { nombre: "Café / Desayuno", icono_emoji: "☕" },
-  { nombre: "Cocina equipada", icono_emoji: "🍳" },
-  { nombre: "Ducha", icono_emoji: "🚿" },
-  { nombre: "Bañera", icono_emoji: "🛁" },
-  { nombre: "Playa privada", icono_emoji: "🏖️" },
-  { nombre: "Música en vivo", icono_emoji: "🎵" },
-  { nombre: "Área para niños", icono_emoji: "👶" },
-  { nombre: "Casino", icono_emoji: "🎰" },
-  { nombre: "Marina / Puerto deportivo", icono_emoji: "⚓" },
-  { nombre: "Amenities de tocador", icono_emoji: "🧴" },
-  { nombre: "Caja fuerte", icono_emoji: "🔒" },
-  { nombre: "Vista panorámica", icono_emoji: "🌅" },
-  { nombre: "Servicio a la habitación", icono_emoji: "🛎️" },
-  { nombre: "Actividades dirigidas", icono_emoji: "🎯" },
-  { nombre: "Vuelos incluidos", icono_emoji: "✈️" },
-  { nombre: "Isla privada", icono_emoji: "🏝️" },
-  { nombre: "Snorkel / Buceo", icono_emoji: "🤿" },
-  { nombre: "Surf", icono_emoji: "🏄" },
-  { nombre: "Yoga / Meditación", icono_emoji: "🧘" },
-  { nombre: "Cine a bordo", icono_emoji: "🎬" },
-  { nombre: "Golf", icono_emoji: "⛳" },
-  { nombre: "Tenis", icono_emoji: "🎾" },
-  { nombre: "Escalada", icono_emoji: "🧗" },
-  { nombre: "Kayak / Remo", icono_emoji: "🛶" },
-  { nombre: "Ski acuático", icono_emoji: "🎿" },
-];
 
 
 const productoInicial = {
@@ -112,7 +54,6 @@ const productoInicial = {
   cantidad_reviews: "",
   fecha_inicio: "",
   fecha_fin: "",
-  color_fondo: "verde",
   categoria_id: "",
   activo: true,
   imagenFile: null,
@@ -167,17 +108,6 @@ const AdminPanel = () => {
   // ─── Campos extra solo para cruceros (tabla detalles_cruceros) ───────────
   const [detalleCrucero, setDetalleCrucero] = useState(detalleInicial);
 
-  // ─── Listas dinamicas: galeria, rooms, amenities, highlights ─────────────
-  const [galleryFiles, setGalleryFiles] = useState([]);
-  const [rooms, setRooms] = useState([{ ...emptyRoom }]);
-  const [amenities, setAmenities] = useState([]);
-  const [highlights, setHighlights] = useState([{ ...emptyHighlight }]);
-
-  // ─── Selector de amenities: dropdown predefinidos y picker custom ────────
-  const [showPredefinedDropdown, setShowPredefinedDropdown] = useState(false);
-  const [customAmenity, setCustomAmenity] = useState({ nombre: "", icono_emoji: "" });
-  const [showCustomEmojiPicker, setShowCustomEmojiPicker] = useState(false);
-
   // ─── Guard contra doble submit ────────────────────────────────────────────
   const submittingRef = useRef(false);
 
@@ -185,10 +115,6 @@ const AdminPanel = () => {
   const [expandedSections, setExpandedSections] = useState({
     producto: true,
     crucero: true,
-    galeria: true,
-    rooms: true,
-    amenities: true,
-    highlights: true,
   });
 
   // ─── Formulario especial para Destinos Nacionales / Internacionales ────
@@ -334,19 +260,6 @@ const AdminPanel = () => {
     setDetalleCrucero((prev) => ({ ...prev, [field]: value }));
   };
 
-  // ─── Helpers para listas dinamicas ────────────────────────────────────────
-  const updateListItem = (setter, index, field, value) => {
-    setter((prev) => prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)));
-  };
-
-  const addListItem = (setter, item) => {
-    setter((prev) => [...prev, { ...item }]);
-  };
-
-  const removeListItem = (setter, index) => {
-    setter((prev) => prev.filter((_, i) => i !== index));
-  };
-
   // ─── Sube un archivo a Supabase Storage y retorna la URL publica ──────────
   const uploadFile = async (file, folder) => {
     validarArchivo(file);
@@ -370,13 +283,6 @@ const AdminPanel = () => {
   const resetForm = () => {
     setProducto(productoInicial);
     setDetalleCrucero(detalleInicial);
-    setGalleryFiles([]);
-    setRooms([{ ...emptyRoom }]);
-    setAmenities([]);
-    setHighlights([{ ...emptyHighlight }]);
-    setShowPredefinedDropdown(false);
-    setCustomAmenity({ nombre: "", icono_emoji: "" });
-    setShowCustomEmojiPicker(false);
     setEditingProductId(null);
     setFieldErrors({});
     setError("");
@@ -411,45 +317,6 @@ const AdminPanel = () => {
         imagen: data.imagen || "",
       });
 
-      setDetalleCrucero(
-        data.detalles_crucero
-          ? {
-              anos_servicio: data.detalles_crucero.anos_servicio != null ? String(data.detalles_crucero.anos_servicio) : "",
-              pasajeros_max: data.detalles_crucero.pasajeros_max != null ? String(data.detalles_crucero.pasajeros_max) : "",
-              tripulantes: data.detalles_crucero.tripulantes != null ? String(data.detalles_crucero.tripulantes) : "",
-              ratio_espacio: data.detalles_crucero.ratio_espacio != null ? String(data.detalles_crucero.ratio_espacio) : "",
-              ratio_servicio: data.detalles_crucero.ratio_servicio != null ? String(data.detalles_crucero.ratio_servicio) : "",
-              cabina_single: data.detalles_crucero.cabina_single || false,
-              viajando_con_ninos: data.detalles_crucero.viajando_con_ninos || false,
-            }
-          : detalleInicial
-      );
-
-      setRooms(
-        data.rooms.length > 0
-          ? data.rooms.map((r) => ({
-              titulo: r.titulo || "",
-              descripcion: r.descripcion || "",
-              precio: String(r.precio ?? ""),
-              imagenFile: null,
-              existingImageUrl: r.imagen_url || null,
-            }))
-          : [{ ...emptyRoom }]
-      );
-
-      setAmenities(
-        data.amenities.length > 0
-          ? data.amenities.map((a) => ({ nombre: a.nombre || "", icono_emoji: a.icono_emoji || "" }))
-          : []
-      );
-
-      setHighlights(
-        data.highlights.length > 0
-          ? data.highlights.map((h) => ({ descripcion: h.descripcion || "" }))
-          : [{ ...emptyHighlight }]
-      );
-
-      setGalleryFiles([]);
       setEditingProductId(productId);
       setActiveTab("crear");
     } catch (err) {
@@ -679,79 +546,6 @@ const AdminPanel = () => {
           }
         }
 
-        // Reemplazar rooms: borrar y reinsertar
-        await supabase.from("rooms").delete().eq("producto_id", editingProductId);
-        const roomsValidos = rooms.filter((r) => r.titulo && r.titulo.trim());
-        if (roomsValidos.length > 0) {
-          const roomPayload = await Promise.all(
-            roomsValidos.map(async (room) => {
-              let roomImageUrl = room.existingImageUrl || null;
-              if (room.imagenFile) {
-                roomImageUrl = await uploadFile(room.imagenFile, `productos/${editingProductId}/rooms`);
-              }
-              return {
-                producto_id: editingProductId,
-                titulo: room.titulo.trim(),
-                descripcion: room.descripcion || "",
-                precio: parseNumber(room.precio),
-                imagen_url: roomImageUrl,
-              };
-            })
-          );
-          const { error: roomsError } = await supabase.from("rooms").insert(roomPayload);
-          if (roomsError) throw roomsError;
-        }
-
-        // Reemplazar amenities
-        await supabase.from("amenities").delete().eq("producto_id", editingProductId);
-        const amenitiesValidos = amenities.filter((a) => a.nombre && a.nombre.trim());
-        if (amenitiesValidos.length > 0) {
-          const amenityRows = amenitiesValidos.map((a) => ({
-            producto_id: editingProductId,
-            nombre: a.nombre.trim(),
-            icono_emoji: a.icono_emoji || null,
-          }));
-          const { error: amenityError } = await supabase.from("amenities").insert(amenityRows);
-          if (amenityError) throw amenityError;
-        }
-
-        // Reemplazar highlights
-        await supabase.from("highlights").delete().eq("producto_id", editingProductId);
-        const highlightsValidos = highlights.filter((h) => h.descripcion && h.descripcion.trim());
-        if (highlightsValidos.length > 0) {
-          const highlightRows = highlightsValidos.map((h, index) => ({
-            producto_id: editingProductId,
-            descripcion: h.descripcion.trim(),
-            posicion_orden: index + 1,
-          }));
-          const { error: highlightError } = await supabase.from("highlights").insert(highlightRows);
-          if (highlightError) throw highlightError;
-        }
-
-        // Agregar nuevas imagenes a galeria (sin borrar las existentes)
-        if (galleryFiles.length > 0) {
-          const uploadedGallery = [];
-          for (const file of galleryFiles) {
-            const url = await uploadFile(file, `productos/${editingProductId}/gallery`);
-            uploadedGallery.push(url);
-          }
-          const { data: maxPos } = await supabase
-            .from("galleries")
-            .select("posicion_orden")
-            .eq("producto_id", editingProductId)
-            .order("posicion_orden", { ascending: false })
-            .limit(1)
-            .maybeSingle();
-
-          const offset = maxPos?.posicion_orden || 0;
-          const galleryRows = uploadedGallery.map((url, index) => ({
-            producto_id: editingProductId,
-            imagen_url: url,
-            posicion_orden: offset + index + 1,
-          }));
-          await supabase.from("galleries").insert(galleryRows);
-        }
-
         setSuccess({ titulo: producto.titulo, categoria: categoriaNombre, ruta: rutaPorCategoria(categoriaNombre), modo: "editado" });
         resetForm();
         return;
@@ -795,67 +589,6 @@ const AdminPanel = () => {
           viajando_con_ninos: detalleCrucero.viajando_con_ninos,
         });
         if (detalleError) throw detalleError;
-      }
-
-      if (galleryFiles.length > 0) {
-        const uploadedGallery = [];
-        for (const file of galleryFiles) {
-          const url = await uploadFile(file, `productos/${productoId}/gallery`);
-          uploadedGallery.push(url);
-        }
-        const galleryRows = uploadedGallery.map((url, index) => ({
-          producto_id: productoId,
-          imagen_url: url,
-          posicion_orden: index + 1,
-        }));
-        const { error: galleryError } = await supabase.from("galleries").insert(galleryRows);
-        if (galleryError) throw galleryError;
-      }
-
-      // Insertar rooms (solo aquellos con título)
-      const roomsValidos = rooms.filter((room) => room.titulo.trim());
-      if (roomsValidos.length > 0) {
-        const roomPayload = await Promise.all(
-          roomsValidos.map(async (room) => {
-            let roomImageUrl = null;
-            if (room.imagenFile) {
-              roomImageUrl = await uploadFile(room.imagenFile, `productos/${productoId}/rooms`);
-            }
-            return {
-              producto_id: productoId,
-              titulo: room.titulo,
-              descripcion: room.descripcion,
-              precio: parseNumber(room.precio),
-              imagen_url: roomImageUrl,
-            };
-          })
-        );
-        const { error: roomsError } = await supabase.from("rooms").insert(roomPayload);
-        if (roomsError) throw roomsError;
-      }
-
-      // Insertar amenities (solo aquellos con nombre)
-      const amenitiesValidos = amenities.filter((a) => a.nombre && a.nombre.trim());
-      if (amenitiesValidos.length > 0) {
-        const amenityRows = amenitiesValidos.map((a) => ({
-          producto_id: productoId,
-          nombre: a.nombre.trim(),
-          icono_emoji: a.icono_emoji || null,
-        }));
-        const { error: amenityError } = await supabase.from("amenities").insert(amenityRows);
-        if (amenityError) throw amenityError;
-      }
-
-      // Insertar highlights (solo aquellos con descripción)
-      const highlightsValidos = highlights.filter((h) => h.descripcion && h.descripcion.trim());
-      if (highlightsValidos.length > 0) {
-        const highlightRows = highlightsValidos.map((h, index) => ({
-          producto_id: productoId,
-          descripcion: h.descripcion.trim(),
-          posicion_orden: index + 1,
-        }));
-        const { error: highlightError } = await supabase.from("highlights").insert(highlightRows);
-        if (highlightError) throw highlightError;
       }
 
       setSuccess({
@@ -1382,277 +1115,7 @@ const AdminPanel = () => {
             </section>
           )}
 
-          {/* ── Galeria ── */}
-          {!isDestinosCategory && (
-          <>
-          <section className="admin-section admin-section-collapsible">
-            <div className="admin-collapsible-header" onClick={() => toggleSection("galeria")}>
-              <h2>🖼️ Galeria {editingProductId && "(agregar nuevas)"}</h2>
-              <span className={`admin-collapsible-arrow${expandedSections.galeria ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
-            </div>
-            <div className={`admin-collapsible-body${expandedSections.galeria ? " admin-collapsible-body--open" : ""}`}>
-            <label>
-              Seleccionar imagenes
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={(e) => setGalleryFiles(Array.from(e.target.files || []))}
-              />
-            </label>
-            {galleryFiles.length > 0 && (
-              <p className="admin-help">{galleryFiles.length} imagenes seleccionadas</p>
-            )}
-            </div>
-          </section>
 
-          {/* ── Rooms ── */}
-          <section className="admin-section admin-section-collapsible">
-            <div className="admin-collapsible-header" onClick={() => toggleSection("rooms")}>
-              <h2>🛏️ Rooms</h2>
-              <span className={`admin-collapsible-arrow${expandedSections.rooms ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
-            </div>
-            <div className={`admin-collapsible-body${expandedSections.rooms ? " admin-collapsible-body--open" : ""}`}>
-            <p className="admin-help">Solo se guardan rooms con titulo. Descripcion y precio son opcionales.</p>
-            {rooms.map((room, index) => (
-              <div className="admin-list" key={`room-${index}`}>
-                <label>
-                  Titulo (requerido)
-                  <input
-                    type="text"
-                    placeholder="Titulo (requerido)"
-                    value={room.titulo}
-                    onChange={(e) => updateListItem(setRooms, index, "titulo", e.target.value)}
-                  />
-                </label>
-                <label>
-                  Descripcion
-                  <textarea
-                    placeholder="Descripcion"
-                    rows={2}
-                    value={room.descripcion}
-                    onChange={(e) => updateListItem(setRooms, index, "descripcion", e.target.value)}
-                  />
-                </label>
-                <label>
-                  Precio (opcional)
-                  <input
-                    type="number"
-                    placeholder="Precio (opcional)"
-                    min="0"
-                    step="0.01"
-                    value={room.precio}
-                    onChange={(e) => updateListItem(setRooms, index, "precio", e.target.value)}
-                    onKeyDown={(e) => ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()}
-                  />
-                </label>
-                <label>
-                  {room.existingImageUrl ? "Nueva imagen (reemplaza la actual)" : "Imagen"}
-                  {room.existingImageUrl && (
-                    <div className="admin-current-image admin-current-image--small">
-                      <img src={room.existingImageUrl} alt="Imagen actual" />
-                    </div>
-                  )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => updateListItem(setRooms, index, "imagenFile", e.target.files[0])}
-                  />
-                </label>
-                {rooms.length > 1 && (
-                  <button type="button" onClick={() => removeListItem(setRooms, index)}>
-                    Quitar
-                  </button>
-                )}
-              </div>
-            ))}
-            <button type="button" className="admin-add" onClick={() => addListItem(setRooms, emptyRoom)}>
-              + Agregar room
-            </button>
-            </div>
-          </section>
-
-          {/* ── Amenities ── */}
-          <section className="admin-section admin-section-collapsible">
-            <div className="admin-collapsible-header" onClick={() => toggleSection("amenities")}>
-              <h2>🎯 Amenities {amenities.length > 0 && <span className="admin-help" style={{fontWeight:400}}>({amenities.length})</span>}</h2>
-              <span className={`admin-collapsible-arrow${expandedSections.amenities ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
-            </div>
-            <div className={`admin-collapsible-body${expandedSections.amenities ? " admin-collapsible-body--open" : ""}`}>
-
-            {/* Chips de amenities seleccionados */}
-            <div className="admin-amenity-chips">
-              {amenities.length === 0 && (
-                <p className="admin-help">Sin amenities. Agrega desde la lista o crea uno personalizado.</p>
-              )}
-              {amenities.map((amenity, index) => (
-                <span key={`chip-${index}`} className="admin-amenity-chip">
-                  {amenity.icono_emoji && (
-                    <span className="admin-amenity-chip-emoji">{amenity.icono_emoji}</span>
-                  )}
-                  <span>{amenity.nombre}</span>
-                  <button
-                    type="button"
-                    className="admin-amenity-chip-remove"
-                    onClick={() => removeListItem(setAmenities, index)}
-                    title="Quitar"
-                  >
-                    ✕
-                  </button>
-                </span>
-              ))}
-            </div>
-
-            {/* Selector de lista predefinida */}
-            <div className="admin-amenity-selector">
-              <button
-                type="button"
-                className="admin-add"
-                onClick={() => {
-                  setShowPredefinedDropdown((v) => !v);
-                  setShowCustomEmojiPicker(false);
-                }}
-              >
-                {showPredefinedDropdown ? "Cerrar lista ✕" : "+ Desde lista predefinida"}
-              </button>
-              {showPredefinedDropdown && (
-                <div className="admin-amenity-dropdown">
-                  {AMENITIES_PREDEFINIDOS.filter(
-                    (p) => !amenities.some((a) => a.nombre === p.nombre)
-                  ).length === 0 ? (
-                    <p className="admin-help" style={{ padding: "12px" }}>
-                      Todos los amenities predefinidos ya fueron agregados.
-                    </p>
-                  ) : (
-                    AMENITIES_PREDEFINIDOS.filter(
-                      (p) => !amenities.some((a) => a.nombre === p.nombre)
-                    ).map((item) => (
-                      <button
-                        key={item.nombre}
-                        type="button"
-                        className="admin-amenity-option"
-                        onClick={() =>
-                          setAmenities((prev) => [
-                            ...prev,
-                            { nombre: item.nombre, icono_emoji: item.icono_emoji },
-                          ])
-                        }
-                      >
-                        <span>{item.icono_emoji}</span>
-                        <span>{item.nombre}</span>
-                      </button>
-                    ))
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Amenity personalizado */}
-            <div className="admin-amenity-custom">
-              <span className="admin-amenity-emoji-preview">
-                {customAmenity.icono_emoji || "?"}
-              </span>
-              <button
-                type="button"
-                className="admin-emoji-toggle"
-                onClick={() => {
-                  setShowCustomEmojiPicker((v) => !v);
-                  setShowPredefinedDropdown(false);
-                }}
-              >
-                {showCustomEmojiPicker ? "Cerrar ✕" : "Emoji"}
-              </button>
-              <input
-                className="admin-amenity-nombre"
-                type="text"
-                placeholder="Nombre personalizado (ej: Helipuerto)"
-                value={customAmenity.nombre}
-                onChange={(e) =>
-                  setCustomAmenity((prev) => ({ ...prev, nombre: e.target.value }))
-                }
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    if (customAmenity.nombre.trim()) {
-                      setAmenities((prev) => [
-                        ...prev,
-                        { nombre: customAmenity.nombre.trim(), icono_emoji: customAmenity.icono_emoji },
-                      ]);
-                      setCustomAmenity({ nombre: "", icono_emoji: "" });
-                      setShowCustomEmojiPicker(false);
-                    }
-                  }
-                }}
-              />
-              <button
-                type="button"
-                className="admin-add"
-                onClick={() => {
-                  if (customAmenity.nombre.trim()) {
-                    setAmenities((prev) => [
-                      ...prev,
-                      { nombre: customAmenity.nombre.trim(), icono_emoji: customAmenity.icono_emoji },
-                    ]);
-                    setCustomAmenity({ nombre: "", icono_emoji: "" });
-                    setShowCustomEmojiPicker(false);
-                  }
-                }}
-              >
-                + Agregar
-              </button>
-            </div>
-            {showCustomEmojiPicker && (
-              <div className="admin-emoji-grid">
-                {EMOJIS_TRAVEL.map((emoji) => (
-                  <button
-                    key={emoji}
-                    type="button"
-                    className={`admin-emoji-btn${customAmenity.icono_emoji === emoji ? " admin-emoji-btn--active" : ""}`}
-                    onClick={() => {
-                      setCustomAmenity((prev) => ({ ...prev, icono_emoji: emoji }));
-                      setShowCustomEmojiPicker(false);
-                    }}
-                  >
-                    {emoji}
-                  </button>
-                ))}
-              </div>
-            )}
-            </div>
-          </section>
-
-          {/* ── Highlights ── */}
-          <section className="admin-section admin-section-collapsible">
-            <div className="admin-collapsible-header" onClick={() => toggleSection("highlights")}>
-              <h2>⭐ Highlights</h2>
-              <span className={`admin-collapsible-arrow${expandedSections.highlights ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
-            </div>
-            <div className={`admin-collapsible-body${expandedSections.highlights ? " admin-collapsible-body--open" : ""}`}>
-            {highlights.map((highlight, index) => (
-              <div className="admin-list" key={`highlight-${index}`}>
-                <label>
-                  Descripcion
-                  <input
-                    type="text"
-                    placeholder="Descripcion"
-                    value={highlight.descripcion}
-                    onChange={(e) => updateListItem(setHighlights, index, "descripcion", e.target.value)}
-                  />
-                </label>
-                {highlights.length > 1 && (
-                  <button type="button" onClick={() => removeListItem(setHighlights, index)}>
-                    Quitar
-                  </button>
-                )}
-              </div>
-            ))}
-            <button type="button" className="admin-add" onClick={() => addListItem(setHighlights, emptyHighlight)}>
-              + Agregar highlight
-            </button>
-            </div>
-          </section>
-          </>
-          )}
 
           {/* ── Mensajes ── */}
           {error && <div className="admin-error">{error}</div>}
@@ -2023,7 +1486,7 @@ const AdminPanel = () => {
             <div className="admin-modal-icon">🗑️</div>
             <div className="admin-modal-title">Eliminar producto</div>
             <div className="admin-modal-desc">
-              Esta accion no se puede deshacer. Se eliminara el producto y todos sus datos asociados (detalles, galeria, rooms, amenities, highlights).
+              Esta accion no se puede deshacer. Se eliminara el producto y todos sus datos asociados (detalles, itinerarios).
             </div>
             <div className="admin-modal-actions">
               <button
