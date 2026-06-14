@@ -111,6 +111,64 @@
   }
 }
 
+/* ====================================================================== */
+/* DESTINO HEADER */
+/* ====================================================================== */
+.detalles-destino-header {
+  text-align: center;
+  padding: 24px 0 8px;
+}
+
+.detalles-destino-titulo {
+  margin: 0 0 8px;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  font-family: 'Lora', serif;
+  color: var(--color-text-primary);
+}
+
+.detalles-destino-desc {
+  margin: 0 0 16px;
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Grid de cards destino ── */
+.card-grid--destino {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  padding: 16px 0 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .card-grid--destino {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 900px) {
+  .card-grid--destino {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .card-grid--destino {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 8px 0 32px;
+  }
+}
+
 @media (max-width: 480px) {
   .detalles-page {
     padding: 12px 12px 72px;

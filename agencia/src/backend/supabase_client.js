@@ -91,23 +91,27 @@ export const fetchProductById = async (id) => {
       return null;
     }
 
-    const [resultCrucero, resultGalleries, resultRooms, resultAmenities, resultHighlights, resultItinerarios] = await Promise.all([
+    const [resultCrucero, resultGalleries, resultRooms, resultAmenities, resultHighlights, resultItinerarios, resultCategoria, resultAlojamientos] = await Promise.all([
       supabase.from("detalles_cruceros").select("*").eq("producto_id", id).maybeSingle(),
       supabase.from("galleries").select("id, imagen_url, posicion_orden").eq("producto_id", id).order("posicion_orden", { ascending: true }),
       supabase.from("rooms").select("id, titulo, descripcion, precio, imagen_url").eq("producto_id", id).order("id", { ascending: true }),
       supabase.from("amenities").select("id, nombre, icono_emoji").eq("producto_id", id),
       supabase.from("highlights").select("id, descripcion").eq("producto_id", id).order("posicion_orden", { ascending: true }),
       supabase.from("itinerarios").select("id, dia, titulo, descripcion, categoria, posicion_orden").eq("producto_id", id).order("dia", { ascending: true }).order("posicion_orden", { ascending: true }),
+      supabase.from("categorias").select("nombre").eq("id", producto.categoria_id).maybeSingle(),
+      supabase.from("alojamientos").select("*").eq("producto_id", id).order("posicion_orden", { ascending: true }),
     ]);
 
     return {
       ...producto,
+      categoria_nombre: resultCategoria?.data?.nombre || "",
       detalles_crucero: resultCrucero?.data || {},
       gallery: resultGalleries?.data?.map(g => g.imagen_url) || [],
       rooms: resultRooms?.data || [],
       amenities: resultAmenities?.data || [],
       highlights: resultHighlights?.data?.map(h => h.descripcion) || [],
       itinerarios: resultItinerarios?.data || [],
+      alojamientos: resultAlojamientos?.data || [],
     };
   } catch (err) {
     console.error("Error inesperado al obtener producto con detalles:", err);
@@ -650,6 +654,29 @@ export const fetchItinerariosByProducto = async (productoId) => {
     return data || [];
   } catch (err) {
     console.error("Error inesperado al obtener itinerarios:", err);
+    return [];
+  }
+};
+
+// ============================================
+// ALOJAMIENTOS (opciones de alojamiento para destinos)
+// ============================================
+export const fetchAlojamientosByProducto = async (productoId) => {
+  try {
+    const { data, error } = await supabase
+      .from("alojamientos")
+      .select("*")
+      .eq("producto_id", productoId)
+      .order("posicion_orden", { ascending: true });
+
+    if (error) {
+      console.error("Error al obtener alojamientos:", error);
+      return [];
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado al obtener alojamientos:", err);
     return [];
   }
 };
