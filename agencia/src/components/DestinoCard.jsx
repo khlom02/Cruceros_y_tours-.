@@ -28,7 +28,7 @@ const Estrellas = ({ count }) => {
   return <span className="destino-card__stars">{filled}{empty}</span>;
 };
 
-const DestinoCard = ({ alojamiento }) => {
+const DestinoCard = ({ alojamiento, compact }) => {
   const {
     titulo,
     precio,
@@ -51,7 +51,7 @@ const DestinoCard = ({ alojamiento }) => {
   };
 
   return (
-    <article className="card card--destino" style={backgroundStyle}>
+    <article className={`card card--destino${compact ? " card--destino--compact" : ""}`} style={backgroundStyle}>
       <div className="card--destino__overlay" />
 
       {precio != null && (

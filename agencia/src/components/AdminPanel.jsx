@@ -13,8 +13,13 @@ import {
   updateReservaEstado,
   fetchSuscripcionesAdmin,
   updateSuscripcionEstado,
+  fetchAlojamientosByProducto,
+  insertAlojamiento,
+  updateAlojamiento,
+  deleteAlojamiento,
 } from "../backend/supabase_client";
 import DestinationCard from "./DestinationCard";
+import DestinoCard from "./DestinoCard";
 
 // ─── Nombre del bucket de Supabase Storage donde se guardan las imagenes ───
 const BUCKET_NAME = "content media";
@@ -70,6 +75,20 @@ const detalleInicial = {
   viajando_con_ninos: false,
 };
 
+const emptyAlojamiento = {
+  id: null,
+  titulo: "",
+  precio: "",
+  imagen_url: "",
+  imagenFile: null,
+  previewUrl: "",
+  estrellas: 3,
+  distancia_centro: "",
+  categoria: "",
+  tipo_habitacion: "",
+  enlace_externo: "",
+};
+
 const AdminPanel = () => {
 
   // ─── Tabs ─────────────────────────────────────────────────────────────────
@@ -108,6 +127,10 @@ const AdminPanel = () => {
   // ─── Campos extra solo para cruceros (tabla detalles_cruceros) ───────────
   const [detalleCrucero, setDetalleCrucero] = useState(detalleInicial);
 
+  // ─── Alojamientos para edición de destinos ────────────────────────────────
+  const [alojamientos, setAlojamientos] = useState([]);
+  const [alojamientosToDelete, setAlojamientosToDelete] = useState([]);
+
   // ─── Guard contra doble submit ────────────────────────────────────────────
   const submittingRef = useRef(false);
 
@@ -115,6 +138,7 @@ const AdminPanel = () => {
   const [expandedSections, setExpandedSections] = useState({
     producto: true,
     crucero: true,
+    alojamientos: true,
   });
 
   // ─── Formulario especial para Destinos Nacionales / Internacionales ────
@@ -288,6 +312,8 @@ const AdminPanel = () => {
     setError("");
     submittingRef.current = false;
     resetDestinosForm();
+    setAlojamientos([]);
+    setAlojamientosToDelete([]);
   };
 
   // ─── Cargar producto en el formulario para edicion ────────────────────────
@@ -319,6 +345,14 @@ const AdminPanel = () => {
 
       setEditingProductId(productId);
       setActiveTab("crear");
+
+      // Cargar alojamientos si es un destino
+      const cat = categorias.find((c) => String(c.id) === String(data.categoria_id));
+      const isDestino = cat && (cat.nombre.toLowerCase().includes("destinos nacionales") || cat.nombre.toLowerCase().includes("destinos internacionales"));
+      if (isDestino) {
+        const aloj = await fetchAlojamientosByProducto(productId);
+        setAlojamientos((aloj || []).map((a) => ({ ...a, imagenFile: null, previewUrl: "" })));
+      }
     } catch (err) {
       setError("Error al cargar el producto para edicion.");
       console.error(err);
@@ -346,8 +380,8 @@ const AdminPanel = () => {
     setError("");
     setSuccess(null);
 
-    // ── MODO ESPECIAL: Destinos Nacionales / Internacionales ──────────────
-    if (isDestinosCategory) {
+    // ── MODO ESPECIAL: Creación masiva de Destinos ─────────────────────────
+    if (isDestinosCategory && !editingProductId) {
       const validItems = destinosItems.filter((d) => d.destino.trim() && d.pais.trim() && d.precio);
       if (validItems.length === 0) {
         setError("Debes agregar al menos un destino con destino, país y precio.");
@@ -365,14 +399,12 @@ const AdminPanel = () => {
         const catId = parseNumber(producto.categoria_id);
 
         for (const item of validItems) {
-          // Subir imágenes
           const imageUrls = [];
           for (const file of item.imagenes) {
             const url = await uploadFile(file, 'productos/destinos');
             imageUrls.push(url);
           }
 
-          // Crear producto
           const { data: prod, error: prodErr } = await supabase
             .from('productos')
             .insert({
@@ -390,7 +422,6 @@ const AdminPanel = () => {
 
           if (prodErr) throw prodErr;
 
-          // Guardar imágenes extra en galería
           if (imageUrls.length > 1) {
             const galleryRows = imageUrls.slice(1).map((url, idx) => ({
               producto_id: prod.id,
@@ -412,6 +443,85 @@ const AdminPanel = () => {
       } catch (err) {
         console.error('Error al guardar destinos:', err);
         setError(`Error al guardar: ${err?.message || 'Error desconocido'}`);
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
+    // ── MODO EDICION INDIVIDUAL DE DESTINO ────────────────────────────────
+    if (isDestinosCategory && editingProductId) {
+      if (!producto.titulo || !producto.titulo.trim()) {
+        setError("El título es obligatorio.");
+        return;
+      }
+
+      try {
+        setLoading(true);
+
+        const imagenUrl = producto.imagenFile
+          ? await uploadFile(producto.imagenFile, "productos")
+          : producto.imagen;
+
+        const { error: updateError } = await supabase
+          .from("productos")
+          .update({
+            titulo: producto.titulo,
+            descripcion: producto.descripcion,
+            precio: parseNumber(producto.precio),
+            imagen: imagenUrl,
+            ubicacion: producto.ubicacion,
+            rating: parseNumber(producto.rating),
+            cantidad_reviews: parseNumber(producto.cantidad_reviews),
+            fecha_inicio: producto.fecha_inicio || null,
+            fecha_fin: producto.fecha_fin || null,
+            color_fondo: producto.color_fondo,
+            categoria_id: parseNumber(producto.categoria_id),
+            activo: Boolean(producto.activo),
+          })
+          .eq("id", editingProductId);
+
+        if (updateError) throw updateError;
+
+        for (const id of alojamientosToDelete) {
+          await deleteAlojamiento(id);
+        }
+
+        for (let i = 0; i < alojamientos.length; i++) {
+          const a = alojamientos[i];
+          let imgUrl = a.imagen_url;
+          if (a.imagenFile) {
+            imgUrl = await uploadFile(a.imagenFile, "productos/alojamientos");
+          }
+          const payload = {
+            producto_id: editingProductId,
+            titulo: a.titulo,
+            precio: parseNumber(a.precio),
+            imagen_url: imgUrl || null,
+            estrellas: a.estrellas,
+            distancia_centro: a.distancia_centro || null,
+            categoria: a.categoria || null,
+            tipo_habitacion: a.tipo_habitacion || null,
+            enlace_externo: a.enlace_externo || null,
+            posicion_orden: i,
+          };
+          if (a.id) {
+            await updateAlojamiento(a.id, payload);
+          } else {
+            await insertAlojamiento(payload);
+          }
+        }
+
+        setSuccess({
+          titulo: producto.titulo,
+          categoria: categoriaNombre,
+          ruta: rutaPorCategoria(categoriaNombre),
+          modo: "editado",
+        });
+        resetForm();
+      } catch (err) {
+        console.error("Error al guardar destino:", err);
+        setError(`Error al guardar: ${err?.message || "Error desconocido"}`);
       } finally {
         setLoading(false);
       }
@@ -696,6 +806,50 @@ const AdminPanel = () => {
     setDestinoImageIndex({});
   };
 
+  // ─── Handlers para alojamientos destinos ──────────────────────────────────
+  const handleAlojamientoChange = (index, field, value) => {
+    setAlojamientos((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+    );
+  };
+
+  const handleAlojamientoImage = (index, file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setAlojamientos((prev) =>
+        prev.map((item, i) =>
+          i === index ? { ...item, imagenFile: file, previewUrl: e.target.result } : item
+        )
+      );
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const addAlojamiento = () => {
+    setAlojamientos((prev) => [...prev, { ...emptyAlojamiento }]);
+  };
+
+  const removeAlojamiento = (index) => {
+    setAlojamientos((prev) => {
+      const removed = prev[index];
+      if (removed?.id) {
+        setAlojamientosToDelete((d) => [...d, removed.id]);
+      }
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
+  const moveAlojamiento = (index, direction) => {
+    setAlojamientos((prev) => {
+      const newArr = [...prev];
+      const target = index + direction;
+      if (target < 0 || target >= newArr.length) return prev;
+      [newArr[index], newArr[target]] = [newArr[target], newArr[index]];
+      return newArr;
+    });
+  };
+
   const productosFiltrados = useMemo(() => {
     if (!productSearch.trim()) return productosLista;
     const q = productSearch.toLowerCase();
@@ -817,7 +971,7 @@ const AdminPanel = () => {
             </label>
 
             <div className="admin-grid">
-              {!isDestinosCategory && (
+              {(!isDestinosCategory || editingProductId) && (
               <label className={fieldErrors.precio ? "admin-field-error-label" : ""}>
                 Precio (0 - 999,999)
                 <input
@@ -852,7 +1006,7 @@ const AdminPanel = () => {
               </label>
 
               {/* ── Formulario especial para Destinos Nacionales / Internacionales ── */}
-              {isDestinosCategory && (
+              {isDestinosCategory && !editingProductId && (
                 <div className="admin-destinos-form" style={{ gridColumn: '1 / -1' }}>
                   <p className="admin-help" style={{ marginBottom: '16px', fontSize: '0.95rem', color: 'var(--color-primary-dark)', fontWeight: 600 }}>
                     Formulario especial de destinos — Máximo 3 imágenes por producto, navegables con flechas
@@ -935,7 +1089,7 @@ const AdminPanel = () => {
                 </div>
               )}
 
-              {!isDestinosCategory && (
+              {(!isDestinosCategory || editingProductId) && (
               <>
               <label>
                 Ubicacion
@@ -1007,7 +1161,7 @@ const AdminPanel = () => {
               )}
             </div>
 
-            {!isDestinosCategory && (
+            {(!isDestinosCategory || editingProductId) && (
             <>
             <label className="admin-toggle">
               <input
@@ -1115,7 +1269,125 @@ const AdminPanel = () => {
             </section>
           )}
 
+          {/* ── Alojamientos (solo edicion de destinos) ── */}
+          {isDestinosCategory && editingProductId && (
+            <section className="admin-section admin-section-collapsible">
+              <div className="admin-collapsible-header" onClick={() => toggleSection("alojamientos")}>
+                <h2>🏨 Alojamientos</h2>
+                <span className={`admin-collapsible-arrow${expandedSections.alojamientos ? " admin-collapsible-arrow--open" : ""}`}>▼</span>
+              </div>
+              <div className={`admin-collapsible-body${expandedSections.alojamientos ? " admin-collapsible-body--open" : ""}`}>
 
+                {alojamientos.length === 0 && (
+                  <p className="admin-help" style={{ marginBottom: "16px", color: "#666" }}>
+                    No hay opciones de alojamiento registradas. Agrega una a continuacion.
+                  </p>
+                )}
+
+                <div className="admin-alojamientos-list">
+                  {alojamientos.map((item, idx) => (
+                    <div key={idx} className="admin-alojamiento-card">
+                      <div className="admin-alojamiento-card__header">
+                        <span className="admin-alojamiento-card__number">{idx + 1}</span>
+                        <span className="admin-alojamiento-card__label">{item.titulo || "Nuevo alojamiento"}</span>
+                        <div className="admin-alojamiento-card__actions">
+                          <button type="button" className="admin-btn-reorder" onClick={() => moveAlojamiento(idx, -1)} disabled={idx === 0} title="Subir">&#8593;</button>
+                          <button type="button" className="admin-btn-reorder" onClick={() => moveAlojamiento(idx, 1)} disabled={idx === alojamientos.length - 1} title="Bajar">&#8595;</button>
+                          <button type="button" className="admin-btn-delete" onClick={() => removeAlojamiento(idx)}>Quitar</button>
+                        </div>
+                      </div>
+
+                      <div className="admin-alojamiento-card__body">
+                        <div className="admin-alojamiento-fields">
+                          <div className="admin-grid">
+                            <label>
+                              Titulo
+                              <input type="text" value={item.titulo} onChange={(e) => handleAlojamientoChange(idx, "titulo", e.target.value)} placeholder="ej: Hotel Playa Dorada" />
+                            </label>
+                            <label>
+                              Precio (USD)
+                              <input type="number" min="0" step="0.01" value={item.precio} onChange={(e) => handleAlojamientoChange(idx, "precio", e.target.value)} placeholder="ej: 150" />
+                            </label>
+                            <label>
+                              Estrellas (1-5)
+                              <input type="number" min="1" max="5" step="1" value={item.estrellas} onChange={(e) => handleAlojamientoChange(idx, "estrellas", Number(e.target.value))} />
+                            </label>
+                            <label>
+                              Distancia centro
+                              <input type="text" value={item.distancia_centro} onChange={(e) => handleAlojamientoChange(idx, "distancia_centro", e.target.value)} placeholder="ej: 2.5 km" />
+                            </label>
+                            <label>
+                              Categoria
+                              <select value={item.categoria} onChange={(e) => handleAlojamientoChange(idx, "categoria", e.target.value)}>
+                                <option value="">Seleccionar</option>
+                                <option value="todo incluido">Todo incluido</option>
+                                <option value="solo alojamiento">Solo alojamiento</option>
+                                <option value="desayunos">Desayunos</option>
+                                <option value="media pension">Media pension</option>
+                              </select>
+                            </label>
+                            <label>
+                              Tipo habitacion
+                              <select value={item.tipo_habitacion} onChange={(e) => handleAlojamientoChange(idx, "tipo_habitacion", e.target.value)}>
+                                <option value="">Seleccionar</option>
+                                <option value="superior">Superior</option>
+                                <option value="primera calidad">Primera calidad</option>
+                                <option value="doble superior">Doble superior</option>
+                                <option value="doble premium">Doble premium</option>
+                              </select>
+                            </label>
+                            <label style={{ gridColumn: "1 / -1" }}>
+                              Enlace externo (Booking, Despegar, etc.)
+                              <input type="url" value={item.enlace_externo} onChange={(e) => handleAlojamientoChange(idx, "enlace_externo", e.target.value)} placeholder="https://..." />
+                            </label>
+                            <label style={{ gridColumn: "1 / -1" }}>
+                              Imagen
+                              <input type="file" accept="image/*" onChange={(e) => {
+                                const file = e.target.files[0];
+                                if (file) handleAlojamientoImage(idx, file);
+                              }} />
+                            </label>
+                          </div>
+                          {item.previewUrl && (
+                            <div className="admin-alojamiento-img-preview">
+                              <img src={item.previewUrl} alt="Preview" />
+                            </div>
+                          )}
+                          {item.imagen_url && !item.previewUrl && (
+                            <div className="admin-alojamiento-img-preview">
+                              <img src={item.imagen_url} alt="Actual" />
+                              <span className="admin-alojamiento-img-label">Imagen actual</span>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="admin-alojamiento-preview">
+                          <DestinoCard
+                            compact
+                            alojamiento={{
+                              titulo: item.titulo || "Vista previa",
+                              precio: item.precio ? parseNumber(item.precio) : null,
+                              imagen_url: item.previewUrl || item.imagen_url,
+                              estrellas: item.estrellas,
+                              distancia_centro: item.distancia_centro,
+                              categoria: item.categoria,
+                              tipo_habitacion: item.tipo_habitacion,
+                              enlace_externo: item.enlace_externo,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <button type="button" className="admin-destinos-add-btn" onClick={addAlojamiento}>
+                  <span className="admin-destinos-add-btn__icon">+</span>
+                  <span>Agregar alojamiento</span>
+                </button>
+              </div>
+            </section>
+          )}
 
           {/* ── Mensajes ── */}
           {error && <div className="admin-error">{error}</div>}
@@ -1131,7 +1403,7 @@ const AdminPanel = () => {
           )}
 
           <button className="admin-submit" type="submit" disabled={loading}>
-            {loading ? "Guardando..." : isDestinosCategory ? "Crear destino(s)" : editingProductId ? "Guardar cambios" : "Crear producto"}
+            {loading ? "Guardando..." : isDestinosCategory && !editingProductId ? "Crear destino(s)" : editingProductId ? "Guardar cambios" : "Crear producto"}
           </button>
         </form>
       )}

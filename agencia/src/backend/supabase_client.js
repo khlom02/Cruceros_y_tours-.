@@ -389,6 +389,7 @@ export const deleteProductAndRelated = async (id) => {
     await supabase.from("rooms").delete().eq("producto_id", id);
     await supabase.from("galleries").delete().eq("producto_id", id);
     await supabase.from("detalles_cruceros").delete().eq("producto_id", id);
+    await supabase.from("alojamientos").delete().eq("producto_id", id);
 
     const { error } = await supabase.from("productos").delete().eq("id", id);
 
@@ -678,6 +679,61 @@ export const fetchAlojamientosByProducto = async (productoId) => {
   } catch (err) {
     console.error("Error inesperado al obtener alojamientos:", err);
     return [];
+  }
+};
+
+export const insertAlojamiento = async (payload) => {
+  try {
+    const { data, error } = await supabase
+      .from("alojamientos")
+      .insert(payload)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error al insertar alojamiento:", error);
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.error("Error inesperado al insertar alojamiento:", err);
+    return null;
+  }
+};
+
+export const updateAlojamiento = async (id, payload) => {
+  try {
+    const { error } = await supabase
+      .from("alojamientos")
+      .update(payload)
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error al actualizar alojamiento:", error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("Error inesperado al actualizar alojamiento:", err);
+    return false;
+  }
+};
+
+export const deleteAlojamiento = async (id) => {
+  try {
+    const { error } = await supabase
+      .from("alojamientos")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error al eliminar alojamiento:", error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("Error inesperado al eliminar alojamiento:", err);
+    return false;
   }
 };
 
