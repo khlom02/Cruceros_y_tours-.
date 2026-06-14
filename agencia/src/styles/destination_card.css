@@ -361,6 +361,10 @@
   will-change: transform;
 }
 
+.destinos-carousel__track--resetting {
+  transition: none !important;
+}
+
 .destinos-carousel__slide {
   flex: 0 0 25%;
   padding: 0 10px;
