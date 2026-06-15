@@ -30,6 +30,7 @@ import Suscripciones from "./components/Suscripciones.jsx";
 import SobreNosotros from "./components/SobreNosotros.jsx";
 import NotFound from "./components/NotFound.jsx";
 import AutoLogout from "./components/AutoLogout.jsx";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const FloatingCTA = () => {
   const location = useLocation();
@@ -61,6 +62,7 @@ export default function App() {
     <HelmetProvider>
     <AuthProvider>
         <Router>
+          <SpeedInsights />
           <RecoveryGuard />
           <AutoLogout />
           <Header />

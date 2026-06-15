@@ -704,6 +704,116 @@ export const deleteAlojamiento = async (id) => {
 };
 
 // ============================================
+// DETALLE DE ALOJAMIENTO (página detalles-alojamiento)
+// ============================================
+export const fetchAlojamientoById = async (id) => {
+  try {
+    const { data: alojamiento, error: errorAlojamiento } = await supabase
+      .from("alojamientos")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (errorAlojamiento) {
+      console.error("Error al obtener alojamiento:", errorAlojamiento);
+      return null;
+    }
+
+    const { data: imagenes, error: errorImagenes } = await supabase
+      .from("alojamiento_imagenes")
+      .select("id, tipo, imagen_url, titulo, posicion_orden")
+      .eq("alojamiento_id", id)
+      .order("posicion_orden", { ascending: true });
+
+    if (errorImagenes) {
+      console.error("Error al obtener imágenes del alojamiento:", errorImagenes);
+    }
+
+    return {
+      ...alojamiento,
+      imagenes: imagenes || [],
+    };
+  } catch (err) {
+    console.error("Error inesperado al obtener alojamiento por id:", err);
+    return null;
+  }
+};
+
+export const fetchAlojamientoImagenes = async (alojamientoId) => {
+  try {
+    const { data, error } = await supabase
+      .from("alojamiento_imagenes")
+      .select("id, tipo, imagen_url, titulo, posicion_orden")
+      .eq("alojamiento_id", alojamientoId)
+      .order("posicion_orden", { ascending: true });
+
+    if (error) {
+      console.error("Error al obtener imágenes del alojamiento:", error);
+      return [];
+    }
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado al obtener imágenes del alojamiento:", err);
+    return [];
+  }
+};
+
+export const insertAlojamientoImagen = async (payload) => {
+  try {
+    const { data, error } = await supabase
+      .from("alojamiento_imagenes")
+      .insert(payload)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error al insertar imagen de alojamiento:", error);
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.error("Error inesperado al insertar imagen de alojamiento:", err);
+    return null;
+  }
+};
+
+export const updateAlojamientoImagen = async (id, payload) => {
+  try {
+    const { error } = await supabase
+      .from("alojamiento_imagenes")
+      .update(payload)
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error al actualizar imagen de alojamiento:", error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("Error inesperado al actualizar imagen de alojamiento:", err);
+    return false;
+  }
+};
+
+export const deleteAlojamientoImagen = async (id) => {
+  try {
+    const { error } = await supabase
+      .from("alojamiento_imagenes")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error al eliminar imagen de alojamiento:", error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("Error inesperado al eliminar imagen de alojamiento:", err);
+    return false;
+  }
+};
+
+// ============================================
 // SUSCRIPCIONES — CLIENTE
 // ============================================
 export const createSuscripcion = async (userId, plan, email) => {
