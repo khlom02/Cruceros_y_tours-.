@@ -20,13 +20,17 @@ const getCarouselConfig = (w) => {
   return { cardW, cardH, xSpacing, containerH };
 };
 
-const Carousel3D = ({ destinations = [], onModalChange, showCTA = true }) => {
+const Carousel3D = ({ destinations = [], onModalChange, showCTA = true, startIndex }) => {
   const [currentIndex, setCurrentIndex] = useState(() => {
-  const videoIndex = destinations.findIndex(
-    (dest) => dest.img === "/imagenes/serenade.mp4"
-  );
-  return videoIndex >= 0 ? videoIndex : 0;
-});
+    if (typeof startIndex === "number" && destinations[startIndex]) {
+      return startIndex;
+    }
+
+    const videoIndex = destinations.findIndex(
+      (dest) => dest.img === "/imagenes/serenade.mp4"
+    );
+    return videoIndex >= 0 ? videoIndex : 0;
+  });
   const [isAnimating, setIsAnimating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
