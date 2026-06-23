@@ -26,10 +26,7 @@ const Carousel3D = ({ destinations = [], onModalChange, showCTA = true, startInd
       return startIndex;
     }
 
-    const videoIndex = destinations.findIndex(
-      (dest) => dest.img === "/imagenes/serenade.mp4"
-    );
-    return videoIndex >= 0 ? videoIndex : 0;
+    return Math.floor(destinations.length / 2);
   });
   const [isAnimating, setIsAnimating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
