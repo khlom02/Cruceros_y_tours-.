@@ -218,6 +218,7 @@ Reglas:
 - **NO hardcodear** colores, spacings ni valores de estilo — usar variables CSS
 - **Código optimizado** para rendimiento y SEO
 - **Prohibido** tocar archivos fuera del alcance de la tarea actual SUMAMENTE IMPORTANTE
+- **Scroll al cambiar de ruta:** en SPA con React Router, siempre usar `ScrollToTop` dentro del `<Router>` para que cada navegación inicie desde el inicio de la página. Nunca dejar que el scroll de la página anterior persista al entrar a una nueva ruta.
 
 ---
 
