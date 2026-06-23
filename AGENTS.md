@@ -323,3 +323,69 @@ La tarjeta `.airline-card` con `position: sticky` se solapaba con el header stic
 
 ### MCP tools
 cuando necesites buscar documentacion, usa 'context7' tools.
+
+---
+
+## Ponytail — control de over-engineering
+
+El proyecto tiene configurado el plugin **Ponytail** para OpenCode. Su objetivo es evitar over-engineering forzando al agente a:
+
+1. Preguntarse si algo necesita existir (YAGNI)
+2. Reutilizar código existente en el proyecto
+3. Preferir stdlib, plataforma nativa y dependencias ya instaladas
+4. Escribir el mínimo código necesario
+
+**Por defecto está APAGADO (`off`)** para que tú tengas el control total.
+
+### Activar / desactivar durante una sesión
+
+Usa el comando `/ponytail` seguido del nivel:
+
+| Comando | Efectivo |
+|---|---|
+| `/ponytail off` | Desactivado (por defecto) |
+| `/ponytail lite` | Activo, solo sugerencias suaves |
+| `/ponytail full` | Activo, reglas normales |
+| `/ponytail ultra` | Muy agresivo recortando complejidad |
+
+El cambio se aplica desde el siguiente mensaje.
+
+### Cambiar el modo por defecto
+
+Opción A — variable de entorno (prioridad alta):
+
+```bash
+export PONYTAIL_DEFAULT_MODE=full
+```
+
+Opción B — archivo de configuración global:
+
+Edita `~/.config/ponytail/config.json`:
+
+```json
+{
+  "defaultMode": "full"
+}
+```
+
+Valores válidos: `off`, `lite`, `full`, `ultra`.
+
+### Otros comandos útiles
+
+- `/ponytail` — muestra el modo activo
+- `/ponytail-review` — revisa el diff actual buscando over-engineering
+- `/ponytail-audit` — audita todo el repo buscando over-engineering
+
+### Instalación técnica
+
+El plugin se carga desde `opencode.json` apuntando a la ruta absoluta del checkout:
+
+```json
+"plugin": ["/home/khalom/.opencode/ponytail/.opencode/plugins/ponytail.mjs"]
+```
+
+El checkout vive en `/home/khalom/.opencode/ponytail` (clonado del repo oficial). Para actualizarlo:
+
+```bash
+cd /home/khalom/.opencode/ponytail && git pull
+```
