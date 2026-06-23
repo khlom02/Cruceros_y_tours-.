@@ -428,23 +428,31 @@ const DetallesAlojamiento = () => {
           </div>
         </section>
 
-        <Carousel3DSection
-          items={carruselHotel}
-          title="Galería del hotel"
-          subtitle="Conoce cada rincón de tu próxima estadía"
-        />
+        <section className="alojamiento-gallery-layout">
+          <div className="alojamiento-gallery-layout__main">
+            <Carousel3DSection
+              items={carruselHotel}
+              title="Galería del hotel"
+              subtitle="Conoce cada rincón de tu próxima estadía"
+            />
 
-        <Carousel3DSection
-          items={carruselHabitacion}
-          title="Habitaciones"
-          subtitle="Espacios diseñados para tu descanso"
-        />
+            <Carousel3DSection
+              items={carruselHabitacion}
+              title="Habitaciones"
+              subtitle="Espacios diseñados para tu descanso"
+            />
 
-        <Carousel3DSection
-          items={carruselComida}
-          title="Gastronomía"
-          subtitle="Sabores que harán memorable tu viaje"
-        />
+            <Carousel3DSection
+              items={carruselComida}
+              title="Gastronomía"
+              subtitle="Sabores que harán memorable tu viaje"
+            />
+          </div>
+
+          <aside className="alojamiento-gallery-layout__side">
+            <BookingCard alojamiento={alojamiento} user={user} />
+          </aside>
+        </section>
 
         <section className="alojamiento-info-grid">
           <div className="alojamiento-info-grid__main">
@@ -491,8 +499,6 @@ const DetallesAlojamiento = () => {
           </div>
 
           <div className="alojamiento-info-grid__side">
-            <BookingCard alojamiento={alojamiento} user={user} />
-
             <article className="alojamiento-card alojamiento-card--tarifa">
               <h2 className="alojamiento-card__title">La tarifa incluye</h2>
               <ul className="alojamiento-card__list">
