@@ -299,6 +299,7 @@
   position: sticky;
   top: 100px;
   align-self: flex-start;
+  width: 100%;
   background: linear-gradient(
     135deg,
     var(--color-primary) 0%,
@@ -309,7 +310,6 @@
   padding: var(--card-hero-padding);
   box-shadow: var(--card-shadow-hover);
   box-sizing: border-box;
-  z-index: 10;
 }
 
 .alojamiento-booking__price-row {

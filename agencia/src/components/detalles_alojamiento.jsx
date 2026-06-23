@@ -491,6 +491,8 @@ const DetallesAlojamiento = () => {
           </div>
 
           <div className="alojamiento-info-grid__side">
+            <BookingCard alojamiento={alojamiento} user={user} />
+
             <article className="alojamiento-card alojamiento-card--tarifa">
               <h2 className="alojamiento-card__title">La tarifa incluye</h2>
               <ul className="alojamiento-card__list">
@@ -509,8 +511,6 @@ const DetallesAlojamiento = () => {
               direccion={alojamiento.direccion}
               titulo={alojamiento.titulo}
             />
-
-            <BookingCard alojamiento={alojamiento} user={user} />
           </div>
         </section>
       </main>
