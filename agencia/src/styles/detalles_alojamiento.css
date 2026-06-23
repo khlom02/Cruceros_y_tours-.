@@ -90,6 +90,10 @@
   gap: clamp(1.5rem, 3vw, 2rem);
 }
 
+.alojamiento-gallery-layout__main .carousel3d-section {
+  padding: 0;
+}
+
 .alojamiento-gallery-layout__side {
   /* Se estira a la altura de la columna izquierda para permitir sticky del hijo */
   min-width: 0;
