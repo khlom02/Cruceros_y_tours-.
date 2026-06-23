@@ -8,15 +8,13 @@ const Carousel3DSection = ({ items = [], title, subtitle }) => {
 
   return (
     <section className="carousel3d-section">
-      {(title || subtitle) && (
-        <header className="carousel3d-section__header">
-          {title && <h2 className="carousel3d-section__title">{title}</h2>}
-          {subtitle && (
-            <p className="carousel3d-section__subtitle">{subtitle}</p>
-          )}
-        </header>
-      )}
-      <Carousel3D destinations={items} showCTA={false} startIndex={middleIndex} />
+      <Carousel3D
+        destinations={items}
+        showCTA={false}
+        startIndex={middleIndex}
+        title={title}
+        subtitle={subtitle}
+      />
     </section>
   );
 };

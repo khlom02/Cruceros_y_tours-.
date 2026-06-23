@@ -20,7 +20,7 @@ const getCarouselConfig = (w) => {
   return { cardW, cardH, xSpacing, containerH };
 };
 
-const Carousel3D = ({ destinations = [], onModalChange, showCTA = true, startIndex }) => {
+const Carousel3D = ({ destinations = [], onModalChange, showCTA = true, startIndex, title, subtitle }) => {
   const [currentIndex, setCurrentIndex] = useState(() => {
     if (typeof startIndex === "number" && destinations[startIndex]) {
       return startIndex;
@@ -304,9 +304,17 @@ const Carousel3D = ({ destinations = [], onModalChange, showCTA = true, startInd
   return (
     // overflow-x:hidden previene scroll horizontal sin cortar las cards verticalmente
     <div style={{ overflowX: "hidden", width: "100%" }}>
-    <div
-      style={{
-        perspective: "2000px",
+      {(title || subtitle) && (
+        <header className="carousel3d-header">
+          {title && <h2 className="carousel3d-title">{title}</h2>}
+          {subtitle && (
+            <p className="carousel3d-subtitle">{subtitle}</p>
+          )}
+        </header>
+      )}
+      <div
+        style={{
+          perspective: "2000px",
         height: `${containerH}px`,
         display: "flex",
         alignItems: "center",

@@ -1,6 +1,24 @@
 /* ====================================================================== */
-/* CARRUSEL 3D - INDICADORES Y CTA */
+/* CARRUSEL 3D - HEADER, INDICADORES Y CTA */
 /* ====================================================================== */
+
+.carousel3d-header {
+  text-align: center;
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.carousel3d-title {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  color: var(--color-text-primary);
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+}
+
+.carousel3d-subtitle {
+  font-size: var(--card-font-subtitle);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
 
 .carousel3d-indicators {
 	display: flex;
