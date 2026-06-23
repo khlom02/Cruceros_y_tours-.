@@ -20,14 +20,10 @@ const getCarouselConfig = (w) => {
   return { cardW, cardH, xSpacing, containerH };
 };
 
-const Carousel3D = ({ destinations = [], onModalChange, showCTA = true, startIndex, title, subtitle }) => {
-  const [currentIndex, setCurrentIndex] = useState(() => {
-    if (typeof startIndex === "number" && destinations[startIndex]) {
-      return startIndex;
-    }
-
-    return Math.floor(destinations.length / 2);
-  });
+const Carousel3D = ({ destinations = [], onModalChange, showCTA = true, title, subtitle }) => {
+  const [currentIndex, setCurrentIndex] = useState(() =>
+    Math.floor(destinations.length / 2)
+  );
   const [isAnimating, setIsAnimating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);

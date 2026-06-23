@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import SEO from "./SEO.jsx";
-import Carousel3DSection from "./Carousel3DSection.jsx";
+import Carousel3D from "./Carousel3D.jsx";
 import {
   fetchAlojamientoById,
   createReserva,
@@ -430,20 +430,23 @@ const DetallesAlojamiento = () => {
 
         <section className="alojamiento-gallery-layout">
           <div className="alojamiento-gallery-layout__main">
-            <Carousel3DSection
-              items={carruselHotel}
+            <Carousel3D
+              destinations={carruselHotel}
+              showCTA={false}
               title="Galería del hotel"
               subtitle="Conoce cada rincón de tu próxima estadía"
             />
 
-            <Carousel3DSection
-              items={carruselHabitacion}
+            <Carousel3D
+              destinations={carruselHabitacion}
+              showCTA={false}
               title="Habitaciones"
               subtitle="Espacios diseñados para tu descanso"
             />
 
-            <Carousel3DSection
-              items={carruselComida}
+            <Carousel3D
+              destinations={carruselComida}
+              showCTA={false}
               title="Gastronomía"
               subtitle="Sabores que harán memorable tu viaje"
             />

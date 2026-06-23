@@ -90,7 +90,7 @@
   gap: clamp(1.5rem, 3vw, 2rem);
 }
 
-.alojamiento-gallery-layout__main .carousel3d-section {
+.alojamiento-gallery-layout__main > div {
   padding: 0;
 }
 
