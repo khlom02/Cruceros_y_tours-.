@@ -25,6 +25,8 @@
 	color: var(--color-text-primary);
 	background: #ffffff;
 	text-transform: none;
+	/* Fuente legible: Chicago Police dibuja la minuscula como mayuscula */
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .auth-input:focus {

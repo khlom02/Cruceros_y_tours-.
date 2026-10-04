@@ -184,13 +184,15 @@ export default function LoginForm() {
                       <label htmlFor={recoveryEmailId} className="form-label fw-semibold auth-label">
                         Correo Electrónico
                       </label>
-                      <input
-                        ref={emailRecoveryRef}
-                        type="email"
-                        className="form-control rounded-pill auth-input"
-                        id={recoveryEmailId}
-                        name="rec-email"
-                        autoComplete="off"
+              <input
+                ref={emailRecoveryRef}
+                type="email"
+                className="form-control rounded-pill auth-input"
+                id={recoveryEmailId}
+                name="rec-email"
+                autoComplete="off"
+                autoCapitalize="none"
+                autoCorrect="off"
                         value={emailRecovery}
                         onChange={(e) => setEmailRecovery(e.target.value)}
                         placeholder="Ingresa tu correo"
@@ -259,11 +261,13 @@ export default function LoginForm() {
                   <label htmlFor={emailId} className="form-label fw-semibold auth-label">
                     Correo Electrónico
                   </label>
-                  <input
-                    ref={emailRef}
-                    type="email"
-                    className="form-control rounded-pill auth-input"
-                    id={emailId}
+                <input
+                  ref={emailRef}
+                  type="email"
+                  className="form-control rounded-pill auth-input"
+                  id={emailId}
+                  autoCapitalize="none"
+                  autoCorrect="off"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Ingresa tu correo"
@@ -278,10 +282,12 @@ export default function LoginForm() {
                   <label htmlFor={passwordId} className="form-label fw-semibold auth-label">
                     Contraseña
                   </label>
-                  <input
-                    type="password"
-                    className="form-control rounded-pill auth-input"
-                    id={passwordId}
+                <input
+                  type="password"
+                  className="form-control rounded-pill auth-input"
+                  id={passwordId}
+                  autoCapitalize="none"
+                  autoCorrect="off"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Ingresa tu contraseña"

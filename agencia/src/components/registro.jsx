@@ -166,6 +166,8 @@ const Register = () => {
                     type="email"
                     id={regEmailId}
                     name="reg-email"
+                    autoCapitalize="none"
+                    autoCorrect="off"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -184,6 +186,8 @@ const Register = () => {
                     type="password"
                     id={regPasswordId}
                     name="reg-password"
+                    autoCapitalize="none"
+                    autoCorrect="off"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -224,6 +228,8 @@ const Register = () => {
                     type="password"
                     id={regConfirmId}
                     name="reg-confirm"
+                    autoCapitalize="none"
+                    autoCorrect="off"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
