@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import "../styles/autoLogout.css";
 
 const INACTIVIDAD_MAX_MS = 30 * 60 * 1000;
 const AVISO_MS = 2 * 60 * 1000;
@@ -59,28 +60,16 @@ export default function AutoLogout() {
   if (!mostrarAviso || !user) return null;
 
   return (
-    <div style={{
-      position: "fixed", bottom: 20, right: 20, zIndex: 9999,
-      background: "#fff3cd", color: "#856404", border: "1px solid #ffeeba",
-      borderRadius: 12, padding: "16px 20px", maxWidth: 340,
-      boxShadow: "0 4px 20px rgba(0,0,0,0.15)", fontFamily: "Arial, sans-serif",
-    }}>
-      <p style={{ margin: 0, fontSize: 14, fontWeight: 600 }}>
+    <div className="auto-logout" role="alert">
+      <p className="auto-logout__title">
         Sesión por expirar
       </p>
-      <p style={{ margin: "6px 0 0", fontSize: 13, lineHeight: 1.4 }}>
+      <p className="auto-logout__text">
         {segundosRestantes > 60
           ? `Por inactividad, tu sesión cerrará en ${Math.ceil(segundosRestantes / 60)} min.`
           : `Por inactividad, tu sesión cerrará en ${segundosRestantes} seg.`}
       </p>
-      <button
-        onClick={reiniciarTimer}
-        style={{
-          marginTop: 10, padding: "6px 16px", border: "none",
-          borderRadius: 6, background: "#0FD3D3", color: "#003366",
-          fontWeight: 600, cursor: "pointer", fontSize: 13,
-        }}
-      >
+      <button type="button" className="auto-logout__button" onClick={reiniciarTimer}>
         Seguir navegando
       </button>
     </div>
