@@ -1,4 +1,3 @@
-import TimelineEvent from "./TimelineEvent";
 import "../styles/timeline.css";
 
 const groupByDay = (itinerarios) => {
@@ -26,15 +25,22 @@ const Timeline = ({ itinerarios }) => {
             <div key={dia} className="timeline__day">
               <h3 className="timeline__day-title">Día {dia}</h3>
               <div className="timeline__events">
-                {items.map((item, index) => (
-                  <TimelineEvent
-                    key={item.id}
-                    titulo={item.titulo}
-                    descripcion={item.descripcion}
-                    categoria={item.categoria}
-                    isLast={index === items.length - 1 && dia === dias[dias.length - 1]}
-                  />
-                ))}
+                {items.map((item, index) => {
+                  const isLast = index === items.length - 1 && dia === dias[dias.length - 1];
+                  return (
+                    <div key={item.id} className="timeline-event">
+                      <div className="timeline-event__dot-col">
+                        <div className="timeline-event__dot" />
+                        {!isLast && <div className="timeline-event__connector" />}
+                      </div>
+                      <div className="timeline-event__content">
+                        <h4 className="timeline-event__title">{item.titulo}</h4>
+                        {item.categoria && <span className="timeline-event__badge">{item.categoria}</span>}
+                        {item.descripcion && <p className="timeline-event__desc">{item.descripcion}</p>}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );
