@@ -7,18 +7,12 @@ export default defineConfig({
   server: {
     allowedHosts: true,
   },
-  resolve: {
-    alias: {
-      react: 'react',
-    },
-  },
   build: {
     rollupOptions: {
       output: {
         manualChunks: {
           'vendor': ['react', 'react-dom', 'react-router-dom'],
           'supabase': ['@supabase/supabase-js'],
-          'ui': ['react-icons'],
           'animation': ['gsap', 'animate.css'],
         },
       },

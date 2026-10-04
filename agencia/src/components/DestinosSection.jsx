@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { FaWhatsappSquare } from 'react-icons/fa';
 import TourCard from './TourCard';
 import { fetchCategories, fetchProductsByCategory, supabase } from '../backend/supabase_client';
 import { getSupabaseImageUrl } from '../utils/imageHelper';
@@ -114,7 +113,7 @@ const DestinosSection = () => {
         className="whatsapp-float"
         aria-label="Contactar por WhatsApp"
       >
-        <FaWhatsappSquare size={30} />
+        <i className="bi bi-whatsapp" aria-hidden="true"></i>
       </a>
     </>
   );

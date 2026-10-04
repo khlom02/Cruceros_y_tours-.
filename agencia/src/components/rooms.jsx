@@ -1,6 +1,5 @@
 import "../styles/rooms.css";
 import { useMemo, memo } from "react";
-import PropTypes from "prop-types";
 import railEuropa from "../imagenes/rail_europa.png";
 import renfeLogo from "../imagenes/Renfe.png";
 import budgetLogo from "../imagenes/Budget.png";
@@ -250,32 +249,6 @@ const Rooms = ({ serviceType = "", rooms = [], title = "", subtitle = "" }) => {
             </section>
         </div>
     );
-};
-
-// ─── PropTypes ───────────────────────────────────────────────────────────────
-const roomShape = PropTypes.shape({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    title: PropTypes.string,
-    imageUrl: PropTypes.string,
-    features: PropTypes.arrayOf(PropTypes.string),
-    isBrand: PropTypes.bool,
-    description: PropTypes.string,
-    price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-});
-
-BrandCard.propTypes = {
-    room: roomShape.isRequired,
-};
-
-ProductRoomCard.propTypes = {
-    room: roomShape.isRequired,
-};
-
-Rooms.propTypes = {
-    serviceType: PropTypes.string,
-    rooms: PropTypes.array,
-    title: PropTypes.string,
-    subtitle: PropTypes.string,
 };
 
 export default Rooms;

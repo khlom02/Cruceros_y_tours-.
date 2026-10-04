@@ -22,7 +22,7 @@ const normalizeDetalle = (data) => {
     const mainImage = data.imagen || data.imagen_url;
     const gallery = mainImage
       ? [mainImage, ...dbGallery]
-      : dbGallery;
+      : dbGallery; 
 
     return {
         id: data.id,

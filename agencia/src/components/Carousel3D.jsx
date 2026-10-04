@@ -20,13 +20,10 @@ const getCarouselConfig = (w) => {
   return { cardW, cardH, xSpacing, containerH };
 };
 
-const Carousel3D = ({ destinations = [], onModalChange }) => {
-  const [currentIndex, setCurrentIndex] = useState(() => {
-  const videoIndex = destinations.findIndex(
-    (dest) => dest.img === "/imagenes/serenade.mp4"
+const Carousel3D = ({ destinations = [], onModalChange, showCTA = true, title, subtitle }) => {
+  const [currentIndex, setCurrentIndex] = useState(() =>
+    Math.floor(destinations.length / 2)
   );
-  return videoIndex >= 0 ? videoIndex : 0;
-});
   const [isAnimating, setIsAnimating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
@@ -303,9 +300,17 @@ const Carousel3D = ({ destinations = [], onModalChange }) => {
   return (
     // overflow-x:hidden previene scroll horizontal sin cortar las cards verticalmente
     <div style={{ overflowX: "hidden", width: "100%" }}>
-    <div
-      style={{
-        perspective: "2000px",
+      {(title || subtitle) && (
+        <header className="carousel3d-header">
+          {title && <h2 className="carousel3d-title">{title}</h2>}
+          {subtitle && (
+            <p className="carousel3d-subtitle">{subtitle}</p>
+          )}
+        </header>
+      )}
+      <div
+        style={{
+          perspective: "2000px",
         height: `${containerH}px`,
         display: "flex",
         alignItems: "center",
@@ -885,57 +890,59 @@ const Carousel3D = ({ destinations = [], onModalChange }) => {
       )}
     </div>
 
-    {/* Indicadores — fuera del contexto 3D para evitar solapamiento */}
-    <div
-      className={`carousel3d-indicators ${isModalOpen ? "is-hidden" : ""}`}
-    >
-      <div className="carousel3d-indicator-row">
-        {destinations.map((_, index) => (
+    {showCTA && (
+      // Indicadores — fuera del contexto 3D para evitar solapamiento
+      <div
+        className={`carousel3d-indicators ${isModalOpen ? "is-hidden" : ""}`}
+      >
+        <div className="carousel3d-indicator-row">
+          {destinations.map((_, index) => (
+            <button
+              key={index}
+              className={`carousel3d-indicator ${
+                currentIndex === index ? "is-active" : ""
+              }`}
+              onClick={() => {
+                if (index !== currentIndex && !isAnimating) {
+                  setCurrentIndex(index);
+                }
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="carousel3d-cta text-center">
           <button
-            key={index}
-            className={`carousel3d-indicator ${
-              currentIndex === index ? "is-active" : ""
-            }`}
-            onClick={() => {
-              if (index !== currentIndex && !isAnimating) {
-                setCurrentIndex(index);
-              }
+            className="carousel3d-cta-button"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-5px) scale(1.05)";
+              e.currentTarget.style.boxShadow = "0 15px 40px rgba(0, 119, 182, 0.5)";
             }}
-          />
-        ))}
-      </div>
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0) scale(1)";
+              e.currentTarget.style.boxShadow = "0 8px 25px rgba(0, 119, 182, 0.35)";
+            }}
+          >
+            🌴 Reserva tu Aventura
+          </button>
 
-      <div className="carousel3d-cta text-center">
-        <button
-          className="carousel3d-cta-button"
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "translateY(-5px) scale(1.05)";
-            e.currentTarget.style.boxShadow = "0 15px 40px rgba(0, 119, 182, 0.5)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "translateY(0) scale(1)";
-            e.currentTarget.style.boxShadow = "0 8px 25px rgba(0, 119, 182, 0.35)";
-          }}
-        >
-          🌴 Reserva tu Aventura
-        </button>
-
-        <div className="carousel3d-perks">
-          <div className="carousel3d-perk">
-            <span className="carousel3d-perk-icon">✓</span>
-            <span>Cancelación gratuita</span>
-          </div>
-          <div className="carousel3d-perk">
-            <span className="carousel3d-perk-icon">✓</span>
-            <span>Pago seguro</span>
-          </div>
-          <div className="carousel3d-perk">
-            <span className="carousel3d-perk-icon">✓</span>
-            <span>Mejor precio garantizado</span>
+          <div className="carousel3d-perks">
+            <div className="carousel3d-perk">
+              <span className="carousel3d-perk-icon">✓</span>
+              <span>Cancelación gratuita</span>
+            </div>
+            <div className="carousel3d-perk">
+              <span className="carousel3d-perk-icon">✓</span>
+              <span>Pago seguro</span>
+            </div>
+            <div className="carousel3d-perk">
+              <span className="carousel3d-perk-icon">✓</span>
+              <span>Mejor precio garantizado</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    )}
 
     </div>
   );

@@ -17,6 +17,9 @@ import {
   insertAlojamiento,
   updateAlojamiento,
   deleteAlojamiento,
+  fetchAlojamientoImagenes,
+  insertAlojamientoImagen,
+  deleteAlojamientoImagen,
 } from "../backend/supabase_client";
 import AlojamientoCard from "./AlojamientoCard";
 
@@ -57,6 +60,21 @@ const emptyAlojamiento = {
   categoria: "",
   tipo_habitacion: "",
   enlace_externo: "",
+  descripcion: "",
+  direccion: "",
+  latitud: "",
+  longitud: "",
+  texto_venta: "",
+  servicios_incluidos: [],
+  tarifa_incluye: [],
+  tipos_habitacion: [],
+  galerias: {
+    hotel: [],
+    habitacion: [],
+    comida: [],
+    servicio: [],
+  },
+  galeriasToDelete: [],
 };
 
 const emptyEditFields = {
@@ -306,7 +324,28 @@ const AdminPanel = () => {
       const isDestino = cat && (cat.nombre.toLowerCase().includes("destinos nacionales") || cat.nombre.toLowerCase().includes("destinos internacionales"));
       if (isDestino) {
         const aloj = await fetchAlojamientosByProducto(productId);
-        setAlojamientos((aloj || []).map((a) => ({ ...a, imagenFile: null, previewUrl: "" })));
+        const alojConImagenes = await Promise.all(
+          (aloj || []).map(async (a) => {
+            const imagenes = await fetchAlojamientoImagenes(a.id);
+            const galerias = { hotel: [], habitacion: [], comida: [], servicio: [] };
+            imagenes.forEach((img) => {
+              if (galerias[img.tipo]) {
+                galerias[img.tipo].push({ ...img, file: null, previewUrl: "" });
+              }
+            });
+            return {
+              ...a,
+              imagenFile: null,
+              previewUrl: "",
+              servicios_incluidos: Array.isArray(a.servicios_incluidos) ? a.servicios_incluidos : [],
+              tarifa_incluye: Array.isArray(a.tarifa_incluye) ? a.tarifa_incluye : [],
+              tipos_habitacion: Array.isArray(a.tipos_habitacion) ? a.tipos_habitacion : [],
+              galerias,
+              galeriasToDelete: [],
+            };
+          })
+        );
+        setAlojamientos(alojConImagenes);
       }
     } catch (err) {
       setError("Error al cargar el producto para edicion.");
@@ -452,12 +491,55 @@ const AdminPanel = () => {
             categoria: a.categoria || null,
             tipo_habitacion: a.tipo_habitacion || null,
             enlace_externo: a.enlace_externo || null,
+            descripcion: a.descripcion || null,
+            direccion: a.direccion || null,
+            latitud: a.latitud ? parseNumber(a.latitud) : null,
+            longitud: a.longitud ? parseNumber(a.longitud) : null,
+            texto_venta: a.texto_venta || null,
+            servicios_incluidos: Array.isArray(a.servicios_incluidos)
+              ? a.servicios_incluidos.filter((s) => typeof s === "string" && s.trim())
+              : [],
+            tarifa_incluye: Array.isArray(a.tarifa_incluye)
+              ? a.tarifa_incluye.filter((s) => typeof s === "string" && s.trim())
+              : [],
+            tipos_habitacion: Array.isArray(a.tipos_habitacion)
+              ? a.tipos_habitacion.filter((s) => typeof s === "string" && s.trim())
+              : [],
             posicion_orden: i,
           };
+
+          let alojamientoId = a.id;
           if (a.id) {
             await updateAlojamiento(a.id, payload);
           } else {
-            await insertAlojamiento(payload);
+            const nuevo = await insertAlojamiento(payload);
+            if (nuevo?.id) alojamientoId = nuevo.id;
+          }
+
+          if (!alojamientoId) continue;
+
+          // Eliminar imágenes marcadas para borrar
+          for (const id of (a.galeriasToDelete || [])) {
+            await deleteAlojamientoImagen(id);
+          }
+
+          // Subir nuevas imágenes de cada galería
+          const tipos = ["hotel", "habitacion", "comida", "servicio"];
+          for (const tipo of tipos) {
+            const imagenes = a.galerias?.[tipo] || [];
+            for (let j = 0; j < imagenes.length; j++) {
+              const img = imagenes[j];
+              if (img.file) {
+                const url = await uploadFile(img.file, `productos/alojamientos/${tipo}`);
+                await insertAlojamientoImagen({
+                  alojamiento_id: alojamientoId,
+                  tipo,
+                  imagen_url: url,
+                  titulo: img.titulo || `${tipo} ${j + 1}`,
+                  posicion_orden: j,
+                });
+              }
+            }
           }
         }
       }
@@ -594,6 +676,71 @@ const AdminPanel = () => {
       [newArr[index], newArr[target]] = [newArr[target], newArr[index]];
       return newArr;
     });
+  };
+
+  const handleAlojamientoArrayChange = (index, field, arrayIndex, value) => {
+    setAlojamientos((prev) =>
+      prev.map((item, i) => {
+        if (i !== index) return item;
+        const arr = [...(item[field] || [])];
+        arr[arrayIndex] = value;
+        return { ...item, [field]: arr };
+      })
+    );
+  };
+
+  const addAlojamientoArrayItem = (index, field) => {
+    setAlojamientos((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, [field]: [...(item[field] || []), ""] } : item
+      )
+    );
+  };
+
+  const removeAlojamientoArrayItem = (index, field, arrayIndex) => {
+    setAlojamientos((prev) =>
+      prev.map((item, i) =>
+        i === index
+          ? {
+              ...item,
+              [field]: (item[field] || []).filter((_, j) => j !== arrayIndex),
+            }
+          : item
+      )
+    );
+  };
+
+  const handleAlojamientoGaleriaImage = (index, tipo, file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setAlojamientos((prev) =>
+        prev.map((item, i) => {
+          if (i !== index) return item;
+          const galerias = { ...item.galerias };
+          galerias[tipo] = [
+            ...(galerias[tipo] || []),
+            { file, previewUrl: e.target.result, titulo: "" },
+          ];
+          return { ...item, galerias };
+        })
+      );
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removeAlojamientoGaleriaImage = (index, tipo, imgIndex, imgId) => {
+    setAlojamientos((prev) =>
+      prev.map((item, i) => {
+        if (i !== index) return item;
+        const galerias = { ...item.galerias };
+        galerias[tipo] = (galerias[tipo] || []).filter((_, j) => j !== imgIndex);
+        const galeriasToDelete = imgId
+          ? [...(item.galeriasToDelete || []), imgId]
+          : item.galeriasToDelete || [];
+        return { ...item, galerias, galeriasToDelete };
+      })
+    );
   };
 
   const productosFiltrados = useMemo(() => {
@@ -927,13 +1074,110 @@ const AdminPanel = () => {
                                   <input type="url" value={item.enlace_externo} onChange={(e) => handleAlojamientoChange(idx, "enlace_externo", e.target.value)} placeholder="https://..." />
                                 </label>
                                 <label style={{ gridColumn: "1 / -1" }}>
-                                  Imagen
+                                  Imagen principal
                                   <input type="file" accept="image/*" onChange={(e) => {
                                     const file = e.target.files[0];
                                     if (file) handleAlojamientoImage(idx, file);
                                   }} />
                                 </label>
+                                <label style={{ gridColumn: "1 / -1" }}>
+                                  Direccion
+                                  <input type="text" value={item.direccion || ""} onChange={(e) => handleAlojamientoChange(idx, "direccion", e.target.value)} placeholder="ej: Av. Principal 123, Miami" />
+                                </label>
+                                <label>
+                                  Latitud
+                                  <input type="number" step="any" value={item.latitud || ""} onChange={(e) => handleAlojamientoChange(idx, "latitud", e.target.value)} placeholder="ej: 25.7617" />
+                                </label>
+                                <label>
+                                  Longitud
+                                  <input type="number" step="any" value={item.longitud || ""} onChange={(e) => handleAlojamientoChange(idx, "longitud", e.target.value)} placeholder="ej: -80.1918" />
+                                </label>
+                                <label style={{ gridColumn: "1 / -1" }}>
+                                  Texto de venta
+                                  <textarea rows={2} value={item.texto_venta || ""} onChange={(e) => handleAlojamientoChange(idx, "texto_venta", e.target.value)} placeholder="Frase corta para convencer al cliente..." />
+                                </label>
+                                <label style={{ gridColumn: "1 / -1" }}>
+                                  Descripcion
+                                  <textarea rows={3} value={item.descripcion || ""} onChange={(e) => handleAlojamientoChange(idx, "descripcion", e.target.value)} placeholder="Descripcion detallada del alojamiento..." />
+                                </label>
                               </div>
+
+                              {/* Arrays editables */}
+                              <div className="admin-alojamiento-array-section">
+                                <span className="admin-alojamiento-array-label">Tipos de habitacion</span>
+                                {(item.tipos_habitacion || []).map((val, i) => (
+                                  <div key={i} className="admin-alojamiento-array-row">
+                                    <input type="text" value={val} onChange={(e) => handleAlojamientoArrayChange(idx, "tipos_habitacion", i, e.target.value)} placeholder="ej: Superior" />
+                                    <button type="button" className="admin-btn-delete" onClick={() => removeAlojamientoArrayItem(idx, "tipos_habitacion", i)}>✕</button>
+                                  </div>
+                                ))}
+                                <button type="button" className="admin-add-small" onClick={() => addAlojamientoArrayItem(idx, "tipos_habitacion")}>+ Agregar tipo</button>
+                              </div>
+
+                              <div className="admin-alojamiento-array-section">
+                                <span className="admin-alojamiento-array-label">Tarifa incluye</span>
+                                {(item.tarifa_incluye || []).map((val, i) => (
+                                  <div key={i} className="admin-alojamiento-array-row">
+                                    <input type="text" value={val} onChange={(e) => handleAlojamientoArrayChange(idx, "tarifa_incluye", i, e.target.value)} placeholder="ej: Desayuno incluido" />
+                                    <button type="button" className="admin-btn-delete" onClick={() => removeAlojamientoArrayItem(idx, "tarifa_incluye", i)}>✕</button>
+                                  </div>
+                                ))}
+                                <button type="button" className="admin-add-small" onClick={() => addAlojamientoArrayItem(idx, "tarifa_incluye")}>+ Agregar item</button>
+                              </div>
+
+                              <div className="admin-alojamiento-array-section">
+                                <span className="admin-alojamiento-array-label">Servicios incluidos (solo texto)</span>
+                                {(item.servicios_incluidos || []).map((val, i) => (
+                                  <div key={i} className="admin-alojamiento-array-row">
+                                    <input type="text" value={val} onChange={(e) => handleAlojamientoArrayChange(idx, "servicios_incluidos", i, e.target.value)} placeholder="ej: WiFi" />
+                                    <button type="button" className="admin-btn-delete" onClick={() => removeAlojamientoArrayItem(idx, "servicios_incluidos", i)}>✕</button>
+                                  </div>
+                                ))}
+                                <button type="button" className="admin-add-small" onClick={() => addAlojamientoArrayItem(idx, "servicios_incluidos")}>+ Agregar servicio</button>
+                              </div>
+
+                              {/* Galerías por tipo */}
+                              {[
+                                { key: "hotel", label: "Hotel" },
+                                { key: "habitacion", label: "Habitaciones" },
+                                { key: "comida", label: "Comida" },
+                                { key: "servicio", label: "Servicios" },
+                              ].map(({ key, label }) => (
+                                <div key={key} className="admin-alojamiento-gallery">
+                                  <span className="admin-alojamiento-array-label">Imagenes de {label}</span>
+                                  <div className="admin-alojamiento-gallery-grid">
+                                    {(item.galerias?.[key] || []).map((img, imgIdx) => (
+                                      <div key={imgIdx} className="admin-alojamiento-gallery-thumb">
+                                        <img src={img.previewUrl || img.imagen_url} alt={img.titulo || label} />
+                                        <button
+                                          type="button"
+                                          className="admin-alojamiento-gallery-remove"
+                                          onClick={() => removeAlojamientoGaleriaImage(idx, key, imgIdx, img.id)}
+                                          title="Eliminar imagen"
+                                        >
+                                          ✕
+                                        </button>
+                                      </div>
+                                    ))}
+                                    <label className="admin-alojamiento-gallery-add">
+                                      <span>+</span>
+                                      <input
+                                        type="file"
+                                        accept="image/*"
+                                        multiple
+                                        onChange={(e) => {
+                                          Array.from(e.target.files || []).forEach((file) =>
+                                            handleAlojamientoGaleriaImage(idx, key, file)
+                                          );
+                                          e.target.value = "";
+                                        }}
+                                        style={{ display: "none" }}
+                                      />
+                                    </label>
+                                  </div>
+                                </div>
+                              ))}
+
                               {item.previewUrl && (
                                 <div className="admin-alojamiento-img-preview">
                                   <img src={item.previewUrl} alt="Preview" />

@@ -4,17 +4,38 @@ import { useAuth } from '../contexts/AuthContext';
 import SEO from './SEO.jsx';
 import "../styles/auth.css";
 
+const MAX_INTENTOS = 3;
+const BLOQUEO_MS = 5 * 60 * 1000;
+
+function traducirError(mensaje) {
+  if (!mensaje) return "Error desconocido.";
+  const m = mensaje.toLowerCase();
+  if (m.includes("already registered") || m.includes("already been registered"))
+    return "Este correo ya está registrado.";
+  if (m.includes("password should be at least"))
+    return "La contraseña debe tener al menos 8 caracteres.";
+  if (m.includes("email not confirmed"))
+    return "Debes confirmar tu correo antes de iniciar sesión.";
+  if (m.includes("too many requests") || m.includes("rate limit"))
+    return "Demasiados intentos. Espera unos minutos e intenta de nuevo.";
+  if (m.includes("network") || m.includes("fetch"))
+    return "Error de conexión. Verifica tu internet.";
+  return mensaje;
+}
+
 function nivelFortaleza(password) {
-  if (password.length < 6) return { nivel: 0, texto: "" };
+  if (password.length < 8) return { nivel: 0, texto: "" };
   let puntos = 0;
-  if (password.length >= 8) puntos++;
+  if (password.length >= 12) puntos++;
   if (/[A-Z]/.test(password)) puntos++;
   if (/[0-9]/.test(password)) puntos++;
   if (/[^A-Za-z0-9]/.test(password)) puntos++;
-  if (puntos <= 1) return { nivel: 1, texto: "Débil", color: "#dc3545" };
-  if (puntos === 2) return { nivel: 2, texto: "Media", color: "#fd7e14" };
-  return { nivel: 3, texto: "Fuerte", color: "#198754" };
+  if (puntos <= 1) return { nivel: 1, texto: "Débil", color: "var(--bs-danger)" };
+  if (puntos === 2) return { nivel: 2, texto: "Media", color: "var(--bs-warning)" };
+  return { nivel: 3, texto: "Fuerte", color: "var(--bs-success)" };
 }
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -23,26 +44,57 @@ const Register = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [registroBloqueado, setRegistroBloqueado] = useState(false);
+  const [bloqueadoHasta, setBloqueadoHasta] = useState(null);
+  const [tiempoRestante, setTiempoRestante] = useState(0);
   const { signUp, signInWithOAuth, user } = useAuth();
   const navigate = useNavigate();
   const fortaleza = nivelFortaleza(password);
   const emailRef = useRef(null);
+  const timerRef = useRef(null);
+  const successTimerRef = useRef(null);
 
   useEffect(() => {
     if (user) navigate("/");
   }, [user, navigate]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timerRef.current);
+      clearTimeout(successTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!bloqueadoHasta) return;
+    timerRef.current = setInterval(() => {
+      const restante = Math.ceil((bloqueadoHasta - Date.now()) / 1000);
+      if (restante <= 0) {
+        clearInterval(timerRef.current);
+        setBloqueadoHasta(null);
+        setTiempoRestante(0);
+      } else {
+        setTiempoRestante(restante);
+      }
+    }, 1000);
+    return () => clearInterval(timerRef.current);
+  }, [bloqueadoHasta]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(false);
 
-    if (registroBloqueado) {
-      setError("Demasiados intentos. Espera unos minutos.");
+    if (tiempoRestante > 0) return;
+
+    if (!email.trim()) {
+      setError("Ingresa tu correo electrónico.");
       return;
     }
-
+    if (!EMAIL_REGEX.test(email.trim())) {
+      setError("Ingresa un correo electrónico válido.");
+      if (emailRef.current) emailRef.current.focus();
+      return;
+    }
     if (password.length < 8) {
       setError("La contraseña debe tener al menos 8 caracteres.");
       return;
@@ -52,27 +104,25 @@ const Register = () => {
       return;
     }
 
-    const intentos = parseInt(sessionStorage.getItem("reg_intentos") || "0", 10);
-    if (intentos >= 3) {
-      setRegistroBloqueado(true);
-      setError("Demasiados intentos. Espera 5 minutos.");
-      setTimeout(() => { setRegistroBloqueado(false); sessionStorage.setItem("reg_intentos", "0"); }, 300_000);
-      return;
-    }
-
     setLoading(true);
-    const trimmedEmail = email.trim();
-    const { error } = await signUp(trimmedEmail, password);
-
+    const { error } = await signUp(email.trim(), password);
     setLoading(false);
 
     if (error) {
-      sessionStorage.setItem("reg_intentos", String(intentos + 1));
-      setError(error.message);
+      const nuevosIntentos = parseInt(sessionStorage.getItem("reg_intentos") || "0", 10) + 1;
+      sessionStorage.setItem("reg_intentos", String(nuevosIntentos));
+      if (nuevosIntentos >= MAX_INTENTOS) {
+        setBloqueadoHasta(Date.now() + BLOQUEO_MS);
+        sessionStorage.removeItem("reg_intentos");
+        setError("Demasiados intentos. Espera 5 minutos.");
+      } else {
+        setError(`${traducirError(error.message)} (${nuevosIntentos}/${MAX_INTENTOS} intentos)`);
+      }
+      if (emailRef.current) emailRef.current.focus();
     } else {
       sessionStorage.removeItem("reg_intentos");
       setSuccess(true);
-      setTimeout(() => navigate("/"), 3000);
+      successTimerRef.current = setTimeout(() => navigate("/"), 3000);
     }
   };
 
@@ -81,7 +131,7 @@ const Register = () => {
     setLoading(true);
     const { error } = await signInWithOAuth(provider);
     if (error) {
-      setError(error.message);
+      setError(traducirError(error.message));
       setLoading(false);
     }
   };
@@ -105,7 +155,7 @@ const Register = () => {
           <div className="col-md-6">
             <div className="card shadow-lg auth-card">
               <div className="card-body p-4 auth-card__body">
-                <h1 className="card-title text-center mb-4 auth-title" style={{fontSize:'1.5rem'}}>Crear Cuenta</h1>
+                <h1 className="card-title text-center mb-4 auth-title">Crear Cuenta</h1>
               <form onSubmit={handleRegister} noValidate>
                 <div className="mb-3">
                   <label htmlFor={regEmailId} className="form-label fw-semibold auth-label">
@@ -115,6 +165,9 @@ const Register = () => {
                     ref={emailRef}
                     type="email"
                     id={regEmailId}
+                    name="reg-email"
+                    autoCapitalize="none"
+                    autoCorrect="off"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -132,6 +185,9 @@ const Register = () => {
                   <input
                     type="password"
                     id={regPasswordId}
+                    name="reg-password"
+                    autoCapitalize="none"
+                    autoCorrect="off"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -150,7 +206,7 @@ const Register = () => {
                       <div style={{
                         height: "4px",
                         borderRadius: "2px",
-                        background: "#e9ecef",
+                        background: "var(--color-background-light)",
                         overflow: "hidden",
                       }}>
                         <div style={{
@@ -171,6 +227,9 @@ const Register = () => {
                   <input
                     type="password"
                     id={regConfirmId}
+                    name="reg-confirm"
+                    autoCapitalize="none"
+                    autoCorrect="off"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
@@ -186,6 +245,7 @@ const Register = () => {
                 {error && (
                   <p id={regErrorId} className="text-danger mb-3" role="alert" aria-live="assertive">
                     {error}
+                    {tiempoRestante > 0 && ` Tiempo restante: ${tiempoRestante}s`}
                   </p>
                 )}
                 {success && (
@@ -198,9 +258,13 @@ const Register = () => {
                   <button
                     type="submit"
                     className="btn rounded-pill auth-btn-primary"
-                    disabled={loading || registroBloqueado}
+                    disabled={loading || tiempoRestante > 0}
                   >
-                    {loading ? "Registrando..." : "Registrarse"}
+                    {tiempoRestante > 0
+                      ? `Bloqueado (${tiempoRestante}s)`
+                      : loading
+                      ? "Registrando..."
+                      : "Registrarse"}
                   </button>
                 </div>
               </form>
@@ -211,6 +275,7 @@ const Register = () => {
 
               <div className="d-grid gap-2">
                 <button
+                  type="button"
                   onClick={() => handleOAuth("google")}
                   className="btn rounded-pill auth-btn-outline auth-btn-google"
                   disabled={loading}
@@ -219,6 +284,7 @@ const Register = () => {
                   {loading ? "Conectando..." : "Continuar con Google"}
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleOAuth("facebook")}
                   className="btn rounded-pill auth-btn-outline auth-btn-facebook"
                   disabled={loading}

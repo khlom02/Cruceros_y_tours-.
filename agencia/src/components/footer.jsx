@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import '../styles/footer.css';
 import { Link } from 'react-router-dom';
-import { FaInstagramSquare } from "react-icons/fa";
-import { FaWhatsappSquare } from "react-icons/fa";
-import { BiLogoGmail } from "react-icons/bi";
 import { subscribeNewsletter } from "../backend/supabase_client";
 import { getSupabaseImageUrl } from "../utils/imageHelper";
 
@@ -35,14 +32,14 @@ const Footer = React.memo(() => {
             />
           </Link>
           <section className="socials_media">
-            <a href="https://instagram.com/crucerosytours" target="_blank" rel="noopener noreferrer">
-              <FaInstagramSquare className="icon-instagram" size={50}/>
+            <a href="https://instagram.com/crucerosytours" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <i className="bi bi-instagram icon-instagram" aria-hidden="true"></i>
             </a>
-            <a href="https://wa.me/584142783669?text=Hola,%20quiero%20información%20sobre%20un%20viaje" target="_blank" rel="noopener noreferrer">
-              <FaWhatsappSquare className="icon-whatsapp" size={50}/>
+            <a href="https://wa.me/584142783669?text=Hola,%20quiero%20información%20sobre%20un%20viaje" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+              <i className="bi bi-whatsapp icon-whatsapp" aria-hidden="true"></i>
             </a>
-            <a href="mailto:crucerosytoursagencia@gmail.com">
-              <BiLogoGmail className="icon-gmail" size={50}/>
+            <a href="mailto:crucerosytoursagencia@gmail.com" aria-label="Correo">
+              <i className="bi bi-envelope icon-gmail" aria-hidden="true"></i>
             </a>
           </section>
         </div>

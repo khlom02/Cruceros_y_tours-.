@@ -1,293 +1,42 @@
-/* ====================================================================== */
-/* ⚠️ ESTE ARCHIVO HA SIDO REFACTORIZADO */
-/* ====================================================================== */
-
-/*
-  NOTA IMPORTANTE:
-  
-  Los estilos de este archivo han sido organizados en archivos separados
-  dentro de la carpeta src/styles/ para mejor organización y mantenimiento.
-  
-  Estructura nueva:
-  - src/styles/variables.css  → Variables CSS globales
-  - src/styles/base.css        → Estilos base y utilidades
-  - src/styles/header.css      → Estilos del header
-  - src/styles/footer.css      → Estilos del footer
-  - src/styles/landing.css     → Estilos de landing page
-  - src/styles/productos.css   → Estilos de productos
-  - src/styles/pagos.css       → Estilos de pagos
-  - src/styles/contacto.css    → Estilos de contacto
-  - src/styles/cart.css        → Estilos del carrito
-
-
-/* ========== LANDING PAGE ========== */
-.landing_page {
-  background: #ffffff;
-  min-height: 100vh;
-}
-
-.texto_landing_page h1 {
-  font-family: 'Chicago Police', sans-serif;
-}
-
-.texto_landing_page p {
-  font-family: 'Photogenic', cursive;
-}
-
-/* ========== PRODUCTOS ========== */
-.imagen_header_productos {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 15px;
-  box-shadow: var(--shadow-lg);
-}
-
-#breadcrumb-inicio,
-#breadcrumb-productos {
-  text-decoration: none;
-  color: var(--color-primary);
-  transition: color 0.3s ease;
-}
-
-#breadcrumb-inicio:hover,
-#breadcrumb-productos:hover {
-  color: var(--color-primary-dark);
-}
-
-.producto-card {
-  transition: all 0.3s ease;
-  cursor: pointer;
-  border: none;
-  overflow: hidden;
-}
-
-.producto-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
-}
-
-.producto-card img {
-  transition: transform 0.4s ease;
-}
-
-.producto-card:hover img {
-  transform: scale(1.1);
-}
-
-.marca_producto {
-  color: var(--color-accent);
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* ========== DETALLES PRODUCTO ========== */
-.galeria-container {
-  position: relative;
-}
-
-.miniaturas {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.miniaturas img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 8px;
-  cursor: pointer;
-  opacity: 0.6;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-}
-
-.miniaturas img:hover {
-  opacity: 1;
-  transform: scale(1.05);
-}
-
-.miniaturas img.activa {
-  opacity: 1;
-  border-color: var(--color-primary);
-}
-
-.precio-detalles {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--color-primary);
-}
-
-.btn_ir_a_productos {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  border: none;
-  color: white;
-  padding: 12px 30px;
-  border-radius: 25px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn_ir_a_productos:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
-
-/* ========== PAGOS ========== */
-.pagos {
-  min-height: 100vh;
-  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
-}
-
-.datos-envio-card,
-.resumen-pedido-card {
-  background: white;
-  border-radius: 15px;
-  padding: 2rem;
-  box-shadow: var(--shadow-md);
-}
-
-.producto-resumen {
+/* FloatingCTA — definido en App.jsx */
+.floating-cta {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: var(--color-background-light);
-  border-radius: 10px;
-  margin-bottom: 1rem;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 50px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-family: "Chicago Police", sans-serif;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--shadow-lg);
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.producto-resumen img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 8px;
+.floating-cta:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  color: #ffffff;
 }
 
-.price {
-  color: var(--color-primary);
-  font-weight: 700;
+.floating-cta__icon {
   font-size: 1.2rem;
 }
 
-.divider-line {
-  border: none;
-  border-top: 2px solid var(--color-background-light);
-  margin: 1.5rem 0;
-}
-
-/* ========== TOP VENTAS ========== */
-.top-ventas-container {
-  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
-}
-
-.btn_top_ventas {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  border: none;
-  color: white;
-  padding: 10px 25px;
-  border-radius: 25px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn_top_ventas:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
-
-/* ========== PROMOCIONES ========== */
-.promociones {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  color: white;
-  padding: 3rem 0;
-  margin: 4rem 0;
-  border-radius: 20px;
-  text-align: center;
-}
-
-/* ========== UTILIDADES ========== */
-.ml-2 {
-  margin-left: 0.5rem;
-}
-
-.re {
-  position: relative;
-}
-
-/* ========== MEDIA QUERIES ========== */
 @media (max-width: 768px) {
-  .logo-social {
-    font-size: 1.5rem;
-    margin-right: 0;
-    align-items: center;
-    text-align: center;
-    width: 100%;
-  }
-  
-  .kamima_store {
+  .floating-cta {
+    bottom: 16px;
+    right: 16px;
+    padding: 10px 16px;
     font-size: 0.9rem;
   }
-  
-  .social-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 1.1rem;
-  }
-  
-  .newsletter-input,
-  .subscribe-form {
-    flex-direction: column;
-  }
-  
-  .newsletter-input button,
-  .subscribe-button {
-    width: 100%;
-  }
-  
-  .imagen_header_productos {
-    height: 250px;
-  }
-  
-  .precio-detalles {
-    font-size: 2rem;
-  }
-  
-  .footer {
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 30px;
-  }
 
-  .footer-section {
-    margin-right: 0;
-    margin-bottom: 40px;
-    text-align: center;
-    width: 100%;
-  }
-}
-
-@media (max-width: 576px) {
-  .footer-top,
-  .footer-middle {
-    padding: 2rem 0;
-  }
-  
-  .help-links,
-  .other-links,
-  .newsletter {
-    margin-bottom: 2rem;
-  }
-  
-  @media (max-width: 600px) {
-    .rectangulo {
-      padding: 15px;
-    }
-    .texto {
-      font-size: 1rem;
-    }
+  .floating-cta__label {
+    display: none;
   }
 }

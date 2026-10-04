@@ -4,7 +4,7 @@ import './styles/base.css';
 import 'animate.css';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { useAuth, AuthProvider } from "./contexts/AuthContext.jsx";
 import ResetPassword from './components/ResetPassword.jsx';
 import Header from './components/header.jsx';
@@ -20,7 +20,6 @@ import Cruceros from "./components/Cruceros.jsx";
 import ServiciosEspeciales from "./components/servicios_especiales.jsx";
 import ServicioCategoria from "./components/ServicioCategoria.jsx";
 import Vuelos from "./components/vuelos.jsx";
-import AdminPanel from "./components/AdminPanel.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
 import Perfil from "./components/Perfil.jsx";
 import FAQ from "./components/FAQ.jsx";
@@ -30,6 +29,10 @@ import Suscripciones from "./components/Suscripciones.jsx";
 import SobreNosotros from "./components/SobreNosotros.jsx";
 import NotFound from "./components/NotFound.jsx";
 import AutoLogout from "./components/AutoLogout.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
+import { SpeedInsights } from "@vercel/speed-insights/react";
+
+const AdminPanel = lazy(() => import("./components/AdminPanel.jsx"));
 
 const FloatingCTA = () => {
   const location = useLocation();
@@ -61,6 +64,8 @@ export default function App() {
     <HelmetProvider>
     <AuthProvider>
         <Router>
+          <ScrollToTop />
+          <SpeedInsights />
           <RecoveryGuard />
           <AutoLogout />
           <Header />
@@ -119,7 +124,15 @@ export default function App() {
               path="/admin"
               element={
                 <AdminRoute>
-                  <AdminPanel />
+                  <Suspense
+                    fallback={
+                      <div className="d-flex justify-content-center py-5">
+                        <div className="spinner-border" style={{ color: "var(--color-primary)" }} role="status" aria-label="Cargando panel" />
+                      </div>
+                    }
+                  >
+                    <AdminPanel />
+                  </Suspense>
                 </AdminRoute>
               }
             />

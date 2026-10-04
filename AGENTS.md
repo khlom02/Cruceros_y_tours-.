@@ -45,7 +45,7 @@ Cruceros_y_tours-./
 ├── CLAUDE.md                    # Redirige a AGENTS.md
 └── agencia/                     # ★ Aplicación principal
     ├── vercel.json              # Config Vercel (IMPORTANTE: dentro de agencia/, no raíz del repo)
-    ├── .env                     # VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY
+    ├── .env                     # VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY + VITE_TURNSTILE_SITE_KEY
     ├── package.json
     ├── vite.config.js           # SWC + code-splitting chunks
     ├── eslint.config.js
@@ -61,13 +61,12 @@ Cruceros_y_tours-./
         ├── main.jsx             # Punto de entrada React
         ├── App.jsx              # Componente raíz (rutas + providers)
         ├── backend/
-        │   ├── supabase_client.js   # TODAS las consultas Supabase
-        │   └── productService.js    # Legacy fetch service
+        │   └── supabase_client.js   # TODAS las consultas Supabase
         ├── contexts/
         │   └── AuthContext.jsx      # Context de autenticación
         ├── utils/
         │   └── imageHelper.js       # Resolución de URLs de imágenes
-        ├── components/              # 37 componentes React
+        ├── components/              # 49 componentes React
         ├── styles/                  # CSS por componente + globales
         └── imagenes/                # Assets locales
 ```
@@ -84,7 +83,7 @@ Cruceros_y_tours-./
 - `src/contexts/AuthContext.jsx` — Auth state de Supabase. Expone: `user`, `session`, `signIn`, `signUp`, `signInWithOAuth`, `signOut`, `getUserProfile`, `resetPasswordForEmail`, `updatePassword`
 
 ### Backend (Supabase)
-- **Todas** las consultas van en `src/backend/supabase_client.js` (único archivo monolítico ~768 líneas)
+- **Todas** las consultas van en `src/backend/supabase_client.js` (único archivo monolítico ~764 líneas)
 - Credenciales en `agencia/.env`: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
 - Proyecto Supabase ID: `krpdacuthwpoyuccbihf`
 - Tablas principales: `categorias`, `productos`, `detalles_cruceros`, `galleries`, `rooms`, `amenities`, `highlights`, `profiles`, `reservas`, `contactos`, `suscripciones`, `newsletter`
@@ -99,6 +98,7 @@ Cruceros_y_tours-./
 | `/servicios_especiales` | `servicios_especiales` |
 | `/servicios_especiales/:categoria` | `ServicioCategoria` (dinámico) |
 | `/detalles` | `detalles` (embebe `rooms.jsx`) |
+| `/detalles-alojamiento` | `DetallesAlojamiento` |
 | `/contacto` | `contacto` |
 | `/login`, `/registro`, `/reset-password` | Auth pages |
 | `/perfil` | `Perfil` |
@@ -218,6 +218,7 @@ Reglas:
 - **NO hardcodear** colores, spacings ni valores de estilo — usar variables CSS
 - **Código optimizado** para rendimiento y SEO
 - **Prohibido** tocar archivos fuera del alcance de la tarea actual SUMAMENTE IMPORTANTE
+- **Scroll al cambiar de ruta:** en SPA con React Router, siempre usar `ScrollToTop` dentro del `<Router>` para que cada navegación inicie desde el inicio de la página. Nunca dejar que el scroll de la página anterior persista al entrar a una nueva ruta.
 
 ---
 
@@ -323,3 +324,96 @@ La tarjeta `.airline-card` con `position: sticky` se solapaba con el header stic
 
 ### MCP tools
 cuando necesites buscar documentacion, usa 'context7' tools.
+
+---
+
+## Ponytail — control de over-engineering
+
+El proyecto tiene configurado el plugin **Ponytail** para OpenCode. Su objetivo es evitar over-engineering forzando al agente a:
+
+1. Preguntarse si algo necesita existir (YAGNI)
+2. Reutilizar código existente en el proyecto
+3. Preferir stdlib, plataforma nativa y dependencias ya instaladas
+4. Escribir el mínimo código necesario
+
+**Por defecto está APAGADO (`off`)** para que tú tengas el control total.
+
+### Activar / desactivar durante una sesión
+
+Usa el comando `/ponytail` seguido del nivel:
+
+| Comando | Efectivo |
+|---|---|
+| `/ponytail off` | Desactivado (por defecto) |
+| `/ponytail lite` | Activo, solo sugerencias suaves |
+| `/ponytail full` | Activo, reglas normales |
+| `/ponytail ultra` | Muy agresivo recortando complejidad |
+
+El cambio se aplica desde el siguiente mensaje.
+
+### Cambiar el modo por defecto
+
+Opción A — variable de entorno (prioridad alta):
+
+```bash
+export PONYTAIL_DEFAULT_MODE=full
+```
+
+Opción B — archivo de configuración global:
+
+Edita `~/.config/ponytail/config.json`:
+
+```json
+{
+  "defaultMode": "full"
+}
+```
+
+Valores válidos: `off`, `lite`, `full`, `ultra`.
+
+### Otros comandos útiles
+
+- `/ponytail` — muestra el modo activo
+- `/ponytail-review` — revisa el diff actual buscando over-engineering
+- `/ponytail-audit` — audita todo el repo buscando over-engineering
+
+### Instalación técnica
+
+El plugin se carga desde `opencode.json` apuntando a la ruta absoluta del checkout:
+
+```json
+"plugin": ["/home/khalom/.opencode/ponytail/.opencode/plugins/ponytail.mjs"]
+```
+
+El checkout vive en `/home/khalom/.opencode/ponytail` (clonado del repo oficial). Para actualizarlo:
+
+```bash
+cd /home/khalom/.opencode/ponytail && git pull
+```
+
+---
+
+## Cambios futuros pendientes
+
+> Registrado el 2026-10-04 tras auditoría Ponytail + revisión de registro.
+> Marcar como ✅ cuando se implemente.
+
+### Prioridad alta
+
+- [ ] **Turnstile captcha** — AGENTS.md declara `VITE_TURNSTILE_SITE_KEY` como variable requerida en Vercel, pero **0 archivos de `src/` la usan**. Integrar en los formularios sensibles (`registro.jsx`, `contacto.jsx`) usando `VITE_TURNSTILE_SITE_KEY` del `.env`. Sin esto, el rate limit es solo client-side (sessionStorage, evadible).
+- [ ] **Code-splitting por ruta** — `AdminPanel.jsx` (1641 líneas) se importa eager en `App.jsx` y viaja en el bundle principal (`index.js` ~495 kB). Usar `React.lazy` + `<Suspense>` al menos para `/admin`. Los `manualChunks` de `vite.config.js` solo aíslan vendor/supabase/ui/animation, no rutas.
+
+### Prioridad media
+
+- [ ] **Eliminar dependencias huérfanas**
+  - `prop-types`: un solo import en todo el repo (`rooms.jsx:3`). React 19 no lo necesita → `npm rm prop-types`.
+  - `react-icons`: 6 iconos en 3 archivos, pero `bootstrap-icons` ya se carga por CDN en `index.html:8`. Mapear: `FaWhatsappSquare`→`bi-whatsapp`, `FaInstagramSquare`→`bi-instagram`, `BiLogoGmail`→`bi-envelope`, `FaMapMarkerAlt`→`bi-geo-alt`, `FaMoon`→`bi-moon`, `FaTicketAlt`→`bi-ticket-perforated`. Desaparece también el chunk `ui` de `vite.config.js`.
+- [ ] **Actualizar `public/sitemap.xml`** — fecha `lastmod: 2026-06-06` y falta la ruta `/detalles-alojamiento` (0 coincidencias entre sus 14 URLs).
+- [ ] **AutoLogout.jsx: estilos inline** — 4 bloques `style={{...}}` con valores hardcodeados (`#fff3cd`, `#0FD3D3`, `#003366`, `Arial`). Mover a variables de `variables.css` o a un CSS propio según la regla "NO hardcodear".
+
+### Prioridad baja
+
+- [ ] **Cortes Ponytail opcionales** (ya confirmados, pendientes de decisión)
+  - `TimelineEvent.jsx` (15 l.) — un solo caller (`Timeline.jsx`), inline el JSX.
+  - `src/backend/seedCategories.js` (54 l.) — script "ejecutar una sola vez" dentro de `src/`, se auto-invoca al importar. Mover a `scripts/` (ya existe) o borrar: las 7 categorías ya están en la DB.
+- [ ] **Framework de tests** — AGENTS.md: "No hay framework de tests configurado". Candidato mínimo: Vitest (nativo de Vite) para lógica pura (`nivelFortaleza`, `traducirError`, `imageHelper`).

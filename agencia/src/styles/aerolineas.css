@@ -108,6 +108,9 @@
   }
 
   .airline-card-link {
+    position: sticky;
+    top: 100px;
+    z-index: 100;
     padding: 16px 10px 14px;
     border-width: 1.5px;
   }
@@ -120,5 +123,9 @@
 @media (max-width: 400px) {
   .aerolineas-content {
     grid-template-columns: 1fr;
+  }
+
+  .airline-card-link {
+    top: 100px;
   }
 }

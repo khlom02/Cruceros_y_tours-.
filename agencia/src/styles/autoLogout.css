@@ -1,0 +1,51 @@
+/* Aviso de sesión por expirar — AutoLogout.jsx */
+.auto-logout {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 9999;
+	max-width: 340px;
+	padding: 16px 20px;
+	border: 1px solid #ffeeba;
+	border-radius: var(--border-radius);
+	background: #fff3cd;
+	color: #856404;
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	box-shadow: var(--shadow-lg);
+}
+
+.auto-logout__title {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.auto-logout__text {
+	margin: 6px 0 0;
+	font-size: 13px;
+	line-height: 1.4;
+}
+
+.auto-logout__button {
+	margin-top: 10px;
+	padding: 6px 16px;
+	border: none;
+	border-radius: var(--border-radius);
+	background: var(--color-primary);
+	color: var(--color-text-primary);
+	font-weight: 600;
+	font-size: 13px;
+	cursor: pointer;
+}
+
+.auto-logout__button:hover {
+	filter: brightness(0.95);
+}
+
+@media (max-width: 480px) {
+	.auto-logout {
+		left: 16px;
+		right: 16px;
+		max-width: none;
+	}
+}

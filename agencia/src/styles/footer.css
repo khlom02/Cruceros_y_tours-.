@@ -63,6 +63,7 @@
 
 .icon-instagram {
   color: #E1306C;
+  font-size: 50px;
   transition: transform 0.3s ease;
 }
 
@@ -72,6 +73,7 @@
 
 .icon-whatsapp {
   color: #25D366;
+  font-size: 50px;
   transition: transform 0.3s ease;
 }
 
@@ -81,6 +83,7 @@
 
 .icon-gmail {
   color: #EA4335;
+  font-size: 50px;
   transition: transform 0.3s ease;
 }
 
