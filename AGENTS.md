@@ -282,6 +282,7 @@ El Dashboard de Vercel tiene **`Root Directory: agencia`**. Esto implica:
 1. **`vercel.json` debe estar en `agencia/vercel.json`**, no en la raíz del repo. El de la raíz es ignorado.
 2. **`buildCommand`** se ejecuta desde `agencia/`, por lo tanto es solo `npm install && npm run build` (sin `cd agencia`).
 3. **`outputDirectory`** es `dist` (relativo a `agencia/`).
+4. **Rama de producción: `main`** (NO `develop`). Un push a `develop` solo crea un deploy de *Preview*; para llegar a producción hay que mergear `develop` → `main` y pushear `main` (históricamente el repo hace merges `Merge branch 'develop'` en `main`). Flujo: `git checkout main && git merge develop && git push origin main`, luego sincronizar develop con `git merge --ff-only main`.
 
 ### Variables de entorno requeridas en Vercel Dashboard
 
@@ -401,15 +402,13 @@ cd /home/khalom/.opencode/ponytail && git pull
 ### Prioridad alta
 
 - [ ] **Turnstile captcha** — AGENTS.md declara `VITE_TURNSTILE_SITE_KEY` como variable requerida en Vercel, pero **0 archivos de `src/` la usan**. Integrar en los formularios sensibles (`registro.jsx`, `contacto.jsx`) usando `VITE_TURNSTILE_SITE_KEY` del `.env`. Sin esto, el rate limit es solo client-side (sessionStorage, evadible).
-- [ ] **Code-splitting por ruta** — `AdminPanel.jsx` (1641 líneas) se importa eager en `App.jsx` y viaja en el bundle principal (`index.js` ~495 kB). Usar `React.lazy` + `<Suspense>` al menos para `/admin`. Los `manualChunks` de `vite.config.js` solo aíslan vendor/supabase/ui/animation, no rutas.
+- [x] **Code-splitting por ruta** — ✅ 2026-10-04: `React.lazy` + `<Suspense>` para `/admin` en `App.jsx`. `index.js` 495→453 kB, chunk `AdminPanel-*.js` (38.5 kB) + CSS propio.
 
 ### Prioridad media
 
-- [ ] **Eliminar dependencias huérfanas**
-  - `prop-types`: un solo import en todo el repo (`rooms.jsx:3`). React 19 no lo necesita → `npm rm prop-types`.
-  - `react-icons`: 6 iconos en 3 archivos, pero `bootstrap-icons` ya se carga por CDN en `index.html:8`. Mapear: `FaWhatsappSquare`→`bi-whatsapp`, `FaInstagramSquare`→`bi-instagram`, `BiLogoGmail`→`bi-envelope`, `FaMapMarkerAlt`→`bi-geo-alt`, `FaMoon`→`bi-moon`, `FaTicketAlt`→`bi-ticket-perforated`. Desaparece también el chunk `ui` de `vite.config.js`.
-- [ ] **Actualizar `public/sitemap.xml`** — fecha `lastmod: 2026-06-06` y falta la ruta `/detalles-alojamiento` (0 coincidencias entre sus 14 URLs).
-- [ ] **AutoLogout.jsx: estilos inline** — 4 bloques `style={{...}}` con valores hardcodeados (`#fff3cd`, `#0FD3D3`, `#003366`, `Arial`). Mover a variables de `variables.css` o a un CSS propio según la regla "NO hardcodear".
+- [x] **Eliminar dependencias huérfanas** — ✅ 2026-10-04: `prop-types` eliminado (bloque PropTypes de `rooms.jsx`), `react-icons` → `bootstrap-icons` (6 iconos mapeados en footer/DestinosSection/TourCard), chunk `ui` fuera de `vite.config.js`.
+- [x] **Actualizar `public/sitemap.xml`** — ✅ 2026-10-04: 15 URLs, `lastmod: 2026-10-04`, `/detalles-alojamiento` añadida.
+- [x] **AutoLogout.jsx: estilos inline** — ✅ 2026-10-04: movido a `src/styles/autoLogout.css` (vars `--color-primary`, `--color-text-primary`, `--shadow-lg`, `--border-radius`; responsive ≤480px; `role="alert"`).
 
 ### Prioridad baja
 
