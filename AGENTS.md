@@ -401,7 +401,7 @@ cd /home/khalom/.opencode/ponytail && git pull
 
 ### Prioridad alta
 
-- [ ] **Turnstile captcha** — AGENTS.md declara `VITE_TURNSTILE_SITE_KEY` como variable requerida en Vercel, pero **0 archivos de `src/` la usan**. Integrar en los formularios sensibles (`registro.jsx`, `contacto.jsx`) usando `VITE_TURNSTILE_SITE_KEY` del `.env`. Sin esto, el rate limit es solo client-side (sessionStorage, evadible).
+- [~] **Turnstile captcha** — ✅ 2026-10-04 (frontend): widget `@marsidev/react-turnstile` en `registro.jsx` y `login.jsx` (login + recuperación), `AuthContext` acepta `captchaToken` en `signIn`/`signUp`/`resetPasswordForEmail`, reset de token tras cada intento (tokens de un solo uso) y CSP con `challenges.cloudflare.com` en `vercel.json`. **Falta (requiere usuario):** activar Captcha en Supabase Dashboard → Auth → Bot and Abuse Protection (pegar secret de Cloudflare) y añadir dominios de prueba al widget. **Pendiente:** `contacto.jsx` necesita verificación server-side (endpoint con `TURNSTILE_SECRET` en Vercel) — no implementado hasta que exista el secret.
 - [x] **Code-splitting por ruta** — ✅ 2026-10-04: `React.lazy` + `<Suspense>` para `/admin` en `App.jsx`. `index.js` 495→453 kB, chunk `AdminPanel-*.js` (38.5 kB) + CSS propio.
 
 ### Prioridad media
@@ -412,7 +412,5 @@ cd /home/khalom/.opencode/ponytail && git pull
 
 ### Prioridad baja
 
-- [ ] **Cortes Ponytail opcionales** (ya confirmados, pendientes de decisión)
-  - `TimelineEvent.jsx` (15 l.) — un solo caller (`Timeline.jsx`), inline el JSX.
-  - `src/backend/seedCategories.js` (54 l.) — script "ejecutar una sola vez" dentro de `src/`, se auto-invoca al importar. Mover a `scripts/` (ya existe) o borrar: las 7 categorías ya están en la DB.
+- [x] **Cortes Ponytail opcionales** — ✅ 2026-10-04: `TimelineEvent.jsx` (15 l.) inlineado en su único caller `Timeline.jsx`; `src/backend/seedCategories.js` eliminado (0 imports, categorías ya en la DB).
 - [ ] **Framework de tests** — AGENTS.md: "No hay framework de tests configurado". Candidato mínimo: Vitest (nativo de Vite) para lógica pura (`nivelFortaleza`, `traducirError`, `imageHelper`).
