@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { FaMapMarkerAlt, FaMoon, FaTicketAlt } from 'react-icons/fa';
 import '../styles/destination_card.css';
 
 const BADGE_CLASSES = {
@@ -95,19 +94,19 @@ const TourCard = ({
           <div className="destination-card__features">
             {destinosCount && (
               <span className="destination-card__feature">
-                <FaMapMarkerAlt className="destination-card__feature-icon" />
+                <i className="bi bi-geo-alt destination-card__feature-icon" aria-hidden="true"></i>
                 {destinosCount} {destinosCount === 1 ? 'Destination' : 'Destinations'}
               </span>
             )}
             {nightsCount && (
               <span className="destination-card__feature">
-                <FaMoon className="destination-card__feature-icon" />
+                <i className="bi bi-moon destination-card__feature-icon" aria-hidden="true"></i>
                 {nightsCount} {nightsCount === 1 ? 'Night' : 'Nights'}
               </span>
             )}
             {activityCount && (
               <span className="destination-card__feature">
-                <FaTicketAlt className="destination-card__feature-icon" />
+                <i className="bi bi-ticket-perforated destination-card__feature-icon" aria-hidden="true"></i>
                 {activityCount} {activityCount === 1 ? 'Activity' : 'Activities'}
               </span>
             )}
