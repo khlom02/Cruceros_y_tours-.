@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import SEO from './SEO.jsx';
+import { Turnstile } from '@marsidev/react-turnstile';
 import "../styles/auth.css";
 
 const MAX_INTENTOS = 3;
 const BLOQUEO_MS = 5 * 60 * 1000;
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 function traducirError(mensaje) {
   if (!mensaje) return "Error desconocido.";
@@ -46,6 +48,8 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [bloqueadoHasta, setBloqueadoHasta] = useState(null);
   const [tiempoRestante, setTiempoRestante] = useState(0);
+  const [captchaToken, setCaptchaToken] = useState('');
+  const captchaRef = useRef(null);
   const { signUp, signInWithOAuth, user } = useAuth();
   const navigate = useNavigate();
   const fortaleza = nivelFortaleza(password);
@@ -105,8 +109,11 @@ const Register = () => {
     }
 
     setLoading(true);
-    const { error } = await signUp(email.trim(), password);
+    const { error } = await signUp(email.trim(), password, captchaToken);
     setLoading(false);
+    // Los tokens de Turnstile son de un solo uso: reiniciar tras cada intento
+    captchaRef.current?.reset();
+    setCaptchaToken('');
 
     if (error) {
       const nuevosIntentos = parseInt(sessionStorage.getItem("reg_intentos") || "0", 10) + 1;
@@ -254,6 +261,13 @@ const Register = () => {
                     Serás redirigido en unos segundos...
                   </div>
                 )}
+                <div className="auth-captcha">
+                  <Turnstile
+                    ref={captchaRef}
+                    siteKey={TURNSTILE_SITE_KEY}
+                    onSuccess={setCaptchaToken}
+                  />
+                </div>
                 <div className="d-grid">
                   <button
                     type="submit"

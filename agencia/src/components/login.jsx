@@ -3,10 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { checkEmailExists } from "../backend/supabase_client";
 import SEO from './SEO.jsx';
+import { Turnstile } from '@marsidev/react-turnstile';
 import "../styles/auth.css";
 
 const MAX_INTENTOS = 5;
 const BLOQUEO_MS = 60_000; // 60 segundos
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 function traducirError(mensaje) {
   if (!mensaje) return "Error desconocido.";
@@ -42,11 +44,17 @@ export default function LoginForm() {
   const [emailRecovery, setEmailRecovery] = useState("");
   const [recoveryEnviado, setRecoveryEnviado] = useState(false);
 
+  // Captcha — Turnstile (un token por intento, se reinicia tras cada envío)
+  const [captchaLogin, setCaptchaLogin] = useState("");
+  const [captchaRecovery, setCaptchaRecovery] = useState("");
+
   const { signIn, signInWithOAuth, resetPasswordForEmail, user } = useAuth();
   const navigate = useNavigate();
   const timerRef = useRef(null);
   const emailRef = useRef(null);
   const emailRecoveryRef = useRef(null);
+  const captchaLoginRef = useRef(null);
+  const captchaRecoveryRef = useRef(null);
 
   useEffect(() => {
     if (user) navigate("/");
@@ -77,7 +85,10 @@ export default function LoginForm() {
     setLoading(true);
 
     const trimmedEmail = email.trim();
-    const { error } = await signIn(trimmedEmail, password);
+    const { error } = await signIn(trimmedEmail, password, captchaLogin);
+    // Los tokens de Turnstile son de un solo uso: reiniciar tras cada intento
+    captchaLoginRef.current?.reset();
+    setCaptchaLogin("");
 
     if (error) {
       const nuevosIntentos = intentosFallidos + 1;
@@ -140,8 +151,11 @@ export default function LoginForm() {
       return;
     }
 
-    const { error } = await resetPasswordForEmail(trimmedEmail);
+    const { error } = await resetPasswordForEmail(trimmedEmail, captchaRecovery);
     setLoading(false);
+    // Los tokens de Turnstile son de un solo uso: reiniciar tras cada intento
+    captchaRecoveryRef.current?.reset();
+    setCaptchaRecovery("");
     if (error) {
       setError(traducirError(error.message));
     } else {
@@ -206,6 +220,13 @@ export default function LoginForm() {
                         {error}
                       </p>
                     )}
+                    <div className="auth-captcha">
+                      <Turnstile
+                        ref={captchaRecoveryRef}
+                        siteKey={TURNSTILE_SITE_KEY}
+                        onSuccess={setCaptchaRecovery}
+                      />
+                    </div>
                     <div className="d-grid">
                       <button
                         type="submit"
@@ -304,6 +325,13 @@ export default function LoginForm() {
                     {tiempoRestante > 0 && ` Tiempo restante: ${tiempoRestante}s`}
                   </p>
                 )}
+                <div className="auth-captcha">
+                  <Turnstile
+                    ref={captchaLoginRef}
+                    siteKey={TURNSTILE_SITE_KEY}
+                    onSuccess={setCaptchaLogin}
+                  />
+                </div>
                 <div className="d-grid">
                   <button
                     type="submit"

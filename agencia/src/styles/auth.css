@@ -34,6 +34,12 @@
 	box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--color-primary) 25%, transparent);
 }
 
+.auth-captcha {
+	display: flex;
+	justify-content: center;
+	margin: 14px 0 4px;
+}
+
 .auth-btn-primary {
 	background: var(--color-primary);
 	border: 1px solid var(--color-primary);

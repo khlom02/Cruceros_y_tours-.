@@ -42,19 +42,21 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Función para iniciar sesión con email/password
-  const signIn = async (email, password) => {
+  const signIn = async (email, password, captchaToken) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
+      options: { captchaToken },
     });
     return { data, error };
   };
 
   // Función para registrarse con email/password
-  const signUp = async (email, password) => {
+  const signUp = async (email, password, captchaToken) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: { captchaToken },
     });
     return { data, error };
   };
@@ -71,9 +73,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Función para enviar email de recuperación de contraseña
-  const resetPasswordForEmail = async (email) => {
+  const resetPasswordForEmail = async (email, captchaToken) => {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset-password`,
+      captchaToken,
     });
     return { data, error };
   };
