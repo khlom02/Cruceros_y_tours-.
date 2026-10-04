@@ -7,11 +7,6 @@ export default defineConfig({
   server: {
     allowedHosts: true,
   },
-  resolve: {
-    alias: {
-      react: 'react',
-    },
-  },
   build: {
     rollupOptions: {
       output: {

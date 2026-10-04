@@ -51,29 +51,6 @@ export const fetchProductsByCategory = async (categoryId) => {
 };
 
 // ============================================
-// OBTENER TODOS LOS PRODUCTOS
-// ============================================
-export const fetchProducts = async () => {
-  try {
-    const { data, error } = await supabase
-      .from("productos")
-      .select("id, titulo, descripcion, precio, imagen, imagen_url, ubicacion, rating, cantidad_reviews, categoria_id, fecha_inicio, fecha_fin, color_fondo")
-      .eq("activo", true)
-      .order("fecha_creacion", { ascending: false });
-
-    if (error) {
-      console.error("Error al obtener productos:", error);
-      return [];
-    }
-
-    return data || [];
-  } catch (err) {
-    console.error("Error inesperado al obtener productos:", err);
-    return [];
-  }
-};
-
-// ============================================
 // OBTENER PRODUCTO POR ID CON DETALLES COMPLETOS
 // ============================================
 export const fetchProductById = async (id) => {
@@ -114,97 +91,6 @@ export const fetchProductById = async (id) => {
   } catch (err) {
     console.error("Error inesperado al obtener producto con detalles:", err);
     return null;
-  }
-};
-
-// ============================================
-// OBTENER GALERÍAS DE UN PRODUCTO
-// ============================================
-export const fetchGalleries = async (productId) => {
-  try {
-    const { data, error } = await supabase
-      .from("galleries")
-      .select("id, imagen_url, posicion_orden")
-      .eq("producto_id", productId)
-      .order("posicion_orden", { ascending: true });
-
-    if (error) {
-      console.error("Error al obtener galerías:", error);
-      return [];
-    }
-
-    return data || [];
-  } catch (err) {
-    console.error("Error inesperado al obtener galerías:", err);
-    return [];
-  }
-};
-
-// ============================================
-// OBTENER HABITACIONES DE UN PRODUCTO
-// ============================================
-export const fetchRoomsForProduct = async (productId) => {
-  try {
-    const { data, error } = await supabase
-      .from("rooms")
-      .select("id, titulo, descripcion, precio, imagen_url")
-      .eq("producto_id", productId)
-      .order("id", { ascending: true });
-
-    if (error) {
-      console.error("Error al obtener habitaciones:", error);
-      return [];
-    }
-
-    return data || [];
-  } catch (err) {
-    console.error("Error inesperado al obtener habitaciones:", err);
-    return [];
-  }
-};
-
-// ============================================
-// OBTENER AMENIDADES DE UN PRODUCTO
-// ============================================
-export const fetchAmenitiesForProduct = async (productId) => {
-  try {
-    const { data, error } = await supabase
-      .from("amenities")
-      .select("id, nombre, icono_emoji")
-      .eq("producto_id", productId);
-
-    if (error) {
-      console.error("Error al obtener amenidades:", error);
-      return [];
-    }
-
-    return data || [];
-  } catch (err) {
-    console.error("Error inesperado al obtener amenidades:", err);
-    return [];
-  }
-};
-
-// ============================================
-// OBTENER HIGHLIGHTS DE UN PRODUCTO
-// ============================================
-export const fetchHighlightsForProduct = async (productId) => {
-  try {
-    const { data, error } = await supabase
-      .from("highlights")
-      .select("id, descripcion")
-      .eq("producto_id", productId)
-      .order("posicion_orden", { ascending: true });
-
-    if (error) {
-      console.error("Error al obtener highlights:", error);
-      return [];
-    }
-
-    return data?.map(h => h.descripcion) || [];
-  } catch (err) {
-    console.error("Error inesperado al obtener highlights:", err);
-    return [];
   }
 };
 
@@ -294,35 +180,6 @@ export const updateUserProfile = async (usuarioId, perfil) => {
   } catch (err) {
     console.error("Error inesperado:", err);
     return null;
-  }
-};
-
-// ============================================
-// OBTENER HABITACIONES (Para compatibilidad con rooms.jsx)
-// ============================================
-export const fetchRooms = async ({ serviceType } = {}) => {
-  try {
-    let query = supabase
-      .from("rooms")
-      .select("id, titulo, descripcion, precio, imagen_url, producto_id");
-
-    // Si se proporciona serviceType, filtrar por tipo de servicio
-    if (serviceType) {
-      // Por ahora devolvemos todas las habitaciones
-      // En futuro se puede expandir para filtrar por categoría
-    }
-
-    const { data, error } = await query;
-
-    if (error) {
-      console.error("Error al obtener habitaciones:", error);
-      return [];
-    }
-
-    return data || [];
-  } catch (err) {
-    console.error("Error inesperado al obtener habitaciones:", err);
-    return [];
   }
 };
 
@@ -602,30 +459,6 @@ export const updateContactoEstado = async (id, estado) => {
 };
 
 // ============================================
-// ITINERARIOS
-// ============================================
-export const fetchItinerariosByProducto = async (productoId) => {
-  try {
-    const { data, error } = await supabase
-      .from("itinerarios")
-      .select("id, dia, titulo, descripcion, categoria, posicion_orden")
-      .eq("producto_id", productoId)
-      .order("dia", { ascending: true })
-      .order("posicion_orden", { ascending: true });
-
-    if (error) {
-      console.error("Error al obtener itinerarios:", error);
-      return [];
-    }
-
-    return data || [];
-  } catch (err) {
-    console.error("Error inesperado al obtener itinerarios:", err);
-    return [];
-  }
-};
-
-// ============================================
 // ALOJAMIENTOS (opciones de alojamiento para destinos)
 // ============================================
 export const fetchAlojamientosByProducto = async (productoId) => {
@@ -774,24 +607,6 @@ export const insertAlojamientoImagen = async (payload) => {
   } catch (err) {
     console.error("Error inesperado al insertar imagen de alojamiento:", err);
     return null;
-  }
-};
-
-export const updateAlojamientoImagen = async (id, payload) => {
-  try {
-    const { error } = await supabase
-      .from("alojamiento_imagenes")
-      .update(payload)
-      .eq("id", id);
-
-    if (error) {
-      console.error("Error al actualizar imagen de alojamiento:", error);
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.error("Error inesperado al actualizar imagen de alojamiento:", err);
-    return false;
   }
 };
 
