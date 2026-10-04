@@ -292,6 +292,8 @@ El Dashboard de Vercel tiene **`Root Directory: agencia`**. Esto implica:
 | `VITE_SUPABASE_ANON_KEY` | Anon key pública de Supabase |
 | `VITE_TURNSTILE_SITE_KEY` | `0x4AAAAAADd6blXfpD5j1zCO` (clave pública Cloudflare Turnstile) |
 
+> ⚠️ **2026-10-04:** el build de producción inlineó `VITE_TURNSTILE_SITE_KEY` como `undefined` → **la variable NO existe en el Dashboard de Vercel**. Hay que re-añadirla (Settings → Environment Variables) y redeployar; los formularios no renderizan el widget mientras falte (guarda `TURNSTILE_SITE_KEY && ...`).
+
 ### SPA fallback
 
 Usar **`rewrites`** (NO `routes`). Los `rewrites` tienen máxima prioridad y sobreescriben el framework detection de Vite.

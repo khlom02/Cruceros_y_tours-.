@@ -261,13 +261,15 @@ const Register = () => {
                     Serás redirigido en unos segundos...
                   </div>
                 )}
-                <div className="auth-captcha">
-                  <Turnstile
-                    ref={captchaRef}
-                    siteKey={TURNSTILE_SITE_KEY}
-                    onSuccess={setCaptchaToken}
-                  />
-                </div>
+                {TURNSTILE_SITE_KEY && (
+                  <div className="auth-captcha">
+                    <Turnstile
+                      ref={captchaRef}
+                      siteKey={TURNSTILE_SITE_KEY}
+                      onSuccess={setCaptchaToken}
+                    />
+                  </div>
+                )}
                 <div className="d-grid">
                   <button
                     type="submit"

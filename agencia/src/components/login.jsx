@@ -220,13 +220,15 @@ export default function LoginForm() {
                         {error}
                       </p>
                     )}
-                    <div className="auth-captcha">
-                      <Turnstile
-                        ref={captchaRecoveryRef}
-                        siteKey={TURNSTILE_SITE_KEY}
-                        onSuccess={setCaptchaRecovery}
-                      />
-                    </div>
+                    {TURNSTILE_SITE_KEY && (
+                      <div className="auth-captcha">
+                        <Turnstile
+                          ref={captchaRecoveryRef}
+                          siteKey={TURNSTILE_SITE_KEY}
+                          onSuccess={setCaptchaRecovery}
+                        />
+                      </div>
+                    )}
                     <div className="d-grid">
                       <button
                         type="submit"
@@ -325,13 +327,15 @@ export default function LoginForm() {
                     {tiempoRestante > 0 && ` Tiempo restante: ${tiempoRestante}s`}
                   </p>
                 )}
-                <div className="auth-captcha">
-                  <Turnstile
-                    ref={captchaLoginRef}
-                    siteKey={TURNSTILE_SITE_KEY}
-                    onSuccess={setCaptchaLogin}
-                  />
-                </div>
+                {TURNSTILE_SITE_KEY && (
+                  <div className="auth-captcha">
+                    <Turnstile
+                      ref={captchaLoginRef}
+                      siteKey={TURNSTILE_SITE_KEY}
+                      onSuccess={setCaptchaLogin}
+                    />
+                  </div>
+                )}
                 <div className="d-grid">
                   <button
                     type="submit"
