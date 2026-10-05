@@ -20,6 +20,11 @@ header .container-fluid {
   min-height: auto;
 }
 
+header .nav-link,
+header .dropdown-item {
+  font-family: 'Chicago Police', sans-serif;
+}
+
 /* Logo del header - sin fondo, adaptable y moderno */
 .header-logo {
   display: inline-flex;

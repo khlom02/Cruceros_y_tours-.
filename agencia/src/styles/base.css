@@ -43,3 +43,18 @@ body {
   color: #333333;
   font-weight: bold;
 }
+
+p,
+li,
+blockquote,
+figcaption,
+label,
+td {
+  font-family: 'Lora', 'Georgia', serif;
+}
+
+input,
+textarea,
+select {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
