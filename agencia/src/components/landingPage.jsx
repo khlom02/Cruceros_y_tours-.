@@ -180,7 +180,7 @@ const LandingPage = () => {
             miembros={[
               {
                 imagen: 'https://krpdacuthwpoyuccbihf.supabase.co/storage/v1/object/public/content%20media/agente%20de%20viajes01.jpeg',
-                titulo: 'Maria Eugenia Martinez Pineda',
+                titulo: 'Maria Eugenia Pineda Martinez',
                 descripcion: '33 años de experiencia en el sector turístico, especializada en cruceros y tours de lujo.',
                 items: ['Licenciada en Turismo', 'Tours Operator', 'CEO de la agencia'],
                 links: [{ texto: 'Contactar con agente', href: 'https://wa.me/584142783669?text=Hola,%20quiero%20información%20sobre%20un%20viaje' }],
