@@ -13,6 +13,8 @@ import BannerPrincipal from './banner_principal.jsx';
 import DestinosSection from './DestinosSection.jsx';
 import Testimonios from './Testimonios.jsx';
 import { getSupabaseImageUrl } from '../utils/imageHelper';
+import PersonalDeLaAgencia from './personal_de_la_agencia.jsx';
+
 
 const CAROUSEL_FALLBACK = [
   { id: 1, img: getSupabaseImageUrl("imagenes/MSC.jpg"),       logo: getSupabaseImageUrl("assets/MSC_logo.png"),            title: "Alaska" },
@@ -164,15 +166,36 @@ const LandingPage = () => {
           <p style={{ 
             fontSize: 'clamp(1.1rem, 2vw, 1.5rem)',
             '--color-primary-dark': '#003366',
-            fontWeight: '400',
+            fontWeight: '600',
             margin: '0 auto',
             maxWidth: '700px',
             lineHeight: '1.6',
             fontFamily: "'Lora', 'Georgia', serif",
-            paddingTop: '70px'
+            paddingTop: '40px'
           }}>
-            Aventuras increíbles te esperan
+            Conoce a nuestro equipo de expertos en viajes, listos para ayudarte a planificar la aventura de tus sueños.
           </p>
+
+          <PersonalDeLaAgencia
+            miembros={[
+              {
+                imagen: 'imagenes/banner_principal.jpeg',
+                alt: 'Nombre',
+                titulo: 'Nombre y cargo',
+                descripcion: 'Bio del miembro...',
+                items: ['Detalle 1', 'Detalle 2', 'Detalle 3'],
+                links: [{ texto: 'Contactar', href: '/contacto' }],
+              },
+              {
+                imagen: 'imagenes/banner_principal.jpeg',
+                alt: 'Nombre',
+                titulo: 'Nombre y cargo',
+                descripcion: 'Bio del miembro...',
+                items: ['Detalle 1', 'Detalle 2', 'Detalle 3'],
+                links: [{ texto: 'Contactar', href: '/contacto' }],
+              },
+            ]}
+          />
           
           <div style={{
             display: 'flex',
