@@ -93,6 +93,7 @@
 	align-items: center;
 	gap: 20px;
 	flex-wrap: wrap;
+	border-color: black;
 }
 
 .carousel3d-perk {

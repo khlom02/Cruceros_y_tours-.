@@ -175,7 +175,7 @@ const LandingPage = () => {
           }}>
             Conoce a nuestro equipo de expertos en viajes, listos para ayudarte a planificar la aventura de tus sueños.
           </p>
-
+          {/* Miembros del equipo */}
           <PersonalDeLaAgencia
             miembros={[
               {
@@ -212,7 +212,7 @@ const LandingPage = () => {
           fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
           color: '#023e8a',
           fontWeight: '700',
-          marginBottom: '100px',
+          marginBottom: '30px',
           marginTop: '40px',
           letterSpacing: '-0.5px',
           fontFamily: "'Photogenic', serif"
