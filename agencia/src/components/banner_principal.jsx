@@ -33,7 +33,7 @@ const BannerPrincipal = ({ children }) => {
 						fontSize: "clamp(1.8rem, 5vw, 3rem)",
 					}}
 				>
-					 CRUCEROS Y TOURS: TU PRÓXIMA AVENTURA COMIENZA AQUÍ.
+					 
 				</h1>
 				<p
 					className="lead text-white mb-5"
