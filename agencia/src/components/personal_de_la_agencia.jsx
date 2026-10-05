@@ -41,6 +41,11 @@ const PersonalDeLaAgencia = ({ miembros = MIEMBROS_EJEMPLO }) => (
 					className="card-img-top"
 					alt={miembro.alt || miembro.titulo}
 					loading="lazy"
+					style={
+						miembro.imagenPosicion
+							? { objectPosition: miembro.imagenPosicion }
+							: undefined
+					}
 				/>
 				<div className="card-body">
 					<h5 className="card-title">{miembro.titulo}</h5>
