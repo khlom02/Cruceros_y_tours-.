@@ -111,7 +111,7 @@ const LandingPage = () => {
           padding: '0 20px'
         }}>
           <h1 className="fw-bold" style={{ 
-            fontSize: 'clamp(4rem, 7vw, 6rem)',
+            fontSize: 'clamp(2.5rem, 5vw, 4rem)',
             marginBottom: '40px',
             color: '#023e8a',
             letterSpacing: '-1px',
