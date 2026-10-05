@@ -180,19 +180,17 @@ const LandingPage = () => {
             miembros={[
               {
                 imagen: 'imagenes/banner_principal.jpeg',
-                alt: 'Nombre',
-                titulo: 'Nombre y cargo',
-                descripcion: 'Bio del miembro...',
-                items: ['Detalle 1', 'Detalle 2', 'Detalle 3'],
-                links: [{ texto: 'Contactar', href: '/contacto' }],
+                titulo: 'Maria Eugenia Martinez Pineda',
+                descripcion: '33 años de experiencia en el sector turístico, especializada en cruceros y tours de lujo.',
+                items: ['Licenciada en Turismo', 'Tours Operator', 'CEO de la agencia'],
+                links: [{ texto: 'Contactar con agente', href: '/contacto' }],
               },
               {
                 imagen: 'imagenes/banner_principal.jpeg',
-                alt: 'Nombre',
-                titulo: 'Nombre y cargo',
-                descripcion: 'Bio del miembro...',
-                items: ['Detalle 1', 'Detalle 2', 'Detalle 3'],
-                links: [{ texto: 'Contactar', href: '/contacto' }],
+                titulo: 'Miguel Alejandro Martinez Pineda',
+                descripcion: 'Programador web y especialista en marketing digital, encargado de la presencia online de la agencia.',
+                items: ['Desarollador Web', 'Marketing Digital', 'SEO y SEM'],
+                links: [{ texto: 'Contactar con agente', href: '/contacto' }],
               },
             ]}
           />

@@ -11,7 +11,7 @@
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-	border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+	border: 2px solid #000;
 	border-radius: var(--card-content-radius);
 	box-shadow: var(--card-shadow);
 	transition: var(--card-transition);
@@ -51,17 +51,31 @@
 	margin-top: auto;
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: center;
 	gap: 16px;
 }
 
 .staff-card .card-link {
-	color: var(--color-primary);
-	font-size: var(--card-font-label);
-	font-weight: 600;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--card-btn-padding);
+	background: var(--color-primary);
+	color: var(--color-text-primary);
+	border: 2px solid var(--color-primary);
+	border-radius: var(--card-btn-radius);
+	box-shadow: 0 4px 20px color-mix(in srgb, var(--color-primary) 40%, transparent);
+	font-size: var(--card-font-btn);
+	font-weight: 700;
 	text-decoration: none;
+	transition: var(--card-transition);
 }
 
 .staff-card .card-link:hover {
-	color: var(--color-primary-dark);
-	text-decoration: underline;
+	background: var(--color-primary-dark);
+	color: var(--color-primary);
+	border-color: var(--color-primary-dark);
+	box-shadow: 0 8px 28px color-mix(in srgb, var(--color-primary-dark) 30%, transparent);
+	transform: translateY(-3px);
+	text-decoration: none;
 }
