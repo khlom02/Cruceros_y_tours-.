@@ -44,7 +44,8 @@ const BannerPrincipal = ({ children }) => {
 						textShadow: "4px 4px 16px rgba(0, 0, 0, 0.5)",
 					}}
 				>
-					Desde el Caribe hasta el Mediterráneo, nosotros te llevamos
+					¡Reserva tus próximas vacaciones al mejor precio!
+					Cruceros MSC desde USD 199. Exclusivo reservando antes del 19 de octubre.
 				</p>
 
 				<a href="#" className="btn_banner_principal btn_banner_principal__wrapper">Ver Ofertas del Mes</a>
