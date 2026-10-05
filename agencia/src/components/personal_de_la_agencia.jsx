@@ -36,17 +36,14 @@ const PersonalDeLaAgencia = ({ miembros = MIEMBROS_EJEMPLO }) => (
 	<div className="staff-grid">
 		{miembros.map((miembro, index) => (
 			<article className="card staff-card" key={`${miembro.titulo}-${index}`}>
-				<img
-					src={getSupabaseImageUrl(miembro.imagen)}
-					className="card-img-top"
-					alt={miembro.alt || miembro.titulo}
-					loading="lazy"
-					style={
-						miembro.imagenPosicion
-							? { objectPosition: miembro.imagenPosicion }
-							: undefined
-					}
-				/>
+				<div className="staff-card__imagen re">
+					<img
+						src={getSupabaseImageUrl(miembro.imagen)}
+						className="card-img-top"
+						alt={miembro.alt || miembro.titulo}
+						loading="lazy"
+					/>
+				</div>
 				<div className="card-body">
 					<h5 className="card-title">{miembro.titulo}</h5>
 					<p className="card-text">{miembro.descripcion}</p>

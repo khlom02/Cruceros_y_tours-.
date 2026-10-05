@@ -187,7 +187,6 @@ const LandingPage = () => {
               },
               {
                 imagen: 'https://krpdacuthwpoyuccbihf.supabase.co/storage/v1/object/public/content%20media/agente002.jpeg',
-                imagenPosicion: '50% calc(50% - 5px)',
                 titulo: 'Miguel Alejandro Martinez Pineda',
                 descripcion: 'Programador web y especialista en marketing digital, encargado de la presencia online de la agencia.',
                 items: ['Desarrollador Web', 'Marketing Digital', 'SEO y SEM'],

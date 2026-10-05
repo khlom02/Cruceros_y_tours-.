@@ -22,9 +22,17 @@
 	box-shadow: var(--card-shadow-hover);
 }
 
-.staff-card .card-img-top {
+.staff-card__imagen {
 	width: 100%;
 	height: 200px;
+	overflow: hidden;
+}
+
+.staff-card__imagen .card-img-top {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
 	object-fit: cover;
 }
 
