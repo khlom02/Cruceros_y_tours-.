@@ -179,18 +179,18 @@ const LandingPage = () => {
           <PersonalDeLaAgencia
             miembros={[
               {
-                imagen: 'imagenes/banner_principal.jpeg',
+                imagen: 'https://krpdacuthwpoyuccbihf.supabase.co/storage/v1/object/public/content%20media/agente%20de%20viajes01.jpeg',
                 titulo: 'Maria Eugenia Martinez Pineda',
                 descripcion: '33 años de experiencia en el sector turístico, especializada en cruceros y tours de lujo.',
                 items: ['Licenciada en Turismo', 'Tours Operator', 'CEO de la agencia'],
-                links: [{ texto: 'Contactar con agente', href: '/contacto' }],
+                links: [{ texto: 'Contactar con agente', href: 'https://wa.me/584142783669?text=Hola,%20quiero%20información%20sobre%20un%20viaje' }],
               },
               {
-                imagen: 'imagenes/banner_principal.jpeg',
+                imagen: 'https://krpdacuthwpoyuccbihf.supabase.co/storage/v1/object/public/content%20media/agente002.jpeg',
                 titulo: 'Miguel Alejandro Martinez Pineda',
                 descripcion: 'Programador web y especialista en marketing digital, encargado de la presencia online de la agencia.',
                 items: ['Desarollador Web', 'Marketing Digital', 'SEO y SEM'],
-                links: [{ texto: 'Contactar con agente', href: '/contacto' }],
+                links: [{ texto: 'Contactar con agente', href: 'https://wa.me/584142783669?text=Hola,%20quiero%20información%20sobre%20un%20viaje' }],
               },
             ]}
           />
