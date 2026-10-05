@@ -2,6 +2,14 @@
   margin-bottom: 48px;
 }
 
+.info-page:has(.about-mission) .info-page__subtitle,
+.about-mission p,
+.about-stat__label,
+.about-value p,
+.about-cta p {
+  font-family: 'Lora', 'Georgia', serif;
+}
+
 .about-mission h2 {
   font-size: clamp(1.2rem, 2.5vw, 1.5rem);
   color: var(--color-primary);
