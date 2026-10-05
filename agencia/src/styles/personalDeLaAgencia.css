@@ -1,0 +1,67 @@
+/* Cards — Personal de la agencia */
+.staff-grid {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 10px;
+}
+
+.staff-card {
+	width: min(100%, 340px);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+	border-radius: var(--card-content-radius);
+	box-shadow: var(--card-shadow);
+	transition: var(--card-transition);
+}
+
+.staff-card:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--card-shadow-hover);
+}
+
+.staff-card .card-img-top {
+	width: 100%;
+	height: 200px;
+	object-fit: cover;
+}
+
+.staff-card .card-title {
+	color: var(--color-text-primary);
+	font-size: var(--card-font-title);
+	font-weight: 700;
+}
+
+.staff-card .card-text {
+	color: var(--color-text-secondary);
+	font-size: var(--card-font-body);
+	margin-bottom: 0;
+}
+
+.staff-card .list-group-item {
+	border-color: color-mix(in srgb, var(--color-primary) 15%, transparent);
+	background: var(--color-background-light);
+	color: var(--color-text-primary);
+	font-size: var(--card-font-body);
+}
+
+.staff-card .card-body:last-child {
+	margin-top: auto;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.staff-card .card-link {
+	color: var(--color-primary);
+	font-size: var(--card-font-label);
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.staff-card .card-link:hover {
+	color: var(--color-primary-dark);
+	text-decoration: underline;
+}
