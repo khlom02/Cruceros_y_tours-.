@@ -45,10 +45,18 @@ const BannerPrincipal = ({ children }) => {
 					}}
 				>
 					¡Reserva tus próximas vacaciones al mejor precio!
-					Cruceros MSC desde USD 199. Exclusivo reservando antes del 19 de octubre.
+					Cruceros MSC desde USD 199. 
+					Exclusivo reservando antes del 19 de octubre.
 				</p>
 
-				<a href="#" className="btn_banner_principal btn_banner_principal__wrapper">Ver Ofertas del Mes</a>
+				<a
+					href="https://wa.me/584142783669?text=Hola,%20quiero%20información%20sobre%20un%20viaje"
+					target="_blank"
+					rel="noopener noreferrer"
+					className="btn_banner_principal btn_banner_principal__wrapper"
+				>
+					Chatea con nosotros
+				</a>
 			</div>
 
 			{/* Curvas decorativas (Wave Shape) */}
