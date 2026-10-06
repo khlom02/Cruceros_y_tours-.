@@ -84,6 +84,8 @@
 	cursor: pointer;
 	transition: all 0.3s ease;
 	box-shadow: var(--shadow-md);
+	text-decoration: none;
+	display: inline-block;
 }
 
 .carousel3d-perks {

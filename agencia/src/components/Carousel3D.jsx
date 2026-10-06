@@ -912,7 +912,10 @@ const Carousel3D = ({ destinations = [], onModalChange, showCTA = true, title, s
         </div>
 
         <div className="carousel3d-cta text-center">
-          <button
+          <a
+            href="https://wa.me/584142783669?text=Hola,%20quiero%20información%20sobre%20un%20viaje"
+            target="_blank"
+            rel="noopener noreferrer"
             className="carousel3d-cta-button"
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-5px) scale(1.05)";
@@ -924,7 +927,7 @@ const Carousel3D = ({ destinations = [], onModalChange, showCTA = true, title, s
             }}
           >
             🌴 Reserva tu Aventura
-          </button>
+          </a>
 
           <div className="carousel3d-perks">
             <div className="carousel3d-perk">
