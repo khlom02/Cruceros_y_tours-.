@@ -6,7 +6,7 @@ import { getSupabaseImageUrl } from "../utils/imageHelper";
 
 
 const BannerPrincipal = ({ children }) => {
-	const bannerBg = getSupabaseImageUrl("imagenes/banner_principal.jpeg");
+	const bannerBg = getSupabaseImageUrl("https://krpdacuthwpoyuccbihf.supabase.co/storage/v1/object/public/content%20media/WhatsApp%20Image%202026-10-12%20at%202.11.40%20PM.jpeg");
 	return (
 		<header
 			className="position-relative"
