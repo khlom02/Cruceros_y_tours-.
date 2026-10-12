@@ -1,7 +1,7 @@
 /* Banner principal — tamaño de diseño 1920x735 */
 .banner_principal {
   width: 100%;
-  aspect-ratio: 1000 / 3500mm;
+  aspect-ratio: 1000/500mm;
   min-height: 400px;
   display: flex;
   flex-direction: column;
