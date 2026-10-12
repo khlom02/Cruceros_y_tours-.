@@ -11,7 +11,7 @@ const BannerPrincipal = ({ children }) => {
 		<header
 			className="position-relative"
 			style={{
-				backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(${bannerBg})`,
+				// 				backgroundImage: `url(${bannerBg})`,
 				backgroundSize: "cover",
 				backgroundPosition: "center 10%",
 				backgroundRepeat: "no-repeat",
