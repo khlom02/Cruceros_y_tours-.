@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { fetchCarouselCruises } from '../backend/supabase_client';
 import { Link } from 'react-router-dom';
 import Trenesyvehiculos from './Trenes_vehiculos.jsx';
-import BannerPrincipal from './banner_principal.jsx';
+import BannerCarrusel from './banner_carrusel.jsx';
 import DestinosSection from './DestinosSection.jsx';
 import Testimonios from './Testimonios.jsx';
 import { getSupabaseImageUrl } from '../utils/imageHelper';
@@ -73,7 +73,7 @@ const LandingPage = () => {
         type="website"
         jsonLd={jsonLd}
       />
-      <BannerPrincipal />
+      <BannerCarrusel />
       <main className="landing_page" style={{ 
         background: 'white',
         minHeight: '100vh', 
