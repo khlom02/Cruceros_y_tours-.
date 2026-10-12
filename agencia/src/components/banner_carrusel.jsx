@@ -95,22 +95,31 @@ const BannerCarrusel = () => {
             <span className="visually-hidden">Siguiente</span>
           </button>
         </div>
-
-        <div className="banner_carrusel__wave">
-          <svg
-            viewBox="0 0 1440 120"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path
-              d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,64C960,75,1056,85,1152,80C1248,75,1344,53,1392,42.7L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"
-              fill="#ffffff"
-            />
-          </svg>
-        </div>
       </header>
+
+      <div className="banner_carrusel__wave">
+        <svg
+          viewBox="0 0 1440 120"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            className="banner_carrusel__wave-white"
+            d="M0,56L48,50.7C96,45,192,35,288,40C384,45,480,67,576,72C672,77,768,67,864,56C960,45,1056,35,1152,40C1248,45,1344,67,1392,77.3L1440,88L1440,120L0,120Z"
+          />
+          <path
+            className="banner_carrusel__wave-navy"
+            transform="translate(0 16)"
+            d="M0,56L48,50.7C96,45,192,35,288,40C384,45,480,67,576,72C672,77,768,67,864,56C960,45,1056,35,1152,40C1248,45,1344,67,1392,77.3L1440,88L1440,-40L0,-40Z"
+          />
+          <path
+            className="banner_carrusel__wave-turquoise"
+            d="M0,56L48,50.7C96,45,192,35,288,40C384,45,480,67,576,72C672,77,768,67,864,56C960,45,1056,35,1152,40C1248,45,1344,67,1392,77.3L1440,88L1440,0L0,0Z"
+          />
+        </svg>
+      </div>
 
       <div className="banner_carrusel__cta">
         <a

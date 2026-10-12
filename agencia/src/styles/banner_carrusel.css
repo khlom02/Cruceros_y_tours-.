@@ -78,10 +78,7 @@
 }
 
 .banner_carrusel__wave {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  width: 100%;
   line-height: 0;
   pointer-events: none;
 }
@@ -90,6 +87,18 @@
   display: block;
   width: 100%;
   height: auto;
+}
+
+.banner_carrusel__wave-white {
+  fill: var(--color-text-light);
+}
+
+.banner_carrusel__wave-navy {
+  fill: var(--color-primary-dark);
+}
+
+.banner_carrusel__wave-turquoise {
+  fill: var(--color-primary);
 }
 
 .banner_carrusel__cta {
