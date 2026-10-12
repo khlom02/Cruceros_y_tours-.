@@ -11,7 +11,7 @@ const BannerPrincipal = ({ children }) => {
 		<header
 			className="position-relative"
 			style={{
-				// 				backgroundImage: `url(${bannerBg})`,
+				backgroundImage: `url(${bannerBg})`,
 				backgroundSize: "cover",
 				backgroundPosition: "center 10%",
 				backgroundRepeat: "no-repeat",
