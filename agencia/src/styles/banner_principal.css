@@ -1,3 +1,12 @@
+/* Banner principal — tamaño de diseño 1920x735 */
+.banner_principal {
+  width: 100%;
+  aspect-ratio: 1920 / 735;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Grupo de CTAs del banner */
 .banner_cta_group {
   display: flex;

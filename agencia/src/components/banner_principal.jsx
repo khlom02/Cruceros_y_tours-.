@@ -6,18 +6,15 @@ import { getSupabaseImageUrl } from "../utils/imageHelper";
 
 
 const BannerPrincipal = ({ children }) => {
-	const bannerBg = getSupabaseImageUrl("https://krpdacuthwpoyuccbihf.supabase.co/storage/v1/object/public/content%20media/crucer.jpeg");
+	const bannerBg = getSupabaseImageUrl("https://krpdacuthwpoyuccbihf.supabase.co/storage/v1/object/public/content%20media/WhatsApp%20Image%202026-10-12%20at%202.37.44%20PM.jpeg");
 	return (
 		<header
-			className="position-relative"
+			className="banner_principal position-relative"
 			style={{
 				backgroundImage: `url(${bannerBg})`,
 				backgroundSize: "cover",
 				backgroundPosition: "center 10%",
 				backgroundRepeat: "no-repeat",
-				minHeight: "400px",
-				display: "flex",
-				flexDirection: "column",
 			}}
 		>
 			{children}
