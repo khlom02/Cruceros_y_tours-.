@@ -89,15 +89,7 @@
   height: auto;
 }
 
-.banner_carrusel__wave-white {
-  fill: var(--color-text-light);
-}
-
-.banner_carrusel__wave-navy {
-  fill: var(--color-primary-dark);
-}
-
-.banner_carrusel__wave-turquoise {
+.banner_carrusel__wave-fill {
   fill: var(--color-primary);
 }
 
