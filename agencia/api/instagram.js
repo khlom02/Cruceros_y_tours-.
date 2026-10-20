@@ -158,8 +158,11 @@ export default async function handler(req, res) {
 
   const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!supabaseUrl || !serviceKey) {
-    return res.status(503).json({ error: 'Servicio no configurado', posts: [] });
+  if (!supabaseUrl) {
+    return res.status(503).json({ error: 'Falta la variable VITE_SUPABASE_URL', posts: [] });
+  }
+  if (!serviceKey) {
+    return res.status(503).json({ error: 'Falta la variable SUPABASE_SERVICE_ROLE_KEY', posts: [] });
   }
 
   const admin = createClient(supabaseUrl, serviceKey, {
