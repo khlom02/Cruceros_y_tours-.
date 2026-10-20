@@ -12,6 +12,8 @@ const MAX_CONCURRENCIA = 4;
 let syncEnCurso = null;
 let ultimoIntento = 0;
 
+const limpiarEnv = (valor = '') => valor.split('\n')[0].trim();
+
 const normalizar = (texto = '') =>
   texto
     .normalize('NFD')
@@ -59,8 +61,8 @@ const fuentesDeMedia = (item) => {
 };
 
 const obtenerPostsDeInstagram = async () => {
-  const token = process.env.INSTAGRAM_ACCESS_TOKEN;
-  const igId = process.env.INSTAGRAM_BUSINESS_ACCOUNT_ID;
+  const token = limpiarEnv(process.env.INSTAGRAM_ACCESS_TOKEN);
+  const igId = limpiarEnv(process.env.INSTAGRAM_BUSINESS_ACCOUNT_ID);
   if (!token || !igId) {
     throw new Error('Faltan INSTAGRAM_ACCESS_TOKEN o INSTAGRAM_BUSINESS_ACCOUNT_ID');
   }
@@ -158,8 +160,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Método no permitido', posts: [] });
   }
 
-  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseUrl = limpiarEnv(process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL);
+  const serviceKey = limpiarEnv(process.env.SUPABASE_SERVICE_ROLE_KEY);
   if (!supabaseUrl) {
     return res.status(503).json({ error: 'Falta la variable VITE_SUPABASE_URL', posts: [] });
   }
