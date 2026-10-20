@@ -1,8 +1,11 @@
 import React, { useState, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import Filtro, { aplicarFiltros } from "./filtro";
+import InstagramCard from "./InstagramCard";
+import useInstagramPosts, { seccionDesdeNombre } from "../hooks/useInstagramPosts";
 import { fetchCategories, fetchProductsByCategory } from "../backend/supabase_client";
 import { getSupabaseImageUrl } from "../utils/imageHelper";
+import "../styles/instagramCard.css";
 
 /**
  * Componente de Card genérico reutilizable
@@ -82,6 +85,9 @@ export const CardGrid = ({
   const navigate = useNavigate();
   const [datosProductos, setDatosProductos] = useState([]);
   const [cargando, setCargando] = useState(false);
+  const seccionIG = categoryName ? seccionDesdeNombre(categoryName) : "";
+  const { posts: postsIG, cargando: cargandoIG } = useInstagramPosts(seccionIG);
+  const usarIG = !airlineFilter && postsIG.length > 0;
   const [filtros, setFiltros] = useState({
     fechaInicio: "",
     fechaFin: "",
@@ -98,6 +104,12 @@ export const CardGrid = ({
   // Cargar datos desde BD cuando se monta o cambia categoryName
   useEffect(() => {
     if (!categoryName) return;
+    if (!airlineFilter && cargandoIG) return;
+    if (!airlineFilter && postsIG.length > 0) {
+      setDatosProductos([]);
+      setCargando(false);
+      return;
+    }
 
     let isMounted = true;
 
@@ -155,7 +167,7 @@ export const CardGrid = ({
     return () => {
       isMounted = false;
     };
-  }, [categoryName, airlineFilter]);
+  }, [categoryName, airlineFilter, cargandoIG, postsIG.length]);
 
   const handleFilterChange = (nuevosFiltros) => {
     setFiltros(nuevosFiltros);
@@ -164,7 +176,7 @@ export const CardGrid = ({
   // Aplicar filtros a los productos
   const productosFiltrados = aplicarFiltros(datosProductos, filtros);
 
-  if (cargando) {
+  if ((!airlineFilter && cargandoIG) || cargando) {
     return (
       <div style={{
         textAlign: "center",
@@ -173,6 +185,16 @@ export const CardGrid = ({
         fontSize: "1.1rem"
       }}>
         Cargando {categoryName}...
+      </div>
+    );
+  }
+
+  if (usarIG) {
+    return (
+      <div className="instagram-grid">
+        {postsIG.map((post) => (
+          <InstagramCard key={post.id} post={post} />
+        ))}
       </div>
     );
   }

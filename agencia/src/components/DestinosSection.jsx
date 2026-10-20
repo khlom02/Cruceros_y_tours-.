@@ -1,9 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import TourCard from './TourCard';
+import InstagramCard from './InstagramCard';
+import useInstagramPosts from '../hooks/useInstagramPosts';
 import { fetchCategories, fetchProductsByCategory, supabase } from '../backend/supabase_client';
 import { getSupabaseImageUrl } from '../utils/imageHelper';
 import { useNavigate } from 'react-router-dom';
 import '../styles/destination_card.css';
+import '../styles/instagramCard.css';
 
 const AUTOPLAY_DELAY = 7000;
 
@@ -18,72 +21,80 @@ const tituloStyle = {
   fontFamily: "'Photogenic', serif"
 };
 
-const DestinosSection = () => {
-  const navigate = useNavigate();
-  const [nacionales, setNacionales] = useState([]);
-  const [internacionales, setInternacionales] = useState([]);
-  const [cargando, setCargando] = useState(true);
+let categoriasCache = null;
+
+const cargarProductosDeCategoria = async (nombreCategoria) => {
+  if (!categoriasCache) {
+    categoriasCache = await fetchCategories();
+  }
+  const categoria = categoriasCache.find((c) => c.nombre.toLowerCase() === nombreCategoria);
+  if (!categoria) return [];
+
+  const productos = await fetchProductsByCategory(categoria.id);
+
+  const cargarGaleria = async (productoId) => {
+    const { data } = await supabase
+      .from('galleries')
+      .select('imagen_url')
+      .eq('producto_id', productoId)
+      .order('posicion_orden', { ascending: true });
+    return (data || []).map((g) => g.imagen_url).filter(Boolean);
+  };
+
+  return Promise.all(
+    productos.map(async (p) => {
+      const galeria = await cargarGaleria(p.id);
+      return {
+        id: p.id,
+        imagen: p.imagen ? getSupabaseImageUrl(p.imagen) : getSupabaseImageUrl('imagenes/default.jpg'),
+        imagenes: galeria.map((url) => getSupabaseImageUrl(url)),
+        titulo: p.titulo,
+        ubicacion: p.ubicacion,
+        precio: p.precio,
+        descripcion: p.descripcion,
+      };
+    })
+  );
+};
+
+const useRespaldoDestinos = (posts, cargando, nombreCategoria) => {
+  const [respaldo, setRespaldo] = useState(null);
 
   useEffect(() => {
+    if (cargando || posts.length > 0) return undefined;
+
     let cancelled = false;
+    cargarProductosDeCategoria(nombreCategoria)
+      .then((datos) => {
+        if (!cancelled) setRespaldo(datos);
+      })
+      .catch((err) => {
+        console.error(`Error al cargar ${nombreCategoria}:`, err);
+        if (!cancelled) setRespaldo([]);
+      });
 
-    const cargar = async () => {
-      try {
-        setCargando(true);
-        const categorias = await fetchCategories();
-
-        if (cancelled) return;
-
-        const catNac = categorias.find(c => c.nombre.toLowerCase() === 'destinos nacionales');
-        const catInt = categorias.find(c => c.nombre.toLowerCase() === 'destinos internacionales');
-
-        const [productosNac, productosInt] = await Promise.all([
-          catNac ? fetchProductsByCategory(catNac.id) : Promise.resolve([]),
-          catInt ? fetchProductsByCategory(catInt.id) : Promise.resolve([]),
-        ]);
-
-        if (cancelled) return;
-
-        const cargarGaleria = async (productoId) => {
-          const { data } = await supabase
-            .from('galleries')
-            .select('imagen_url')
-            .eq('producto_id', productoId)
-            .order('posicion_orden', { ascending: true });
-          return (data || []).map(g => g.imagen_url).filter(Boolean);
-        };
-
-        const mapear = async (productos) => {
-          const results = await Promise.all(
-            productos.map(async (p) => {
-              const galeria = await cargarGaleria(p.id);
-              const imagenes = galeria.map(url => getSupabaseImageUrl(url));
-              return {
-                id: p.id,
-                imagen: p.imagen ? getSupabaseImageUrl(p.imagen) : getSupabaseImageUrl('imagenes/default.jpg'),
-                imagenes,
-                titulo: p.titulo,
-                ubicacion: p.ubicacion,
-                precio: p.precio,
-                descripcion: p.descripcion,
-              };
-            })
-          );
-          return results;
-        };
-
-        setNacionales(await mapear(productosNac));
-        setInternacionales(await mapear(productosInt));
-      } catch (err) {
-        console.error('Error al cargar destinos:', err);
-      } finally {
-        if (!cancelled) setCargando(false);
-      }
+    return () => {
+      cancelled = true;
     };
+  }, [cargando, posts.length, nombreCategoria]);
 
-    cargar();
-    return () => { cancelled = true; };
-  }, []);
+  return respaldo;
+};
+
+const DestinosSection = () => {
+  const navigate = useNavigate();
+  const igNac = useInstagramPosts('destinosnacionales');
+  const igInt = useInstagramPosts('destinosinternacionales');
+  const respaldoNac = useRespaldoDestinos(igNac.posts, igNac.cargando, 'destinos nacionales');
+  const respaldoInt = useRespaldoDestinos(igInt.posts, igInt.cargando, 'destinos internacionales');
+
+  const itemsNac = igNac.posts.length > 0 ? igNac.posts : (respaldoNac || []);
+  const itemsInt = igInt.posts.length > 0 ? igInt.posts : (respaldoInt || []);
+  const cargando =
+    igNac.cargando ||
+    igInt.cargando ||
+    (igNac.posts.length === 0 && respaldoNac === null) ||
+    (igInt.posts.length === 0 && respaldoInt === null);
 
   if (cargando) {
     return (
@@ -96,14 +107,16 @@ const DestinosSection = () => {
   return (
     <>
       <DestinosCarousel
-        items={nacionales}
+        items={itemsNac}
         titulo="Destinos Nacionales"
         navigate={navigate}
+        renderItem={igNac.posts.length > 0 ? (post) => <InstagramCard post={post} /> : null}
       />
       <DestinosCarousel
-        items={internacionales}
+        items={itemsInt}
         titulo="Destinos Internacionales"
         navigate={navigate}
+        renderItem={igInt.posts.length > 0 ? (post) => <InstagramCard post={post} /> : null}
       />
 
       <a
@@ -127,7 +140,7 @@ const getSlidesPerView = () => {
   return 4;
 };
 
-const DestinosCarousel = ({ items, titulo, navigate }) => {
+const DestinosCarousel = ({ items, titulo, navigate, renderItem = null }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slidesPerView, setSlidesPerView] = useState(getSlidesPerView);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -234,13 +247,17 @@ const DestinosCarousel = ({ items, titulo, navigate }) => {
                   className="destinos-carousel__slide"
                   style={{ flex: `0 0 ${100 / slidesPerView}%` }}
                 >
-                  <TourCard
-                    imagen={dest.imagen}
-                    imagenes={dest.imagenes}
-                    titulo={dest.titulo}
-                    precio={dest.precio}
-                    onClick={() => navigate(`/detalles?id=${dest.id}`)}
-                  />
+                  {renderItem ? (
+                    renderItem(dest)
+                  ) : (
+                    <TourCard
+                      imagen={dest.imagen}
+                      imagenes={dest.imagenes}
+                      titulo={dest.titulo}
+                      precio={dest.precio}
+                      onClick={() => navigate(`/detalles?id=${dest.id}`)}
+                    />
+                  )}
                 </div>
               ))}
             </div>
