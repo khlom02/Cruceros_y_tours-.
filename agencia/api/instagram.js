@@ -107,9 +107,11 @@ const sincronizar = async (admin) => {
   const items = await obtenerPostsDeInstagram();
   if (!items.length) throw new Error('Instagram devolvió 0 publicaciones');
 
-  const { data: existentes = [] } = await admin
+  const { data: existentesData, error: errorExistentes } = await admin
     .from('posts_instagram')
     .select('id, media_urls');
+  if (errorExistentes) throw new Error(errorExistentes.message);
+  const existentes = existentesData || [];
   const previo = new Map(existentes.map((fila) => [fila.id, fila.media_urls || []]));
 
   const posts = [];
@@ -171,13 +173,14 @@ export default async function handler(req, res) {
 
   let errorSync = null;
   try {
-    const { data: filas = [] } = await admin
+    const { data: filas, error: errorFilas } = await admin
       .from('posts_instagram')
       .select('sincronizado_en')
       .order('sincronizado_en', { ascending: false })
       .limit(1);
+    if (errorFilas) throw new Error(errorFilas.message);
 
-    const ultima = filas[0]?.sincronizado_en;
+    const ultima = (filas || [])[0]?.sincronizado_en;
     const desactualizado = !ultima || Date.now() - new Date(ultima).getTime() > SYNC_INTERVAL_MS;
     const puedeIntentar = Date.now() - ultimoIntento > SYNC_INTERVAL_MS;
 
@@ -193,11 +196,13 @@ export default async function handler(req, res) {
       }
     }
 
-    const { data: posts = [] } = await admin
+    const { data: postsData, error: errorPosts } = await admin
       .from('posts_instagram')
       .select('*')
       .order('posted_at', { ascending: false })
       .limit(60);
+    if (errorPosts) throw new Error(errorPosts.message);
+    const posts = postsData || [];
 
     if (!posts.length && errorSync) {
       return res.status(503).json({ error: errorSync, posts: [] });
@@ -223,6 +228,7 @@ export default async function handler(req, res) {
       sincronizado_en: posts[0]?.sincronizado_en || null,
     });
   } catch (e) {
+    console.error('Error en /api/instagram:', e);
     return res.status(500).json({ error: e.message, posts: [] });
   }
 }
