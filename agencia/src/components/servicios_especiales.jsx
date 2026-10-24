@@ -40,9 +40,11 @@ const ServiciosEspeciales = () => {
             Novedades en Instagram
           </h2>
           <div className="instagram-grid">
-            {posts.map((post) => (
-              <InstagramCard key={post.id} post={post} />
-            ))}
+            {(posts || [])
+              .filter((p) => Array.isArray(p.media_urls) && p.media_urls.some(Boolean))
+              .map((post) => (
+                <InstagramCard key={post.id} post={post} />
+              ))}
           </div>
         </section>
       )}

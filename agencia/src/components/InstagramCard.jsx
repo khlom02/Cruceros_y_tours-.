@@ -8,6 +8,7 @@ const InstagramCard = ({ post }) => {
   if (!post) return null;
 
   const imagenes = Array.isArray(post.media_urls) ? post.media_urls.filter(Boolean) : [];
+  if (imagenes.length === 0) return null;
   const total = imagenes.length;
   const esCarrusel = post.media_type === 'CAROUSEL_ALBUM' && total > 1;
   const texto = (post.caption || '').trim();
