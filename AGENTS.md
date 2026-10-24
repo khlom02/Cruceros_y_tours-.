@@ -330,6 +330,40 @@ cuando necesites buscar documentacion, usa 'context7' tools.
 
 ---
 
+## Uso obligatorio de MCP Skills para desarrollo
+
+Este proyecto tiene configuradas dos **MCP Skills** que **DEBEN usarse** en cada tarea de escritura, revisión o refactorización de código para garantizar calidad, rendimiento y evitar errores:
+
+### 1. `context7-mcp` — Documentación actualizada de librerías
+**Activar SIEMPRE que:**
+- Se use una librería/framework (React, Supabase, React Router, GSAP, Bootstrap, Vite, etc.)
+- Se escriban consultas a Supabase, hooks de React Router, configuración de Vite, etc.
+- Se necesiten ejemplos de API o patrones recomendados
+- Se configure algo nuevo (auth, storage, RLS, deploy, etc.)
+
+**Flujo:** Resolver ID de librería → Consultar docs oficiales → Aplicar en código.
+
+### 2. `vercel-react-best-practices` — Optimización React/Vite
+**Activar SIEMPRE que:**
+- Se escriban componentes React nuevos o se modifiquen existentes
+- Se implemente data fetching (client-side o server-side)
+- Se revise rendimiento, bundle size, re-renders
+- Se configure code-splitting, lazy loading, Suspense
+- Se optimice rendering, hooks, efectos, memoización
+
+**Reglas críticas a aplicar por defecto:**
+- `async-parallel`: `Promise.all()` para operaciones independientes
+- `bundle-dynamic-imports`: `React.lazy` + `<Suspense>` para rutas pesadas
+- `rerender-memo`: memoizar componentes costosos
+- `rerender-lazy-state-init`: `useState(() => expensive)` para init costoso
+- `rendering-hoist-jsx`: sacar JSX estático fuera del componente
+- `client-swr-dedup`: deduplicar requests (si se usa SWR/TanStack Query)
+- `js-set-map-lookups`: usar `Map`/`Set` para lookups O(1)
+
+**Antes de entregar cualquier código:** verificar que cumple las reglas relevantes de estas skills.
+
+---
+
 ## Ponytail — control de over-engineering
 
 El proyecto tiene configurado el plugin **Ponytail** para OpenCode. Su objetivo es evitar over-engineering forzando al agente a:
@@ -396,7 +430,30 @@ cd /home/khalom/.opencode/ponytail && git pull
 
 ---
 
-## Cambios futuros pendientes
+## Feed Instagram — operación (implementado 2026-10-20)
+
+Feed de posts de Instagram con espejo permanente en Supabase. **Funcionando en preview.**
+
+### Arquitectura
+- **API:** `agencia/api/instagram.js` (Vercel Function) → `GET /api/instagram?seccion=<slug>[,slug2]`
+- **Sync on-demand** cada 30 min desde `graph.instagram.com` (flujo **Instagram Login**, no Facebook Login). Re-hospeda imágenes en bucket Storage **`instagram-media`** (las URLs de IG expiran en 24h; las espejadas no). Reutiliza medios ya subidos si el post no cambió.
+- **Tabla:** `public.posts_instagram` (id, caption, media_type, media_urls jsonb, permalink, posted_at, hashtags text[], sincronizado_en). RLS: SELECT público. SQL de setup: `agencia/instagram_feed.sql`.
+- **Frontend:** hook `src/hooks/useInstagramPosts.js` (caché sessionStorage 15 min) + `src/components/InstagramCard.jsx` (+ `src/styles/instagramCard.css`). Integrado en `DestinosSection` (landing, 2 carruseles), `CardGrid` (/destinos, /cruceros, /vuelos — no cuando hay `airlineFilter`) y `servicios_especiales` (sección inferior "Novedades en Instagram").
+- **Fallback:** si la API falla o la sección no tiene posts → se renderizan las cards Supabase de siempre (sin romper nada).
+
+### Env vars (Vercel Dashboard Y .env local)
+`INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` (= `28834012292896238`), `SUPABASE_SERVICE_ROLE_KEY`. **Gotcha:** al pegar valores en Vercel, revisar que no se peguen varias veces ni con saltos de línea (rompe headers); la función ya sanitiza con `limpiarEnv`, pero limpiar el dashboard igual. **Gotcha 2:** las URLs de deployment individuales quedan con snapshot de env viejo → siempre usar el alias de rama o el deploy más reciente.
+
+### Hashtags que alimentan secciones
+Regla: hashtag debe coincidir con un slug de la tabla `categorias` (normalizado sin espacios/acentos) o ser el slug exacto. Útiles: `#cruceros`, `#crucerosdestacados`, `#vuelos`, `#destinos`, `#destinosnacionales`, `#destinosinternacionales`, `#trenes`, `#vehiculos`, `#asistencia`. `#crucerosytours` (marca) **no** cuenta como sección.
+
+### Mantenimiento
+- **Token expira ~60 días.** Renovar: `GET https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=<token>` (solo si tiene ≥24h). Nuevo token → actualizar env vars en Vercel + `.env` + Redeploy. Apps/secret en developers.facebook.com (app del usuario, cuenta personal con rol admin en el Business).
+- **Producción:** merge `develop` → `main` + push; agregar las 3 env vars con ámbito Production (o All) y Redeploy.
+
+---
+
+
 
 > Registrado el 2026-10-04 tras auditoría Ponytail + revisión de registro.
 > Marcar como ✅ cuando se implemente.
@@ -415,4 +472,5 @@ cd /home/khalom/.opencode/ponytail && git pull
 ### Prioridad baja
 
 - [x] **Cortes Ponytail opcionales** — ✅ 2026-10-04: `TimelineEvent.jsx` (15 l.) inlineado en su único caller `Timeline.jsx`; `src/backend/seedCategories.js` eliminado (0 imports, categorías ya en la DB).
+- [ ] **Rediseño visual `InstagramCard`** — pendiente 2026-10-21: misma forma/altura que las cards del sistema (`--card-hero-*` en `variables.css`, patrón visual de `destination-card`/`grid-experiencia__card`) + un twist diferenciador de UX (pendiente definir: acento gradiente IG, badge de carrusel estilo Instagram, hover CTA "Escríbenos", etc.). Aplica en DestinosSection, CardGrid y servicios_especiales. Responsive obligatorio (375/768/1280).
 - [ ] **Framework de tests** — AGENTS.md: "No hay framework de tests configurado". Candidato mínimo: Vitest (nativo de Vite) para lógica pura (`nivelFortaleza`, `traducirError`, `imageHelper`).

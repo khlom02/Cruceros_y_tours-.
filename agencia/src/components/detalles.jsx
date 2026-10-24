@@ -14,6 +14,8 @@ import StickyBookingBar from "./StickyBookingBar.jsx";
 import MobileStickyBar from "./MobileStickyBar.jsx";
 import AlojamientoCard from "./AlojamientoCard.jsx";
 import AlojamientoGrid from "./AlojamientoGrid.jsx";
+import InstagramDetailView from "./InstagramDetailView.jsx";
+import "../styles/instagramDetailView.css";
 
 const normalizeDetalle = (data) => {
     if (!data) return null;
@@ -85,7 +87,9 @@ const Detalles = () => {
     const detalleId = searchParams.get("id");
     const detalleTipo = searchParams.get("tipo");
     const isSpecialService = serviceTypes.includes(detalleTipo);
+    const isInstagramPost = detalleId?.startsWith('ig_');
     const [detalle, setDetalle] = useState(null);
+    const [postInstagram, setPostInstagram] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const { user } = useAuth();
@@ -94,11 +98,38 @@ const Detalles = () => {
         let mounted = true;
 
         const load = async () => {
-            if (!detalleId && !isSpecialService) {
+            if (!detalleId && !isSpecialService && !isInstagramPost) {
                 if (!mounted) return;
                 setDetalle(null);
                 setError("Selecciona una experiencia para ver sus detalles.");
                 setLoading(false);
+                return;
+            }
+
+            // Instagram posts se cargan via API directa
+            if (isInstagramPost) {
+                setLoading(true);
+                setError("");
+                try {
+                    const igId = detalleId.replace('ig_', '');
+                    const respuesta = await fetch(`/api/instagram?seccion=todos&id=${igId}`);
+                    const cuerpo = await respuesta.json();
+                    const post = (cuerpo.posts || []).find(p => p.id === igId);
+                    if (post && mounted) {
+                        setPostInstagram(post);
+                        setLoading(false);
+                        return;
+                    }
+                    if (mounted) {
+                        setError("No se encontró la publicación de Instagram.");
+                        setLoading(false);
+                    }
+                } catch {
+                    if (mounted) {
+                        setError("Error al cargar la publicación.");
+                        setLoading(false);
+                    }
+                }
                 return;
             }
 
@@ -122,14 +153,16 @@ const Detalles = () => {
                 ? normalizeServiceDetalle(data)
                 : normalizeDetalle(data);
 
-            setDetalle(normalized);
-            setLoading(false);
+            if (mounted) {
+                setDetalle(normalized);
+                setLoading(false);
+            }
         };
 
         load();
 
         return () => { mounted = false; };
-    }, [detalleId, detalleTipo, isSpecialService]);
+    }, [detalleId, detalleTipo, isSpecialService, isInstagramPost]);
 
     if (loading) {
         return (
@@ -144,6 +177,23 @@ const Detalles = () => {
             <div className="detalles-page">
                 <div className="detalles-state">{error}</div>
             </div>
+        );
+    }
+
+    // Instagram post detail view
+    if (isInstagramPost && postInstagram) {
+        return (
+            <>
+                <SEO
+                    title={postInstagram.caption?.split('\n')[0]?.split('#')[0]?.trim() || 'Experiencia Instagram'}
+                    description={(postInstagram.caption || "").substring(0, 160)}
+                    canonical={`/detalles?id=${detalleId}`}
+                    image={postInstagram.media_urls?.[0]}
+                />
+                <div className="detalles-page">
+                    <InstagramDetailView post={postInstagram} />
+                </div>
+            </>
         );
     }
 
