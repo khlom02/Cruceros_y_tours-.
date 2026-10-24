@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { instagramToProduct, instagramToDetail } from '../utils/instagramToProduct';
 
 const CACHE_MS = 15 * 60 * 1000;
 
@@ -24,10 +25,22 @@ const leerCache = (seccion) => {
   return null;
 };
 
-const useInstagramPosts = (seccion) => {
+const useInstagramPosts = (seccion, etiqueta) => {
   const [posts, setPosts] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(false);
+
+  // Posts normalizados para ProductCard (lista/grid)
+  const postsNormalizados = useMemo(
+    () => posts.map(instagramToProduct).filter(Boolean),
+    [posts]
+  );
+
+  // Post normalizado para vista detalle (si se pide uno solo)
+  const postDetalle = useMemo(
+    () => (posts.length === 1 ? instagramToDetail(posts[0]) : null),
+    [posts]
+  );
 
   useEffect(() => {
     if (!seccion) {
@@ -51,7 +64,7 @@ const useInstagramPosts = (seccion) => {
 
     const controlador = new AbortController();
 
-    fetch(`/api/instagram?seccion=${encodeURIComponent(seccion)}`, {
+    fetch(`/api/instagram?seccion=${encodeURIComponent(seccion)}&etiqueta=${encodeURIComponent(etiqueta || '')}`, {
       signal: controlador.signal,
     })
       .then((respuesta) => {
@@ -75,9 +88,9 @@ const useInstagramPosts = (seccion) => {
       });
 
     return () => controlador.abort();
-  }, [seccion]);
+  }, [seccion, etiqueta]);
 
-  return { posts, cargando, error };
+  return { posts, postsNormalizados, postDetalle, cargando, error };
 };
 
 export default useInstagramPosts;

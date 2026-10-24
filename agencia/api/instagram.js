@@ -211,12 +211,23 @@ export default async function handler(req, res) {
     }
 
     const seccionParam = (req.query?.seccion || '').trim();
+    const etiquetaParam = (req.query?.etiqueta || '').trim();
+    const idParam = (req.query?.id || '').trim();
     const secciones = seccionParam
       .split(',')
       .map((s) => s.trim())
       .filter(Boolean);
     let filtrados = posts;
-    if (secciones.length && !secciones.includes('inicio')) {
+
+    // Filtrar por etiqueta/hashtag específico si se proporciona
+    if (etiquetaParam) {
+      const slugs = await obtenerSlugsDeCategorias(admin);
+      filtrados = posts.filter((p) =>
+        p.hashtags.some((h) => normalizar(h) === normalizar(etiquetaParam) || coincideSeccion(p.hashtags || [], etiquetaParam, slugs))
+      );
+    } else if (idParam) {
+      filtrados = posts.filter((p) => p.id === idParam);
+    } else if (secciones.length && !secciones.includes('inicio')) {
       const slugs = await obtenerSlugsDeCategorias(admin);
       filtrados = posts.filter((p) =>
         secciones.some((s) => coincideSeccion(p.hashtags || [], s, slugs))

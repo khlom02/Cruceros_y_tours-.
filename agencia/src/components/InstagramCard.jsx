@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import '../styles/instagramCard.css';
 
 const WHATSAPP_NUMERO = '584142783669';
 
@@ -44,8 +43,16 @@ const InstagramCard = ({ post }) => {
       onClick={abrirWhatsApp}
       onKeyDown={manejarTeclado}
       aria-label={texto ? `Publicación de Instagram: ${texto.slice(0, 80)}` : 'Publicación de Instagram'}
+      style={{
+        minHeight: 'var(--card-hero-min-height, 300px)',
+        borderRadius: 'var(--card-hero-radius, 16px)',
+        boxShadow: 'var(--card-shadow, 0 4px 12px rgba(0,0,0,0.15))',
+      }}
     >
-      <div className="instagram-card__media">
+      <div className="instagram-card__media" style={{
+        height: '100%',
+        width: '100%',
+      }}>
         {total > 0 && (
           <img
             className="instagram-card__img"
@@ -53,6 +60,11 @@ const InstagramCard = ({ post }) => {
             alt={texto.slice(0, 80) || 'Publicación de Instagram'}
             loading="lazy"
             decoding="async"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
           />
         )}
         {esCarrusel && (
@@ -89,7 +101,7 @@ const InstagramCard = ({ post }) => {
           </span>
         )}
       </div>
-      {texto && <p className="instagram-card__caption">{texto}</p>}
+      {texto && <p className="instagram-card__caption" style={{ fontSize: 'clamp(0.75rem, 3vw, 1rem)' }}>{texto}</p>}
     </article>
   );
 };
