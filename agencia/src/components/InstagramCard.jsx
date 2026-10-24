@@ -45,9 +45,9 @@ const InstagramCard = ({ post }) => {
       onKeyDown={manejarTeclado}
       aria-label={texto ? `Publicación de Instagram: ${texto.slice(0, 80)}` : 'Publicación de Instagram'}
       style={{
-        minHeight: 'var(--card-hero-min-height, 300px)',
-        borderRadius: 'var(--card-hero-radius, 16px)',
-        boxShadow: 'var(--card-shadow, 0 4px 12px rgba(0,0,0,0.15))',
+        minHeight: 'var(--card-hero-min-height)',
+        borderRadius: 'var(--card-hero-radius)',
+        boxShadow: 'var(--card-shadow)',
         height: '100%',
       }}
     >
