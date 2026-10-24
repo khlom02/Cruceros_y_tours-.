@@ -1,0 +1,374 @@
+/* ====================================================================== */
+/* INSTAGRAM DETAIL VIEW — Vista detalle de post de Instagram */
+/* ====================================================================== */
+
+.instagram-detail-view {
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+/* Hero Carousel */
+.instagram-detail__hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--color-background-light);
+  overflow: hidden;
+}
+
+.instagram-detail__carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.instagram-detail__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.instagram-detail__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(40px, 5vw, 56px);
+  height: clamp(40px, 5vw, 56px);
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 51, 102, 0.6);
+  color: var(--color-text-light);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+.instagram-detail__nav--prev { left: clamp(12px, 2vw, 24px); }
+.instagram-detail__nav--next { right: clamp(12px, 2vw, 24px); }
+
+.instagram-detail__hero:hover .instagram-detail__nav,
+.instagram-detail__nav:focus-visible {
+  opacity: 1;
+}
+
+.instagram-detail__nav:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.instagram-detail__dots {
+  position: absolute;
+  bottom: clamp(16px, 3vw, 24px);
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 10;
+}
+
+.instagram-detail__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.instagram-detail__dot:hover {
+  background: var(--color-primary);
+  transform: scale(1.2);
+}
+
+.instagram-detail__dot--active {
+  background: var(--color-primary);
+  transform: scale(1.2);
+}
+
+.instagram-detail__video-badge {
+  position: absolute;
+  top: clamp(12px, 2vw, 16px);
+  right: clamp(12px, 2vw, 16px);
+  padding: clamp(6px, 1vw, 8px) clamp(12px, 2vw, 16px);
+  border-radius: var(--card-compact-badge-radius);
+  background: rgba(0, 51, 102, 0.8);
+  color: var(--color-text-light);
+  font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+}
+
+.instagram-detail__counter {
+  position: absolute;
+  bottom: clamp(8px, 1.5vw, 12px);
+  right: clamp(12px, 2vw, 16px);
+  padding: 4px 10px;
+  border-radius: var(--card-compact-badge-radius);
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--color-text-light);
+  font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+}
+
+/* Info Section */
+.instagram-detail__info {
+  padding: clamp(24px, 4vw, 40px) clamp(16px, 4vw, 64px);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.instagram-detail__header {
+  margin-bottom: clamp(20px, 3vw, 32px);
+}
+
+.instagram-detail__titulo {
+  margin: 0 0 clamp(12px, 2vw, 16px);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+  font-family: 'Chicago Police', sans-serif;
+}
+
+.instagram-detail__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(12px, 2vw, 24px);
+  margin-bottom: clamp(16px, 2.5vw, 20px);
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  color: var(--color-text-secondary);
+}
+
+.instagram-detail__ubicacion {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icono-ubicacion {
+  width: 18px;
+  height: 18px;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.instagram-detail__hashtags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.instagram-detail__hashtag {
+  font-size: clamp(0.75rem, 1.2vw, 0.85rem);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  padding: 4px 10px;
+  border-radius: var(--card-compact-badge-radius);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Highlights */
+.instagram-detail__highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: clamp(12px, 2vw, 16px);
+  margin-bottom: clamp(20px, 3vw, 32px);
+  padding: clamp(16px, 3vw, 24px);
+  background: var(--color-background-light);
+  border-radius: var(--card-hero-radius);
+}
+
+.instagram-detail__highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: clamp(0.85rem, 1.4vw, 0.95rem);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+.highlight-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Caption */
+.instagram-detail__caption {
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  line-height: 1.7;
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.instagram-detail__caption p {
+  margin: 0 0 1em;
+}
+
+.instagram-detail__caption p:last-child {
+  margin-bottom: 0;
+}
+
+/* CTA Bar */
+.instagram-detail__cta-bar {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  gap: clamp(12px, 2vw, 16px);
+  padding: clamp(16px, 3vw, 20px) clamp(16px, 4vw, 64px);
+  background: linear-gradient(to top, var(--color-background) 60%, transparent);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(0, 51, 102, 0.08);
+}
+
+.instagram-detail__btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: clamp(14px, 2.5vw, 18px) clamp(20px, 4vw, 32px);
+  border: none;
+  border-radius: var(--card-btn-radius);
+  font-size: clamp(1rem, 1.8vw, 1.1rem);
+  font-weight: 600;
+  font-family: 'Chicago Police', sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  text-decoration: none;
+}
+
+.instagram-detail__btn:active {
+  transform: scale(0.98);
+}
+
+.instagram-detail__btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.instagram-detail__btn--whatsapp {
+  background: #25D366;
+  color: #fff;
+  box-shadow: var(--shadow-md);
+}
+
+.instagram-detail__btn--whatsapp:hover {
+  background: #1EBE5A;
+  box-shadow: var(--shadow-lg);
+}
+
+.instagram-detail__btn--instagram {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: #fff;
+  box-shadow: var(--shadow-md);
+}
+
+.instagram-detail__btn--instagram:hover {
+  filter: brightness(1.1);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Related Posts */
+.instagram-detail__related {
+  padding: clamp(24px, 4vw, 40px) clamp(16px, 4vw, 64px);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.instagram-detail__related-title {
+  margin: 0 0 clamp(20px, 3vw, 28px);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  font-family: 'Chicago Police', sans-serif;
+}
+
+.instagram-detail__related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2.5vw, 24px);
+}
+
+.instagram-detail__related-grid > :global(.card) {
+  height: 100%;
+  min-height: var(--card-hero-min-height);
+}
+
+/* Loading */
+.instagram-detail__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--color-text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .instagram-detail__related-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .instagram-detail__hero {
+    aspect-ratio: 4 / 3;
+  }
+  
+  .instagram-detail__info {
+    padding: clamp(20px, 5vw, 28px) clamp(12px, 4vw, 20px);
+  }
+  
+  .instagram-detail__highlights {
+    grid-template-columns: 1fr;
+  }
+  
+  .instagram-detail__cta-bar {
+    flex-direction: column;
+    padding: clamp(12px, 3vw, 16px) clamp(12px, 4vw, 20px);
+    gap: 10px;
+  }
+  
+  .instagram-detail__btn {
+    width: 100%;
+  }
+  
+  .instagram-detail__related-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .instagram-detail__hero {
+    aspect-ratio: 1 / 1;
+  }
+  
+  .instagram-detail__meta {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
