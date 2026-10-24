@@ -191,7 +191,7 @@ export const CardGrid = ({
 
   if (usarIG) {
     return (
-      <div className="instagram-grid">
+      <div className="instagram-grid" style={{ marginTop: 'clamp(1.5rem, 3vw, 2rem)', paddingTop: 'clamp(1rem, 2vw, 1.5rem)' }}>
         {postsIG.map((post) => (
           <InstagramCard key={post.id} post={post} />
         ))}

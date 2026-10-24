@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import TourCard from './TourCard';
-import InstagramCard from './InstagramCard';
+import { ProductCard } from './CardGrid';
 import useInstagramPosts from '../hooks/useInstagramPosts';
 import { fetchCategories, fetchProductsByCategory, supabase } from '../backend/supabase_client';
 import { getSupabaseImageUrl } from '../utils/imageHelper';
 import { useNavigate } from 'react-router-dom';
 import '../styles/destination_card.css';
-import '../styles/instagramCard.css';
 
 const AUTOPLAY_DELAY = 7000;
 
@@ -57,11 +56,11 @@ const cargarProductosDeCategoria = async (nombreCategoria) => {
   );
 };
 
-const useRespaldoDestinos = (posts, cargando, nombreCategoria) => {
+const useRespaldoDestinos = (postsNormalizados, cargando, nombreCategoria) => {
   const [respaldo, setRespaldo] = useState(null);
 
   useEffect(() => {
-    if (cargando || posts.length > 0) return undefined;
+    if (cargando || (postsNormalizados?.length > 0)) return undefined;
 
     let cancelled = false;
     cargarProductosDeCategoria(nombreCategoria)
@@ -76,7 +75,7 @@ const useRespaldoDestinos = (posts, cargando, nombreCategoria) => {
     return () => {
       cancelled = true;
     };
-  }, [cargando, posts.length, nombreCategoria]);
+  }, [cargando, postsNormalizados?.length, nombreCategoria]);
 
   return respaldo;
 };
@@ -85,16 +84,17 @@ const DestinosSection = () => {
   const navigate = useNavigate();
   const igNac = useInstagramPosts('destinosnacionales');
   const igInt = useInstagramPosts('destinosinternacionales');
-  const respaldoNac = useRespaldoDestinos(igNac.posts, igNac.cargando, 'destinos nacionales');
-  const respaldoInt = useRespaldoDestinos(igInt.posts, igInt.cargando, 'destinos internacionales');
+  const respaldoNac = useRespaldoDestinos(igNac.postsNormalizados, igNac.cargando, 'destinos nacionales');
+  const respaldoInt = useRespaldoDestinos(igInt.postsNormalizados, igInt.cargando, 'destinos internacionales');
 
-  const itemsNac = igNac.posts.length > 0 ? igNac.posts : (respaldoNac || []);
-  const itemsInt = igInt.posts.length > 0 ? igInt.posts : (respaldoInt || []);
+  // Usar posts normalizados (formato producto) para Instagram, fallback a BD
+  const itemsNac = igNac.postsNormalizados.length > 0 ? igNac.postsNormalizados : (respaldoNac || []);
+  const itemsInt = igInt.postsNormalizados.length > 0 ? igInt.postsNormalizados : (respaldoInt || []);
   const cargando =
     igNac.cargando ||
     igInt.cargando ||
-    (igNac.posts.length === 0 && respaldoNac === null) ||
-    (igInt.posts.length === 0 && respaldoInt === null);
+    (igNac.postsNormalizados.length === 0 && respaldoNac === null) ||
+    (igInt.postsNormalizados.length === 0 && respaldoInt === null);
 
   if (cargando) {
     return (
@@ -106,18 +106,20 @@ const DestinosSection = () => {
 
   return (
     <>
-      <DestinosCarousel
-        items={itemsNac}
-        titulo="Destinos Nacionales"
-        navigate={navigate}
-        renderItem={igNac.posts.length > 0 ? (post) => <InstagramCard post={post} /> : null}
-      />
-      <DestinosCarousel
-        items={itemsInt}
-        titulo="Destinos Internacionales"
-        navigate={navigate}
-        renderItem={igInt.posts.length > 0 ? (post) => <InstagramCard post={post} /> : null}
-      />
+      <div style={{ marginTop: 'clamp(2rem, 4vw, 3rem)' }}>
+        <DestinosCarousel
+          items={itemsNac}
+          titulo="Destinos Nacionales"
+          navigate={navigate}
+        />
+      </div>
+      <div style={{ marginTop: 'clamp(2rem, 4vw, 3rem)' }}>
+        <DestinosCarousel
+          items={itemsInt}
+          titulo="Destinos Internacionales"
+          navigate={navigate}
+        />
+      </div>
 
       <a
         href={`https://wa.me/584142783669?text=${encodeURIComponent('Hola, quiero información sobre los destinos')}`}
@@ -140,7 +142,7 @@ const getSlidesPerView = () => {
   return 4;
 };
 
-const DestinosCarousel = ({ items, titulo, navigate, renderItem = null }) => {
+const DestinosCarousel = ({ items, titulo, navigate }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slidesPerView, setSlidesPerView] = useState(getSlidesPerView);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -247,8 +249,17 @@ const DestinosCarousel = ({ items, titulo, navigate, renderItem = null }) => {
                   className="destinos-carousel__slide"
                   style={{ flex: `0 0 ${100 / slidesPerView}%` }}
                 >
-                  {renderItem ? (
-                    renderItem(dest)
+                  {dest.esInstagram ? (
+                    <ProductCard
+                      imagen={dest.imagen}
+                      titulo={dest.titulo}
+                      ubicacion={dest.ubicacion}
+                      fechaInicio={dest.fechaInicio}
+                      fechaFin={dest.fechaFin}
+                      precio={dest.precio}
+                      colorFondo={dest.colorFondo}
+                      onClick={() => navigate(`/detalles?id=${dest.id}`)}
+                    />
                   ) : (
                     <TourCard
                       imagen={dest.imagen}

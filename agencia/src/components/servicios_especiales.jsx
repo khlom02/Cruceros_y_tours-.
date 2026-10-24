@@ -33,7 +33,8 @@ const ServiciosEspeciales = () => {
               fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
               color: 'var(--color-text-primary)',
               fontWeight: '700',
-              margin: '40px 0 25px',
+              margin: '70px 0 35px',
+              paddingTop: '20px',
             }}
           >
             Novedades en Instagram
