@@ -1,11 +1,10 @@
 import React, { useState, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import Filtro, { aplicarFiltros } from "./filtro";
-import InstagramCard from "./InstagramCard";
 import useInstagramPosts, { seccionDesdeNombre } from "../hooks/useInstagramPosts";
 import { fetchCategories, fetchProductsByCategory } from "../backend/supabase_client";
 import { getSupabaseImageUrl } from "../utils/imageHelper";
-import "../styles/instagramCard.css";
+import { instagramToProduct } from "../utils/instagramToProduct";
 
 /**
  * Componente de Card genérico reutilizable
@@ -194,9 +193,23 @@ export const CardGrid = ({
       <div className="instagram-grid" style={{ marginTop: 'clamp(1.5rem, 3vw, 2rem)', paddingTop: 'clamp(1rem, 2vw, 1.5rem)' }}>
         {(postsIG || [])
           .filter((p) => Array.isArray(p.media_urls) && p.media_urls.some(Boolean))
-          .map((post) => (
-            <InstagramCard key={post.id} post={post} />
-          ))}
+          .map((post) => {
+            const producto = instagramToProduct(post);
+            if (!producto) return null;
+            return (
+              <ProductCard
+                key={producto.id}
+                imagen={producto.imagen}
+                titulo={producto.titulo}
+                ubicacion={producto.ubicacion}
+                fechaInicio={producto.fechaInicio}
+                fechaFin={producto.fechaFin}
+                precio={producto.precio}
+                colorFondo={producto.colorFondo}
+                onClick={() => navigate(`/detalles?id=${producto.id}`)}
+              />
+            );
+          })}
       </div>
     );
   }
