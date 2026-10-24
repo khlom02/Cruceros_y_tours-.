@@ -1,15 +1,12 @@
 import { ServiceCard, servicesData } from './services';
 import useInstagramPosts from '../hooks/useInstagramPosts';
-import { ProductCard } from './CardGrid';
-import { instagramToProduct } from '../utils/instagramToProduct';
-import { useNavigate } from 'react-router-dom';
+import InstagramCard from './InstagramCard';
 import '../styles/services.css';
 import SEO from './SEO.jsx';
 
 // Pagina principal de servicios especiales.
 // Cada tarjeta navega a su propia ruta: /servicios_especiales/:seccionId
 const ServiciosEspeciales = () => {
-  const navigate = useNavigate();
   const { posts, cargando } = useInstagramPosts(
     'serviciosespeciales,asistencia,trenes,vehiculos'
   );
@@ -41,26 +38,12 @@ const ServiciosEspeciales = () => {
           >
             Novedades en Instagram
           </h2>
-          <div className="instagram-grid">
+          <div className="destinos-grid">
             {(posts || [])
               .filter((p) => Array.isArray(p.media_urls) && p.media_urls.some(Boolean))
-              .map((post) => {
-                const producto = instagramToProduct(post);
-                if (!producto) return null;
-                return (
-                  <ProductCard
-                    key={producto.id}
-                    imagen={producto.imagen}
-                    titulo={producto.titulo}
-                    ubicacion={producto.ubicacion}
-                    fechaInicio={producto.fechaInicio}
-                    fechaFin={producto.fechaFin}
-                    precio={producto.precio}
-                    colorFondo={producto.colorFondo}
-                    onClick={() => navigate(`/detalles?id=${producto.id}`)}
-                  />
-                );
-              })}
+              .map((post) => (
+                <InstagramCard key={post.id} post={post} />
+              ))}
           </div>
         </section>
       )}
