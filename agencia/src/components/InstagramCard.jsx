@@ -48,12 +48,10 @@ const InstagramCard = ({ post }) => {
         minHeight: 'var(--card-hero-min-height, 300px)',
         borderRadius: 'var(--card-hero-radius, 16px)',
         boxShadow: 'var(--card-shadow, 0 4px 12px rgba(0,0,0,0.15))',
+        height: '100%',
       }}
     >
-      <div className="instagram-card__media" style={{
-        height: '100%',
-        width: '100%',
-      }}>
+      <div className="instagram-card__media">
         {total > 0 && (
           <img
             className="instagram-card__img"
